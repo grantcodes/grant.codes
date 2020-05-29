@@ -1,0 +1,39 @@
+{
+  "name": "grant.codes",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "export": "next export"
+  },
+  "dependencies": {
+    "chroma-js": "^2.1.0",
+    "circular-std": "^1.0.4",
+    "dotenv": "^8.2.0",
+    "indieauth-helper": "^1.0.2",
+    "micropub-helper": "^1.6.1",
+    "moment": "^2.26.0",
+    "next": "^9.4.4",
+    "next-fonts": "^1.1.0",
+    "next-seo": "^4.5.0",
+    "nookies": "^2.3.0",
+    "pigeon-maps": "^0.15.0",
+    "pluralize": "^8.0.0",
+    "polished": "^3.6.3",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "react-image-lightbox": "^5.1.1",
+    "react-stripe-elements": "^6.1.2",
+    "stripe": "^8.56.0",
+    "styled-components": "^5.1.1",
+    "svg-inline-loader": "^0.8.2",
+    "viewport-mercator-project": "^7.0.1"
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  }
+}
