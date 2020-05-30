@@ -11,9 +11,11 @@ export { getStaticProps } from 'lib/get/posts'
 // Staticly generate so many pages
 export async function getStaticPaths() {
   // TODO: Year pages are going to 404 - but that is probably good for now.
-  // TODO: Get dynamic list of post types from micropub endpoint
   // Maybe I can create year overview pages
-  const types = await getTypes(true)
+  const ingoredTypes = ['photos']
+  const types = await getTypes(true).filter((type) =>
+    ingoredTypes.includes(type)
+  )
   return {
     paths: types.map((t) => ({ params: { typeOrYear: t } })),
     fallback: false, // Don't really need to generate these pages dynamically - apart from year pages
