@@ -3,9 +3,6 @@ import getTypes from 'lib/get/post-types'
 
 const Page = ({ posts = [] }) => <PostList posts={posts} type="home" />
 
-// TODO: Change container class based on type
-// Page.containerClass = 'right-aligned right-aligned--wide-content'
-
 export { getStaticProps } from 'lib/get/posts'
 
 // Staticly generate so many pages
@@ -13,9 +10,8 @@ export async function getStaticPaths() {
   // TODO: Year pages are going to 404 - but that is probably good for now.
   // Maybe I can create year overview pages
   const ingoredTypes = ['photos']
-  const types = await getTypes(true).filter((type) =>
-    ingoredTypes.includes(type)
-  )
+  let types = await getTypes(true)
+  types = types.filter((type) => ingoredTypes.includes(type))
   return {
     paths: types.map((t) => ({ params: { typeOrYear: t } })),
     fallback: false, // Don't really need to generate these pages dynamically - apart from year pages

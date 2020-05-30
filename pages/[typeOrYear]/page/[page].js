@@ -12,9 +12,8 @@ export async function getStaticPaths() {
   const paths = []
   const ingoredTypes = ['photos']
   // Get all types
-  const types = await getTypes(true).filter((type) =>
-    ingoredTypes.includes(type)
-  )
+  let types = await getTypes(true)
+  types = types.filter((type) => ingoredTypes.includes(type))
   for (const type of types) {
     // Get post count for each post type
     const pageCount = await getPageCount({ type })
