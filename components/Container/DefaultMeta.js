@@ -25,14 +25,31 @@ export default () => (
       cardType: 'summary_large_image',
     }}
     additionalMetaTags={[
-      { charSet: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { name: 'mobile-web-app-capable', value: 'yes' },
-      { name: 'apple-mobile-web-app-capable', content: 'yes' },
-      { name: 'msapplication-TileImage', content: '/icons/mstile-144x144.png' },
+      { charSet: 'utf-8', key: 'meta-charset' },
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1',
+        key: 'meta-viewport',
+      },
+      {
+        name: 'mobile-web-app-capable',
+        value: 'yes',
+        key: 'meta-mobile-web-app-capable',
+      },
+      {
+        name: 'apple-mobile-web-app-capable',
+        content: 'yes',
+        key: 'meta-apple-mobile-web-app-capable',
+      },
+      {
+        name: 'msapplication-TileImage',
+        content: '/icons/mstile-144x144.png',
+        key: 'meta-msapptile',
+      },
       {
         name: 'apple-mobile-web-app-status-bar-style',
         content: 'black-translucent',
+        key: 'meta-apple-status-bar',
       },
     ]}
   />
