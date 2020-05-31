@@ -68,7 +68,7 @@ const StripeCheckout = ({
   }
 
   const stripeTokenHandler = async (token) => {
-    const response = await fetch('/api/pay/stripe', {
+    const response = await fetch('/api/pay', {
       method: 'POST',
       body: JSON.stringify({
         token,
