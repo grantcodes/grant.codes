@@ -38,7 +38,7 @@ const PaymentForm = ({ monthly = false }) => {
         <NextSeo title="Pay Me" />
         <p>First I need to know how much you are paying me</p>
 
-        <form method="post" action="/api/pay/form">
+        <form method="post" action="/api/pay">
           <AmountInput>
             <div>
               <label htmlFor="currency">Currency</label>

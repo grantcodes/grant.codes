@@ -1,7 +1,7 @@
 import Stripe from 'stripe'
 
 export default async (req, res) => {
-  if (req.method === 'POST') {
+  if (req.method === 'POST' && req.body.action === 'stripe') {
     const { token, currency, amount, monthly, description } = req.body
     if (!token || !currency || !amount) {
       res.status(400).json({ error: 'Missing token, currency or amount' })
@@ -45,6 +45,27 @@ export default async (req, res) => {
       res.status(400).json({ error: err.message })
     }
     return res.end()
+  } else {
+    let redirect = '/pay'
+    const { currencySymbol, amount, reason = '', monthly } = req.body
+
+    if (currencySymbol && amount) {
+      redirect = `/pay/${currencySymbol}${amount}`
+    }
+
+    if (monthly) {
+      redirect += '/monthly'
+    }
+
+    if (reason) {
+      redirect += `?reason=${encodeURIComponent(reason)}`
+    }
+
+    redirect = encodeURI(redirect)
+
+    console.log('[Pay form redirect]', redirect)
+
+    res.writeHead(302, { Location: redirect })
   }
   return res.status(405)
 }
