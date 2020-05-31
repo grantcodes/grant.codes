@@ -11,7 +11,7 @@ export async function getStaticPaths() {
   // Maybe I can create year overview pages
   const ingoredTypes = ['photos']
   let types = await getTypes(true)
-  types = types.filter((type) => ingoredTypes.includes(type))
+  types = types.filter((type) => !ingoredTypes.includes(type))
   return {
     paths: types.map((t) => ({ params: { typeOrYear: t } })),
     fallback: false, // Don't really need to generate these pages dynamically - apart from year pages
