@@ -9,6 +9,7 @@
     "export": "next export"
   },
   "dependencies": {
+    "@postr/core": "^1.8.0",
     "chroma-js": "^2.1.0",
     "circular-std": "^1.0.4",
     "dotenv": "^8.2.0",
@@ -22,6 +23,7 @@
     "pigeon-maps": "^0.15.0",
     "pluralize": "^8.0.0",
     "polished": "^3.6.4",
+    "pouchdb-adapter-http": "^7.2.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-image-lightbox": "^5.1.1",
