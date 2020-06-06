@@ -21,7 +21,7 @@ const List = styled.div`
 export default () => (
   <List>
     {websites.map((website) => (
-      <Tile {...website} />
+      <Tile key={`website-tile-${website.slug}`} {...website} />
     ))}
   </List>
 )

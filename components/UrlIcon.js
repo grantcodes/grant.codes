@@ -40,5 +40,11 @@ export default ({ url }) => {
       return <Icon icon={iconDomain.icon} ariaLabel={iconDomain.domain} />
     }
   }
-  return new URL(url).hostname
+  try {
+    const hostname = new URL(url).hostname
+    return hostname
+  } catch (err) {
+    console.warn('[Error with icon url]', err)
+    return null
+  }
 }

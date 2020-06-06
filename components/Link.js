@@ -38,6 +38,9 @@
 // export default styled(Link)``
 
 import Link from 'next/link'
+import styled from 'styled-components'
+
+const StyledA = styled.a``
 
 export default ({ to = null, as = null, linkAs = null, ...props }) => {
   if (!to) {
@@ -51,12 +54,12 @@ export default ({ to = null, as = null, linkAs = null, ...props }) => {
   }
 
   if (to.startsWith('http')) {
-    return <a href={to} {...props} />
+    return <StyledA href={to} {...props} />
   }
 
   return (
     <Link href={to} as={linkAs || as}>
-      <a {...props}></a>
+      <StyledA {...props} />
     </Link>
   )
 }

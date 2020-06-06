@@ -1,6 +1,6 @@
 import React from 'react'
 
-const getPostPhotos = post => {
+const getPostPhotos = (post) => {
   const { properties, cms } = post
   const photos = []
   const data = {}
@@ -42,9 +42,13 @@ const getPostPhotos = post => {
         ) {
           photoData.thumbnail = cms.imageSizes[photo]['200x200']
         } else {
-          const { hostname, pathname } = new URL(photo)
-          const encodedUrl = encodeURIComponent(hostname + pathname)
-          photoData.thumbnail = `https://images.weserv.nl/?url=${encodedUrl}&w=200&h=200&t=square`
+          try {
+            const { hostname, pathname } = new URL(photo)
+            const encodedUrl = encodeURIComponent(hostname + pathname)
+            photoData.thumbnail = `https://images.weserv.nl/?url=${encodedUrl}&w=200&h=200&t=square`
+          } catch (err) {
+            console.warn('[Error with photo url]', err)
+          }
         }
         photos.push(photoData)
       } else if (typeof photo === 'object' && photo.value) {
@@ -59,9 +63,13 @@ const getPostPhotos = post => {
         ) {
           photoData.thumbnail = cms.imageSizes[photo.value]['200x200']
         } else {
-          const { hostname, pathname } = new URL(photo.value)
-          const encodedUrl = encodeURIComponent(hostname + pathname)
-          photoData.thumbnail = `https://images.weserv.nl/?url=${encodedUrl}&w=200&h=200&t=square`
+          try {
+            const { hostname, pathname } = new URL(photo.value)
+            const encodedUrl = encodeURIComponent(hostname + pathname)
+            photoData.thumbnail = `https://images.weserv.nl/?url=${encodedUrl}&w=200&h=200&t=square`
+          } catch (err) {
+            console.warn('[Error with photo url]', err)
+          }
         }
         photos.push(photoData)
       }

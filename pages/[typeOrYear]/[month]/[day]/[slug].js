@@ -6,7 +6,7 @@ const Page = ({ posts = [] }) =>
 
 export async function getStaticPaths() {
   // Get a max of the 200 last posts
-  const posts = await getPosts({ limit: 200 }, true)
+  const posts = await getPosts({ limit: 10 }, true)
 
   // Helper function to add 0 to the start of numbers
   const leadingZero = (num) =>

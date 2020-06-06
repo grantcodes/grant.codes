@@ -37,6 +37,24 @@ const eventTimeDisplayOptions = {
 //   }
 // }
 
+const PostTitle = styled(CardTitle)`
+  .post--like-of &,
+  .post--bookmark & {
+    font-size: ${mixin.fs(0)};
+  }
+  .container.single-article & {
+    font-size: ${mixin.fs(4)};
+    @media (min-width: ${theme('midBreak')}) {
+      font-size: ${mixin.fs(5)};
+    }
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: ${mixin.space(1)};
+    margin-bottom: ${mixin.space(3)};
+    text-align: center;
+  }
+`
+
 const PostHeader = styled.header`
   ${({ background, theme }) =>
     !!background
@@ -68,24 +86,6 @@ const PostAction = styled(CardBreakout)`
   font-size: ${mixin.fs(-1)};
   ${Footer} + & {
     margin-top: -${theme('cardPadding')};
-  }
-`
-
-const PostTitle = styled(CardTitle)`
-  .post--like-of &,
-  .post--bookmark & {
-    font-size: ${mixin.fs(0)};
-  }
-  .container.single-article & {
-    font-size: ${mixin.fs(4)};
-    @media (min-width: ${theme('midBreak')}) {
-      font-size: ${mixin.fs(5)};
-    }
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: ${mixin.space(1)};
-    margin-bottom: ${mixin.space(3)};
-    text-align: center;
   }
 `
 
