@@ -8,6 +8,7 @@ const Page = ({ posts = [] }) => (
 )
 
 export async function getStaticPaths() {
+  console.log('page/[page] static path')
   // Count how many pages are needed
   const pageCount = getPageCount()
   const paths = []

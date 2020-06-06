@@ -42,6 +42,7 @@ export default ({ title, screenshot, url, content, ...props }) => (
 )
 
 export const getStaticProps = ({ params }) => {
+  console.log('website static props')
   const slug = params.website
   return {
     props: websites.find((website) => website.slug === slug),
@@ -51,7 +52,10 @@ export const getStaticProps = ({ params }) => {
 /**
  * Get all websites as static paths
  */
-export const getStaticPaths = () => ({
-  paths: websites.map((website) => ({ params: { website: website.slug } })),
-  fallback: false,
-})
+export const getStaticPaths = () => {
+  console.log('website static path')
+  return {
+    paths: websites.map((website) => ({ params: { website: website.slug } })),
+    fallback: false,
+  }
+}

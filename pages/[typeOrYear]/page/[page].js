@@ -9,6 +9,7 @@ const Page = ({ posts = [] }) => (
 )
 
 export async function getStaticPaths() {
+  console.log('[typeoryear]/page/[page] get static paths')
   const paths = []
   const ingoredTypes = ['photos']
   // Get all types

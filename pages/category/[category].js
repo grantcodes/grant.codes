@@ -9,6 +9,7 @@ const Page = ({ posts = [] }) => (
 
 export async function getStaticPaths() {
   // Get all categories
+  console.log('category get static path')
   const categories = await getCategories()
 
   // Return the paths, with a fallback to dynamically new / old categories

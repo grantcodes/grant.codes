@@ -7,6 +7,7 @@ export { getStaticProps } from 'lib/get/posts'
 
 // Staticly generate so many pages
 export async function getStaticPaths() {
+  console.log('typeoryear static paths')
   // TODO: Year pages are going to 404 - but that is probably good for now.
   // Maybe I can create year overview pages
   const ingoredTypes = ['photos']
