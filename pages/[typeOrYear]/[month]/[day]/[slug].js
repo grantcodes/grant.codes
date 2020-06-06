@@ -5,8 +5,8 @@ const Page = ({ posts = [] }) =>
   posts.map((post, i) => <Post post={post} key={`post-single-${i}`} />)
 
 export async function getStaticPaths() {
-  // Get a max of the 9999 last posts
-  const posts = await getPosts({ limit: 9999 }, true)
+  // Get a max of the 200 last posts
+  const posts = await getPosts({ limit: 200 }, true)
 
   // Helper function to add 0 to the start of numbers
   const leadingZero = (num) =>
