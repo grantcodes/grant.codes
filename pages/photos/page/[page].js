@@ -8,7 +8,6 @@ const Page = ({ posts = [] }) => <PostList posts={posts} type="photos" />
 Page.containerClass = 'right-aligned right-aligned--wide-content'
 
 export async function getStaticPaths() {
-  console.log('[typeoryear]/page/[page] get static paths')
   const paths = []
   const ingoredTypes = ['photos', 'journals']
   // Get all types
@@ -30,7 +29,6 @@ export async function getStaticPaths() {
 }
 
 export const getStaticProps = async (ctx) => {
-  console.log('photos get static props')
   ctx.params.typeOrYear = 'photos'
   ctx.limit = 50
   return await getPosts(ctx, true)

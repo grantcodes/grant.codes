@@ -21,7 +21,6 @@ export async function getStaticPaths() {
       paths.push({ params: { page: `${pageNumber}`, category } })
     }
   }
-  console.log('category/page get static path', paths.length)
 
   // Return the paths, with a fallback to dynamically new / old categories
   return {
