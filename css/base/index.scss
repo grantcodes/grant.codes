@@ -1,0 +1,29 @@
+:root {
+  --color-main: red;
+  --color-main--alt: darkred;
+  --color-complementary: blue;
+  --color-complementary--alt: darkblue;
+  --color-contrast: white;
+  --background-image: url('https://twitter-topography-banner.glitch.me/1920/1080/red');
+  --card-padding: 1rem;
+  --border-radius: 3px;
+  --content-width: 550px;
+  --mid-break: calc(34rem + 290px);
+  --content-width: 34rem;
+  --side-width: 18rem;
+  --mid-break: 52rem;
+  --header-height: 4rem;
+  --theme-transition-time: 1s;
+  --width-normal: 50rem;
+  --width-wide: 70rem;
+}
+
+@import './base';
+@import './typography';
+@import './media';
+@import './forms';
+@import './helpers';
+@import './layout/layout';
+@import './layout/header';
+@import './layout/nav';
+@import './layout/footer';

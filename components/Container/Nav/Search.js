@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Button from '../../Button'
 import Icon from '../../Icon'
-import searchIcon from '../../../svgs/search.svg'
+import searchIcon from 'eva-icons/fill/svg/search.svg'
 import { mixin, theme } from '../../Theme/helpers'
 
 const Form = styled.form`
@@ -13,7 +13,7 @@ const Form = styled.form`
   margin-top: 1rem;
   margin-bottom: 1rem;
   box-shadow: ${mixin.shadow(2)};
-  border-radius: ${theme('borderRadius')};
+  border-radius: var(--border-radius);
 
   input {
     margin: 0;
@@ -54,7 +54,7 @@ function Search() {
 
   return (
     <Form
-      onSubmit={e => {
+      onSubmit={(e) => {
         e.preventDefault()
         window.location.href = `/search/${search.replace(' ', '+')}`
       }}
@@ -63,7 +63,7 @@ function Search() {
         type="search"
         value={search}
         placeholder="Search..."
-        onChange={e => setSearch(e.target.value)}
+        onChange={(e) => setSearch(e.target.value)}
       />
       <Button type="submit">
         <span className="screen-reader-text">Search</span>

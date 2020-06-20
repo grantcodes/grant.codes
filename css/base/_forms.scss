@@ -1,0 +1,120 @@
+@use '../util/' as u;
+
+.input,
+select,
+input,
+textarea {
+  font-family: inherit;
+  display: block;
+  width: 100%;
+  line-height: 1.5;
+  font-size: 1em;
+  padding: 0.5em 1em;
+  border: 1px solid var(--main-border);
+  border-radius: var(--border-radius);
+  box-shadow: none;
+  outline: none;
+  background-color: var(--color-main--alt);
+
+  color: var(--color-contrast);
+  margin-bottom: 1rem;
+  transition: all 0.3s;
+
+  &::placeholder {
+    color: var(--color-contrast);
+    opacity: 0.6;
+  }
+
+  &:focus,
+  &:active {
+    border-color: var(--color-contrast);
+
+    &:invalid {
+      box-shadow: 0 0 2px red inset;
+    }
+  }
+}
+
+textarea {
+  resize: vertical;
+  min-height: 6.6em;
+}
+
+input[type='radio'],
+input[type='checkbox'] {
+  display: inline-block;
+}
+
+fieldset {
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+
+legend {
+  display: block;
+  width: 100%;
+  font-size: u.fs(2);
+  margin-bottom: u.space(2);
+}
+
+label,
+.label {
+  display: block;
+  opacity: 0.9;
+  cursor: pointer;
+  line-height: 1.5;
+  font-size: u.fs(-1);
+  margin-bottom: 0.1rem;
+}
+
+button,
+.button {
+  display: inline-block;
+  background-color: var(--color-complementary);
+  color: var(--color-main);
+  fill: currentColor;
+  padding: 0.5em 1em;
+  text-decoration: none;
+  transition: background-color var(--theme-transition-time);
+  border: 0;
+  outline: none;
+  border-radius: var(--border-radius);
+  line-height: 1.2;
+  font-size: 1em;
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: 0.3em;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: u.shadow();
+
+  :hover,
+  :focus,
+  :active {
+    color: var(--color-main);
+    fill: var(--color-main);
+    background-color: var(--color-contrast);
+  }
+
+  // TODO: Floater button
+  //   ${({ floater }) =>
+  //     !!floater &&
+  //     `
+  //     color: white;
+  //     background-color: rgba(0, 0, 0, 0.3);
+  //     :hover,
+  //     :focus,
+  //     :active {
+  //   background-color: rgba(0, 0, 0, 0.6);
+  // }
+
+  // TODO: Icon button
+  //   ${({ icon }) =>
+  //     !!icon &&
+  //     `
+  // padding: 0.5em;
+  // line-height: 1;
+  // text-align: center;
+  // `
+}

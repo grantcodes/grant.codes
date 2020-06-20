@@ -1,11 +1,11 @@
 import React from 'react'
 import Icon from './Icon'
-import twitter from '../svgs/twitter.svg'
-import facebook from '../svgs/facebook.svg'
-import instagram from '../svgs/instagram.svg'
-import google from '../svgs/google-plus.svg'
-import github from '../svgs/github.svg'
-import telegram from '../svgs/telegram.svg'
+import twitter from 'eva-icons/fill/svg/twitter.svg'
+import facebook from 'eva-icons/fill/svg/facebook.svg'
+import instagram from 'eva-icons/fill/svg/camera.svg'
+import google from 'eva-icons/fill/svg/google.svg'
+import github from 'eva-icons/fill/svg/github.svg'
+import telegram from 'eva-icons/fill/svg/paper-plane.svg'
 
 const iconDomains = [
   {

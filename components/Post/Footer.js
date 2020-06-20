@@ -1,44 +1,14 @@
-import React, { Fragment } from 'react'
-import styled from 'styled-components'
+import { Fragment } from 'react'
+import classnames from 'classnames'
 import moment from 'moment'
 import Link from '../Link'
 import Icon from '../Icon'
-import CardBreakout from '../Card/Breakout'
 import Avatar from '../Avatar'
 import UrlIcon from '../UrlIcon'
 import mentionTypes from './mention-types'
-import { mixin, theme } from '../Theme/helpers'
+import styles from 'css/components/post.module.scss'
 
 const separator = ' ● '
-
-const PostFooter = styled(CardBreakout).attrs((props) => ({
-  as: props.as || 'footer',
-}))`
-  font-style: italic;
-  padding: ${mixin.space(0.5)} ${theme('cardPadding')};
-
-  &,
-  & * {
-    line-height: 1.2;
-    font-size: ${mixin.fs(-2)};
-  }
-
-  /* Child component doesn't work for some reason? Maybe it is not a default styled component or something? */
-  /* ${Avatar} { */
-  .h-card {
-    display: inline-block;
-    text-decoration: none;
-    font-size: 0.5em;
-    margin-top: -0.25em;
-
-    .p-name {
-      text-decoration: underline;
-      :hover {
-        text-decoration: underline wavy;
-      }
-    }
-  }
-`
 
 const Footer = ({ post, compact = true }) => {
   if (!post) {
@@ -93,7 +63,7 @@ const Footer = ({ post, compact = true }) => {
   }
 
   return (
-    <PostFooter>
+    <footer className={classnames('card__breakout', styles.footer)}>
       {actionText + ' '}
       {!!post.properties.url && (
         <Link className="u-url" to={post.properties.url[0]}>
@@ -137,7 +107,7 @@ const Footer = ({ post, compact = true }) => {
           return null
         }
         return (
-          <Fragment>
+          <Fragment key={`category-${value}`}>
             <Link as={`/category/${value}`} to="/category/[category]">
               #<span className="p-category">{value}</span>
             </Link>{' '}
@@ -159,7 +129,7 @@ const Footer = ({ post, compact = true }) => {
           )}
         </span>
       )}
-    </PostFooter>
+    </footer>
   )
 }
 

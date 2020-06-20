@@ -11,7 +11,7 @@ const Marker = styled.div`
   border-radius: 50%;
   border: 2px solid transparent;
   overflow: hidden;
-  transition: border-color 0.2s ${palette('complementary')};
+  transition: border-color 0.2s var(--color-complementary);
   border: 1px solid;
   left: ${({ left }) => left - size / 2}px;
   top: ${({ top }) => top - size / 2}px;
@@ -21,7 +21,7 @@ const Marker = styled.div`
     ${({ highlight }) =>
       !!highlight &&
       `
-    box-shadow: 0 0 0.2em ${palette('contrast')};
+    box-shadow: 0 0 0.2em var(--color-contrast);
     z-index: 2;
   `}
     img {

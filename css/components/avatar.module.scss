@@ -1,0 +1,73 @@
+$emoji-placeholders: map(
+  '👻',
+  '👤',
+  '🕵️‍',
+  '🧔',
+  '👩‍🚀',
+  '💀',
+  '🧕',
+  '🧙‍',
+  '‍‍🤷‍'
+);
+
+.author {
+  display: inline-block;
+  max-width: 100%;
+
+  a {
+    display: block;
+  }
+}
+
+.author__name {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.thumbnail {
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  overflow: hidden;
+  //   width: ${(props) => (props.width / 20) * 1.5}em;
+  //   height: ${(props) => (props.width / 20) * 1.5}em;
+  object-fit: cover;
+  text-align: center;
+  color: inherit;
+  background-color: var(--color-complementary);
+  transition: box-shadow 0.2s;
+  clip-path: url(#topography-clip);
+  clip-path: url(#topography-clip--rotating);
+  text-indent: -100%;
+
+  /* Make the image a square */
+  &:before {
+    content: '';
+    display: block;
+    width: 100%;
+    padding-bottom: 100%;
+  }
+
+  /* Add a emoji placeholder */
+  &:after {
+    font-style: normal;
+    content: '🤷‍';
+    display: block;
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    text-indent: 0;
+    // width: ${(props) => ((props.width / 20) * 1.5) / 2}em;
+    // height: ${(props) => ((props.width / 20) * 1.5) / 2}em;
+    font-size: 2rem;
+    line-height: 1.5;
+    background-color: var(--color-complementary);
+  }
+
+  @each $i, $emoji in $emoji-placeholders {
+    .h-cite:nth-of-type(#{length($emoji-placeholders)}n - #{$i}) &:after {
+      content: $emoji;
+    }
+  }
+}

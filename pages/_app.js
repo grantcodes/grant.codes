@@ -3,6 +3,8 @@ import Container from 'components/Container'
 
 // TODO: Improve this?
 import 'react-image-lightbox/style.css'
+import '../css/base/index.scss'
+import '../css/components/index.scss'
 
 const MyApp = ({ Component, pageProps }) => {
   let containerClass = ''

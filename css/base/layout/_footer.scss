@@ -1,0 +1,44 @@
+@use '../../util' as u;
+
+.main-footer {
+  grid-area: footer;
+  justify-self: center;
+  margin-top: u.space(1);
+
+  @media (min-width: u.$mid-break) {
+    position: sticky;
+    z-index: 1;
+    align-self: end;
+    justify-self: start;
+    bottom: u.space(2);
+    .container.right-aligned & {
+      justify-self: end;
+    }
+    .container.single-article & {
+      position: static;
+      justify-self: center;
+    }
+  }
+
+  @media print {
+    display: none;
+  }
+}
+
+.main-footer__icon {
+  padding: 0.2em;
+  display: inline-block;
+  text-decoration: none;
+  font-size: 1.5rem;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+
+  svg {
+    filter: drop-shadow(#{u.shadow()});
+  }
+
+  &:hover,
+  &:focus {
+    opacity: 1;
+  }
+}

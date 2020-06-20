@@ -1,0 +1,43 @@
+// Header
+@use '../util' as u;
+
+.main-header {
+  grid-area: header;
+  justify-self: center;
+  margin-top: 4rem;
+  margin-bottom: 3rem;
+  @media (min-width: u.$mid-break) {
+    position: sticky;
+    z-index: 1;
+    justify-self: start;
+    align-self: start;
+    margin: 0;
+    padding-top: 0.3em;
+    height: u.$header-height;
+    top: u.space(1);
+    @media (min-width: u.$mid-break) {
+      top: u.space(2);
+    }
+    .container.right-aligned & {
+      justify-self: end;
+    }
+  }
+  .container.single-article & {
+    display: none;
+  }
+}
+
+.main-header__title {
+  display: inline-block;
+  margin: 0;
+  text-decoration: overline wavy;
+  color: var(--color-contrast);
+  letter-spacing: 0.1em;
+  text-shadow: u.shadow();
+  font-size: u.fs(2);
+}
+
+.main-header__title__link {
+  text-decoration: none !important;
+  color: inherit;
+}

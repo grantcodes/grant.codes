@@ -1,11 +1,10 @@
 import React, { Fragment } from 'react'
+import classnames from 'classnames'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import moment from 'moment'
 import Link from '../Link'
 import Card from '../Card'
-import CardTitle from '../Card/Title'
-import CardBreakout from '../Card/Breakout'
 import PostContent from './Content'
 import Map from '../Map'
 import Photo from './Photo'
@@ -15,10 +14,10 @@ import Admin from './Admin'
 import Footer from './Footer'
 import Button from '../Button'
 import Icon from '../Icon'
-import reply from '../../svgs/reply.svg'
-import bookmark from '../../svgs/bookmark.svg'
-import repost from '../../svgs/repost.svg'
-import like from '../../svgs/heart.svg'
+import reply from 'eva-icons/fill/svg/corner-up-left.svg'
+import bookmark from 'eva-icons/fill/svg/bookmark.svg'
+import repost from 'eva-icons/fill/svg/repeat.svg'
+import like from 'eva-icons/fill/svg/heart.svg'
 import isAdmin from '../../lib/is-admin'
 import { palette, mixin, theme } from '../Theme/helpers'
 
@@ -37,23 +36,25 @@ const eventTimeDisplayOptions = {
 //   }
 // }
 
-const PostTitle = styled(CardTitle)`
-  .post--like-of &,
-  .post--bookmark & {
-    font-size: ${mixin.fs(0)};
-  }
-  .container.single-article & {
-    font-size: ${mixin.fs(4)};
-    @media (min-width: ${theme('midBreak')}) {
-      font-size: ${mixin.fs(5)};
-    }
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: ${mixin.space(1)};
-    margin-bottom: ${mixin.space(3)};
-    text-align: center;
-  }
-`
+// TODO: Post title styles.
+// const PostTitle = styled(CardTitle)`
+//   .post--like-of &,
+//   .post--bookmark & {
+//     font-size: ${mixin.fs(0)};
+//   }
+//   .container.single-article & {
+//     font-size: ${mixin.fs(4)};
+//     @media (min-width: ${theme('midBreak')}) {
+//       font-size: ${mixin.fs(5)};
+//     }
+//     margin-left: auto;
+//     margin-right: auto;
+//     margin-top: ${mixin.space(1)};
+//     margin-bottom: ${mixin.space(3)};
+//     text-align: center;
+//   }
+// `
+const PostTitle = styled.h1``
 
 const PostHeader = styled.header`
   ${({ background, theme }) =>
@@ -79,13 +80,14 @@ const PostHeader = styled.header`
       : ''}
 `
 
-const PostAction = styled(CardBreakout)`
-  padding: ${theme('cardPadding')};
+// TODO: Exends card__breakout
+const PostAction = styled.div`
+  padding: var(--card-padding);
   white-space: nowrap;
   text-overflow: ellipsis;
   font-size: ${mixin.fs(-1)};
   ${Footer} + & {
-    margin-top: -${theme('cardPadding')};
+    margin-top: -var(--card-padding);
   }
 `
 
@@ -138,9 +140,11 @@ const Post = ({ compact, post, className = '' }) => {
 
   return (
     <div
-      className={
-        className + ' ' + (post.type ? post.type[0] : null) + ' ' + postType
-      }
+      className={classnames(
+        className,
+        postType,
+        post.type ? post.type[0] : false
+      )}
     >
       <Card>
         {(postFeatured || postName) && (
@@ -302,14 +306,14 @@ const Post = ({ compact, post, className = '' }) => {
         )}
 
         {property('checkin', ({ value }) => (
-          <CardBreakout>
+          <div className="card__breakout">
             <Map
               location={value}
               defaultWidth={528}
               defaultHeight={224}
               theme="basic"
             />
-          </CardBreakout>
+          </div>
         ))}
 
         {property('location', ({ value }) => (
@@ -325,14 +329,14 @@ const Post = ({ compact, post, className = '' }) => {
                 </Link>
               </h6>
             )}
-            <CardBreakout>
+            <div className="card__breakout">
               <Map
                 location={value}
                 defaultWidth={528}
                 defaultHeight={224}
                 theme="basic"
               />
-            </CardBreakout>
+            </div>
           </Fragment>
         ))}
 

@@ -1,0 +1,72 @@
+@use '../util/' as u;
+
+.card {
+  background-color: var(--color-main--alt);
+  padding: u.$card-padding;
+  margin-bottom: u.$card-padding * 4;
+  transition: background u.$theme-transition-time;
+  border-radius: u.$border-radius;
+  overflow: hidden;
+  border-bottom: 1px solid var(--color-main--border);
+  box-shadow: u.shadow();
+
+  &.is-hightlighted {
+    box-shadow: 2px 0px 0 var(--color-contrast),
+      2px -2px 0 var(--color-contrast), -2px 0px 0 var(--color-contrast),
+      -2px -2px 0 var(--color-contrast);
+  }
+}
+
+// TODO: Convert this stuff to components
+// .card__action-name {
+//   font-size: 0.7em;
+//   background-color: var(--color-main);
+//   padding: 0.7em $card-padding;
+// }
+
+// .content-container__title {
+//   // color: #fff;
+//   font-size: ${mixin.fs( 1)};
+//   @media (min-width:${({theme}) => theme.midBreak}) {
+//     // color: #5c5c5c;
+//     font-size: ${mixin.fs( 2)};
+//   }
+// }
+
+// .h-entry .h-cite .is-long-content {
+//   @include scut-hide-visually();
+//
+
+.card__title {
+  font-size: u.fs(2);
+  margin-top: 0;
+  margin-bottom: u.space(1);
+}
+
+.card__breakout {
+  display: block;
+  overflow: hidden;
+  clear: both;
+  background-color: var(--color-main--alt);
+  margin: u.$card-padding 0 - u.$card-padding;
+
+  .title + & {
+    margin-top: 0;
+  }
+
+  & + & {
+    margin-top: 0 - u.$card-padding;
+  }
+
+  &:first-child {
+    margin-top: 0 - u.$card-padding;
+  }
+  &:last-child {
+    margin-bottom: 0 - u.$card-padding;
+  }
+
+  & > img {
+    display: block;
+    width: 100%;
+  }
+}

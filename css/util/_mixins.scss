@@ -1,0 +1,27 @@
+// TODO: Fix up functions
+@use 'sass:math';
+
+@function fs($size: 0) {
+  @return math.pow(1.4, $size) * 1rem;
+}
+
+@function space($count: 1) {
+  @return $count * 1rem;
+}
+
+@mixin glass($opacity: 0.8) {
+  backdrop-filter: blur(1rem);
+  background-color: rgba(0, 0, 0, 0.3);
+  // background-color: ${transparentize(1 - opacity, props.theme.palette.mainAlt)};
+}
+
+@function shadow($size: 1) {
+  @return $size * 1px $size * 1px $size * 4px rgba(0, 0, 0, 0.1);
+  // $lightness: props.theme.palette.hsl[2];
+  // $shadow:
+  //   $lightness > 0.2
+  //     ? rgba(0,0,0, #{1.3 - lightness / 4})
+  //     : rgba(255,255,255,.05);
+  // @return $size * 1px $size * 1px $size * 4px $shadow;
+  // @return none;
+}

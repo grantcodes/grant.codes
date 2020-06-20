@@ -33,7 +33,7 @@ const Loading = styled.div`
     height: 0.4rem;
     border-radius: 0.2rem;
     width: ${100 * width}%;
-    background-color: ${palette('contrast')};
+    background-color: var(--color-contrast);
     opacity: 0.8;
     position: absolute;
     bottom: 0;

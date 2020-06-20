@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { ThemeProvider } from 'styled-components'
 import { parseCookies, setCookie } from 'nookies'
-import BaseCss from './BaseCss'
 import themer from '../ThemeSwitcher/themer'
 import chroma from 'chroma-js'
 
@@ -44,10 +43,7 @@ const Theme = ({ children, ...props }) => {
 
   return (
     <ThemeProvider theme={theme} {...props}>
-      <>
-        <BaseCss />
-        {children}
-      </>
+      {children}
     </ThemeProvider>
   )
 }

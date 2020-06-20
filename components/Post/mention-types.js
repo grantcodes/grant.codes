@@ -1,9 +1,9 @@
-import comment from '../../svgs/comment.svg'
-import like from '../../svgs/heart.svg'
-import reply from '../../svgs/reply.svg'
-import mention from '../../svgs/share.svg'
-import bookmark from '../../svgs/bookmark.svg'
-import repost from '../../svgs/repost.svg'
+import comment from 'eva-icons/fill/svg/message-square.svg'
+import like from 'eva-icons/fill/svg/heart.svg'
+import reply from 'eva-icons/fill/svg/corner-up-left.svg'
+import mention from 'eva-icons/fill/svg/share.svg'
+import bookmark from 'eva-icons/fill/svg/bookmark.svg'
+import repost from 'eva-icons/fill/svg/repeat.svg'
 
 export default [
   {

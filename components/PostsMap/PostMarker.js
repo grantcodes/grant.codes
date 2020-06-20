@@ -20,7 +20,7 @@ const MapPost = styled.div`
   position: relative;
   max-width: 20em;
   margin: auto;
-  background: ${palette('main')};
+  background: var(--color-main);
 
   /* TODO: THis won't work */
   > .post > .card {
@@ -35,10 +35,10 @@ const PostMarker = ({ post, ...markerProps }) => {
     <Fragment>
       <AvatarMarker
         {...markerProps}
-        onClick={e => setOpen(true)}
+        onClick={(e) => setOpen(true)}
         highlight={open}
       />
-      <MapPostContainer open={open} onClick={e => setOpen(false)}>
+      <MapPostContainer open={open} onClick={(e) => setOpen(false)}>
         <MapPost>
           <Post post={post} compact />
         </MapPost>

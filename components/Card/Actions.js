@@ -1,18 +1,18 @@
 import styled from 'styled-components'
-import CardBreakout from './Breakout'
 import Button from '../Button'
 import { palette, theme } from '../Theme/helpers'
 
-const CardActions = styled(CardBreakout)`
+// TODO: Extends card__breakout
+const CardActions = styled.div`
   display: flex !important;
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
-  background-color: ${palette('mainAlt')};
-  transition: background-color ${theme('themeTransitionTime')};
+  background-color: var(--color-main--alt);
+  transition: background-color var(--theme-transition-time);
 
-  ${CardBreakout} + & {
-    margin-top: -${theme('cardPadding')};
+  .card__breakout + & {
+    margin-top: -var(--card-padding);
   }
 `
 export default CardActions

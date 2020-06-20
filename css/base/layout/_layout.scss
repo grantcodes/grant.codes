@@ -1,0 +1,60 @@
+@use '../util' as u;
+
+.grid {
+  display: grid;
+  width: 100%;
+  min-height: 100vh;
+  padding: u.space(1);
+  grid-column-gap: u.space(1);
+  grid-row-gap: u.space(1);
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto auto;
+  grid-template-areas:
+    'header'
+    'main'
+    'footer';
+  @media (min-width: u.$mid-break) {
+    padding: u.space(2);
+    grid-column-gap: u.space(2);
+    grid-row-gap: u.space(2);
+    grid-template-columns: u.$content-width auto;
+    grid-template-rows: u.$header-height auto auto;
+    grid-template-areas:
+      'main header'
+      'main nav'
+      'main footer';
+
+    &.right-aligned--wide-content {
+      grid-template-columns: auto u.$side-width;
+    }
+  }
+
+  &.single-article {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    @media (min-width: u.$mid-break) {
+      grid-template-columns: auto;
+      grid-template-rows: auto auto;
+      grid-template-areas:
+        'main'
+        'footer';
+    }
+  }
+}
+
+.main-content {
+  grid-area: main;
+  max-width: 100%;
+}
+
+.background-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -5;
+}

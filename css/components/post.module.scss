@@ -1,0 +1,29 @@
+@use '../util' as u;
+
+.footer {
+  padding: u.space(0.5) var(--card-padding);
+  font-family: u.$font-mono;
+  opacity: 0.7;
+
+  &,
+  & * {
+    line-height: 1.2;
+    font-size: u.fs(-2);
+  }
+
+  /* Child component doesn't work for some reason? Maybe it is not a default styled component or something? */
+  /* ${Avatar} { */
+  .h-card {
+    display: inline-block;
+    text-decoration: none;
+    font-size: 0.5em;
+    margin-top: -0.25em;
+
+    .p-name {
+      text-decoration: underline;
+      :hover {
+        text-decoration: underline wavy;
+      }
+    }
+  }
+}

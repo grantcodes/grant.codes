@@ -2,15 +2,14 @@ import styled from 'styled-components'
 import Link from 'components/Link'
 import Icon from 'components/Icon'
 import Card from 'components/Card'
-import CardBreakout from 'components/Card/Breakout'
 import { NextSeo } from 'next-seo'
-import arrowLeft from '../../svgs/arrow-left.svg'
-import externalLink from '../../svgs/external-link.svg'
-import { theme } from 'components/Theme/helpers'
+import arrowLeft from 'eva-icons/fill/svg/arrow-back.svg'
+import externalLink from 'eva-icons/fill/svg/external-link.svg'
 import websites from '../../data/websites'
 
-const WebsiteFooter = styled(CardBreakout)`
-  padding: ${theme('cardPadding')};
+// TODO: extends card__breakout
+const WebsiteFooter = styled.div`
+  padding: var(--card-padding);
 `
 
 export default ({ title, screenshot, url, content, ...props }) => (
@@ -18,9 +17,9 @@ export default ({ title, screenshot, url, content, ...props }) => (
     <NextSeo title={title} />
     <article>
       {!!screenshot && (
-        <CardBreakout>
+        <div className="card__breakout">
           <img src={screenshot} alt={title + ' Screenshot'} />
-        </CardBreakout>
+        </div>
       )}
 
       <header>
@@ -29,7 +28,7 @@ export default ({ title, screenshot, url, content, ...props }) => (
 
       <main dangerouslySetInnerHTML={{ __html: content }}></main>
 
-      <WebsiteFooter as="footer">
+      <WebsiteFooter as="footer" className="card__breakout">
         <Link to="/websites">
           <Icon icon={arrowLeft} /> All Projects
         </Link>{' '}

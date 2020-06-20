@@ -37,7 +37,6 @@ const DeviceInfo = styled.dl`
   dt {
     float: left;
     clear: left;
-    font-weight: bold;
     margin-right: 0.5em;
     &::after {
       content: ':';

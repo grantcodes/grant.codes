@@ -18,10 +18,10 @@ const Content = styled.div`
   .container.single-article & > .postrchild-editor {
     width: auto;
     max-width: none;
-    margin-left: -${theme('cardPadding')};
-    margin-right: -${theme('cardPadding')};
+    margin-left: -var(--card-padding);
+    margin-right: -var(--card-padding);
 
-    background-color: ${palette('main')};
+    background-color: var(--color-main);
     position: relative;
     overflow: hidden;
 
@@ -34,8 +34,8 @@ const Content = styled.div`
       max-width: 100%;
       margin-left: auto;
       margin-right: auto;
-      padding-left: ${theme('cardPadding')};
-      padding-right: ${theme('cardPadding')};
+      padding-left: var(--card-padding);
+      padding-right: var(--card-padding);
     }
 
     > ul,
@@ -58,8 +58,8 @@ const Content = styled.div`
       max-width: 100%;
       margin-left: auto;
       margin-right: auto;
-      padding-left: ${theme('cardPadding')};
-      padding-right: ${theme('cardPadding')};
+      padding-left: var(--card-padding);
+      padding-right: var(--card-padding);
     }
   }
 `

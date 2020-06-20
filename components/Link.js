@@ -47,8 +47,19 @@ export default ({ to = null, as = null, linkAs = null, ...props }) => {
     return props.children
   }
 
-  to = to.replace(process.env.NEXT_PUBLIC_URL, '')
-  to = to.replace('https://grant.codes', '')
+  if (
+    to.startsWith(process.env.NEXT_PUBLIC_URL) ||
+    to.startsWith('https://grant.codes')
+  ) {
+    to = to.replace(process.env.NEXT_PUBLIC_URL, '')
+    to = to.replace('https://grant.codes', '')
+
+    if (!as && !linkAs && to.split('/').length === 5) {
+      linkAs = to
+      to = '/[typeOrYear]/[month]/[day]/[slug]'
+    }
+  }
+
   if (to === '') {
     to = '/'
   }

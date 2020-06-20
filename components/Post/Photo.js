@@ -1,13 +1,12 @@
 import React, { Fragment, useState } from 'react'
 import PropTypes from 'prop-types'
 import Link from '../Link'
-import CardBreakout from '../Card/Breakout'
 import FullscreenPhoto from '../FullscreenPhoto'
 
 const PostPhoto = ({ photos, imageSizes, permalink }) => {
   const [fullscreen, setFullscreen] = useState(null)
 
-  const handleClick = photo => e => {
+  const handleClick = (photo) => (e) => {
     e.preventDefault()
     setFullscreen(photo)
   }
@@ -27,15 +26,15 @@ const PostPhoto = ({ photos, imageSizes, permalink }) => {
           }
 
           return (
-            <CardBreakout
-              as={Link}
+            <Link
+              className="card__breakout"
               key={`post-photo-${photoIndex}`}
               to={permalink}
               onClick={handleClick(value)}
             >
               <img src={smallSrc} alt={alt} />
               <data className="u-photo" value={value} />
-            </CardBreakout>
+            </Link>
           )
         }
       })}

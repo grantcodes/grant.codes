@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import CardActions, { CardActionText, CardActionButton } from '../Card/Actions'
 import BackfillMap from './BackfillMap'
-import twitter from '../../svgs/twitter.svg'
-import x from '../../svgs/x.svg'
-import instagram from '../../svgs/instagram.svg'
-import log from '../../svgs/zoom-in.svg'
-import database from '../../svgs/pencil.svg'
-import refetch from '../../svgs/external-link.svg'
-import location from '../../svgs/map-pin.svg'
+import twitter from 'eva-icons/fill/svg/twitter.svg'
+import x from 'eva-icons/fill/svg/close.svg'
+import instagram from 'eva-icons/fill/svg/camera.svg'
+import log from 'eva-icons/fill/svg/code.svg'
+import database from 'eva-icons/fill/svg/edit.svg'
+import refetch from 'eva-icons/fill/svg/external-link.svg'
+import location from 'eva-icons/fill/svg/pin.svg'
 import Toast from '../Toast'
 import {
   syndicatePost,
@@ -20,7 +20,7 @@ const PostAdmin = ({ post, children }) => {
   const [notification, setNotification] = useState('')
   const [backfillLocations, setBackfillLocations] = useState([])
 
-  const syndicate = async service => {
+  const syndicate = async (service) => {
     const result = await syndicatePost(post.properties.url[0], service)
     if (result) {
       setNotification('Syndicated to ' + service)
@@ -29,7 +29,7 @@ const PostAdmin = ({ post, children }) => {
     }
   }
 
-  const unsyndicate = async service => {
+  const unsyndicate = async (service) => {
     const result = await deleteSyndication(post.properties.url[0], service)
     if (result) {
       setNotification('Syndication deleted from ' + service)
@@ -40,10 +40,10 @@ const PostAdmin = ({ post, children }) => {
 
   const hasTwitter =
     post.properties.syndication &&
-    post.properties.syndication.some(url => url.includes('twitter.com'))
+    post.properties.syndication.some((url) => url.includes('twitter.com'))
   const hasInsta =
     post.properties.syndication &&
-    post.properties.syndication.some(url => url.includes('instagram.com'))
+    post.properties.syndication.some((url) => url.includes('instagram.com'))
 
   const hasReference =
     post.properties['like-of'] ||

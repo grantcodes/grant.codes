@@ -1,45 +1,11 @@
-import React from 'react'
-import styled from 'styled-components'
 import Link from '../Link'
-
-const Tile = styled(Link)`
-  display: block;
-  position: relative;
-  padding: 1rem;
-  background-color: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 0.5rem 3rem rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(1rem);
-  width: 48%;
-  width: calc(50% - 0.5rem);
-  max-width: 16rem;
-  margin-bottom: 1rem;
-  transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
-
-  :hover,
-  :focus {
-    transform: translateY(-0.3em) scale(1.03);
-    background-color: rgba(255, 255, 255, 1);
-    box-shadow: 0 0.5rem 3rem rgba(0, 0, 0, 0.2);
-  }
-
-  :nth-child(2n) {
-    margin-right: 0;
-  }
-`
-
-const TileImage = styled.img`
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: center;
-`
+import styles from 'css/components/website-tile.module.scss'
 
 const Preview = ({ slug, title, thumbnail }) => (
-  <Tile to={`/websites/${slug}`}>
+  <Link className={styles.tile} to={`/websites/${slug}`}>
     <span className="screen-reader-text">{title}</span>
-    <TileImage src={thumbnail} />
-  </Tile>
+    <img className={styles.image} src={thumbnail} />
+  </Link>
 )
 
 export default Preview

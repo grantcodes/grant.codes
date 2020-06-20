@@ -3,8 +3,7 @@ import styled from 'styled-components'
 import moment from 'moment'
 import Link from '../Link'
 import Card from '../Card'
-import CardTitle from '../Card/Title'
-import CardBreakout from '../Card/Breakout'
+// import CardTitle from '../Card/Title'
 import Photo from '../Post/Photo'
 import Comments from '../Post/Comments'
 import Admin from '../Post/Admin'
@@ -13,15 +12,14 @@ import Button from '../Button'
 import Icon from '../Icon'
 import { palette, theme, mixin } from '../Theme/helpers'
 
-// const Banner = styled(Card)`
-// const Banner = styled.div`
-const Banner = styled(CardBreakout)`
+// TODO: Extends card__breakout
+const Banner = styled.div`
   background-color: #222;
   background-size: cover;
   background-position: center;
-  background-image: url(${props => props.background});
-  margin-bottom: -${theme('cardPadding')};
-  padding: ${theme('cardPadding')};
+  background-image: url(${(props) => props.background});
+  margin-bottom: -var(--card-padding);
+  padding: var(--card-padding);
   color: ${palette('white')};
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9), -1px 1px 2px rgba(0, 0, 0, 0.9),
     1px -1px 2px rgba(0, 0, 0, 0.9), -1px -1px 2px rgba(0, 0, 0, 0.9);
@@ -34,20 +32,20 @@ const Poster = styled.img`
   width: auto !important;
   height: auto;
   float: left;
-  margin-right: ${theme('cardPadding')};
-  /* margin-bottom: ${theme('cardPadding')}; */
+  margin-right: var(--card-padding);
+  /* margin-bottom: var(--card-padding); */
   overflow: hidden;
-  border-radius: ${theme('borderRadius')};
-  border: 1px solid ${palette('mainBorder')};
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-main--border);
   box-shadow: ${mixin.shadow()};
 `
 
 const Trakt = ({ plays, last_watched_at: lastWatch, movie, ...props }) => (
   <>
     {!!movie && (
-      <CardTitle>
-        {movie.title} ({movie.year})
-      </CardTitle>
+      // <CardTitle>
+      //   {movie.title} ({movie.year})
+      // </CardTitle>
     )}
     <p>Watched {plays} times</p>
     <p>Last watched {moment(lastWatch).fromNow()}</p>

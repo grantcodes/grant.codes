@@ -28,7 +28,7 @@ const StyledToast = styled.div`
       : type === 'success'
       ? 'green'
       : theme.palette.complementary};
-  color: ${palette('contrast')};
+  color: var(--color-contrast);
   animation: ${animation} 0.2s both;
   opacity: 0.9;
   transform: translateX(-50%);
@@ -40,7 +40,7 @@ const Toast = ({ notification, type }) => {
   const addNotification = (text, type) => {
     setNotifications([...notifications, { type, text }])
     setTimeout(
-      () => setNotifications(notifications.filter(n => n.text !== text)),
+      () => setNotifications(notifications.filter((n) => n.text !== text)),
       notificationTimeout
     )
   }

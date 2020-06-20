@@ -1,0 +1,132 @@
+@use '../util' as u;
+@use './fonts';
+
+*,
+*:before,
+*:after {
+  -webkit-font-smoothing: inherit;
+}
+
+html {
+  font-size: clamp(140%, 2vw, 1.8rem);
+}
+
+body {
+  color: var(--color-contrast);
+  fill: var(--color-contrast);
+  transition: color var(--theme-transition-time);
+  line-height: 1.5;
+  font-family: u.$font-sans;
+  font-variation-settings: 'wght' 300;
+  word-wrap: break-word;
+  text-shadow: 0 0 0 var(--color-contrast);
+  -webkit-font-smoothing: antialiased;
+}
+
+p {
+  margin: 0;
+  margin-bottom: u.space();
+  margin-top: u.space();
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: u.fs(4);
+  margin-top: u.space();
+  margin-bottom: u.space(2);
+}
+h2 {
+  font-size: u.fs(3);
+  margin-bottom: u.space(2);
+}
+h3 {
+  font-size: u.fs(2);
+  margin-bottom: u.space(1);
+}
+h4 {
+  font-size: u.fs(1);
+  margin-bottom: u.space(1);
+}
+h5 {
+  font-size: u.fs(0);
+}
+h6 {
+  font-size: u.fs(-1);
+}
+
+small {
+  font-size: u.fs(-1);
+}
+
+ul,
+ol {
+  padding-left: u.space();
+  margin-top: u.space();
+  margin-bottom: u.space();
+}
+
+blockquote {
+  display: block;
+  text-align: left;
+  border-left: 0.2rem solid;
+  background: var(--color-main);
+  padding: u.space() u.space(2);
+  font-style: italic;
+
+  footer {
+    font-size: 0.7em;
+    font-style: normal;
+  }
+}
+
+pre {
+  code {
+    display: block;
+  }
+  font-family: u.$font-mono;
+  display: block;
+  font-size: 0.9rem;
+  width: 100%;
+  overflow: auto;
+  background-color: var(--color-main);
+  padding: var(--card-padding);
+}
+
+code {
+  font-family: u.$font-mono;
+  p & {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    border-radius: 0.3rem;
+    font-size: 0.9em;
+    display: inline-block;
+    background-color: var(--color-main);
+    border: 1px solid var(--color-main);
+  }
+}
+
+hr {
+  display: block;
+  border: none;
+  text-align: center;
+  line-height: 0;
+  overflow: visible;
+  margin-top: u.space(2);
+  margin-bottom: u.space(2);
+}
+hr::after {
+  display: inline-block;
+  text-decoration: line-through wavy;
+  content: '\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0';
+  @media (min-width: 30em) {
+    content: '\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0';
+  }
+}

@@ -8,6 +8,7 @@ const Icon = styled.span`
   height: 1em;
   fill: currentColor;
   stroke: currentColor;
+  stroke-width: 0;
   vertical-align: middle;
 
   svg {
