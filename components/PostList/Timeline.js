@@ -4,7 +4,7 @@ import Loading from '../Loading'
 import Pagination from '../Container/Pagination'
 import Card from '../Card'
 
-const Timeline = ({ posts, olderLink, newerLink, title }) => (
+const Timeline = ({ posts, title }) => (
   <>
     {posts ? (
       posts.map((post, i) => (
@@ -19,7 +19,7 @@ const Timeline = ({ posts, olderLink, newerLink, title }) => (
       </>
     )}
 
-    <Pagination next={olderLink} previous={newerLink} />
+    <Pagination noNext={posts.length < 10} />
   </>
 )
 
