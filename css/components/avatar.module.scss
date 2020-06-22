@@ -29,8 +29,11 @@ $emoji-placeholders: map(
   vertical-align: middle;
   position: relative;
   overflow: hidden;
-  //   width: ${(props) => (props.width / 20) * 1.5}em;
-  //   height: ${(props) => (props.width / 20) * 1.5}em;
+  // width: ${(props) => (props.width / 20) * 1.5}em;
+  // height: ${(props) => (props.width / 20) * 1.5}em;
+  width: 1em;
+  height: 1em;
+  // TODO: Different sized avatars
   object-fit: cover;
   text-align: center;
   color: inherit;
@@ -38,7 +41,7 @@ $emoji-placeholders: map(
   transition: box-shadow 0.2s;
   clip-path: url(#topography-clip);
   clip-path: url(#topography-clip--rotating);
-  text-indent: -100%;
+  text-indent: -2em;
 
   /* Make the image a square */
   &:before {

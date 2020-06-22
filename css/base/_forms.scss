@@ -89,32 +89,16 @@ button,
   cursor: pointer;
   box-shadow: u.shadow();
 
-  :hover,
-  :focus,
-  :active {
+  &:hover,
+  &:focus,
+  &:active {
     color: var(--color-main);
     fill: var(--color-main);
     background-color: var(--color-contrast);
   }
 
-  // TODO: Floater button
-  //   ${({ floater }) =>
-  //     !!floater &&
-  //     `
-  //     color: white;
-  //     background-color: rgba(0, 0, 0, 0.3);
-  //     :hover,
-  //     :focus,
-  //     :active {
-  //   background-color: rgba(0, 0, 0, 0.6);
-  // }
-
-  // TODO: Icon button
-  //   ${({ icon }) =>
-  //     !!icon &&
-  //     `
-  // padding: 0.5em;
-  // line-height: 1;
-  // text-align: center;
-  // `
+  .icon {
+    line-height: 1;
+    text-align: center;
+  }
 }

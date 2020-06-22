@@ -2,7 +2,10 @@ import React, { Fragment, useState, useEffect } from 'react'
 import classnames from 'classnames'
 import Link from '../../Link'
 import Search from './Search'
+import Icon from 'components/Icon'
 import isAdmin from '../../../lib/is-admin'
+import menuIcon from 'eva-icons/fill/svg/menu.svg'
+import closeIcon from 'eva-icons/fill/svg/close.svg'
 
 const shownLinkCount = 4
 
@@ -97,10 +100,13 @@ export default () => {
           setTargeted(!targeted)
         }}
       >
-        {targeted ? 'x' : '<'}
+        <Icon icon={targeted ? closeIcon : menuIcon} />
       </a>
 
-      <nav className="main-nav" targeted={targeted} id="nav">
+      <nav
+        id="nav"
+        className={classnames('main-nav', { 'is-target': targeted })}
+      >
         {navLinks.map((link, i) => (
           <Fragment key={'nav-link-to-' + i}>
             {i === shownLinkCount && (

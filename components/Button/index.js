@@ -8,7 +8,7 @@ const Button = ({ children, icon, floating, ...props }) => {
     icon = <Icon icon={icon} />
   }
 
-  const El = !!props.to ? Link : 'a'
+  const El = !!props.to ? Link : 'button'
 
   return (
     <El

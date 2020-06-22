@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react'
-import styled from 'styled-components'
 import Icon from '../Icon'
 import Map from '../Map'
 
@@ -13,6 +12,8 @@ import pinIcon from 'eva-icons/fill/svg/pin.svg'
 import homeIcon from 'eva-icons/fill/svg/home.svg'
 import workIcon from 'eva-icons/fill/svg/briefcase.svg'
 
+import styles from 'css/pages/about.module.scss'
+
 const userify = (url) => {
   url = new URL(url)
   let username = url.pathname
@@ -25,39 +26,6 @@ const userify = (url) => {
   return username
 }
 
-const Profiles = styled.dl`
-  &::after {
-    content: '';
-    display: block;
-    clear: both;
-  }
-  dt {
-    display: block;
-    padding: 0;
-    margin: 0;
-    width: 15rem;
-    max-width: 100%;
-    &:after {
-      /* content: ': '; */
-    }
-    @media (min-width: 40em) {
-      float: left;
-      clear: both;
-    }
-  }
-
-  dd {
-    display: block;
-    padding: 0;
-    margin: 0 0 1.5rem 0;
-    @media (min-width: 40em) {
-      margin-bottom: 0.5rem;
-      float: left;
-      max-width: 100%;
-    }
-  }
-`
-
 const Profile = ({ name, icon, children }) => (
   <>
     <dt>
@@ -68,7 +36,7 @@ const Profile = ({ name, icon, children }) => (
 )
 
 const Elsewhere = ({ location }) => (
-  <Profiles>
+  <dl className={styles.profiles}>
     <Profile name="Website" icon={linkIcon}>
       <a href="https://grant.codes" className="u-url">
         grant.codes
@@ -146,7 +114,7 @@ const Elsewhere = ({ location }) => (
         />
       </Profile>
     )}
-  </Profiles>
+  </dl>
 )
 
 export default Elsewhere

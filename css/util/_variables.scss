@@ -1,6 +1,7 @@
 $font-system: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans,
   Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
-$font-sans: 'Genera', 'Codec Pro', 'Lemon Milk', $font-system;
+$font-sans: 'Genera', $font-system;
+$font-h: $font-sans;
 $font-mono: 'DejaVu Sans Mono', Menlo, Consolas, 'Liberation Mono', Monaco,
   'Lucida Console', monospace;
 
@@ -11,8 +12,8 @@ $side-width: 18rem;
 $mid-break: $content-width + $side-width;
 $header-height: 4rem;
 $theme-transition-time: 1s;
-$width-normal: 50rem;
-$width-wide: 70rem;
+$width-normal: 30rem;
+$width-wide: 50rem;
 
 // Clamp content width
 // $content-width: clamp(200px, 34rem, 800px);

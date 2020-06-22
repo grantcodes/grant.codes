@@ -14,6 +14,10 @@ const Form = styled.form`
   margin-bottom: 1rem;
   box-shadow: ${mixin.shadow(2)};
   border-radius: var(--border-radius);
+  font-size: 1rem;
+  @media (min-width: ${theme('midBreak')}) {
+    font-size: 0.9rem;
+  }
 
   input {
     margin: 0;
@@ -21,21 +25,15 @@ const Form = styled.form`
     border-bottom-right-radius: 0;
     box-shadow: none;
     border-color: transparent;
-    font-size: 1rem;
+    font-size: inherit;
     min-width: 5em;
-    @media (min-width: ${theme('midBreak')}) {
-      font-size: 0.9rem;
-    }
   }
 
-  button {
+  .button {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     box-shadow: none;
-    font-size: 0.7rem;
-    @media (min-width: ${theme('midBreak')}) {
-      font-size: 0.9rem;
-    }
+    font-size: inherit;
   }
 `
 

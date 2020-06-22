@@ -64,63 +64,6 @@ body::-webkit-scrollbar-track {
 
 ::-webkit-scrollbar-thumb {
   border-radius: 0.25rem;
+  min-height: 2rem;
   background-color: var(--color-complementary);
-}
-
-/* Single article style, need to rework! */
-.container.single-article {
-  .main-content > .post--article {
-    & > .card {
-      background: none;
-      box-shadow: none;
-      border: none;
-      margin: 0;
-    }
-    > .facepile,
-    > .comments {
-      display: block;
-      width: u.$width-normal;
-      max-width: 100%;
-      margin-left: auto;
-      margin-right: auto;
-      padding-left: u.$card-padding;
-      padding-right: u.$card-padding;
-    }
-  }
-
-  /* Format post content */
-  .main-content > .post--article > .card {
-    > .post__header .post__title {
-      /* @extend h1;
-      @media (min-width: $mid-break) {
-        text-align: center;
-      } */
-      /* max-width: u.$width-normal; */
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    > .post__header--background {
-      min-height: 50vh;
-      position: sticky;
-      top: 0;
-      z-index: 0;
-
-      & ~ div.e-content {
-        box-shadow: 0 -0.2rem 0.2rem rgba(0, 0, 0, 0.2);
-      }
-    }
-
-    > .post__footer,
-    > .post__actions {
-      margin-left: u.$card-padding;
-      margin-right: u.$card-padding;
-      @media (min-width: u.$width-normal) {
-        max-width: 100%;
-        width: u.$width-normal;
-        margin-left: auto;
-        margin-right: auto;
-      }
-    }
-  }
 }

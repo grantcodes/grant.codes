@@ -5,6 +5,7 @@ import Container from 'components/Container'
 import 'react-image-lightbox/style.css'
 import '../css/base/index.scss'
 import '../css/components/index.scss'
+import '../css/pages/index.scss'
 
 const MyApp = ({ Component, pageProps }) => {
   let containerClass = ''

@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react'
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import moment from 'moment'
 import Link from '../Link'
 import Card from '../Card'
@@ -19,7 +18,6 @@ import bookmark from 'eva-icons/fill/svg/bookmark.svg'
 import repost from 'eva-icons/fill/svg/repeat.svg'
 import like from 'eva-icons/fill/svg/heart.svg'
 import isAdmin from '../../lib/is-admin'
-import { palette, mixin, theme } from '../Theme/helpers'
 
 const eventTimeDisplayOptions = {
   sameDay: '[Today] at HH:mm',
@@ -29,75 +27,6 @@ const eventTimeDisplayOptions = {
   lastWeek: '[Last] dddd at HH:mm',
   sameElse: 'DD/MM/YYYY - HH:mm',
 }
-
-// .post {
-//   .has-replies & {
-//     margin-bottom: ${mixin.space( 1)};
-//   }
-// }
-
-// TODO: Post title styles.
-// const PostTitle = styled(CardTitle)`
-//   .post--like-of &,
-//   .post--bookmark & {
-//     font-size: ${mixin.fs(0)};
-//   }
-//   .container.single-article & {
-//     font-size: ${mixin.fs(4)};
-//     @media (min-width: ${theme('midBreak')}) {
-//       font-size: ${mixin.fs(5)};
-//     }
-//     margin-left: auto;
-//     margin-right: auto;
-//     margin-top: ${mixin.space(1)};
-//     margin-bottom: ${mixin.space(3)};
-//     text-align: center;
-//   }
-// `
-const PostTitle = styled.h1``
-
-const PostHeader = styled.header`
-  ${({ background, theme }) =>
-    !!background
-      ? `
-    overflow: hidden;
-    margin-top: ${0 - theme.cardPadding};
-    margin-left: ${0 - theme.cardPadding};
-    margin-right: ${0 - theme.cardPadding};
-    padding: ${theme.cardPadding};
-    background-size: cover;
-    background-position: center;
-    background-image: url(${background});
-    display: flex;
-    align-items: center;
-    min-height: 13rem;
-
-    ${PostTitle} {
-      text-decoration: overline wavy;
-      background-color: ${theme.palette.main};
-    }
-    `
-      : ''}
-`
-
-// TODO: Exends card__breakout
-const PostAction = styled.div`
-  padding: var(--card-padding);
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  font-size: ${mixin.fs(-1)};
-  ${Footer} + & {
-    margin-top: -var(--card-padding);
-  }
-`
-
-const PostReadFull = styled(Button)`
-  display: block !important;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: ${mixin.space()};
-  margin-bottom: ${mixin.space()};
-`
 
 const Post = ({ compact, post, className = '' }) => {
   if (!post) {
@@ -126,34 +55,30 @@ const Post = ({ compact, post, className = '' }) => {
     ? post.properties.featured[0]
     : null
 
-  // if (postType === 'watch') {
-  //   return (
-  //     <div
-  //       className={
-  //         className + ' ' + (post.type ? post.type[0] : null) + ' ' + postType
-  //       }
-  //     >
-  //       <Watch post={post} compact={compact} />
-  //     </div>
-  //   )
-  // }
-
   return (
     <div
       className={classnames(
         className,
-        postType,
-        post.type ? post.type[0] : false
+        'post',
+        'post--' + postType,
+        post.type ? post.type[0] : false // h-type eg h-entry
       )}
     >
       <Card>
         {(postFeatured || postName) && (
-          <PostHeader background={postFeatured}>
+          <header
+            className={classnames('card__breakout', 'post__header', {
+              'post__header--featured': postFeatured,
+            })}
+            style={
+              postFeatured ? { backgroundImage: `url(${postFeatured})` } : null
+            }
+          >
             {!!postFeatured && (
               <data className="u-featured" value={postFeatured} />
             )}
-            {!!postName && <PostTitle className="p-name">{postName}</PostTitle>}
-          </PostHeader>
+            {!!postName && <h1 className="post__title p-name">{postName}</h1>}
+          </header>
         )}
 
         {property(
@@ -161,12 +86,12 @@ const Post = ({ compact, post, className = '' }) => {
           ({ value }) =>
             typeof value === 'string' && (
               <Fragment>
-                <PostAction as="p">
+                <p className="card__breakout post__action">
                   <Icon icon={like} /> Liked{' '}
                   <a className="u-like-of" href={value}>
                     {value}
                   </a>
-                </PostAction>
+                </p>
                 {post.references && post.references[value] && (
                   <Post post={post.references[value]} />
                 )}
@@ -178,12 +103,12 @@ const Post = ({ compact, post, className = '' }) => {
           ({ value }) =>
             typeof value === 'string' && (
               <Fragment>
-                <PostAction as="p">
+                <p className="card__breakout post__action">
                   <Icon icon={bookmark} /> Bookmarked{' '}
                   <a className="u-bookmark-of" href={value}>
                     {value}
                   </a>
-                </PostAction>
+                </p>
                 {post.references && post.references[value] && (
                   <Post post={post.references[value]} />
                 )}
@@ -195,12 +120,12 @@ const Post = ({ compact, post, className = '' }) => {
           ({ value }) =>
             typeof value === 'string' && (
               <Fragment>
-                <PostAction as="p">
+                <p className="card__breakout post__action">
                   <Icon icon={repost} /> Reposted{' '}
                   <a className="u-repost-of" href={value}>
                     {value}
                   </a>
-                </PostAction>
+                </p>
                 {post.references && post.references[value] && (
                   <Post post={post.references[value]} />
                 )}
@@ -212,7 +137,7 @@ const Post = ({ compact, post, className = '' }) => {
           ({ value }) =>
             typeof value === 'string' && (
               <Fragment>
-                <PostAction as="p">
+                <p className="card__breakout post__action">
                   {post.properties.rsvp ? (
                     <Fragment>
                       <Icon icon={reply} /> RSVPed{' '}
@@ -227,7 +152,7 @@ const Post = ({ compact, post, className = '' }) => {
                   <a className="u-in-reply-to" href={value}>
                     {value}
                   </a>
-                </PostAction>
+                </p>
                 {post.references && post.references[value] && (
                   <Post post={post.references[value]} />
                 )}
@@ -274,9 +199,13 @@ const Post = ({ compact, post, className = '' }) => {
             return (
               <Fragment>
                 <div className="screen-reader-text">{content}</div>
-                <PostReadFull to={post.properties.url[0]} aria-hidden="true">
+                <Button
+                  className="post__read-more"
+                  to={post.properties.url[0]}
+                  aria-hidden="true"
+                >
                   Read full post
-                </PostReadFull>
+                </Button>
               </Fragment>
             )
           }

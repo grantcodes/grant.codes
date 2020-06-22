@@ -6,7 +6,6 @@ import Icon from '../Icon'
 import Avatar from '../Avatar'
 import UrlIcon from '../UrlIcon'
 import mentionTypes from './mention-types'
-import styles from 'css/components/post.module.scss'
 
 const separator = ' ● '
 
@@ -63,7 +62,7 @@ const Footer = ({ post, compact = true }) => {
   }
 
   return (
-    <footer className={classnames('card__breakout', styles.footer)}>
+    <footer className="card__breakout post__footer">
       {actionText + ' '}
       {!!post.properties.url && (
         <Link className="u-url" to={post.properties.url[0]}>
