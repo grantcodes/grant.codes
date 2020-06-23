@@ -1,4 +1,3 @@
-import React from 'react'
 import Icon from '../../Icon'
 import ThemeSwitcher from '../../ThemeSwitcher'
 import twitter from 'eva-icons/fill/svg/twitter.svg'
@@ -6,8 +5,6 @@ import instagram from 'eva-icons/fill/svg/camera.svg'
 import email from 'eva-icons/fill/svg/email.svg'
 import facebook from 'eva-icons/fill/svg/facebook.svg'
 import github from 'eva-icons/fill/svg/github.svg'
-import styled from 'styled-components'
-import { mixin, theme } from '../../Theme/helpers'
 
 export default () => (
   <footer className="main-footer">

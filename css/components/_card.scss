@@ -70,3 +70,28 @@
     width: 100%;
   }
 }
+
+.card__actions {
+  display: flex !important;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  background-color: var(--color-main--alt);
+  transition: background-color u.$theme-transition-time;
+  .card__breakout + & {
+    margin-top: 0 - u.$card-padding;
+  }
+}
+
+.card__actions__button {
+  font-size: 0.8em;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.card__actions__text {
+  display: inline-block;
+  font-size: 0.7em;
+  margin-right: 1em;
+  vertical-align: middle;
+}

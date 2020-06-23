@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import CardActions, { CardActionText, CardActionButton } from '../Card/Actions'
 import BackfillMap from './BackfillMap'
 import twitter from 'eva-icons/fill/svg/twitter.svg'
 import x from 'eva-icons/fill/svg/close.svg'
@@ -53,14 +52,15 @@ const PostAdmin = ({ post, children }) => {
 
   return (
     <>
-      <CardActions>
+      <div className="card__breakout card__actions">
         {!!post.properties['post-status'] &&
           post.properties['post-status'][0] !== 'published' && (
-            <CardActionText>
+            <span className="card__actions__text">
               Status: {post.properties['post-status'][0]}
-            </CardActionText>
+            </span>
           )}
-        <CardActionButton
+        <button
+          className="card__actions__button"
           icon={log}
           onClick={() => {
             console.log(post)
@@ -68,14 +68,16 @@ const PostAdmin = ({ post, children }) => {
           }}
           title="Log"
         />
-        <CardActionButton
+        <button
+          className="card__actions__button"
           icon={twitter}
           onClick={async () => {
             hasTwitter ? unsyndicate('twitter') : syndicate('twitter')
           }}
           title={hasTwitter ? 'Delete from Twitter' : 'Push to Twitter'}
         />
-        <CardActionButton
+        <button
+          className="card__actions__button"
           icon={instagram}
           onClick={async () =>
             hasInsta ? unsyndicate('instagram') : syndicate('instagram')
@@ -83,7 +85,8 @@ const PostAdmin = ({ post, children }) => {
           title={hasInsta ? 'Delete from Instagram' : 'Push to Instagram'}
         />
         {!!hasReference && (
-          <CardActionButton
+          <button
+            className="card__actions__button"
             icon={refetch}
             onClick={async () => {
               const res = await postAction(
@@ -98,7 +101,8 @@ const PostAdmin = ({ post, children }) => {
           />
         )}
         {post && post.cms && post.cms._id && (
-          <CardActionButton
+          <button
+            className="card__actions__button"
             icon={database}
             to={`https://d4c206d3-229f-4679-8e85-43414aa29719-bluemix.cloudant.com/dashboard.html#database/grantcodes/${encodeURIComponent(
               post.cms._id
@@ -109,7 +113,8 @@ const PostAdmin = ({ post, children }) => {
           />
         )}
         {!post.properties.location && (
-          <CardActionButton
+          <button
+            className="card__actions__button"
             icon={location}
             onClick={async () => {
               // Get location from owntracks.
@@ -126,7 +131,8 @@ const PostAdmin = ({ post, children }) => {
             title="Backfill location"
           />
         )}
-        <CardActionButton
+        <button
+          className="card__actions__button"
           icon={x}
           onClick={async () => {
             const deleted = await deletePost(post.properties.url[0])
@@ -141,7 +147,7 @@ const PostAdmin = ({ post, children }) => {
         />
         {children}
         {!!notification && <Toast notification={notification} />}
-      </CardActions>
+      </div>
       {backfillLocations.length > 0 && (
         <BackfillMap locations={backfillLocations} />
       )}

@@ -1,0 +1,9 @@
+@use '../util' as u;
+
+.pagination {
+  clear: both;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: u.space(1);
+}

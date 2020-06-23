@@ -4,9 +4,7 @@ import TopographyClipPaths from '../Topography/ClipPaths'
 import Header from './Header'
 import Nav from './Nav'
 import Footer from './Footer'
-import styled from 'styled-components'
 import Meta from './DefaultMeta'
-import { theme } from '../Theme/helpers'
 
 // const Topography = asyncComponent({
 //   loader: () =>

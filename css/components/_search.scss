@@ -1,0 +1,33 @@
+@use '../util' as u;
+
+.search {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: stretch;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: u.shadow(2);
+  border-radius: u.$border-radius;
+  font-size: 1rem;
+  @media (min-width: u.$mid-break) {
+    font-size: 0.9rem;
+  }
+}
+
+.search__input {
+  margin: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  box-shadow: none;
+  border-color: transparent;
+  font-size: inherit;
+  min-width: 5em;
+}
+
+.search__button {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  box-shadow: none;
+  font-size: inherit;
+}

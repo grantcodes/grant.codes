@@ -1,41 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import styled from 'styled-components'
 import Button from '../../Button'
 import Icon from '../../Icon'
 import searchIcon from 'eva-icons/fill/svg/search.svg'
-import { mixin, theme } from '../../Theme/helpers'
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  justify-content: stretch;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  box-shadow: ${mixin.shadow(2)};
-  border-radius: var(--border-radius);
-  font-size: 1rem;
-  @media (min-width: ${theme('midBreak')}) {
-    font-size: 0.9rem;
-  }
-
-  input {
-    margin: 0;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    box-shadow: none;
-    border-color: transparent;
-    font-size: inherit;
-    min-width: 5em;
-  }
-
-  .button {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    box-shadow: none;
-    font-size: inherit;
-  }
-`
 
 function Search() {
   const [showSearch, setShowSearch] = useState(false)
@@ -51,23 +17,25 @@ function Search() {
   }
 
   return (
-    <Form
+    <form
+      className="search"
       onSubmit={(e) => {
         e.preventDefault()
         window.location.href = `/search/${search.replace(' ', '+')}`
       }}
     >
       <input
+        className="search__input"
         type="search"
         value={search}
         placeholder="Search..."
         onChange={(e) => setSearch(e.target.value)}
       />
-      <Button type="submit">
+      <Button className="search__button" type="submit">
         <span className="screen-reader-text">Search</span>
         <Icon icon={searchIcon} />
       </Button>
-    </Form>
+    </form>
   )
 }
 

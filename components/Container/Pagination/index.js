@@ -1,17 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import { useRouter } from 'next/router'
 import Button from '../../Button'
-import { mixin } from '../../Theme/helpers'
-
-const Wrapper = styled.nav`
-  clear: both;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-top: ${mixin.space(1)};
-`
 
 const Pagination = ({ nextText, previousText, noNext, ...props }) => {
   let {
@@ -29,7 +19,7 @@ const Pagination = ({ nextText, previousText, noNext, ...props }) => {
   }
 
   return (
-    <Wrapper {...props}>
+    <nav className="pagination" {...props}>
       {previous > 0 ? (
         <Button
           to={route}
@@ -49,7 +39,7 @@ const Pagination = ({ nextText, previousText, noNext, ...props }) => {
           {nextText}
         </Button>
       )}
-    </Wrapper>
+    </nav>
   )
 }
 

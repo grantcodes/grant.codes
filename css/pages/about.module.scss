@@ -1,5 +1,83 @@
 @use '../util/' as u;
 
+.wrapper {
+  text-shadow: 0 0 4em rgba(0, 0, 0, 0.6);
+}
+
+.section {
+  display: block;
+  margin-bottom: 6rem;
+
+  @media print {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    padding: 2rem 1rem 0 1rem;
+  }
+
+  &::after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+}
+
+.section__title {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+}
+
+.ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  @media print and (min-width: 30em) {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    & > li {
+      width: 48%;
+      width: calc(50% - 1rem);
+    }
+  }
+}
+
+.details {
+  padding-left: 2rem;
+  max-width: 46rem;
+
+  summary {
+    cursor: pointer;
+    outline: none;
+    margin-left: -2rem;
+
+    @media print {
+      &::-webkit-details-marker {
+        display: none;
+      }
+    }
+  }
+}
+
+.profile__avatar-marker {
+  @media print {
+    width: 20rem;
+    max-width: 100%;
+  }
+
+  img {
+    max-width: calc(100% - 4rem);
+    max-height: calc(100% - 4rem);
+  }
+}
+
+.profile__description {
+  font-size: 1.4em;
+}
+
 .profiles {
   &::after {
     content: '';
@@ -79,4 +157,3 @@ $breakpoint: 50rem;
   font-size: 0.9rem;
   opacity: 0.8;
 }
-
