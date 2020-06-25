@@ -1,0 +1,59 @@
+@use '../util' as u;
+
+.map {
+  z-index: 1;
+  height: 10em;
+  overflow: hidden;
+
+  img[src*='tile'] {
+    max-width: none;
+    display: block;
+    // TODO: This was different depending on light/dark theme
+    filter: invert(1);
+    mix-blend-mode: color-dodge;
+  }
+
+  & > div > div:first-child > div {
+    background-color: var(--color-main);
+  }
+}
+
+.map--plain {
+  img[src*='tile'] {
+    filter: none;
+    mix-blend-mode: unset;
+  }
+
+  & > div > div:first-child > div {
+    background-color: transparent;
+  }
+}
+
+$marker-size: 2rem;
+.avatar-marker {
+  display: block;
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  overflow: hidden;
+  transition: border-color 0.2s var(--color-complementary);
+  border: 1px solid;
+  width: $marker-size;
+  height: $marker-size;
+  margin-left: 0 - $marker-size / 2;
+  margin-top: 0 - $marker-size / 2;
+  box-shadow: u.shadow(1);
+
+  &.is-highlighted {
+    box-shadow: 0 0 0.2em var(--color-contrast);
+    z-index: 2;
+  }
+
+  img {
+    display: block;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+  }
+}

@@ -1,33 +1,9 @@
-import React from 'react'
+import classnames from 'classnames'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import PigeonMap from 'pigeon-maps'
 import AvatarMarker from './AvatarMarker'
 import getLatLngFromMf2 from './lib/getLatLngFromMf2'
-
-const StyledMap = styled.div`
-  z-index: 1;
-  height: 10em;
-  overflow: hidden;
-
-  img[src*='tile'] {
-    max-width: none;
-    display: block;
-    filter: ${props =>
-      props.themed && props.theme.palette.hsl[2] < 0.1 ? 'invert(1)' : 'none'};
-    mix-blend-mode: ${props =>
-      props.themed
-        ? props.theme.palette.hsl[2] < 0.1
-          ? 'color-dodge'
-          : 'multiply'
-        : 'unset'};
-  }
-
-  > div > div:first-child > div {
-    background-color: ${props =>
-      props.themed ? props.theme.palette.main : 'transparent'};
-  }
-`
+import styles from 'css/components/map.module.scss'
 
 const Map = ({
   children,
@@ -51,7 +27,13 @@ const Map = ({
       : `https://a.tile.openstreetmap.se/hydda/full/${z}/${x}/${y}.png`
 
   return (
-    <StyledMap className={className + ' is map'} style={style} themed={themed}>
+    <StyledMap
+      className={classnames('map', className, styles.map, {
+        [styles['map--plain']]: !themed,
+      })}
+      style={style}
+      themed={themed}
+    >
       <PigeonMap center={center} {...mapProps} provider={provider}>
         {children ? children : <AvatarMarker anchor={center} />}
       </PigeonMap>

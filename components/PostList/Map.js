@@ -1,10 +1,9 @@
-import Loading from '../Loading'
 import Pagination from '../Container/Pagination'
 import PostsMap from '../PostsMap'
 
 const Map = ({ posts, title }) => (
   <>
-    {posts ? <PostsMap title={title} posts={posts} /> : <Loading />}
+    <PostsMap title={title} posts={posts} />}
     <Pagination
       style={{
         position: 'fixed',

@@ -1,42 +1,16 @@
-import React from 'react'
+import classnames from 'classnames'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import { mixin, palette } from '../../Theme/helpers'
+import styles from 'css/components/map.module.scss'
 
-const size = 32
-
-const Marker = styled.div`
-  display: block;
-  position: absolute;
-  border-radius: 50%;
-  border: 2px solid transparent;
-  overflow: hidden;
-  transition: border-color 0.2s var(--color-complementary);
-  border: 1px solid;
-  left: ${({ left }) => left - size / 2}px;
-  top: ${({ top }) => top - size / 2}px;
-  width: ${size}px;
-  height: ${size}px;
-  box-shadow: ${mixin.shadow(1)}
-    ${({ highlight }) =>
-      !!highlight &&
-      `
-    box-shadow: 0 0 0.2em var(--color-contrast);
-    z-index: 2;
-  `}
-    img {
-    display: block;
-    min-width: 100%;
-    min-height: 100%;
-    width: auto;
-    height: auto;
-  }
-`
-
-const AvatarMarker = ({ image, alt, ...props }) => (
-  <Marker {...props}>
+const AvatarMarker = ({ image, alt, highlight, ...props }) => (
+  <div
+    {...props}
+    className={classnames(styles['avatar-marker'], {
+      'is-highlighted': highlight,
+    })}
+  >
     <img src={image} alt={alt} />
-  </Marker>
+  </div>
 )
 
 AvatarMarker.propTypes = {

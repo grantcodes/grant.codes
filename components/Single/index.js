@@ -22,16 +22,9 @@ const Single = ({ posts }) => {
   return (
     <>
       <SingleMeta post={post} />
-      {posts ? (
-        posts.map((post, i) => <Post key={`single-post-${i}`} post={post} />)
-      ) : (
-        <>
-          <Card>
-            <p className="post__title">Loading...</p>
-          </Card>
-          <Loading />
-        </>
-      )}
+      {posts.map((post, i) => (
+        <Post key={`single-post-${i}`} post={post} />
+      ))}
     </>
   )
 }
@@ -60,7 +53,7 @@ Single.getInitialProps = async ({
 
     let posts = await getSingle({ ...params, findAll: true })
 
-    posts = posts.filter(post => {
+    posts = posts.filter((post) => {
       if (post.properties['post-status'][0] === 'deleted') {
         deleted = true
         if (res) {

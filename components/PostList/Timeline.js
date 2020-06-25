@@ -1,23 +1,12 @@
 import React from 'react'
 import Post from '../Post'
-import Loading from '../Loading'
 import Pagination from '../Container/Pagination'
-import Card from '../Card'
 
-const Timeline = ({ posts, title }) => (
+const Timeline = ({ posts = [] }) => (
   <>
-    {posts ? (
-      posts.map((post, i) => (
-        <Post post={post} key={`post-list-${i}`} compact />
-      ))
-    ) : (
-      <>
-        <Card>
-          <p className="post__title">Loading...</p>
-        </Card>
-        <Loading />
-      </>
-    )}
+    {posts.map((post, i) => (
+      <Post post={post} key={`post-list-${i}`} compact />
+    ))}
 
     <Pagination noNext={posts.length < 10} />
   </>
