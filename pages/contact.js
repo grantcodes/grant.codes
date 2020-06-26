@@ -1,7 +1,7 @@
 import { NextSeo } from 'next-seo'
 import emailIcon from 'eva-icons/fill/svg/email.svg'
 import twitterIcon from 'eva-icons/fill/svg/twitter.svg'
-import Card from 'components/card'
+import Card from 'components/Card'
 import Icon from 'components/Icon'
 import styles from 'css/pages/contact.module.scss'
 
