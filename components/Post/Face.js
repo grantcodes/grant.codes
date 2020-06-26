@@ -1,16 +1,4 @@
-import React from 'react'
-import styled from 'styled-components'
 import Avatar from '../Avatar'
-
-const Face = styled.div`
-  display: inline-block;
-  margin: 0 0.4rem 0.4rem 0;
-
-  a {
-    display: block;
-    text-decoration: none;
-  }
-`
 
 const Author = ({ post, type }) => {
   if (!post.properties) {
@@ -46,11 +34,11 @@ const Author = ({ post, type }) => {
   }
 
   return (
-    <Face className={`p-${type} h-cite`}>
+    <div className={`p-${type} h-cite`}>
       <a href={url} className="u-url">
         <Avatar author={author} noLink noName alt={actionText} size={40} />
       </a>
-    </Face>
+    </div>
   )
 }
 

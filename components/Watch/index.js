@@ -1,5 +1,4 @@
 import React from 'react'
-import styled from 'styled-components'
 import moment from 'moment'
 import Link from '../Link'
 import Card from '../Card'
@@ -10,35 +9,35 @@ import Admin from '../Post/Admin'
 import Footer from '../Post/Footer'
 import Button from '../Button'
 import Icon from '../Icon'
-import { palette, theme, mixin } from '../Theme/helpers'
 
-// TODO: Extends card__breakout
-const Banner = styled.div`
-  background-color: #222;
-  background-size: cover;
-  background-position: center;
-  background-image: url(${(props) => props.background});
-  margin-bottom: -var(--card-padding);
-  padding: var(--card-padding);
-  color: ${palette('white')};
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9), -1px 1px 2px rgba(0, 0, 0, 0.9),
-    1px -1px 2px rgba(0, 0, 0, 0.9), -1px -1px 2px rgba(0, 0, 0, 0.9);
-`
+// TODO: Rework this whole thing.
+// // TODO: Extends card__breakout
+// const Banner = styled.div`
+//   background-color: #222;
+//   background-size: cover;
+//   background-position: center;
+//   background-image: url(${(props) => props.background});
+//   margin-bottom: -var(--card-padding);
+//   padding: var(--card-padding);
+//   color: ${palette('white')};
+//   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9), -1px 1px 2px rgba(0, 0, 0, 0.9),
+//     1px -1px 2px rgba(0, 0, 0, 0.9), -1px -1px 2px rgba(0, 0, 0, 0.9);
+// `
 
-const Poster = styled.img`
-  display: block;
-  max-height: 12em;
-  max-width: 100%;
-  width: auto !important;
-  height: auto;
-  float: left;
-  margin-right: var(--card-padding);
-  /* margin-bottom: var(--card-padding); */
-  overflow: hidden;
-  border-radius: var(--border-radius);
-  border: 1px solid var(--color-main--border);
-  box-shadow: ${mixin.shadow()};
-`
+// const Poster = styled.img`
+//   display: block;
+//   max-height: 12em;
+//   max-width: 100%;
+//   width: auto !important;
+//   height: auto;
+//   float: left;
+//   margin-right: var(--card-padding);
+//   /* margin-bottom: var(--card-padding); */
+//   overflow: hidden;
+//   border-radius: var(--border-radius);
+//   border: 1px solid var(--color-main--border);
+//   box-shadow: ${mixin.shadow()};
+// `
 
 const Trakt = ({ plays, last_watched_at: lastWatch, movie, ...props }) => (
   <>

@@ -71,6 +71,10 @@
   }
 }
 
+.card__breakout--padded {
+  padding: u.$card-padding;
+}
+
 .card__actions {
   display: flex !important;
   flex-direction: row;

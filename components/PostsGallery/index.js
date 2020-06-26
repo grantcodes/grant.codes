@@ -1,51 +1,11 @@
 import React, { Fragment, useState } from 'react'
+import classnames from 'classnames'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import FullscreenPhoto from '../FullscreenPhoto'
 import Post from '../Post'
 import Link from '../Link'
 import getPostPhotos from './get-post-photos'
-
-const Gallery = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: stretch;
-  justify-content: stretch;
-  overflow: hidden;
-`
-
-const GalleryItem = styled.div`
-  display: block;
-  flex-grow: 1;
-  overflow: hidden;
-  position: relative;
-  cursor: zoom;
-  width: ${(props) => props.maxWidth}%;
-  max-width: ${(props) => props.maxWidth}%;
-  @media (max-width: 30rem) {
-    width: 33.333%;
-    max-width: 33.333%;
-  }
-
-  &::before {
-    content: '';
-    display: block;
-    width: 100%;
-    padding-bottom: 100%;
-    pointer-events: none;
-  }
-`
-
-const GalleryPhoto = styled.img`
-  display: block;
-  width: 100%;
-  object-fit: cover;
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-`
+import styles from 'css/components/posts-gallery.module.scss'
 
 const PostsGallery = ({ posts = [], type, maxWidth = 33.333 }) => {
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(false)
@@ -86,11 +46,11 @@ const PostsGallery = ({ posts = [], type, maxWidth = 33.333 }) => {
 
   return (
     <Fragment>
-      <Gallery>
+      <div className={styles.gallery}>
         {photos.map((photo, i) =>
           type === 'feed' ? (
-            <GalleryItem
-              as={Link}
+            <Link
+              className={styles.item}
               key={'posts-gallery-photo-' + i}
               to={photo.permalink}
               onClick={(e) => {
@@ -99,13 +59,22 @@ const PostsGallery = ({ posts = [], type, maxWidth = 33.333 }) => {
               }}
               maxWidth={maxWidth}
             >
-              <GalleryPhoto src={photo.thumbnail} width={200} height={200} />
-            </GalleryItem>
+              <img
+                className={styles.photo}
+                src={photo.thumbnail}
+                width={200}
+                height={200}
+              />
+            </Link>
           ) : (
             <Fragment key={'posts-gallery-photo-' + i}>
-              <GalleryItem className="h-cite" maxWidth={maxWidth}>
+              <div
+                className={classnames('h-cite', styles.item)}
+                maxWidth={maxWidth}
+              >
                 <Link to={photo.permalink} className="u-url">
-                  <GalleryPhoto
+                  <img
+                    className={styles.photo}
                     onClick={(e) => {
                       e.preventDefault()
                       setSelectedPhotoIndex(i)
@@ -117,12 +86,12 @@ const PostsGallery = ({ posts = [], type, maxWidth = 33.333 }) => {
                   />
                   <data className="u-photo" value={photo.photo} />
                 </Link>
-              </GalleryItem>
+              </div>
               <data className="u-photo" value={photo.photo} />
             </Fragment>
           )
         )}
-      </Gallery>
+      </div>
 
       {/* If this is a feed page, output valid mf2 as hidden html */}
       {type === 'feed' && (

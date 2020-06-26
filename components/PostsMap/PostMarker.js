@@ -1,49 +1,29 @@
-import React, { Fragment, useState } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import AvatarMarker from '../Map/AvatarMarker'
 import Post from '../Post'
-import { palette } from '../Theme/helpers'
-
-const MapPostContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  z-index: 5;
-  &.is-hidden {
-    visibility: hidden;
-    pointer-events: none;
-  }
-`
-
-const MapPost = styled.div`
-  position: relative;
-  max-width: 20em;
-  margin: auto;
-  background: var(--color-main);
-
-  /* TODO: THis won't work */
-  > .post > .card {
-    margin: 0;
-  }
-`
+import styles from 'css/components/posts-map.module.scss'
 
 const PostMarker = ({ post, ...markerProps }) => {
   const [open, setOpen] = useState(false)
 
   return (
-    <Fragment>
+    <>
       <AvatarMarker
         {...markerProps}
         onClick={(e) => setOpen(true)}
         highlight={open}
       />
-      <MapPostContainer open={open} onClick={(e) => setOpen(false)}>
-        <MapPost>
+      <div
+        className={styles['post-container']}
+        open={open}
+        onClick={(e) => setOpen(false)}
+      >
+        <div className={styles.posts}>
           <Post post={post} compact />
-        </MapPost>
-      </MapPostContainer>
-    </Fragment>
+        </div>
+      </div>
+    </>
   )
 }
 

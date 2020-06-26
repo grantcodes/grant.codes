@@ -3,7 +3,10 @@ import getTypes from 'lib/get/post-types'
 import getPageCount from 'lib/get/page-count'
 import { getStaticProps as getPosts } from 'lib/get/posts'
 
-const Page = ({ posts = [] }) => <PostList posts={posts} type="photos" />
+const Page = ({ posts = [] }) => (
+  // TODO: Page count
+  <PostList posts={posts} type="photos" title={`Photos`} />
+)
 
 Page.containerClass = 'right-aligned right-aligned--wide-content'
 

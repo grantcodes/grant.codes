@@ -1,27 +1,10 @@
-import styled from 'styled-components'
-import { theme } from 'components/Theme/helpers'
-import Head from 'next/head'
-import Link from 'next/link'
-import Tile from 'components/Websites/Tile'
-import websites from '../../data/websites'
-
-const List = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: stretch;
-  list-style: none;
-
-  @media (min-width: ${theme('midBreak')}) {
-    width: 100%;
-  }
-`
+import { NextSeo } from 'next-seo'
+import Websites from 'components/Websites'
 
 export default () => (
-  <List>
-    {websites.map((website) => (
-      <Tile key={`website-tile-${website.slug}`} {...website} />
-    ))}
-  </List>
+  <>
+    <NextSeo title="Projects" />
+    <h1 className="page-title">Projects</h1>
+    <Websites />
+  </>
 )

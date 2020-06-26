@@ -1,38 +1,9 @@
 import React, { useState, useEffect } from 'react'
+import classnames from 'classnames'
 import PropTypes from 'prop-types'
-import styled, { keyframes } from 'styled-components'
-import { palette } from '../Theme/helpers'
+import styles from 'css/components/toast.module.scss'
 
 const notificationTimeout = 3000
-
-const animation = keyframes`
-0% {
-  opacity: 0;
-}
-100% {
-  opacity: 0.9;
-}
-`
-
-const StyledToast = styled.div`
-  display: inline-block;
-  position: fixed;
-  bottom: 10px;
-  left: 50%;
-  font-size: 0.8em;
-  padding: 0.7em 1.4em;
-  z-index: 100;
-  background-color: ${({ type, theme }) =>
-    type === 'error'
-      ? 'red'
-      : type === 'success'
-      ? 'green'
-      : theme.palette.complementary};
-  color: var(--color-contrast);
-  animation: ${animation} 0.2s both;
-  opacity: 0.9;
-  transform: translateX(-50%);
-`
 
 const Toast = ({ notification, type }) => {
   const [notifications, setNotifications] = useState([])
@@ -56,9 +27,12 @@ const Toast = ({ notification, type }) => {
   }, [notification])
 
   return notifications.map((notification, i) => (
-    <StyledToast key={`notification-${i}`} type={type}>
+    <div
+      key={`notification-${i}`}
+      className={classnames(styles.toast, styles[`toast--${type}`])}
+    >
       {notification.text}
-    </StyledToast>
+    </div>
   ))
 }
 

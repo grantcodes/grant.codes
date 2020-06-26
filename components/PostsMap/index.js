@@ -1,20 +1,9 @@
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import PostMarker from './PostMarker'
 import Map from '../Map'
-import PageTitle from '../util/PageTitle'
 import getLatLngFromMf2 from '../Map/lib/getLatLngFromMf2'
 import boundaries from '../Map/lib/getBoundaries'
-
-const StyledMap = styled(Map)`
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-`
+import styles from 'css/components/posts-map.module.scss'
 
 const PostsMap = ({ title, posts }) => {
   const getBoundaries = () => {
@@ -49,11 +38,12 @@ const PostsMap = ({ title, posts }) => {
 
   return (
     <>
-      <PageTitle as="h2" style={{ position: 'relative', zIndex: 1 }}>
+      <h2 className="page-title" style={{ position: 'relative', zIndex: 1 }}>
         {title}
-      </PageTitle>
+      </h2>
 
-      <StyledMap
+      <Map
+        className={styles.map}
         location={`geo:${viewport.latitude},${viewport.longitude}`}
         zoom={viewport.zoom}
         defaultWidth={1200}
@@ -78,7 +68,7 @@ const PostsMap = ({ title, posts }) => {
             />
           )
         })}
-      </StyledMap>
+      </Map>
     </>
   )
 }

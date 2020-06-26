@@ -1,0 +1,21 @@
+.theme-switcher {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+}
+
+.theme-switcher__label {
+  cursor: pointer;
+  display: block;
+  opacity: 0.4;
+  line-height: 1;
+  &:hover,
+  &:focus {
+    opacity: 0.8;
+  }
+}
+
+.theme-switcher__input {
+  visibility: hidden;
+  position: absolute;
+}

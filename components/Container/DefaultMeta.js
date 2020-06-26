@@ -9,7 +9,7 @@ const twHandle = process.env.NEXT_PUBLIC_TWITTER_HANDLE
 export default () => (
   <DefaultSeo
     title={name}
-    titleTemplate={`%s | ${name}`}
+    titleTemplate={`%s ⁂ ${name}`}
     description={description}
     canonical={url}
     openGraph={{

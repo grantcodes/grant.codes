@@ -27,7 +27,7 @@ const Map = ({
       : `https://a.tile.openstreetmap.se/hydda/full/${z}/${x}/${y}.png`
 
   return (
-    <StyledMap
+    <div
       className={classnames('map', className, styles.map, {
         [styles['map--plain']]: !themed,
       })}
@@ -37,7 +37,7 @@ const Map = ({
       <PigeonMap center={center} {...mapProps} provider={provider}>
         {children ? children : <AvatarMarker anchor={center} />}
       </PigeonMap>
-    </StyledMap>
+    </div>
   )
 }
 

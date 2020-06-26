@@ -1,0 +1,14 @@
+@use '../util' as u;
+
+.list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: stretch;
+  list-style: none;
+
+  @media (min-width: u.$mid-break) {
+    width: 100%;
+  }
+}

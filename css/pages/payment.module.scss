@@ -1,0 +1,20 @@
+@use '../util' as u;
+
+.amount-input {
+  padding: 0;
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+
+  & > * {
+    flex-shrink: 1;
+    &:first-child {
+      margin-right: 0.5rem;
+      max-width: 8rem;
+    }
+    &:last-child {
+      flex-grow: 1;
+    }
+  }
+}

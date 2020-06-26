@@ -6,7 +6,6 @@ import StripeCheckout from './StripeCheckout'
 import { NextSeo } from 'next-seo'
 import Card from '../Card'
 import Button from '../Button'
-import PageTitle from '../util/PageTitle'
 
 const Pay = ({
   paymentLink,
@@ -51,7 +50,7 @@ const Pay = ({
   return (
     <>
       <NextSeo title={title} />
-      <PageTitle>{title}</PageTitle>
+      <h1 className="page-title">{title}</h1>
       <Card>
         {paymentLink ? (
           <Button

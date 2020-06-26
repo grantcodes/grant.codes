@@ -4,8 +4,8 @@ const contrastText = (color) => {
   const whiteContrast = chroma.contrast(color, '#fff')
   const blackContrast = chroma.contrast(color, '#000')
   return whiteContrast > blackContrast
-    ? chroma.mix(color, '#fff', 0.7)
-    : chroma.mix(color, '#000', 0.8)
+    ? chroma.mix(color, '#fff', 0.8)
+    : chroma.mix(color, '#000', 0.9)
 }
 
 const getComplementary = (color) => {
@@ -32,17 +32,8 @@ export default function (color = false) {
     typeof window !== 'undefined'
       ? window.screen.availHeight * window.devicePixelRatio
       : 1080
+
   const palette = {
-    white: '#fff',
-    black: '#000',
-    main: color.hex(),
-    hsl: color.hsl(),
-    mainAlt:
-      contrast === '#000' ? color.darken(0.3).hex() : color.brighten(0.3).hex(),
-    mainBorder:
-      contrast === '#000' ? color.darken(0.9).hex() : color.brighten(0.9).hex(),
-    complementary: getComplementary(color).hex(),
-    contrast,
     'color-main': color.hex(),
     'color-main--alt':
       contrast === '#000' ? color.darken(0.3).hex() : color.brighten(0.3).hex(),

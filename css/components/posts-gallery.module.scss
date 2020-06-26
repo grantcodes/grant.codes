@@ -1,0 +1,40 @@
+.gallery {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: stretch;
+  overflow: hidden;
+}
+
+.item {
+  display: block;
+  flex-grow: 1;
+  overflow: hidden;
+  position: relative;
+  cursor: zoom;
+  width: 20%;
+  max-width: 20%;
+  @media (max-width: 30rem) {
+    width: 33.333%;
+    max-width: 33.333%;
+  }
+
+  &::before {
+    content: '';
+    display: block;
+    width: 100%;
+    padding-bottom: 100%;
+    pointer-events: none;
+  }
+}
+
+.photo {
+  display: block;
+  width: 100%;
+  object-fit: cover;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+}

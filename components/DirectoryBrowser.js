@@ -2,13 +2,12 @@ import React from 'react'
 import axios from 'axios'
 import { NextSeo } from 'next-seo'
 import Card from './Card'
-import PageTitle from './util/PageTitle'
 
 const DirectoryBrowser = ({ match: { path }, files = [] }) => {
   return (
     <>
       <NextSeo title={path} />
-      <PageTitle>{path}</PageTitle>
+      <h1 className="page-title">{path}</h1>
       <Card>
         {files.length === 0 ? (
           <p>Nothing found...</p>

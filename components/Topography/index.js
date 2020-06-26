@@ -1,5 +1,4 @@
 import React, { useContext } from 'react'
-import { ThemeContext } from 'styled-components'
 import chroma from 'chroma-js'
 import P5Wrapper from 'react-p5-wrapper'
 
@@ -20,9 +19,7 @@ const getColors = (from, to) =>
     .colors(colorCount)
 
 const Topography = ({ width = fullWidth, height = fullHeight }) => {
-  const theme = useContext(ThemeContext)
-
-  const sketch = function(p) {
+  const sketch = function (p) {
     let ox = p.random(10000)
     let oy = p.random(10000)
 
@@ -31,19 +28,19 @@ const Topography = ({ width = fullWidth, height = fullHeight }) => {
     const noise_delta = 50 // Bigger number = less circular
     const noise_radius = 0.9 // Smaller = smoother
 
-    p.setup = function() {
+    p.setup = function () {
       p.createCanvas(width, height)
       p.smooth()
       p.noLoop()
       p.noStroke()
     }
 
-    p.draw = function() {
+    p.draw = function () {
       p.translate(width, 0)
       display()
     }
 
-    p.windowResized = function() {
+    p.windowResized = function () {
       p.resizeCanvas(
         document.documentElement.clientWidth,
         document.documentElement.clientHeight
@@ -52,6 +49,7 @@ const Topography = ({ width = fullWidth, height = fullHeight }) => {
     }
 
     function display() {
+      // TODO: Get colors from css custom properties
       let colors = getColors(theme.palette.complementary, theme.palette.main)
       p.background(theme.palette.main)
       let arr = []

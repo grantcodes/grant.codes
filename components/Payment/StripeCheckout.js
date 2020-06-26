@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
-import { ThemeContext } from 'styled-components'
 import Button from '../Button'
 
 import {
@@ -18,7 +17,6 @@ const StripeCheckout = ({
   monthly,
   reason,
 }) => {
-  const { palette } = useContext(ThemeContext)
   const [paymentRequest, setPaymentRequest] = useState(null)
   const [canMakePayment, setCanMakePayment] = useState(false)
   const [error, setError] = useState(null)
@@ -120,19 +118,19 @@ const StripeCheckout = ({
         className="input"
         style={{
           base: {
-            color: palette.contrast,
-            iconColor: palette.contrast,
+            color: 'var(--color-contrast)',
+            iconColor: 'var(--color-contrast)',
             lineHeight: '22px',
             fontFamily: 'monospace',
             fontSmoothing: 'antialiased',
             fontSize: '18px',
             '::placeholder': {
-              color: palette.contrast,
+              color: 'var(--color-contrast)',
             },
           },
           invalid: {
             textDecoration: 'underline wavy',
-            color: palette.contrast,
+            color: 'var(--color-contrast)',
           },
         }}
       />

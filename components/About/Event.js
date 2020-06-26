@@ -1,4 +1,3 @@
-import React from 'react'
 import classnames from 'classnames'
 import moment from 'moment'
 import styles from 'css/pages/about.module.scss'
@@ -10,9 +9,10 @@ const Event = ({
   title,
   children,
   links = [],
+  className,
   ...props
 }) => (
-  <div className={styles.event} {...props}>
+  <div className={classnames(styles.event, className)} {...props}>
     <div className={styles.event__left}>
       {!!place && (
         <h5 className={classnames(styles.event__subtitle, 'p-location')}>

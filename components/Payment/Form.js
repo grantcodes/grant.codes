@@ -1,28 +1,8 @@
-import styled from 'styled-components'
 import currencies from './currencies'
 import { NextSeo } from 'next-seo'
 import Card from '../Card'
 import Button from '../Button'
-import PageTitle from '../util/PageTitle'
-
-const AmountInput = styled.div`
-  padding: 0;
-  display: flex;
-  width: 100%;
-  flex-direction: row;
-  justify-content: space-between;
-
-  & > * {
-    flex-shrink: 1;
-    &:first-child {
-      margin-right: 0.5rem;
-      max-width: 8rem;
-    }
-    &:last-child {
-      flex-grow: 1;
-    }
-  }
-`
+import styles from 'css/pages/payment.module.scss'
 
 let reason = ''
 if (typeof window !== 'undefined') {
@@ -33,13 +13,13 @@ if (typeof window !== 'undefined') {
 const PaymentForm = ({ monthly = false }) => {
   return (
     <>
-      <PageTitle>Give Me Money!</PageTitle>
+      <h1 className="page-title">Give Me Money!</h1>
       <Card>
         <NextSeo title="Pay Me" />
         <p>First I need to know how much you are paying me</p>
 
         <form method="post" action="/api/pay">
-          <AmountInput>
+          <div className={styles['amount-input']}>
             <div>
               <label htmlFor="currency">Currency</label>
               <select name="currencySymbol" id="currency">
@@ -62,7 +42,7 @@ const PaymentForm = ({ monthly = false }) => {
                 defaultValue="5"
               />
             </div>
-          </AmountInput>
+          </div>
 
           <label htmlFor="reason">Reason</label>
           <input type="text" name="reason" id="reason" defaultValue={reason} />

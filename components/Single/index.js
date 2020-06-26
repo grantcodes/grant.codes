@@ -1,8 +1,6 @@
 import React from 'react'
 import { getSingle } from '../../lib/get-posts'
 import Post from '../Post'
-import Loading from '../Loading'
-import Card from '../Card'
 import NotFound from '../NotFound'
 import SingleMeta from './SingleMeta'
 import { isRxDocument } from 'rxdb'

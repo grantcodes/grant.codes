@@ -1,18 +1,6 @@
-import React from 'react'
-import styled from 'styled-components'
 import mentionTypes from './mention-types'
 import Comment from './Comment'
 import Face from './Face'
-import { theme } from '../Theme/helpers'
-
-const Wrapper = styled.div`
-  .container.single-article & {
-    display: block;
-    max-width: ${theme('contentWidth')};
-    margin-left: auto;
-    margin-right: auto;
-  }
-`
 
 const Comments = ({ post }) => {
   // Function to loop though properties to make things a little less verbose
@@ -29,7 +17,7 @@ const Comments = ({ post }) => {
     (mentionType) =>
       post.properties[mentionType.key] &&
       post.properties[mentionType.key].length && (
-        <Wrapper
+        <div
           key={mentionType.id}
           id={mentionType.id}
           className={mentionType.key === 'comment' ? 'comments' : 'facepile'}
@@ -42,10 +30,9 @@ const Comments = ({ post }) => {
               <Face post={value} type={mentionType.key} />
             )
           )}
-        </Wrapper>
+        </div>
       )
   )
 }
 
-export { Wrapper as CommentWrapper }
 export default Comments

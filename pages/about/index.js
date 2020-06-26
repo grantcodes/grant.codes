@@ -1,101 +1,43 @@
-import styled from 'styled-components'
+import classnames from 'classnames'
 import { NextSeo } from 'next-seo'
 import Link from 'components/Link'
-import Websites from '../websites'
+import Websites from 'components/Websites'
 import Profile from 'components/About/Profile'
 import Elsewhere from 'components/About/Elsewhere'
 import Event from 'components/About/Event'
-import { HidePrint } from 'components/util'
 import getLastLocation from 'lib/get/last-location'
 import useIsPrint from 'lib/hooks/use-is-print'
-
-const Wrapper = styled.div`
-  text-shadow: 0 0 4em rgba(0, 0, 0, 0.6);
-`
-
-const Section = styled.section`
-  display: block;
-  margin-bottom: 6rem;
-
-  @media print {
-    page-break-inside: avoid;
-    break-inside: avoid;
-    padding: 2rem 1rem 0 1rem;
-  }
-
-  &::after {
-    content: '';
-    display: block;
-    clear: both;
-  }
-`
-
-const SectionTitle = styled.h3`
-  margin-top: 0;
-  margin-bottom: 1rem;
-  font-size: 2rem;
-`
-
-const UnstyledList = styled.ul`
-  list-style: none;
-  margin: 0;
-  padding: 0;
-
-  @media print and (min-width: 30em) {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-
-    & > li {
-      width: 48%;
-      width: calc(50% - 1rem);
-    }
-  }
-`
-
-const DetailsStyled = styled.details`
-  padding-left: 2rem;
-  max-width: 46rem;
-
-  summary {
-    cursor: pointer;
-    outline: none;
-    margin-left: -2rem;
-
-    @media print {
-      &::-webkit-details-marker {
-        display: none;
-      }
-    }
-  }
-`
+import styles from 'css/pages/about.module.scss'
 
 const Details = (props) => {
   const isPrint = useIsPrint()
 
-  return <DetailsStyled {...props} open={isPrint ? true : null} />
+  return (
+    <details
+      className={styles.details}
+      {...props}
+      open={isPrint ? true : null}
+    />
+  )
 }
 
 const About = ({ lastLocation }) => (
-  <Wrapper>
+  <div className={styles.wrapper}>
     <NextSeo title="About me" />
     <div className="h-resume">
       <div className="h-card p-contact">
-        <Section>
+        <section className={styles.section}>
           <Profile location={lastLocation} />
-        </Section>
-        <HidePrint>
-          <Section>
-            <SectionTitle>Find Me Somewhere Else</SectionTitle>
-            <Elsewhere location={lastLocation} />
-          </Section>
-        </HidePrint>
+        </section>
+        <section className={classnames(styles.section, 'hide-print')}>
+          <h3 className={styles.section__title}>Find Me Somewhere Else</h3>
+          <Elsewhere location={lastLocation} />
+        </section>
       </div>
 
-      <Section>
-        <SectionTitle>Skills</SectionTitle>
-        <UnstyledList>
+      <section className={styles.section}>
+        <h3 className={styles.section__title}>Skills</h3>
+        <ul className={styles.ul}>
           <li>
             <Details>
               <summary className="p-skill">JavaScript</summary>
@@ -228,11 +170,11 @@ const About = ({ lastLocation }) => (
               </ul>
             </Details>
           </li>
-        </UnstyledList>
-      </Section>
+        </ul>
+      </section>
 
-      <Section>
-        <SectionTitle>Work</SectionTitle>
+      <section className={styles.section}>
+        <h3 className={styles.section__title}>Work</h3>
 
         <ol style={{ listStyle: 'none', padding: 0, margin: 0 }}>
           <Event
@@ -313,9 +255,9 @@ const About = ({ lastLocation }) => (
             </p>
           </Event>
         </ol>
-      </Section>
-      <Section>
-        <SectionTitle>Education</SectionTitle>
+      </section>
+      <section className={styles.section}>
+        <h3 className={styles.section__title}>Education</h3>
 
         <Event
           className="p-education h-event"
@@ -327,19 +269,20 @@ const About = ({ lastLocation }) => (
         >
           <p>Graduated with first class honours</p>
         </Event>
-      </Section>
+      </section>
 
-      <HidePrint>
-        <Section style={{ maxWidth: '34rem' }}>
-          <SectionTitle>Projects</SectionTitle>
-          <Websites hideTitle />
-        </Section>
-      </HidePrint>
+      <section
+        className={classnames(styles.section, 'hide-print')}
+        style={{ maxWidth: '34rem' }}
+      >
+        <h3 className={styles.section__title}>Projects</h3>
+        <Websites hideTitle />
+      </section>
 
-      <Section>
-        <SectionTitle>Other Bits & Pieces</SectionTitle>
+      <section className={styles.section}>
+        <h3 className={styles.section__title}>Other Bits & Pieces</h3>
         <h4>Some stuff I enjoy</h4>
-        <UnstyledList>
+        <ul className={styles.ul}>
           <li>
             <Details>
               <summary>Travel</summary>
@@ -412,17 +355,15 @@ const About = ({ lastLocation }) => (
               </p>
             </Details>
           </li>
-        </UnstyledList>
-      </Section>
+        </ul>
+      </section>
     </div>
-  </Wrapper>
+  </div>
 )
 
 About.getInitialProps = async () => {
   const lastLocation = await getLastLocation()
   return { lastLocation }
 }
-
-About.containerClass = 'right-aligned right-aligned--wide-content'
 
 export default About

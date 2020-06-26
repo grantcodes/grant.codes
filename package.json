@@ -32,7 +32,6 @@
     "react-stripe-elements": "^6.1.2",
     "sass": "^1.26.8",
     "stripe": "^8.60.0",
-    "styled-components": "^5.1.1",
     "svg-inline-loader": "^0.8.2",
     "viewport-mercator-project": "^7.0.1"
   },

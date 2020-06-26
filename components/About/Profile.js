@@ -17,7 +17,7 @@ const Profile = (props) => {
           noProxy
         />
       </div>
-      <h1>Hi! I'm Grant 👋</h1>
+      <h1 className="page-title">Hi! I'm Grant 👋</h1>
       <p className={styles.profile__description}>
         I'm a Scottish web developer, currently based in Madrid.
       </p>
