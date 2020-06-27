@@ -12,7 +12,7 @@ export default ({ title, screenshot, url, content, ...props }) => (
     <article>
       {!!screenshot && (
         <div className="card__breakout">
-          <img src={screenshot} alt={title + ' Screenshot'} />
+          <img src={screenshot} alt={title + ' Screenshot'} loading="lazy" />
         </div>
       )}
 

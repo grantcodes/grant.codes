@@ -67,7 +67,8 @@ const Post = ({ compact, post, className = '' }) => {
       <Card>
         {(postFeatured || postName) && (
           <header
-            className={classnames('card__breakout', 'post__header', {
+            className={classnames('post__header', {
+              card__breakout: postFeatured,
               'post__header--featured': postFeatured,
             })}
             style={

@@ -32,7 +32,7 @@ const PostPhoto = ({ photos, imageSizes, permalink }) => {
               to={permalink}
               onClick={handleClick(value)}
             >
-              <img src={smallSrc} alt={alt} />
+              <img src={smallSrc} alt={alt} loading="lazy" />
               <data className="u-photo" value={value} />
             </Link>
           )

@@ -64,6 +64,7 @@ const PostsGallery = ({ posts = [], type, maxWidth = 33.333 }) => {
                 src={photo.thumbnail}
                 width={200}
                 height={200}
+                loading="lazy"
               />
             </Link>
           ) : (
@@ -83,6 +84,7 @@ const PostsGallery = ({ posts = [], type, maxWidth = 33.333 }) => {
                     alt={photo.alt}
                     width={200}
                     height={200}
+                    loading="lazy"
                   />
                   <data className="u-photo" value={photo.photo} />
                 </Link>

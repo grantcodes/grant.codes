@@ -105,12 +105,16 @@
   font-size: u.fs(1);
   flex-grow: 0;
   @media (min-width: u.$mid-break) {
-    // display: none;
     margin-bottom: 0.2em;
     min-width: 48%;
+    .container.right-aligned &,
     .main-nav.is-target &,
     .main-nav:target & {
       display: block;
+      width: 100%;
+    }
+    .container.right-aligned & {
+      text-align: right;
     }
   }
 
@@ -122,7 +126,7 @@
 
 .main-nav__link--hidden {
   @media (min-width: u.$mid-break) {
-    display: none;
+    display: none !important;
   }
 }
 

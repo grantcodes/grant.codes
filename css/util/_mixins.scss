@@ -16,7 +16,7 @@
 }
 
 @function shadow($size: 1) {
-  @return $size * 1px $size * 1px $size * 4px rgba(0, 0, 0, 0.1);
+  @return $size * 1px $size * 1px $size * 0.6rem rgba(0, 0, 0, 0.1);
   // $lightness: props.theme.palette.hsl[2];
   // $shadow:
   //   $lightness > 0.2

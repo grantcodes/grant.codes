@@ -9,7 +9,7 @@ const AvatarMarker = ({ image, alt, highlight, ...props }) => (
       'is-highlighted': highlight,
     })}
   >
-    <img src={image} alt={alt} />
+    <img src={image} alt={alt} loading="lazy" />
   </div>
 )
 

@@ -3,7 +3,7 @@
 .card {
   background-color: var(--color-main--alt);
   padding: u.$card-padding;
-  margin-bottom: u.$card-padding * 4;
+  margin-bottom: u.space(2);
   transition: background u.$theme-transition-time;
   border-radius: u.$border-radius;
   overflow: hidden;

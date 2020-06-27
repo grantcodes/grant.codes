@@ -11,7 +11,7 @@ textarea {
   font-size: 1em;
   padding: 0.5em 1em;
   border: 1px solid var(--main-border);
-  border-radius: var(--border-radius);
+  border-radius: u.$border-radius;
   box-shadow: none;
   outline: none;
   background-color: var(--color-main--alt);
@@ -79,7 +79,7 @@ button,
   transition: background-color var(--theme-transition-time);
   border: 0;
   outline: none;
-  border-radius: var(--border-radius);
+  border-radius: u.$border-radius;
   line-height: 1.2;
   font-size: 1em;
   text-transform: uppercase;

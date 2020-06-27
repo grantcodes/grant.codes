@@ -37,6 +37,7 @@ export default ({
           alt={alt}
           width={size}
           title={alt + author.name}
+          loading="lazy"
         />
         <span
           className={classnames(styles.author__name, 'p-name', {

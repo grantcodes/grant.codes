@@ -7,19 +7,22 @@
 // }
 
 .post__title {
-  .post--like-of &,
+  .post--like &,
   .post--bookmark & {
     font-size: u.fs(0);
   }
 }
 
 .post__header {
-  background-color: var(--color-main);
   margin-bottom: 0;
+  .post__title {
+    margin: 0;
+  }
 }
 
 .post__header--featured {
   overflow: hidden;
+  background-color: var(--color-main);
   background-size: cover;
   background-position: center;
   display: flex;
@@ -28,7 +31,6 @@
 
   .post__title {
     text-decoration: overline wavy;
-    margin: 0;
   }
 }
 

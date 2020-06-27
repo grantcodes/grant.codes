@@ -4,7 +4,7 @@ import styles from 'css/components/website-tile.module.scss'
 const Preview = ({ slug, title, thumbnail }) => (
   <Link className={styles.tile} to={`/websites/${slug}`}>
     <span className="screen-reader-text">{title}</span>
-    <img className={styles.image} src={thumbnail} />
+    <img className={styles.image} src={thumbnail} loading="lazy" />
   </Link>
 )
 
