@@ -1,106 +1,106 @@
 @use '../util/' as u;
 
-// Modidy the main post
-.main-content > .post--article > .card {
-  & {
-    background: var(--color-main);
-    box-shadow: none;
-    border: none;
-    margin: 0;
-  }
-
-  .post__header {
-    padding-top: u.$card-padding * 2;
-    padding-bottom: u.$card-padding * 2;
-  }
-
-  .post__header--featured {
-    min-height: 50vh;
-    position: sticky;
-    top: 0;
-    z-index: 0;
-
-    & ~ div.e-content {
-      box-shadow: 0 -0.2rem 0.2rem rgba(0, 0, 0, 0.2);
-    }
-  }
-
-  .post__title {
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
-    font-size: u.fs(4);
-    @media (min-width: u.$mid-break) {
-      font-size: u.fs(5);
-    }
-  }
-
-  .post__footer,
-  .post__actions {
-    margin-left: u.$card-padding;
-    margin-right: u.$card-padding;
-    @media (min-width: u.$width-normal) {
-      max-width: 100%;
-      width: u.$width-normal;
-      margin-left: auto;
-      margin-right: auto;
-    }
-  }
-
-  /* Format post content */
-  .post__content {
-    margin-left: 0;
-    margin-right: 0;
-    width: auto;
-    max-width: none;
-    margin-left: 0 - u.$card-padding;
-    margin-right: 0 - u.$card-padding;
-
-    background-color: var(--color-main);
-    position: relative;
-    overflow: hidden;
-
-    & > *:not(div),
-    .alignnone,
-    .alignwide,
-    .alignfull {
-      display: block;
-      width: u.$width-normal;
-      max-width: 100%;
-      margin-left: auto;
-      margin-right: auto;
-      padding-left: u.$card-padding;
-      padding-right: u.$card-padding;
-    }
-
-    > ul,
-    > ol {
-      padding-left: u.space(2);
-    }
-
-    .alignwide {
-      width: u.$width-wide;
-    }
-
-    .alignfull {
-      width: 100%;
-      padding-left: 0;
-      padding-right: 0;
-    }
-
-    > p {
-      width: u.$width-normal;
-      max-width: 100%;
-      margin-left: auto;
-      margin-right: auto;
-      padding-left: u.$card-padding;
-      padding-right: u.$card-padding;
-    }
-  }
-}
-
-// Modify site elements.
 .container.single-article {
+  // Modidy the main post
+  .main-content > .post--article > .card {
+    & {
+      background: var(--color-main);
+      box-shadow: none;
+      border: none;
+      margin: 0;
+    }
+
+    .post__header {
+      padding-top: u.$card-padding * 2;
+      padding-bottom: u.$card-padding * 2;
+    }
+
+    .post__header--featured {
+      min-height: 50vh;
+      position: sticky;
+      top: 0;
+      z-index: 0;
+
+      & ~ div.e-content {
+        box-shadow: 0 -0.2rem 0.2rem rgba(0, 0, 0, 0.2);
+      }
+    }
+
+    .post__title {
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+      font-size: u.fs(4);
+      @media (min-width: u.$mid-break) {
+        font-size: u.fs(5);
+      }
+    }
+
+    .post__footer,
+    .post__actions {
+      margin-left: u.$card-padding;
+      margin-right: u.$card-padding;
+      @media (min-width: u.$width-normal) {
+        max-width: 100%;
+        width: u.$width-normal;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+
+    /* Format post content */
+    .post__content {
+      margin-left: 0;
+      margin-right: 0;
+      width: auto;
+      max-width: none;
+      margin-left: 0 - u.$card-padding;
+      margin-right: 0 - u.$card-padding;
+
+      background-color: var(--color-main);
+      position: relative;
+      overflow: hidden;
+
+      & > *:not(div),
+      .alignnone,
+      .alignwide,
+      .alignfull {
+        display: block;
+        width: u.$width-normal;
+        max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: u.$card-padding;
+        padding-right: u.$card-padding;
+      }
+
+      > ul,
+      > ol {
+        padding-left: u.space(2);
+      }
+
+      .alignwide {
+        width: u.$width-wide;
+      }
+
+      .alignfull {
+        width: 100%;
+        padding-left: 0;
+        padding-right: 0;
+      }
+
+      > p {
+        width: u.$width-normal;
+        max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: u.$card-padding;
+        padding-right: u.$card-padding;
+      }
+    }
+  }
+
+  // Modify site elements.
   .facepile,
   .comments {
     display: block;

@@ -7,6 +7,7 @@
 // }
 
 .post__title {
+  font-size: u.fs(1);
   .post--like &,
   .post--bookmark & {
     font-size: u.fs(0);
@@ -45,7 +46,9 @@
 }
 
 .post__read-more {
-  display: block !important;
+  display: block;
+  width: auto;
+  max-width: 80%;
   margin-left: auto;
   margin-right: auto;
   margin-top: u.space();

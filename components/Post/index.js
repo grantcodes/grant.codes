@@ -201,7 +201,7 @@ const Post = ({ compact, post, className = '' }) => {
               <Fragment>
                 <div className="screen-reader-text">{content}</div>
                 <Button
-                  className="post__read-more"
+                  className="button post__read-more"
                   to={post.properties.url[0]}
                   aria-hidden="true"
                 >
