@@ -25,8 +25,8 @@ const ThemeSwitcher = () => {
   // TODO: Maybe add a way to reset / randomize colors
 
   return (
-    <div class="theme-switcher">
-      <label htmlFor="theme-switcher__color" class="theme-switcher__label">
+    <div className="theme-switcher">
+      <label htmlFor="theme-switcher__color" className="theme-switcher__label">
         <span role="img" alt="Theme Color">
           🎨
         </span>
@@ -34,7 +34,7 @@ const ThemeSwitcher = () => {
       <input
         type="color"
         id="theme-switcher__color"
-        class="theme-switcher__input"
+        className="theme-switcher__input"
         value={color ? color : '#123456'}
         onChange={(e) => {
           setColor(e.target.value)

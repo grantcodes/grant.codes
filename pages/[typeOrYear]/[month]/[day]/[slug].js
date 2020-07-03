@@ -1,8 +1,29 @@
+import { useRouter } from 'next/router'
+import ErrorPage from 'next/error'
 import Post from 'components/Post'
 import getPosts from 'lib/get/posts'
 
-const Page = ({ posts = [] }) =>
-  posts.map((post, i) => <Post post={post} key={`post-single-${i}`} />)
+const Page = ({ posts = [] }) => {
+  const router = useRouter()
+
+  if (!router.isFallback && !posts.length) {
+    return <ErrorPage statusCode={404} />
+  }
+
+  return router.isFallback ? (
+    <Post
+      post={{
+        type: ['h-entry'],
+        properties: {
+          name: ['Loading...'],
+          content: ['This post will be with you shortly'],
+        },
+      }}
+    />
+  ) : (
+    posts.map((post, i) => <Post post={post} key={`post-single-${i}`} />)
+  )
+}
 
 export async function getStaticPaths() {
   // Get a max of the 1000 last posts
