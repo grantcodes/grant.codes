@@ -47,6 +47,7 @@
       width: auto;
       top: u.$header-height + u.space(2) + u.space(2);
       bottom: auto;
+      left: auto;
       max-height: calc(
         100vh - #{u.$header-height} - #{u.$header-height} - 4rem
       );

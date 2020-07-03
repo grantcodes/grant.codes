@@ -17,7 +17,7 @@
     padding: u.space(2);
     grid-column-gap: u.space(2);
     grid-row-gap: u.space(2);
-    grid-template-columns: u.$content-width auto;
+    grid-template-columns: u.$content-width minmax(auto, 20rem);
     grid-template-rows: u.$header-height auto auto;
     grid-template-areas:
       'main header'
