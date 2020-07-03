@@ -34,6 +34,10 @@
       @media (min-width: u.$mid-break) {
         font-size: u.fs(5);
       }
+      // Small fix for PostrChild placeholder
+      &.postrchild-inline-editor span[style*='width: 0px'] {
+        width: auto !important;
+      }
     }
 
     .post__footer,
