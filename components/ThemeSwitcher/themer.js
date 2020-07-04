@@ -1,9 +1,13 @@
 import chroma from 'chroma-js'
 
-const contrastText = (color) => {
+const isDark = (color) => {
   const whiteContrast = chroma.contrast(color, '#fff')
   const blackContrast = chroma.contrast(color, '#000')
   return whiteContrast > blackContrast
+}
+
+const contrastText = (color) => {
+  return isDark(color)
     ? chroma.mix(color, '#fff', 0.8)
     : chroma.mix(color, '#000', 0.9)
 }
@@ -23,6 +27,7 @@ const getComplementary = (color) => {
 
 export default function (color = false) {
   color = color ? chroma(color) : chroma.random()
+  const dark = isDark(color)
   const contrast = contrastText(color)
   const width =
     typeof window !== 'undefined'
@@ -35,12 +40,18 @@ export default function (color = false) {
 
   const palette = {
     'color-main': color.hex(),
-    'color-main--alt':
-      contrast === '#000' ? color.darken(0.3).hex() : color.brighten(0.3).hex(),
-    'color-main--border':
-      contrast === '#000' ? color.darken(0.9).hex() : color.brighten(0.9).hex(),
+    'color-main--alt': dark
+      ? color.brighten(0.3).hex()
+      : color.darken(0.3).hex(),
+    'color-main--border': dark
+      ? color.brighten(0.9).hex()
+      : color.darken(0.9).hex(),
     'color-complementary': getComplementary(color).hex(),
     'color-contrast': contrast,
+    'color-glass':
+      'rgba(' + dark
+        ? color.brighten(2).alpha(0.1)
+        : color.darken(2).alpha(0.1).rgba() + ')',
     'background-image': `url(https://twitter-topography-banner.glitch.me/${width}/${height}/${color
       .hex()
       .replace('#', '')})`,

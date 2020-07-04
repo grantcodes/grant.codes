@@ -23,6 +23,7 @@
   border-color: transparent;
   font-size: inherit;
   min-width: 5em;
+  @include u.glass();
 }
 
 .search__button {

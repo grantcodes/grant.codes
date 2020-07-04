@@ -9,10 +9,9 @@
   @return $count * 1rem;
 }
 
-@mixin glass($opacity: 0.8) {
-  backdrop-filter: blur(1rem);
-  background-color: rgba(0, 0, 0, 0.3);
-  // background-color: ${transparentize(1 - opacity, props.theme.palette.mainAlt)};
+@mixin glass() {
+  backdrop-filter: blur(0.6rem);
+  background-color: var(--color-glass);
 }
 
 @function shadow($size: 1) {

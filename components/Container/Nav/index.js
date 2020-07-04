@@ -107,31 +107,33 @@ export default () => {
         id="nav"
         className={classnames('main-nav', { 'is-target': targeted })}
       >
-        {navLinks.map((link, i) => (
-          <Fragment key={'nav-link-to-' + i}>
-            {i === shownLinkCount && (
-              <a
-                className="main-nav__link main-nav__link--more"
-                to="#nav"
-                onClick={(e) => {
-                  e.preventDefault()
-                  setMoreHidden(!moreHidden)
-                }}
+        <ul class="main-nav__ul">
+          {navLinks.map((link, i) => (
+            <li class="main-nav__li" key={'nav-link-to-' + i}>
+              {i === shownLinkCount && (
+                <a
+                  className="main-nav__link main-nav__link--more"
+                  to="#nav"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    setMoreHidden(!moreHidden)
+                  }}
+                >
+                  {moreHidden ? 'More...' : 'Less...'}
+                </a>
+              )}
+              <Link
+                to={link.to}
+                linkAs={link.as}
+                className={classnames('main-nav__link', {
+                  'main-nav__link--hidden': i >= shownLinkCount && moreHidden,
+                })}
               >
-                {moreHidden ? 'More...' : 'Less...'}
-              </a>
-            )}
-            <Link
-              to={link.to}
-              linkAs={link.as}
-              className={classnames('main-nav__link', {
-                'main-nav__link--hidden': i >= shownLinkCount && moreHidden,
-              })}
-            >
-              {link.text}
-            </Link>
-          </Fragment>
-        ))}
+                {link.text}
+              </Link>
+            </li>
+          ))}
+        </ul>
 
         <Search />
 

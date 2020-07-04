@@ -9,6 +9,7 @@
   overflow: hidden;
   border-bottom: 1px solid var(--color-main--border);
   box-shadow: u.shadow();
+  @include u.glass();
 
   &.is-hightlighted {
     box-shadow: 2px 0px 0 var(--color-contrast),
@@ -16,6 +17,11 @@
       -2px -2px 0 var(--color-contrast);
   }
 }
+
+// Decided to make all cards glass now
+// .card--glass {
+//   @include u.glass();
+// }
 
 // TODO: Convert this stuff to components
 // .card__action-name {
@@ -47,8 +53,9 @@
   display: block;
   overflow: hidden;
   clear: both;
-  background-color: var(--color-main--alt);
+  // background-color: var(--color-main--alt);
   margin: u.$card-padding 0 - u.$card-padding;
+  @include u.glass();
 
   .title + & {
     margin-top: 0;

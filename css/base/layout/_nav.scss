@@ -4,7 +4,7 @@
 .main-nav {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   grid-area: nav;
   position: fixed;
   left: 100%;
@@ -18,7 +18,8 @@
   max-width: 100%;
   z-index: 9;
   font-size: 2em;
-  background: var(--color-main--alt);
+  // background: var(--color-main--alt);
+  @include u.glass();
   box-shadow: u.shadow();
   transition: transform 0.4s;
   transform: translateX(0%);
@@ -34,10 +35,6 @@
       padding: 0;
       position: sticky;
       align-self: flex-start;
-      flex-direction: row;
-      flex-wrap: wrap;
-      align-items: flex-start;
-      justify-content: space-between;
       right: auto;
       background: none;
       backdrop-filter: none;
@@ -51,10 +48,15 @@
       max-height: calc(
         100vh - #{u.$header-height} - #{u.$header-height} - 4rem
       );
+
+      &.is-target,
+      &:target {
+        transform: none !important;
+      }
     }
     .container.right-aligned & {
       justify-self: end;
-      justify-content: flex-end;
+      align-items: flex-end;
     }
     .container.single-article & {
       position: fixed;
@@ -75,12 +77,13 @@
   height: 2.5rem;
   text-align: center;
   line-height: 1rem;
-  background-color: var(--color-main--alt);
+  // background-color: var(--color-main--alt);
   z-index: 10;
   box-shadow: u.shadow();
   opacity: 0.9;
   cursor: pointer;
   display: block;
+  @include u.glass();
   @media (min-width: u.$mid-break) {
     display: none;
     .container.single-article & {
@@ -100,29 +103,50 @@
   }
 }
 
-.main-nav__link {
-  display: inline-block;
-  text-shadow: u.shadow(1);
-  font-size: u.fs(1);
+.main-nav__ul {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @media (min-width: u.$mid-break) {
+    .container:not(.single-article) & {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+    .container.right-aligned & {
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+      flex-wrap: nowrap;
+    }
+  }
+}
+
+.main-nav__li {
+  display: block;
   flex-grow: 0;
   @media (min-width: u.$mid-break) {
     margin-bottom: 0.2em;
     min-width: 48%;
-    .container.right-aligned &,
     .main-nav.is-target &,
     .main-nav:target & {
-      display: block;
-      width: 100%;
+      min-width: 48%;
     }
     .container.right-aligned & {
       text-align: right;
+      min-width: auto;
     }
   }
+}
 
-  .main-nav.is-target,
-  .main-nav:target & {
-    display: inline-block;
-  }
+.main-nav__link {
+  display: inline-block;
+  text-shadow: u.shadow(1);
+  font-size: u.fs(1);
 }
 
 .main-nav__link--hidden {

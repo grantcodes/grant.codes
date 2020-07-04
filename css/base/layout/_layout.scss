@@ -24,6 +24,9 @@
       'main nav'
       'main footer';
 
+    &.right-aligned {
+      justify-content: space-between;
+    }
     &.right-aligned--wide-content {
       grid-template-columns: auto u.$side-width;
     }

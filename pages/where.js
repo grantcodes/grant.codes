@@ -27,7 +27,7 @@ const Where = () => {
       <div className={styles.wrapper}>
         <h2 className="page-title">Where am I?</h2>
 
-        <div className={classnames('card', styles.card)}>
+        <div className={classnames('card card--glass', styles.card)}>
           <noscript>Sorry, you need JS enabled to find out where I am</noscript>
 
           {location === null && (
