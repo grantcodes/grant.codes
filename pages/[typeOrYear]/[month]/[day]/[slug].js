@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import ErrorPage from 'pages/_error'
+import ErrorPage from 'pages/404'
 import Post from 'components/Post'
 import getPosts from 'lib/get/posts'
 

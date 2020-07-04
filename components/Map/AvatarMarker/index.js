@@ -1,16 +1,17 @@
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
+import Overlay from 'pigeon-overlay'
 import styles from 'css/components/map.module.scss'
 
 const AvatarMarker = ({ image, alt, highlight, ...props }) => (
-  <div
+  <Overlay
     {...props}
     className={classnames(styles['avatar-marker'], {
       'is-highlighted': highlight,
     })}
   >
     <img src={image} alt={alt} loading="lazy" />
-  </div>
+  </Overlay>
 )
 
 AvatarMarker.propTypes = {

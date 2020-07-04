@@ -54,7 +54,7 @@
     }
     .container.right-aligned & {
       justify-self: end;
-      align-items: flex-end;
+      justify-content: flex-end;
     }
     .container.single-article & {
       position: fixed;

@@ -21,11 +21,11 @@ export default async (req, res) => {
       }
     )
     const data = await response.json()
-    if (data.location) {
-      location = data.location
+    if (Array.isArray(data) && data.length === 1) {
+      location = data[0]
     }
   } catch (err) {
-    console.error('[Error getting posts]', err)
+    console.error('[Error getting owntracks location]', err)
   }
 
   res.statusCode = 200
