@@ -29,8 +29,10 @@
     .post__title {
       margin-left: auto;
       margin-right: auto;
-      text-align: center;
-      font-size: u.fs(4);
+      font-size: u.fs(3.5);
+      @media (min-width: u.$width-normal) {
+        text-align: center;
+      }
       @media (min-width: u.$mid-break) {
         font-size: u.fs(5);
       }

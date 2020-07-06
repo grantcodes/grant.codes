@@ -37,12 +37,17 @@ h5,
 h6 {
   font-family: u.$font-h;
   line-height: 1.2;
+  font-variation-settings: 'wght' 700;
 }
 
 h1 {
-  font-size: u.fs(4);
   margin-top: u.space();
   margin-bottom: u.space(2);
+  font-size: u.fs(3);
+  line-height: 1.1;
+  @media (min-width: u.$mid-break) {
+    font-size: u.fs(4);
+  }
 }
 h2 {
   font-size: u.fs(3);
