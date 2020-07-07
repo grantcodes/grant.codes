@@ -1,12 +1,11 @@
 /*
-Font: 		Codec Pro
-Style: 		Regular
-URL: 		https://www.youworkforthem.com/font/T11634/codec-pro
-Foundry: 	Zetafonts
-Foundry: 	https://www.youworkforthem.com/designer/800/zetafonts
-Copyright:	Copyright © 2019 by Cosimo Lorenzo Pancini & Francesco Canovaro. All rights reserved.
+Font: 		Greycliff CF
+URL: 		https://www.youworkforthem.com/font/T6406/greycliff-cf
+Foundry: 	Connary Fagen
+Foundry: 	https://www.youworkforthem.com/designer/479/connary-fagen
+Copyright:	Copyright © 2018 by Connary Fagen. All rights reserved.
 Version: 	17
-Created:	December 06, 2019
+Created:	October 09, 2019
 License: 	https://www.youworkforthem.com/font-license 
 License: 	The WebFont(s) listed in this document must follow the YouWorkForThem
 			WebFont license rules. All other parties are strictly restricted 
@@ -14,22 +13,228 @@ License: 	The WebFont(s) listed in this document must follow the YouWorkForThem
 			All details above must always remain unaltered and visible in your CSS.
 */
 
+// @font-face {
+//   font-family: 'Greycliff';
+//   src: url('/fonts/greycliff-thin.eot');
+//   src: url('/fonts/greycliff-thin.eot?#iefix') format('embedded-opentype'),
+//     url('/fonts/greycliff-thin.woff2') format('woff2'),
+//     url('/fonts/greycliff-thin.woff') format('woff'),
+//     url('/fonts/greycliff-thin.ttf') format('truetype'),
+//     url('/fonts/greycliff-thin.svg#youworkforthem') format('svg');
+//   font-weight: 100;
+//   font-style: normal;
+// }
+
+// @font-face {
+//   font-family: 'Greycliff';
+//   src: url('/fonts/greycliff-thin-oblique.eot');
+//   src: url('/fonts/greycliff-thin-oblique.eot?#iefix')
+//       format('embedded-opentype'),
+//     url('/fonts/greycliff-thin-oblique.woff2') format('woff2'),
+//     url('/fonts/greycliff-thin-oblique.woff') format('woff'),
+//     url('/fonts/greycliff-thin-oblique.ttf') format('truetype'),
+//     url('/fonts/greycliff-thin-oblique.svg#youworkforthem') format('svg');
+//   font-weight: 100;
+//   font-style: italic;
+// }
+
+// @font-face {
+//   font-family: 'Greycliff';
+//   src: url('/fonts/greycliff-extra-light.eot');
+//   src: url('/fonts/greycliff-extra-light.eot?#iefix')
+//       format('embedded-opentype'),
+//     url('/fonts/greycliff-extra-light.woff2') format('woff2'),
+//     url('/fonts/greycliff-extra-light.woff') format('woff'),
+//     url('/fonts/greycliff-extra-light.ttf') format('truetype'),
+//     url('/fonts/greycliff-extra-light.svg#youworkforthem') format('svg');
+//   font-weight: 200;
+//   font-style: normal;
+// }
+
+// @font-face {
+//   font-family: 'Greycliff';
+//   src: url('/fonts/greycliff-extra-light-oblique.eot');
+//   src: url('/fonts/greycliff-extra-light-oblique.eot?#iefix')
+//       format('embedded-opentype'),
+//     url('/fonts/greycliff-extra-light-oblique.woff2') format('woff2'),
+//     url('/fonts/greycliff-extra-light-oblique.woff') format('woff'),
+//     url('/fonts/greycliff-extra-light-oblique.ttf') format('truetype'),
+//     url('/fonts/greycliff-extra-light-oblique.svg#youworkforthem') format('svg');
+//   font-weight: 200;
+//   font-style: italic;
+// }
+
+// @font-face {
+//   font-family: 'Greycliff';
+//   src: url('/fonts/greycliff-light.eot');
+//   src: url('/fonts/greycliff-light.eot?#iefix') format('embedded-opentype'),
+//     url('/fonts/greycliff-light.woff2') format('woff2'),
+//     url('/fonts/greycliff-light.woff') format('woff'),
+//     url('/fonts/greycliff-light.ttf') format('truetype'),
+//     url('/fonts/greycliff-light.svg#youworkforthem') format('svg');
+//   font-weight: 300;
+//   font-style: normal;
+// }
+
+// @font-face {
+//   font-family: 'Greycliff';
+//   src: url('/fonts/greycliff-light-oblique.eot');
+//   src: url('/fonts/greycliff-light-oblique.eot?#iefix')
+//       format('embedded-opentype'),
+//     url('/fonts/greycliff-light-oblique.woff2') format('woff2'),
+//     url('/fonts/greycliff-light-oblique.woff') format('woff'),
+//     url('/fonts/greycliff-light-oblique.ttf') format('truetype'),
+//     url('/fonts/greycliff-light-oblique.svg#youworkforthem') format('svg');
+//   font-weight: 300;
+//   font-style: italic;
+// }
+
+// @font-face {
+//   font-family: 'Greycliff';
+//   src: url('/fonts/greycliff-regular.eot');
+//   src: url('/fonts/greycliff-regular.eot?#iefix') format('embedded-opentype'),
+//     url('/fonts/greycliff-regular.woff2') format('woff2'),
+//     url('/fonts/greycliff-regular.woff') format('woff'),
+//     url('/fonts/greycliff-regular.ttf') format('truetype'),
+//     url('/fonts/greycliff-regular.svg#youworkforthem') format('svg');
+//   font-weight: normal;
+//   font-style: normal;
+// }
+
+// @font-face {
+//   font-family: 'Greycliff';
+//   src: url('/fonts/greycliff-regular-oblique.eot');
+//   src: url('/fonts/greycliff-regular-oblique.eot?#iefix')
+//       format('embedded-opentype'),
+//     url('/fonts/greycliff-regular-oblique.woff2') format('woff2'),
+//     url('/fonts/greycliff-regular-oblique.woff') format('woff'),
+//     url('/fonts/greycliff-regular-oblique.ttf') format('truetype'),
+//     url('/fonts/greycliff-regular-oblique.svg#youworkforthem') format('svg');
+//   font-weight: normal;
+//   font-style: italic;
+// }
+
+// @font-face {
+//   font-family: 'Greycliff';
+//   src: url('/fonts/greycliff-medium.eot');
+//   src: url('/fonts/greycliff-medium.eot?#iefix') format('embedded-opentype'),
+//     url('/fonts/greycliff-medium.woff2') format('woff2'),
+//     url('/fonts/greycliff-medium.woff') format('woff'),
+//     url('/fonts/greycliff-medium.ttf') format('truetype'),
+//     url('/fonts/greycliff-medium.svg#youworkforthem') format('svg');
+//   font-weight: 500;
+//   font-style: normal;
+// }
+
+// @font-face {
+//   font-family: 'Greycliff';
+//   src: url('/fonts/greycliff-medium-oblique.eot');
+//   src: url('/fonts/greycliff-medium-oblique.eot?#iefix')
+//       format('embedded-opentype'),
+//     url('/fonts/greycliff-medium-oblique.woff2') format('woff2'),
+//     url('/fonts/greycliff-medium-oblique.woff') format('woff'),
+//     url('/fonts/greycliff-medium-oblique.ttf') format('truetype'),
+//     url('/fonts/greycliff-medium-oblique.svg#youworkforthem') format('svg');
+//   font-weight: 500;
+//   font-style: italic;
+// }
+
 @font-face {
-  font-family: 'Codec Pro';
-  src: url('/fonts/codec-pro-regular.eot');
-  src: url('/fonts/codec-pro-regular.eot?#iefix') format('embedded-opentype'),
-    url('/fonts/codec-pro-regular.woff2') format('woff2'),
-    url('/fonts/codec-pro-regular.woff') format('woff'),
-    url('/fonts/codec-pro-regular.ttf') format('truetype'),
-    url('/fonts/codec-pro-regular.svg#youworkforthem') format('svg');
-  font-weight: normal;
+  font-family: 'Greycliff';
+  src: url('/fonts/greycliff-demi-bold.eot');
+  src: url('/fonts/greycliff-demi-bold.eot?#iefix') format('embedded-opentype'),
+    url('/fonts/greycliff-demi-bold.woff2') format('woff2'),
+    url('/fonts/greycliff-demi-bold.woff') format('woff'),
+    url('/fonts/greycliff-demi-bold.ttf') format('truetype'),
+    url('/fonts/greycliff-demi-bold.svg#youworkforthem') format('svg');
+  font-weight: 600;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Genera';
-  src: url('/fonts/genera-semibold.woff2') format('woff2'),
-    url('/fonts/genera-semibold.woff') format('woff');
+  font-family: 'Greycliff';
+  src: url('/fonts/greycliff-demi-bold-oblique.eot');
+  src: url('/fonts/greycliff-demi-bold-oblique.eot?#iefix')
+      format('embedded-opentype'),
+    url('/fonts/greycliff-demi-bold-oblique.woff2') format('woff2'),
+    url('/fonts/greycliff-demi-bold-oblique.woff') format('woff'),
+    url('/fonts/greycliff-demi-bold-oblique.ttf') format('truetype'),
+    url('/fonts/greycliff-demi-bold-oblique.svg#youworkforthem') format('svg');
   font-weight: 600;
+  font-style: italic;
+}
+
+// @font-face {
+//   font-family: 'Greycliff';
+//   src: url('/fonts/greycliff-bold.eot');
+//   src: url('/fonts/greycliff-bold.eot?#iefix') format('embedded-opentype'),
+//     url('/fonts/greycliff-bold.woff2') format('woff2'),
+//     url('/fonts/greycliff-bold.woff') format('woff'),
+//     url('/fonts/greycliff-bold.ttf') format('truetype'),
+//     url('/fonts/greycliff-bold.svg#youworkforthem') format('svg');
+//   font-weight: bold;
+//   font-style: normal;
+// }
+
+// @font-face {
+//   font-family: 'Greycliff';
+//   src: url('/fonts/greycliff-bold-oblique.eot');
+//   src: url('/fonts/greycliff-bold-oblique.eot?#iefix')
+//       format('embedded-opentype'),
+//     url('/fonts/greycliff-bold-oblique.woff2') format('woff2'),
+//     url('/fonts/greycliff-bold-oblique.woff') format('woff'),
+//     url('/fonts/greycliff-bold-oblique.ttf') format('truetype'),
+//     url('/fonts/greycliff-bold-oblique.svg#youworkforthem') format('svg');
+//   font-weight: bold;
+//   font-style: italic;
+// }
+
+// @font-face {
+//   font-family: 'Greycliff';
+//   src: url('/fonts/greycliff-extra-bold.eot');
+//   src: url('/fonts/greycliff-extra-bold.eot?#iefix') format('embedded-opentype'),
+//     url('/fonts/greycliff-extra-bold.woff2') format('woff2'),
+//     url('/fonts/greycliff-extra-bold.woff') format('woff'),
+//     url('/fonts/greycliff-extra-bold.ttf') format('truetype'),
+//     url('/fonts/greycliff-extra-bold.svg#youworkforthem') format('svg');
+//   font-weight: 800;
+//   font-style: normal;
+// }
+
+// @font-face {
+//   font-family: 'Greycliff';
+//   src: url('/fonts/greycliff-extra-bold-oblique.eot');
+//   src: url('/fonts/greycliff-extra-bold-oblique.eot?#iefix')
+//       format('embedded-opentype'),
+//     url('/fonts/greycliff-extra-bold-oblique.woff2') format('woff2'),
+//     url('/fonts/greycliff-extra-bold-oblique.woff') format('woff'),
+//     url('/fonts/greycliff-extra-bold-oblique.ttf') format('truetype'),
+//     url('/fonts/greycliff-extra-bold-oblique.svg#youworkforthem') format('svg');
+//   font-weight: 800;
+//   font-style: italic;
+// }
+
+@font-face {
+  font-family: 'Greycliff';
+  src: url('/fonts/greycliff-heavy.eot');
+  src: url('/fonts/greycliff-heavy.eot?#iefix') format('embedded-opentype'),
+    url('/fonts/greycliff-heavy.woff2') format('woff2'),
+    url('/fonts/greycliff-heavy.woff') format('woff'),
+    url('/fonts/greycliff-heavy.ttf') format('truetype'),
+    url('/fonts/greycliff-heavy.svg#youworkforthem') format('svg');
+  font-weight: 900;
   font-style: normal;
+}
+
+@font-face {
+  font-family: 'Greycliff';
+  src: url('/fonts/greycliff-heavy-oblique.eot');
+  src: url('/fonts/greycliff-heavy-oblique.eot?#iefix')
+      format('embedded-opentype'),
+    url('/fonts/greycliff-heavy-oblique.woff2') format('woff2'),
+    url('/fonts/greycliff-heavy-oblique.woff') format('woff'),
+    url('/fonts/greycliff-heavy-oblique.ttf') format('truetype'),
+    url('/fonts/greycliff-heavy-oblique.svg#youworkforthem') format('svg');
+  font-weight: 900;
+  font-style: italic;
 }

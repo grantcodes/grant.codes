@@ -17,7 +17,7 @@ body {
   transition: color var(--theme-transition-time);
   line-height: 1.5;
   font-family: u.$font-sans;
-  font-variation-settings: 'wght' 300;
+  font-weight: 600;
   word-wrap: break-word;
   text-shadow: 0 0 0 var(--color-contrast);
   -webkit-font-smoothing: antialiased;
@@ -37,7 +37,7 @@ h5,
 h6 {
   font-family: u.$font-h;
   line-height: 1.2;
-  font-variation-settings: 'wght' 700;
+  font-weight: 900;
 }
 
 h1 {
