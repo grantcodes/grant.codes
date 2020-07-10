@@ -151,7 +151,7 @@ const links = [
     rel: 'authorization_endpoint',
     href: process.env.NEXT_PUBLIC_INDIEAUTH_ENDPOINT,
   },
-  { rel: 'token_endpoint', href: url + '/token' },
+  { rel: 'token_endpoint', href: api + '/token' },
   { rel: 'hub', href: process.env.NEXT_PUBLIC_HUB },
   { rel: 'microsub', href: process.env.NEXT_PUBLIC_MICROSUB_ENDPOINT },
   { rel: 'micropub', href: micropub },
