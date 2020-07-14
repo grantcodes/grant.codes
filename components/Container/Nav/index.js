@@ -128,7 +128,10 @@ export default () => {
                 className={classnames('main-nav__link', {
                   'main-nav__link--hidden': i >= shownLinkCount && moreHidden,
                 })}
-                onClick={(e) => setTargeted(fase)}
+                onClick={(e) => {
+                  setTargeted(false)
+                  return true
+                }}
               >
                 {link.text}
               </Link>
