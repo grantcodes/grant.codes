@@ -107,9 +107,9 @@ export default () => {
         id="nav"
         className={classnames('main-nav', { 'is-target': targeted })}
       >
-        <ul class="main-nav__ul">
+        <ul className="main-nav__ul">
           {navLinks.map((link, i) => (
-            <li class="main-nav__li" key={'nav-link-to-' + i}>
+            <li className="main-nav__li" key={'nav-link-to-' + i}>
               {i === shownLinkCount && (
                 <a
                   className="main-nav__link main-nav__link--more"

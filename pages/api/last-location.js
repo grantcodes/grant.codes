@@ -17,7 +17,6 @@ export default async (req, res) => {
           Authorization: `Basic ${auth}`,
         },
         method: 'GET',
-        timeout: 3000,
       }
     )
     const data = await response.json()

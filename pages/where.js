@@ -35,9 +35,7 @@ const Where = () => {
           )}
 
           {location === false && (
-            <p>
-              <p>{process.env.NEXT_PUBLIC_AUTHOR_NAME} not found 🕵️‍</p>
-            </p>
+            <p>{process.env.NEXT_PUBLIC_AUTHOR_NAME} not found 🕵️‍</p>
           )}
 
           {!!location && (
