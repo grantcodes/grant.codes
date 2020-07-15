@@ -25,6 +25,7 @@ export default async (req, res) => {
     }
   } catch (err) {
     console.error('[Error getting owntracks location]', err)
+    throw new Error('Error getting owntracks location')
   }
 
   res.statusCode = 200
