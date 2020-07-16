@@ -16,6 +16,8 @@ const Pagination = ({ nextText, previousText, noNext, ...props }) => {
   if (!asPath.includes('/page/')) {
     asPath += '/page/' + page
     route += '/page/[page]'
+    asPath = asPath.replace('//', '/')
+    route = route.replace('//', '/')
   }
 
   return (
