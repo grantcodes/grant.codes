@@ -3,7 +3,10 @@
  * @param {string|object} location Geouri or mf2 object to use
  * @returns {array} Array with lat + lon
  */
-export default function(mf2) {
+export default function (mf2 = null) {
+  if (!mf2) {
+    return null
+  }
   let coords = null
   if (typeof mf2 === 'string' && mf2.startsWith('geo:')) {
     const semiIndex = mf2.indexOf(';')
@@ -12,6 +15,7 @@ export default function(mf2) {
     }
     coords = mf2.replace('geo:', '').split(',')
   } else if (
+    mf2 &&
     mf2.properties &&
     mf2.properties.latitude &&
     mf2.properties.longitude

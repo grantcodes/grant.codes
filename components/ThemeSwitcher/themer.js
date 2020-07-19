@@ -58,6 +58,9 @@ export default function (color = false) {
   }
 
   if (typeof window !== 'undefined') {
+    window.document.body.classList.remove('theme--dark')
+    window.document.body.classList.remove('theme--light')
+    window.document.body.classList.add(dark ? 'theme--dark' : 'theme--light')
     for (const key in palette) {
       if (palette.hasOwnProperty(key)) {
         const color = palette[key]

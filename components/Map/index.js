@@ -15,10 +15,7 @@ const Map = ({
   ...mapProps
 }) => {
   // Get the center from the location provided
-  const center = getLatLngFromMf2(location)
-  if (center === null) {
-    return null
-  }
+  const center = getLatLngFromMf2(location) ?? [0, 0]
 
   // Set different map providers based on the theme
   const provider = (x, y, z) =>

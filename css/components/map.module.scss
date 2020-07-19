@@ -5,6 +5,7 @@
   z-index: 1;
   height: 10em;
   overflow: hidden;
+  background-color: var(--color-main);
 
   img[src*='tile'] {
     max-width: none;
@@ -12,6 +13,14 @@
     // TODO: This was different depending on light/dark theme
     filter: invert(1);
     mix-blend-mode: color-dodge;
+  }
+
+  canvas {
+    mix-blend-mode: color-burn;
+  }
+  body.theme--dark & canvas {
+    filter: invert(1);
+    mix-blend-mode: screen;
   }
 
   & > div > div:first-child > div {

@@ -1,0 +1,7 @@
+{
+  "postTypes": {
+    "like": 8,
+    "reply": 1,
+    "journal": 3
+  }
+}

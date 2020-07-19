@@ -1,0 +1,1221 @@
+{
+  "postTypes": {
+    "like": 44,
+    "note": 31,
+    "journal": 13,
+    "watch": 2,
+    "photo": 1
+  },
+  "geojson": {
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.054576,
+            47.4856114
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486031484,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.055781,
+            47.500978
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486031485,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0558082,
+            47.5009336
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486036720,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.048116,
+            47.4845755
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486067423,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0510967,
+            47.5001545
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486054008,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.061107,
+            47.4778869
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486222708,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0480258,
+            47.484356
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486222708,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0480939,
+            47.4844601
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486199390,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0686741,
+            47.4827672
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486222708,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0736957,
+            47.4865642
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486222708,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.048116,
+            47.4845755
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486239742,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0407741,
+            47.4833066
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486292979,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0352341,
+            47.4857859
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486292979,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0417557,
+            47.4859099
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486292979,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0296134,
+            47.4881884
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486292979,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0479633,
+            47.4845223
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486401990,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.048116,
+            47.4845755
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1485943976,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0544281,
+            47.4855547
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486470802,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0539232,
+            47.4966574
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486500734,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.048116,
+            47.4845755
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486625587,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.055781,
+            47.500978
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486636450,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0545743,
+            47.4856463
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486115615,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0473871,
+            47.4837168
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486292979,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0362453,
+            47.4884274
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486292979,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0478651,
+            47.4799552
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486401990,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0480939,
+            47.4844601
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486377234,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0422257,
+            47.4960324
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1487507978,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0484737,
+            47.4838386
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1487501444,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.048116,
+            47.4845755
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486928460,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0410729,
+            47.4764639
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486909081,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0485217,
+            47.4743255
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486909081,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0480939,
+            47.4844601
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486923991,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.048116,
+            47.4845755
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486909081,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0480366,
+            47.4848881
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1487507978,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0490952,
+            47.4883191
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1487507978,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0404799,
+            47.5003474
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1487507978,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0410997,
+            47.4915693
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1487507978,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.042255,
+            47.4960005
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1487507978,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0411425,
+            47.484605
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1487507978,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0402584,
+            47.5003507
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1487507978,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0452836,
+            47.4920262
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1487507978,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0393724,
+            47.5048097
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1487507978,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0521944,
+            47.4950027
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486054008,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0546004,
+            47.4856159
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1487586280,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.057275,
+            47.4967282
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1487608472,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0556232,
+            47.5010846
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1487586280,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0558082,
+            47.5009336
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486115615,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0369093,
+            47.4880775
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1487507978,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0477045,
+            47.4800925
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486909081,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0479891,
+            47.4844357
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486915647,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0543185,
+            47.4854797
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1487856013,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0592143,
+            47.4947854
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1487856013,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0622811,
+            47.4896123
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1487879344,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.048494,
+            47.4831995
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1487879344,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.048073,
+            47.4845927
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486838725,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.055781,
+            47.500978
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486470802,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0578227,
+            47.487632
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1488217440,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0546292,
+            47.4857903
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1488199090,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.048494,
+            47.4831995
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1488217440,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.04820244,
+            47.48474278
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1488272825,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0556996,
+            47.5011112
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1488272890,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.06246808,
+            47.49724985
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1488285946,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0556996,
+            47.5011112
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1488285946,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0544599,
+            47.4966876
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1488304010,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0497893,
+            47.4847299
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1488304010,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0563353,
+            47.4871844
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1486141015,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0353397,
+            47.4834865
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1488025784,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0471013,
+            47.4797585
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1488025784,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0418827,
+            47.4827269
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1488025784,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0482542,
+            47.4841948
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1488025784,
+          "acc": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            19.0405917,
+            47.4807058
+          ]
+        },
+        "properties": {
+          "name": "gr",
+          "address": "",
+          "vel": 0,
+          "tst": 1488025784,
+          "acc": 0
+        }
+      }
+    ]
+  }
+}

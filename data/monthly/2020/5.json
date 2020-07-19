@@ -1,0 +1,9 @@
+{
+  "postTypes": {
+    "note": 29,
+    "like": 11,
+    "journal": 3,
+    "photo": 1,
+    "article": 3
+  }
+}
