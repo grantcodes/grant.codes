@@ -3,40 +3,7 @@ import { join } from 'path'
 import { NextSeo } from 'next-seo'
 import pluralize from 'pluralize'
 import Card from 'components/Card'
-import Map from 'components/Map'
-import Overlay from 'pigeon-overlay'
-// import geojson2svg from 'geojson2svg'
-import geojson2svg from 'geojson-to-svg'
-import ReactMapGL, { Source, Layer } from 'react-map-gl'
 import NewMap from 'components/NewMap'
-
-// const converter = geojson2svg({})
-
-const MapRoute = ({
-  mapState: { width, height },
-  latLngToPixel,
-  geojson,
-  style = { stroke: 'rgb(255,0,0)', strokeWidth: 2 },
-}) => {
-  const mapSvg = geojson
-    ? // ? geojson2svg().data(geojson).extent([-160, -100, 160, 100]).render()
-      geojson2svg().data(geojson).render()
-    : null
-  console.log({ geojson, mapSvg })
-  return (
-    <Overlay
-      // style={{ top: 0, left: 0 }}
-      anchor={geojson.features[0].geometry.coordinates}
-    >
-      <div
-        width={width}
-        height={height}
-        className="map-route"
-        dangerouslySetInnerHTML={{ __html: mapSvg }}
-      ></div>
-    </Overlay>
-  )
-}
 
 export default ({ title, postTypes, geojson, body }) => {
   return (
@@ -58,9 +25,6 @@ export default ({ title, postTypes, geojson, body }) => {
       {!!geojson && (
         <Card title="Map">
           <div className="card__breakout">
-            {/* <Map>
-              <MapRoute geojson={geojson} />
-            </Map> */}
             <NewMap geojson={geojson} />
           </div>
         </Card>
