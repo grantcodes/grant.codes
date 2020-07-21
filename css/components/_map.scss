@@ -1,0 +1,80 @@
+@use '../util' as u;
+
+// TODO: Check the things that extend .map
+.map {
+  z-index: 1;
+  overflow: hidden;
+  background-color: var(--color-main) !important;
+  height: 10rem;
+  @media (min-height: 40em) {
+    height: 15rem;
+  }
+
+  &.leaflet-container::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-main);
+    mix-blend-mode: soft-light;
+    pointer-events: none;
+    transition: background-color u.$theme-transition-time;
+  }
+
+  .leaflet-overlay-pane path {
+    stroke: var(--color-complementary) !important;
+  }
+}
+
+.map--plain {
+  img[src*='tile'] {
+    filter: none;
+    mix-blend-mode: unset;
+  }
+
+  & > div > div:first-child > div {
+    background-color: transparent;
+  }
+}
+
+.map--loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.map__loading {
+  margin: 0 auto;
+}
+
+// $marker-size: 2rem;
+// .avatar-marker {
+//   display: block;
+//   position: absolute;
+//   border-radius: 50%;
+//   border: 2px solid transparent;
+//   overflow: hidden;
+//   transition: border-color 0.2s var(--color-complementary);
+//   border: 1px solid;
+//   width: $marker-size;
+//   height: $marker-size;
+//   margin-left: 0 - $marker-size / 2;
+//   margin-top: 0 - $marker-size / 2;
+//   box-shadow: u.shadow(1);
+
+//   &.is-highlighted {
+//     box-shadow: 0 0 0.2em var(--color-contrast);
+//     z-index: 2;
+//   }
+
+//   img {
+//     display: block;
+//     min-width: 100%;
+//     min-height: 100%;
+//     width: auto;
+//     height: auto;
+//   }
+// }

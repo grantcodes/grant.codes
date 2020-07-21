@@ -3,7 +3,10 @@
 // TODO: Check the things that extend .map
 .map {
   z-index: 1;
-  height: 10em;
+  height: 20em;
+  @media (min-height: 40em) {
+    height: 30em;
+  }
   overflow: hidden;
   background-color: var(--color-main);
 
@@ -15,12 +18,18 @@
     mix-blend-mode: color-dodge;
   }
 
-  canvas {
+  canvas,
+  .leaflet-tile-pane {
     mix-blend-mode: color-burn;
   }
-  body.theme--dark & canvas {
+  body.theme--dark & canvas,
+  body.theme--dark & .leaflet-tile-pane {
     filter: invert(1);
     mix-blend-mode: screen;
+  }
+
+  .leaflet-overlay-pane path {
+    stroke: var(--color-complementary) !important;
   }
 
   & > div > div:first-child > div {

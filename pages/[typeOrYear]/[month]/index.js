@@ -4,6 +4,7 @@ import { NextSeo } from 'next-seo'
 import pluralize from 'pluralize'
 import Card from 'components/Card'
 import NewMap from 'components/NewMap'
+import LeafletMap from 'components/LeafletMap'
 
 export default ({ title, postTypes, geojson, body }) => {
   return (
@@ -25,7 +26,8 @@ export default ({ title, postTypes, geojson, body }) => {
       {!!geojson && (
         <Card title="Map">
           <div className="card__breakout">
-            <NewMap geojson={geojson} />
+            {/* <NewMap geojson={geojson} /> */}
+            <LeafletMap geojson={geojson} />
           </div>
         </Card>
       )}
