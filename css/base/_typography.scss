@@ -34,13 +34,20 @@ h2,
 h3,
 h4,
 h5,
-h6 {
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
   font-family: u.$font-h;
   line-height: 1.2;
   font-weight: 900;
 }
 
-h1 {
+h1,
+.h1 {
   margin-top: u.space();
   margin-bottom: u.space(2);
   font-size: u.fs(3);
@@ -49,22 +56,27 @@ h1 {
     font-size: u.fs(4);
   }
 }
-h2 {
+h2,
+.h2 {
   font-size: u.fs(3);
   margin-bottom: u.space(2);
 }
-h3 {
+h3,
+.h3 {
   font-size: u.fs(2);
   margin-bottom: u.space(1);
 }
-h4 {
+h4,
+.h4 {
   font-size: u.fs(1);
   margin-bottom: u.space(1);
 }
-h5 {
+h5,
+.h5 {
   font-size: u.fs(0);
 }
-h6 {
+h6,
+.h6 {
   font-size: u.fs(-1);
 }
 

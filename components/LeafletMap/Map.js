@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { Map, TileLayer, GeoJSON, useLeaflet } from 'react-leaflet'
-// import styles from 'css/components/map.module.scss'
 
 const Route = ({ data }) => {
   const { map } = useLeaflet()

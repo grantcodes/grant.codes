@@ -1,7 +1,10 @@
 @use '../util' as u;
 
 .page-title {
-  font-size: u.fs(4);
+  font-size: u.fs(3);
+  @media (min-width: u.$mid-break) {
+    font-size: u.fs(4);
+  }
   margin-top: 0;
   margin-bottom: u.space(1);
 }

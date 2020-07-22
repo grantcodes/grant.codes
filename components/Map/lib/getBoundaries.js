@@ -1,11 +1,11 @@
 import WebMercatorViewport from 'viewport-mercator-project'
 
-export default function({ width, height, markers }) {
+export default function ({ width, height, markers }) {
   let maxLat = markers[0][0]
   let maxLng = markers[0][1]
   let minLat = markers[0][0]
   let minLng = markers[0][1]
-  markers.forEach(marker => {
+  markers.forEach((marker) => {
     const lat = marker[0]
     const lng = marker[1]
     if (lat > maxLat) {
@@ -22,7 +22,10 @@ export default function({ width, height, markers }) {
     }
   })
   if (maxLat !== minLat && maxLng !== minLng) {
-    const bounds = [[maxLng, maxLat], [minLng, minLat]]
+    const bounds = [
+      [maxLng, maxLat],
+      [minLng, minLat],
+    ]
     const viewport = new WebMercatorViewport({
       width,
       height,

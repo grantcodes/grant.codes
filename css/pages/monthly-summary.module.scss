@@ -1,0 +1,27 @@
+@use '../util' as u;
+
+.counts {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap-reverse;
+  justify-content: center;
+}
+
+.counts__count {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 2rem;
+}
+
+.counts__count__number {
+  font-size: u.fs(3);
+  font-weight: bold;
+}
+
+.counts__count__type {
+  font-weight: normal;
+  margin-top: 0;
+  font-size: u.fs(1);
+  text-transform: capitalize;
+}

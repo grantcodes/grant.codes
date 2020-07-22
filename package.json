@@ -9,7 +9,6 @@
     "export": "next export"
   },
   "dependencies": {
-    "@math.gl/web-mercator": "^3.2.2",
     "@postr/core": "^1.9.0",
     "chroma-js": "^2.1.0",
     "classnames": "^2.2.6",
@@ -26,13 +25,11 @@
     "pigeon-maps": "^0.15.0",
     "pigeon-overlay": "^0.2.3",
     "pluralize": "^8.0.0",
-    "polished": "^3.6.5",
     "pouchdb-adapter-http": "^7.2.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-image-lightbox": "^5.1.1",
     "react-leaflet": "^2.7.0",
-    "react-map-gl": "^5.2.7",
     "react-stripe-elements": "^6.1.2",
     "sass": "^1.26.10",
     "stripe": "^8.71.0",

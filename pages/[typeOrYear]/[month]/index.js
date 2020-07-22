@@ -1,38 +1,67 @@
 import fs from 'fs'
 import { join } from 'path'
 import { NextSeo } from 'next-seo'
+import classnames from 'classnames'
 import pluralize from 'pluralize'
 import Card from 'components/Card'
-import NewMap from 'components/NewMap'
 import LeafletMap from 'components/LeafletMap'
+import Button from 'components/Button'
+import styles from 'css/pages/monthly-summary.module.scss'
 
-export default ({ title, postTypes, geojson, body }) => {
+const leadingZero = (num) =>
+  parseInt(num) < 10 && parseInt(num) > 0 ? `0${num}` : `${num}`
+
+export default ({ year, month, postTypes, geojson, body }) => {
+  const yearInt = parseInt(year)
+  const monthInt = parseInt(month)
+  const nextLink = `/${monthInt === 12 ? yearInt + 1 : year}/${
+    monthInt === 12 ? '01' : leadingZero(monthInt) + 1
+  }`
+  const previousLink = `/${monthInt === 1 ? yearInt - 1 : year}/${
+    month === 1 ? 12 : leadingZero(monthInt - 1)
+  }`
+
   return (
     <>
-      <NextSeo title={title} />
-      <h1 className="page-title">Month Summary</h1>
+      <NextSeo title={`Monthly Summary ${year}/${month}`} />
+      <h1 className="page-title">
+        Monthly Summary {year}/{month}
+      </h1>
       {!!postTypes && (
         <Card title="Posts">
-          {Object.keys(postTypes).map((type) => (
-            <div key={`type-${type}`}>
-              <h3>
-                {postTypes[type].toString()} {pluralize(type)}
-              </h3>
-            </div>
-          ))}
+          <ul className={classnames('card__breakout', styles.counts)}>
+            {Object.keys(postTypes).map((type) => (
+              <li className={styles.counts__count} key={`type-${type}`}>
+                <span className={styles.counts__count__number}>
+                  {postTypes[type].toString()}
+                </span>
+                <h3 className={styles.counts__count__type}>
+                  {postTypes[type] > 1 ? pluralize(type) : type}
+                </h3>
+              </li>
+            ))}
+          </ul>
         </Card>
       )}
 
       {!!geojson && (
         <Card title="Map">
           <div className="card__breakout">
-            {/* <NewMap geojson={geojson} /> */}
             <LeafletMap geojson={geojson} />
           </div>
         </Card>
       )}
 
       {!!body && <Card title="Body"></Card>}
+
+      <nav className="pagination">
+        <Button to="/[typeOrYear]/[month]" linkAs={previousLink}>
+          Previous
+        </Button>
+        <Button to="/[typeOrYear]/[month]" linkAs={nextLink}>
+          Next
+        </Button>
+      </nav>
     </>
   )
 }
@@ -53,7 +82,11 @@ export const getStaticProps = ({ params }) => {
     const jsonString = fs.readFileSync(filePath, 'utf8')
     const data = JSON.parse(jsonString)
     return {
-      props: data,
+      props: {
+        year: params.typeOrYear,
+        month: params.month,
+        ...data,
+      },
     }
   } catch (err) {
     console.error('[Error getting monthly data file]', err)
@@ -64,9 +97,6 @@ export const getStaticProps = ({ params }) => {
 }
 
 export const getStaticPaths = () => {
-  const leadingZero = (num) =>
-    parseInt(num) < 10 && parseInt(num) > 0 ? `0${num}` : `${num}`
-
   const paths = []
 
   const dataDir = join(process.cwd(), 'data', 'monthly')

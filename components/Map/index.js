@@ -3,13 +3,11 @@ import PropTypes from 'prop-types'
 import PigeonMap from 'pigeon-maps'
 import AvatarMarker from './AvatarMarker'
 import getLatLngFromMf2 from './lib/getLatLngFromMf2'
-import styles from 'css/components/map.module.scss'
 
 const Map = ({
   children,
   location,
   className,
-  themed,
   style,
   hideDefaultMarker,
   ...mapProps
@@ -17,20 +15,11 @@ const Map = ({
   // Get the center from the location provided
   const center = getLatLngFromMf2(location) ?? [0, 0]
 
-  // Set different map providers based on the theme
   const provider = (x, y, z) =>
-    !!themed
-      ? `https://stamen-tiles-a.a.ssl.fastly.net/toner-lite/${z}/${x}/${y}@2x.png`
-      : `https://a.tile.openstreetmap.se/hydda/full/${z}/${x}/${y}.png`
+    `https://api.mapbox.com/styles/v1/grantcodes/ckctekw712q2k1jph87kqekjk/tiles/256/${z}/${x}/${y}@2x?access_token=${process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}`
 
   return (
-    <div
-      className={classnames('map', className, styles.map, {
-        [styles['map--plain']]: !themed,
-      })}
-      style={style}
-      themed={themed}
-    >
+    <div className={classnames('map', className)} style={style}>
       <PigeonMap center={center} {...mapProps} provider={provider}>
         {children ? children : <AvatarMarker anchor={center} />}
       </PigeonMap>
@@ -41,7 +30,6 @@ const Map = ({
 Map.propTypes = {
   className: PropTypes.string.isRequired,
   location: PropTypes.any.isRequired,
-  themed: PropTypes.bool.isRequired,
   defaultWidth: PropTypes.number,
   defaultHeight: PropTypes.number,
   zoom: PropTypes.number.isRequired,
@@ -50,7 +38,6 @@ Map.propTypes = {
 
 Map.defaultProps = {
   className: '',
-  themed: false,
   zoom: 14,
   metaWheelZoom: true,
 }
