@@ -4,7 +4,7 @@ import getAuthor from 'lib/get/author'
 import imageProxy from '../../lib/image-proxy'
 import styles from 'css/components/avatar.module.scss'
 
-export default ({
+const Avatar = ({
   author,
   alt = '',
   noLink = false,
@@ -50,3 +50,5 @@ export default ({
     </div>
   )
 }
+
+export default Avatar

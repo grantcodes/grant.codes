@@ -1,3 +1,5 @@
 import PaymentForm from 'components/Payment/Form'
 
-export default () => <PaymentForm monthly />
+const MonthlyPaymentForm = () => <PaymentForm monthly />
+
+export default MonthlyPaymentForm

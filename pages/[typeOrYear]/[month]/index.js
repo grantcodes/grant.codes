@@ -11,7 +11,7 @@ import styles from 'css/pages/monthly-summary.module.scss'
 const leadingZero = (num) =>
   parseInt(num) < 10 && parseInt(num) > 0 ? `0${num}` : `${num}`
 
-export default ({ year, month, postTypes, geojson, body }) => {
+const MonthlySummary = ({ year, month, postTypes, geojson, body }) => {
   const yearInt = parseInt(year)
   const monthInt = parseInt(month)
   const nextLink = `/${monthInt === 12 ? yearInt + 1 : year}/${
@@ -123,3 +123,5 @@ export const getStaticPaths = () => {
     fallback: false,
   }
 }
+
+export default MonthlySummary

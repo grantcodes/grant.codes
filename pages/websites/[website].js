@@ -6,7 +6,7 @@ import arrowLeft from 'eva-icons/fill/svg/arrow-back.svg'
 import externalLink from 'eva-icons/fill/svg/external-link.svg'
 import websites from '../../data/websites'
 
-export default ({ title, screenshot, url, content, ...props }) => (
+const Website = ({ title, screenshot, url, content, ...props }) => (
   <Card>
     <NextSeo title={title} />
     <article>
@@ -48,3 +48,5 @@ export const getStaticPaths = () => ({
   paths: websites.map((website) => ({ params: { website: website.slug } })),
   fallback: false,
 })
+
+export default Website

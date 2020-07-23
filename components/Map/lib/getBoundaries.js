@@ -1,6 +1,6 @@
 import WebMercatorViewport from 'viewport-mercator-project'
 
-export default function ({ width, height, markers }) {
+export default function getBoundaries({ width, height, markers }) {
   let maxLat = markers[0][0]
   let maxLng = markers[0][1]
   let minLat = markers[0][0]

@@ -34,7 +34,7 @@ const iconDomains = [
   },
 ]
 
-export default ({ url }) => {
+const UrlIcon = ({ url }) => {
   for (const iconDomain of iconDomains) {
     if (url.indexOf(iconDomain.domain) > -1) {
       return <Icon icon={iconDomain.icon} ariaLabel={iconDomain.domain} />
@@ -48,3 +48,5 @@ export default ({ url }) => {
     return null
   }
 }
+
+export default UrlIcon

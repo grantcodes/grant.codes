@@ -12,7 +12,7 @@ const Rotate = ({ duration = 300, counterClockwise = false }) => (
   />
 )
 
-export default () => (
+const ClipPaths = () => (
   <svg
     className="topography-clip-paths"
     version="1.1"
@@ -43,3 +43,5 @@ export default () => (
     </defs>
   </svg>
 )
+
+export default ClipPaths

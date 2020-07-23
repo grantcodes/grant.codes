@@ -3,7 +3,7 @@
  * @param {string|object} location Geouri or mf2 object to use
  * @returns {array} Array with lat + lon
  */
-export default function (mf2 = null) {
+export default function getLatLngFromMf2(mf2 = null) {
   if (!mf2) {
     return null
   }

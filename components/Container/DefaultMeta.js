@@ -6,7 +6,7 @@ const description = process.env.NEXT_PUBLIC_META_DESCRIPTION
 const image = JSON.parse(process.env.NEXT_PUBLIC_META_IMAGE)
 const twHandle = process.env.NEXT_PUBLIC_TWITTER_HANDLE
 
-export default () => (
+const DefaultMeta = () => (
   <DefaultSeo
     title={name}
     titleTemplate={`%s ⁂ ${name}`}
@@ -54,3 +54,5 @@ export default () => (
     ]}
   />
 )
+
+export default DefaultMeta

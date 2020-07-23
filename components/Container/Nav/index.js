@@ -9,7 +9,7 @@ import closeIcon from 'eva-icons/fill/svg/close.svg'
 
 const shownLinkCount = 4
 
-export default () => {
+const Nav = () => {
   const [targeted, setTargeted] = useState(false)
   const [moreHidden, setMoreHidden] = useState(true)
   const [showSearch, setShowSearch] = useState(false)
@@ -172,3 +172,5 @@ export default () => {
     </>
   )
 }
+
+export default Nav

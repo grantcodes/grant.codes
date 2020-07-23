@@ -1,6 +1,6 @@
 import Error from '../pages/_error'
 
-export default ({ children, statusCode = 404 }) => {
+const RequireLogin = ({ children, statusCode = 404 }) => {
   let loggedIn = false
 
   if (loggedIn) {
@@ -9,3 +9,5 @@ export default ({ children, statusCode = 404 }) => {
 
   return <Error statusCode={statusCode} />
 }
+
+export default RequireLogin

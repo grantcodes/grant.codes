@@ -25,7 +25,7 @@ const getComplementary = (color) => {
   return color.set('hsl.h', '+180')
 }
 
-export default function (color = false) {
+export default function themer(color = false) {
   color = color ? chroma(color) : chroma.random()
   const dark = isDark(color)
   const contrast = contrastText(color)

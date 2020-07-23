@@ -1,5 +1,6 @@
 import classnames from 'classnames'
-export default ({ icon, className }) => (
+
+const Icon = ({ icon, className }) => (
   <span
     className={classnames('icon', className)}
     dangerouslySetInnerHTML={{
@@ -7,3 +8,5 @@ export default ({ icon, className }) => (
     }}
   />
 )
+
+export default Icon

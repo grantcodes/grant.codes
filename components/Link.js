@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-export default ({ to = null, as = null, linkAs = null, ...props }) => {
+const WrappedLink = ({ to = null, as = null, linkAs = null, ...props }) => {
   if (!to) {
     return props.children
   }
@@ -32,3 +32,5 @@ export default ({ to = null, as = null, linkAs = null, ...props }) => {
     </Link>
   )
 }
+
+export default WrappedLink

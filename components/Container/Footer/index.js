@@ -6,7 +6,7 @@ import email from 'eva-icons/fill/svg/email.svg'
 import facebook from 'eva-icons/fill/svg/facebook.svg'
 import github from 'eva-icons/fill/svg/github.svg'
 
-export default () => (
+const Footer = () => (
   <footer className="main-footer">
     <div>
       <a
@@ -75,3 +75,5 @@ export default () => (
     <ThemeSwitcher />
   </footer>
 )
+
+export default Footer
