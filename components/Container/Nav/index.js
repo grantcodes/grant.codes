@@ -1,9 +1,9 @@
-import React, { Fragment, useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import classnames from 'classnames'
 import Link from '../../Link'
 import Search from './Search'
 import Icon from 'components/Icon'
-import isAdmin from '../../../lib/is-admin'
+import useContext from 'lib/hooks/use-context'
 import menuIcon from 'eva-icons/fill/svg/menu.svg'
 import closeIcon from 'eva-icons/fill/svg/close.svg'
 
@@ -12,13 +12,7 @@ const shownLinkCount = 4
 const Nav = () => {
   const [targeted, setTargeted] = useState(false)
   const [moreHidden, setMoreHidden] = useState(true)
-  const [showSearch, setShowSearch] = useState(false)
-  const [search, setSearch] = useState('')
-  // Reload on mount to update absolute urls
-  useEffect(() => {
-    setTargeted(targeted)
-    setShowSearch(true)
-  }, [])
+  const { isAdmin } = useContext()
 
   const navLinks = [
     {

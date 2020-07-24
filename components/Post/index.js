@@ -13,11 +13,11 @@ import Admin from './Admin'
 import Footer from './Footer'
 import Button from '../Button'
 import Icon from '../Icon'
+import useContext from 'lib/hooks/use-context'
 import reply from 'eva-icons/fill/svg/corner-up-left.svg'
 import bookmark from 'eva-icons/fill/svg/bookmark.svg'
 import repost from 'eva-icons/fill/svg/repeat.svg'
 import like from 'eva-icons/fill/svg/heart.svg'
-import isAdmin from '../../lib/is-admin'
 
 const eventTimeDisplayOptions = {
   sameDay: '[Today] at HH:mm',
@@ -29,6 +29,8 @@ const eventTimeDisplayOptions = {
 }
 
 const Post = ({ compact, post, className = '' }) => {
+  const { isAdmin } = useContext()
+
   if (!post) {
     return null
   }

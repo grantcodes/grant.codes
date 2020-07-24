@@ -1,5 +1,6 @@
 import { NextSeo } from 'next-seo'
 import Container from 'components/Container'
+import { Provider } from 'lib/hooks/use-context'
 
 // TODO: Improve this?
 import '../css/base/index.scss'
@@ -17,11 +18,18 @@ const MyApp = ({ Component, pageProps }) => {
     containerClass += ' ' + pageProps.containerClass
   }
 
+  const contextData = {
+    isAdmin: pageProps?.isAdmin ?? false,
+    previewMode: pageProps?.previewMode ?? false,
+  }
+
   return (
-    <Container className={containerClass}>
-      {!!pageProps.pageTitle && <NextSeo title={pageProps.pageTitle} />}
-      <Component {...pageProps} />
-    </Container>
+    <Provider data={contextData}>
+      <Container className={containerClass}>
+        {!!pageProps.pageTitle && <NextSeo title={pageProps.pageTitle} />}
+        <Component {...pageProps} />
+      </Container>
+    </Provider>
   )
 }
 export default MyApp

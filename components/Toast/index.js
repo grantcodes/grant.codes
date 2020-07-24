@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
 import styles from 'css/components/toast.module.scss'
@@ -26,14 +27,17 @@ const Toast = ({ notification, type }) => {
     addNotification(notification, type)
   }, [notification])
 
-  return notifications.map((notification, i) => (
-    <div
-      key={`notification-${i}`}
-      className={classnames(styles.toast, styles[`toast--${type}`])}
-    >
-      {notification.text}
-    </div>
-  ))
+  return notifications.map((notification, i) =>
+    createPortal(
+      <div
+        key={`notification-${i}`}
+        className={classnames(styles.toast, styles[`toast--${type}`])}
+      >
+        {notification.text}
+      </div>,
+      document.body
+    )
+  )
 }
 
 Toast.propTypes = {

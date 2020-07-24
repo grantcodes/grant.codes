@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Button from 'components/Button'
 import BackfillMap from './BackfillMap'
 import twitter from 'eva-icons/fill/svg/twitter.svg'
 import x from 'eva-icons/fill/svg/close.svg'
@@ -59,7 +60,7 @@ const PostAdmin = ({ post, children }) => {
               Status: {post.properties['post-status'][0]}
             </span>
           )}
-        <button
+        <Button
           className="card__actions__button"
           icon={log}
           onClick={() => {
@@ -68,7 +69,7 @@ const PostAdmin = ({ post, children }) => {
           }}
           title="Log"
         />
-        <button
+        <Button
           className="card__actions__button"
           icon={twitter}
           onClick={async () => {
@@ -76,7 +77,7 @@ const PostAdmin = ({ post, children }) => {
           }}
           title={hasTwitter ? 'Delete from Twitter' : 'Push to Twitter'}
         />
-        <button
+        <Button
           className="card__actions__button"
           icon={instagram}
           onClick={async () =>
@@ -85,7 +86,7 @@ const PostAdmin = ({ post, children }) => {
           title={hasInsta ? 'Delete from Instagram' : 'Push to Instagram'}
         />
         {!!hasReference && (
-          <button
+          <Button
             className="card__actions__button"
             icon={refetch}
             onClick={async () => {
@@ -101,7 +102,7 @@ const PostAdmin = ({ post, children }) => {
           />
         )}
         {post && post.cms && post.cms._id && (
-          <button
+          <Button
             className="card__actions__button"
             icon={database}
             to={`https://d4c206d3-229f-4679-8e85-43414aa29719-bluemix.cloudant.com/dashboard.html#database/grantcodes/${encodeURIComponent(
@@ -113,7 +114,7 @@ const PostAdmin = ({ post, children }) => {
           />
         )}
         {!post.properties.location && (
-          <button
+          <Button
             className="card__actions__button"
             icon={location}
             onClick={async () => {
@@ -131,7 +132,7 @@ const PostAdmin = ({ post, children }) => {
             title="Backfill location"
           />
         )}
-        <button
+        <Button
           className="card__actions__button"
           icon={x}
           onClick={async () => {

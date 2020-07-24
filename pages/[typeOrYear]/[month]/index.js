@@ -68,7 +68,12 @@ const MonthlySummary = ({ year, month, postTypes, geojson, body }) => {
 
 export const getStaticProps = ({ params }) => {
   try {
-    if (!params.typeOrYear || !params.month) {
+    if (
+      !params.typeOrYear ||
+      !params.month ||
+      !parseInt(params.typeOrYear) ||
+      !parseInt(params.month)
+    ) {
       throw new Error('Year or month is not defined')
     }
 

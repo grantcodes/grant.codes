@@ -77,12 +77,12 @@
   height: 2.5rem;
   text-align: center;
   line-height: 1rem;
-  // background-color: var(--color-main--alt);
   z-index: 10;
   box-shadow: u.shadow();
   opacity: 0.9;
   cursor: pointer;
   display: block;
+  border-bottom-left-radius: u.$border-radius;
   @include u.glass();
   @media (min-width: u.$mid-break) {
     display: none;

@@ -24,6 +24,7 @@
   animation: toast 0.2s both;
   opacity: 0.9;
   transform: translateX(-50%);
+  border-radius: u.$border-radius;
 }
 
 .toast--error {
