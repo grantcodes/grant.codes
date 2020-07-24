@@ -18,7 +18,7 @@ textarea {
 
   color: var(--color-contrast);
   margin-bottom: 1rem;
-  transition: all 0.3s;
+  transition: all 0.2s;
 
   &::placeholder {
     color: var(--color-contrast);
@@ -76,7 +76,7 @@ button,
   fill: currentColor;
   padding: 0.5em 1em;
   text-decoration: none;
-  transition: background-color var(--theme-transition-time);
+  transition: background-color 0.2s;
   border: 0;
   outline: none;
   border-radius: u.$border-radius;

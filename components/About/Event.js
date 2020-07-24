@@ -21,7 +21,7 @@ const Event = ({
       )}
       <time
         className={classnames(styles.event__time, 'dt-start')}
-        datetime={moment(start).format()}
+        dateTime={moment(start).format()}
       >
         {moment(start).format('MMMM YYYY')}
       </time>{' '}
@@ -29,7 +29,7 @@ const Event = ({
       {end ? (
         <time
           className={classnames(styles.event__time, 'dt-end')}
-          datetime={moment(end).format()}
+          dateTime={moment(end).format()}
         >
           {moment(end).format('MMMM YYYY')}
         </time>

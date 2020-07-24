@@ -4,7 +4,6 @@
   background-color: var(--color-main--alt);
   padding: u.$card-padding;
   margin-bottom: u.space(2);
-  transition: background u.$theme-transition-time;
   border-radius: u.$border-radius;
   overflow: hidden;
   border-bottom: 1px solid var(--color-main--border);
@@ -88,7 +87,6 @@
   justify-content: flex-end;
   align-items: center;
   background-color: var(--color-main--alt);
-  transition: background-color u.$theme-transition-time;
   .card__breakout + & {
     margin-top: 0 - u.$card-padding;
   }

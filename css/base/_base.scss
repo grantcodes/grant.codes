@@ -19,7 +19,6 @@ html {
   background-color: var(--color-main);
   color: var(--color-contrast);
   fill: currentColor;
-  transition: color 1s, background-color 1s, fill 1s;
   position: relative;
   cursor: url(/img/cursor.png) 16 16, auto;
   cursor: -webkit-image-set(url(/img/cursor.png) 1x, url(/img/cursor-64.png) 2x)

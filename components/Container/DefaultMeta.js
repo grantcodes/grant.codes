@@ -58,8 +58,19 @@ const DefaultMeta = () => (
     <script
       dangerouslySetInnerHTML={{
         __html: `
-          var color = localStorage.getItem('themeColor');
-          window.document.documentElement.style.setProperty('--color-main', color); 
+          var theme = localStorage.getItem('theme');
+          if (theme) {
+            theme = JSON.parse(theme);
+            if (theme.palette) {
+              Object.keys(theme.palette).forEach(function(key) {
+                var color = theme.palette[key];
+                if (typeof color !== 'string' && color._rgb) {
+                  color = 'rgba(' + color._rgb.join(',') + ')';
+                } 
+                window.document.documentElement.style.setProperty('--' + key, color.toString());
+              }) 
+            }
+          } 
         `,
       }}
     />

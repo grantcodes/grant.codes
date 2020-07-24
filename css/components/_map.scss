@@ -21,7 +21,6 @@
     background-color: var(--color-main);
     mix-blend-mode: soft-light;
     pointer-events: none;
-    transition: background-color u.$theme-transition-time;
   }
 
   .leaflet-overlay-pane path {

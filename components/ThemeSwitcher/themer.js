@@ -28,7 +28,6 @@ const getComplementary = (color) => {
 export default function themer(color = false) {
   color = color ? chroma(color) : chroma.random()
   const dark = isDark(color)
-  const contrast = contrastText(color)
   const width =
     typeof window !== 'undefined'
       ? window.screen.availWidth * window.devicePixelRatio
@@ -47,7 +46,7 @@ export default function themer(color = false) {
       ? color.brighten(0.9).hex()
       : color.darken(0.9).hex(),
     'color-complementary': getComplementary(color).hex(),
-    'color-contrast': contrast,
+    'color-contrast': contrastText(color).hex(),
     'color-glass':
       'rgba(' + dark
         ? color.brighten(2).alpha(0.1)
@@ -61,6 +60,7 @@ export default function themer(color = false) {
     window.document.body.classList.remove('theme--dark')
     window.document.body.classList.remove('theme--light')
     window.document.body.classList.add(dark ? 'theme--dark' : 'theme--light')
+    window.localStorage.setItem('theme', JSON.stringify({ palette, dark }))
     for (const key in palette) {
       if (palette.hasOwnProperty(key)) {
         const color = palette[key]
