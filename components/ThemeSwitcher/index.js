@@ -10,6 +10,7 @@ const ThemeSwitcher = () => {
     setColorState(color)
     setCookie(null, 'themeColor', color, { path: '/' })
     themer(color)
+    localStorage.setItem('themeColor', color)
   }
 
   useEffect(() => {

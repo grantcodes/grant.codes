@@ -7,52 +7,63 @@ const image = JSON.parse(process.env.NEXT_PUBLIC_META_IMAGE)
 const twHandle = process.env.NEXT_PUBLIC_TWITTER_HANDLE
 
 const DefaultMeta = () => (
-  <DefaultSeo
-    title={name}
-    titleTemplate={`%s ⁂ ${name}`}
-    description={description}
-    canonical={url}
-    openGraph={{
-      type: 'website',
-      locale: 'en_GB',
-      url: url,
-      site_name: name,
-      images: [image],
-    }}
-    twitter={{
-      handle: twHandle,
-      site: twHandle,
-      cardType: 'summary_large_image',
-    }}
-    additionalMetaTags={[
-      { charSet: 'utf-8', key: 'meta-charset' },
-      {
-        name: 'viewport',
-        content: 'width=device-width, initial-scale=1',
-        key: 'meta-viewport',
-      },
-      {
-        name: 'mobile-web-app-capable',
-        value: 'yes',
-        key: 'meta-mobile-web-app-capable',
-      },
-      {
-        name: 'apple-mobile-web-app-capable',
-        content: 'yes',
-        key: 'meta-apple-mobile-web-app-capable',
-      },
-      {
-        name: 'msapplication-TileImage',
-        content: '/icons/mstile-144x144.png',
-        key: 'meta-msapptile',
-      },
-      {
-        name: 'apple-mobile-web-app-status-bar-style',
-        content: 'black-translucent',
-        key: 'meta-apple-status-bar',
-      },
-    ]}
-  />
+  <>
+    <DefaultSeo
+      title={name}
+      titleTemplate={`%s ⁂ ${name}`}
+      description={description}
+      canonical={url}
+      openGraph={{
+        type: 'website',
+        locale: 'en_GB',
+        url: url,
+        site_name: name,
+        images: [image],
+      }}
+      twitter={{
+        handle: twHandle,
+        site: twHandle,
+        cardType: 'summary_large_image',
+      }}
+      additionalMetaTags={[
+        { charSet: 'utf-8', key: 'meta-charset' },
+        {
+          name: 'viewport',
+          content: 'width=device-width, initial-scale=1',
+          key: 'meta-viewport',
+        },
+        {
+          name: 'mobile-web-app-capable',
+          value: 'yes',
+          key: 'meta-mobile-web-app-capable',
+        },
+        {
+          name: 'apple-mobile-web-app-capable',
+          content: 'yes',
+          key: 'meta-apple-mobile-web-app-capable',
+        },
+        {
+          name: 'msapplication-TileImage',
+          content: '/icons/mstile-144x144.png',
+          key: 'meta-msapptile',
+        },
+        {
+          name: 'apple-mobile-web-app-status-bar-style',
+          content: 'black-translucent',
+          key: 'meta-apple-status-bar',
+        },
+      ]}
+    />
+    {/* Script to load theme without flash */}
+    <script
+      dangerouslySetInnerHTML={{
+        __html: `
+          var color = localStorage.getItem('themeColor');
+          window.document.documentElement.style.setProperty('--color-main', color); 
+        `,
+      }}
+    />
+  </>
 )
 
 export default DefaultMeta
