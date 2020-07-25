@@ -1,17 +1,11 @@
-import fs from 'fs'
-import { join } from 'path'
-import { NextSeo } from 'next-seo'
-import classnames from 'classnames'
-import pluralize from 'pluralize'
-import Card from 'components/Card'
-import LeafletMap from 'components/LeafletMap'
-import Button from 'components/Button'
-import styles from 'css/pages/monthly-summary.module.scss'
+import DataSummary from 'components/DataSummary'
+import getMonthData from 'lib/get/month-data'
+import getMonthDataFiles from 'lib/get/month-data-files'
 
 const leadingZero = (num) =>
   parseInt(num) < 10 && parseInt(num) > 0 ? `0${num}` : `${num}`
 
-const MonthlySummary = ({ year, month, postTypes, geojson, body }) => {
+const MonthlySummary = ({ year, month, ...props }) => {
   const yearInt = parseInt(year)
   const monthInt = parseInt(month)
   const nextLink = `/${monthInt === 12 ? yearInt + 1 : year}/${
@@ -22,47 +16,20 @@ const MonthlySummary = ({ year, month, postTypes, geojson, body }) => {
   }`
 
   return (
-    <>
-      <NextSeo title={`Monthly Summary ${year}/${month}`} />
-      <h1 className="page-title">
-        Monthly Summary {year}/{month}
-      </h1>
-      {!!postTypes && (
-        <Card title="Posts">
-          <ul className={classnames('card__breakout', styles.counts)}>
-            {Object.keys(postTypes).map((type) => (
-              <li className={styles.counts__count} key={`type-${type}`}>
-                <span className={styles.counts__count__number}>
-                  {postTypes[type].toString()}
-                </span>
-                <h3 className={styles.counts__count__type}>
-                  {postTypes[type] > 1 ? pluralize(type) : type}
-                </h3>
-              </li>
-            ))}
-          </ul>
-        </Card>
-      )}
-
-      {!!geojson && (
-        <Card title="Map">
-          <div className="card__breakout">
-            <LeafletMap geojson={geojson} />
-          </div>
-        </Card>
-      )}
-
-      {!!body && <Card title="Body"></Card>}
-
-      <nav className="pagination">
-        <Button to="/[typeOrYear]/[month]" linkAs={previousLink}>
-          Previous
-        </Button>
-        <Button to="/[typeOrYear]/[month]" linkAs={nextLink}>
-          Next
-        </Button>
-      </nav>
-    </>
+    <DataSummary
+      {...props}
+      title={`Monthly Summary ${year}/${month}`}
+      pagination={{
+        previous: {
+          to: '/[typeOrYear]/[month]',
+          linkAs: previousLink,
+        },
+        next: {
+          to: '/[typeOrYear]/[month]',
+          linkAs: nextLink,
+        },
+      }}
+    />
   )
 }
 
@@ -77,15 +44,10 @@ export const getStaticProps = ({ params }) => {
       throw new Error('Year or month is not defined')
     }
 
-    const filePath = join(
-      process.cwd(),
-      'data',
-      'monthly',
-      parseInt(params.typeOrYear).toString(),
-      parseInt(params.month) + '.json'
-    )
-    const jsonString = fs.readFileSync(filePath, 'utf8')
-    const data = JSON.parse(jsonString)
+    const data = getMonthData(params.typeOrYear, params.month)
+    if (!data) {
+      throw new Error('No data returned')
+    }
     return {
       props: {
         year: params.typeOrYear,
@@ -102,26 +64,17 @@ export const getStaticProps = ({ params }) => {
 }
 
 export const getStaticPaths = () => {
-  const paths = []
-
-  const dataDir = join(process.cwd(), 'data', 'monthly')
-  const dir = fs.opendirSync(dataDir)
-  let yearFolder
-  while ((yearFolder = dir.readSync()) !== null) {
-    const yearDir = fs.opendirSync(join(dataDir, yearFolder.name))
-    let monthFile
-    while ((monthFile = yearDir.readSync()) !== null) {
-      paths.push({
-        params: {
-          year: yearFolder.name,
-          month: leadingZero(monthFile.name.replace('.json', '')),
-          typeOrYear: yearFolder.name,
-        },
-      })
+  const files = getMonthDataFiles()
+  const paths = files.map((file) => {
+    const [year, month] = file.split('/')
+    return {
+      params: {
+        year,
+        month: leadingZero(month),
+        typeOrYear: year,
+      },
     }
-    yearDir.closeSync()
-  }
-  dir.closeSync()
+  })
 
   return {
     paths,
