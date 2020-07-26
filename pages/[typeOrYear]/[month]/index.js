@@ -9,7 +9,7 @@ const MonthlySummary = ({ year, month, ...props }) => {
   const yearInt = parseInt(year)
   const monthInt = parseInt(month)
   const nextLink = `/${monthInt === 12 ? yearInt + 1 : year}/${
-    monthInt === 12 ? '01' : leadingZero(monthInt) + 1
+    monthInt === 12 ? '01' : leadingZero(monthInt + 1)
   }`
   const previousLink = `/${monthInt === 1 ? yearInt - 1 : year}/${
     month === 1 ? 12 : leadingZero(monthInt - 1)

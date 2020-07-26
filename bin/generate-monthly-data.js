@@ -1,9 +1,9 @@
 const fs = require('fs')
 const path = require('path')
 const dotenv = require('next/dist/compiled/dotenv')
-import getGeojson from './lib/get-monthly-geojson'
-import getPosts from './lib/get-monthly-posts'
-import getWeight from './lib/get-monthly-weight'
+const getGeojson = require('./lib/get-monthly-geojson')
+const getPosts = require('./lib/get-monthly-posts')
+const getWeight = require('./lib/get-monthly-weight')
 
 dotenv.config({ path: '.env' })
 dotenv.config({ path: '.env.production' })
