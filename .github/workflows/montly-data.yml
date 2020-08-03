@@ -1,8 +1,8 @@
-name: Montly Data Update 
+name: Montly Data Update
 
 on:
   schedule:
-  - cron: 0 12 1 * *
+    - cron: 0 12 1 * *
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -13,26 +13,28 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v2
-    
-    - name: Setup Node.js environment
-      uses: actions/setup-node@v2.1.1
+      - name: Checkout repo
+        uses: actions/checkout@v2
 
-    - name: Install dependencies
-      run: npm install
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.1.1
+        with:
+          node-version: "14"
 
-    - name: Generate data for the previous month
-      run: node bin/generate-monthly-data --save
-    
-    - name: Commit new file
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add data/monthly
-        git commit -m "Add new montly data file" -a
+      - name: Install dependencies
+        run: npm install
 
-    - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Generate data for the previous month
+        run: node bin/generate-monthly-data --save
+
+      - name: Commit new file
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data/monthly
+          git commit -m "Add new montly data file" -a
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
