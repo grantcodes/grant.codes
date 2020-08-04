@@ -9,14 +9,6 @@ dotenv.config({ path: '.env' })
 dotenv.config({ path: '.env.production' })
 
 const getData = async ({ year, month } = {}) => {
-  const currentDate = new Date()
-  if (!month) {
-    month = currentDate.getMonth() === 0 ? 12 : currentDate.getMonth()
-  }
-  if (!year) {
-    year =
-      month === 1 ? currentDate.getFullYear() - 1 : currentDate.getFullYear()
-  }
   console.log(`[Getting data for ${year}/${month}]`)
 
   const data = {
@@ -55,14 +47,23 @@ const getData = async ({ year, month } = {}) => {
 }
 
 const init = async () => {
+  const currentDate = new Date()
   const saveData = process.argv.includes('--save')
   let year = process.argv.find((arg) => arg.startsWith('--year='))
   let month = process.argv.find((arg) => arg.startsWith('--month='))
   if (year) {
     year = parseInt(year.replace('--year=', ''))
+  } else {
+    year =
+      month === 1 ? currentDate.getFullYear() - 1 : currentDate.getFullYear()
   }
   if (month) {
     month = parseInt(month.replace('--month=', ''))
+  } else {
+    month = currentDate.getMonth() === 0 ? 12 : currentDate.getMonth()
+  }
+
+  if (!month) {
   }
 
   const data = await getData({ year, month })
