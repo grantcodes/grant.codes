@@ -30,8 +30,9 @@
     "react-image-lightbox": "^5.1.1",
     "react-leaflet": "^2.7.0",
     "react-stripe-elements": "^6.1.2",
+    "recharts": "^1.8.5",
     "sass": "^1.26.10",
-    "stripe": "^8.71.0",
+    "stripe": "^8.79.0",
     "svg-inline-loader": "^0.8.2",
     "viewport-mercator-project": "^7.0.1"
   },

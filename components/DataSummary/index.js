@@ -4,6 +4,7 @@ import pluralize from 'pluralize'
 import Card from 'components/Card'
 import LeafletMap from 'components/LeafletMap'
 import Button from 'components/Button'
+import BodyGraph from './BodyGraph'
 import styles from 'css/pages/monthly-summary.module.scss'
 
 const DataSummary = ({
@@ -42,7 +43,11 @@ const DataSummary = ({
       </Card>
     )}
 
-    {!!body && <Card title="Body"></Card>}
+    {!!body && (
+      <Card title="Body">
+        <BodyGraph {...body} />
+      </Card>
+    )}
 
     {!!pagination && (
       <nav className="pagination">
