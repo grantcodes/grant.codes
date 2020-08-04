@@ -73,6 +73,20 @@ export async function getStaticProps(ctx) {
           }
         }
       }
+
+      // Merge body data
+      if (monthData.body) {
+        if (!yearData.body) {
+          yearData.body = monthData.body
+        } else {
+          for (const key in monthData.body) {
+            if (monthData.body.hasOwnProperty(key)) {
+              const values = monthData.body[key]
+              yearData.body[key].push(...values)
+            }
+          }
+        }
+      }
     }
 
     return { props: { year, ...yearData } }
