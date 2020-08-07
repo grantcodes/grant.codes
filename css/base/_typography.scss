@@ -105,16 +105,20 @@ blockquote {
 }
 
 pre {
-  code {
-    display: block;
-  }
   font-family: u.$font-mono;
   display: block;
   font-size: 0.9rem;
   width: 100%;
   overflow: auto;
-  background-color: var(--color-main);
-  padding: var(--card-padding);
+  padding: 1rem 1.2rem;
+  border-radius: u.$border-radius;
+  font-weight: normal;
+  @include u.glass();
+
+  code {
+    display: block;
+    line-height: 1.2;
+  }
 }
 
 code {
