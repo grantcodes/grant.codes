@@ -28,7 +28,7 @@
       justify-content: space-between;
     }
     &.right-aligned--wide-content {
-      grid-template-columns: auto u.$side-width;
+      grid-template-columns: 1fr u.$side-width;
     }
   }
 
