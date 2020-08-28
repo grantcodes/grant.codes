@@ -18,7 +18,7 @@
   max-width: 100%;
   z-index: 9;
   font-size: 2em;
-  // background: var(--color-main--alt);
+  // background: var(--theme-mainAlt);
   @include u.glass();
   box-shadow: u.shadow();
   transition: transform 0.4s;

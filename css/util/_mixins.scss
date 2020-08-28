@@ -11,7 +11,7 @@
 
 @mixin glass() {
   backdrop-filter: blur(0.6rem);
-  background-color: var(--color-glass);
+  background-color: var(--theme-glass);
 }
 
 @function shadow($size: 1) {

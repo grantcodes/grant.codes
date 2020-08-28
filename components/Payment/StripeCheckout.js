@@ -118,19 +118,19 @@ const StripeCheckout = ({
         className="input"
         style={{
           base: {
-            color: 'var(--color-contrast)',
-            iconColor: 'var(--color-contrast)',
+            color: 'var(--theme-contrast)',
+            iconColor: 'var(--theme-contrast)',
             lineHeight: '22px',
             fontFamily: 'monospace',
             fontSmoothing: 'antialiased',
             fontSize: '18px',
             '::placeholder': {
-              color: 'var(--color-contrast)',
+              color: 'var(--theme-contrast)',
             },
           },
           invalid: {
             textDecoration: 'underline wavy',
-            color: 'var(--color-contrast)',
+            color: 'var(--theme-contrast)',
           },
         }}
       />

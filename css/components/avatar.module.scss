@@ -37,7 +37,7 @@ $emoji-placeholders: map(
   object-fit: cover;
   text-align: center;
   color: inherit;
-  background-color: var(--color-complementary);
+  background-color: var(--theme-complementary);
   transition: box-shadow 0.2s;
   clip-path: url(#topography-clip);
   clip-path: url(#topography-clip--rotating);
@@ -65,7 +65,7 @@ $emoji-placeholders: map(
     // height: ${(props) => ((props.width / 20) * 1.5) / 2}em;
     font-size: 2rem;
     line-height: 1.5;
-    background-color: var(--color-complementary);
+    background-color: var(--theme-complementary);
   }
 
   @each $i, $emoji in $emoji-placeholders {

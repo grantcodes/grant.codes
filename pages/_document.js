@@ -1,4 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document'
+import themer from '@grantcodes/themer'
 
 const url = process.env.NEXT_PUBLIC_URL
 const name = process.env.NEXT_PUBLIC_SITE_NAME
@@ -188,6 +189,22 @@ const links = [
   },
 ]
 
+const theme = themer.daily()
+let themeCss = ':root {'
+for (const key in theme) {
+  if (theme.hasOwnProperty(key)) {
+    const value = theme[key]
+    if (typeof value === 'string') {
+      themeCss += `--theme-${key}: ${value};`
+    } else if (Array.isArray(value)) {
+      value.forEach((c, i) => {
+        themeCss += `--theme-${key}-${i}: ${c};`
+      })
+    }
+  }
+}
+themeCss += '}'
+
 class MyDocument extends Document {
   render() {
     return (
@@ -196,6 +213,7 @@ class MyDocument extends Document {
           {links.map((props, i) => (
             <link key={`link-${i}`} {...props} />
           ))}
+          <style>{themeCss}</style>
         </Head>
         <body>
           <Main />

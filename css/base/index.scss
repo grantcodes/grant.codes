@@ -1,10 +1,4 @@
 :root {
-  --color-main: #ff94b4;
-  --color-main--alt: #ffa3c3;
-  --color-main--border: #ffc1e1;
-  --color-complementary: #94ffdf;
-  --color-contrast: #724250;
-  --background-image: url(https://twitter-topography-banner.glitch.me/3240/2160/ff94b4);
   --card-padding: 1rem;
   --border-radius: 3px;
   --content-width: 550px;
@@ -15,6 +9,39 @@
   --header-height: 4rem;
   --width-normal: 50rem;
   --width-wide: 70rem;
+
+  // Theme is now set in _document
+
+  // Boring white theme by default
+  // --theme-main: #e3e3e3;
+  // --theme-mainAlt: #d4d4d4;
+  // --theme-complementary: #828282;
+  // --theme-gradient-0: #e3e3e3;
+  // --theme-gradient-1: #d0d0d0;
+  // --theme-gradient-2: #bcbcbc;
+  // --theme-gradient-3: #a9a9a9;
+  // --theme-gradient-4: #959595;
+  // --theme-gradient-5: #828282;
+  // --theme-contrast: #484848;
+  // --theme-border: #b6b6b6;
+  // --theme-glass: rgba(130, 130, 130, 0.1);
+
+  // // Boring black theme for dark mode peeps
+  // Makes for bad flash on start
+  // @media (prefers-color-scheme: dark) {
+  //   --theme-main: #171717;
+  //   --theme-mainAlt: #222222;
+  //   --theme-complementary: #676767;
+  //   --theme-gradient-0: #171717;
+  //   --theme-gradient-1: #272727;
+  //   --theme-gradient-2: #373737;
+  //   --theme-gradient-3: #474747;
+  //   --theme-gradient-4: #575757;
+  //   --theme-gradient-5: #676767;
+  //   --theme-contrast: #e4e4e4;
+  //   --theme-border: #393939;
+  //   --theme-glass: rgba(103, 103, 103, 0.1);
+  // }
 }
 
 @import './base';

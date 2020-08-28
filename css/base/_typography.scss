@@ -12,13 +12,13 @@ html {
 }
 
 body {
-  color: var(--color-contrast);
-  fill: var(--color-contrast);
+  color: var(--theme-contrast);
+  fill: var(--theme-contrast);
   line-height: 1.5;
   font-family: u.$font-sans;
   font-weight: 600;
   word-wrap: break-word;
-  text-shadow: 0 0 0 var(--color-contrast);
+  text-shadow: 0 0 0 var(--theme-contrast);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -94,7 +94,7 @@ blockquote {
   display: block;
   text-align: left;
   border-left: 0.2rem solid;
-  background: var(--color-main);
+  background: var(--theme-main);
   padding: u.space() u.space(2);
   font-style: italic;
 
@@ -129,8 +129,8 @@ code {
     border-radius: 0.3rem;
     font-size: 0.9em;
     display: inline-block;
-    background-color: var(--color-main);
-    border: 1px solid var(--color-main);
+    background-color: var(--theme-main);
+    border: 1px solid var(--theme-main);
   }
 }
 

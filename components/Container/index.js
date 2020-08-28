@@ -1,5 +1,6 @@
 import classnames from 'classnames'
 import TopographyClipPaths from '../Topography/ClipPaths'
+import Topography from 'components/Topography'
 import Header from './Header'
 import Nav from './Nav'
 import Footer from './Footer'
@@ -23,7 +24,7 @@ const Container = ({ children, className }) => (
     </div>
     <div className="background-layer">
       <div style={{ position: 'absolute', top: 0, right: 0 }}>
-        {/* <Topography /> */}
+        <Topography />
       </div>
     </div>
     <TopographyClipPaths />

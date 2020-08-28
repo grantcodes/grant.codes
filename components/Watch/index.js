@@ -35,7 +35,7 @@ import Icon from '../Icon'
 //   /* margin-bottom: var(--card-padding); */
 //   overflow: hidden;
 //   border-radius: var(--border-radius);
-//   border: 1px solid var(--color-main--border);
+//   border: 1px solid var(--theme-border);
 //   box-shadow: ${mixin.shadow()};
 // `
 

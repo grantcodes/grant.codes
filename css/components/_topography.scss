@@ -1,0 +1,35 @@
+@use '../util/' as u;
+
+@keyframes topography-ring-enter {
+  0% {
+    transform: translate(100%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(0%, 0%) rotate(0deg);
+  }
+}
+
+.topography-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top right;
+  float: right;
+  @media (min-width: u.$mid-break) {
+    max-width: 30rem;
+    min-width: none;
+  }
+}
+
+$animation-time: 0.7s;
+
+.topography-bg path {
+  animation: topography-ring-enter $animation-time both;
+  transform-origin: top right;
+}
+
+@for $i from 1 to 7 {
+  .topography-bg path:nth-child(#{$i}) {
+    animation-duration: $i * $animation-time;
+  }
+}

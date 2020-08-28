@@ -14,20 +14,20 @@ textarea {
   border-radius: u.$border-radius;
   box-shadow: none;
   outline: none;
-  background-color: var(--color-main--alt);
+  background-color: var(--theme-mainAlt);
 
-  color: var(--color-contrast);
+  color: var(--theme-contrast);
   margin-bottom: 1rem;
   transition: all 0.2s;
 
   &::placeholder {
-    color: var(--color-contrast);
+    color: var(--theme-contrast);
     opacity: 0.6;
   }
 
   &:focus,
   &:active {
-    border-color: var(--color-contrast);
+    border-color: var(--theme-contrast);
 
     &:invalid {
       box-shadow: 0 0 2px red inset;
@@ -71,8 +71,8 @@ label,
 button,
 .button {
   display: inline-block;
-  background-color: var(--color-complementary);
-  color: var(--color-main);
+  background-color: var(--theme-complementary);
+  color: var(--theme-main);
   fill: currentColor;
   padding: 0.5em 1em;
   text-decoration: none;
@@ -93,9 +93,9 @@ button,
   &:hover,
   &:focus,
   &:active {
-    color: var(--color-main);
-    fill: var(--color-main);
-    background-color: var(--color-contrast);
+    color: var(--theme-main);
+    fill: var(--theme-main);
+    background-color: var(--theme-contrast);
   }
 
   .icon {

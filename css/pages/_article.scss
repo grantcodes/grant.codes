@@ -4,7 +4,7 @@
   // Modidy the main post
   .main-content > .post--article > .card {
     & {
-      background: var(--color-main);
+      background: var(--theme-main);
       box-shadow: none;
       border: none;
       margin: 0;
@@ -63,7 +63,7 @@
       margin-left: 0 - u.$card-padding;
       margin-right: 0 - u.$card-padding;
 
-      background-color: var(--color-main);
+      background-color: var(--theme-main);
       position: relative;
       overflow: hidden;
 

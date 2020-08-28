@@ -1,4 +1,5 @@
-import themer from './themer'
+import { useEffect } from 'react'
+import setTheme from './themer'
 
 const ThemeSwitcher = () => {
   let color = null
@@ -12,6 +13,13 @@ const ThemeSwitcher = () => {
   } catch (err) {
     // Error getting theme from local storage - but probably no big deal
   }
+
+  useEffect(() => {
+    // Use daily theme if no default theme set
+    if (!window.localStorage.getItem('theme')) {
+      setTheme()
+    }
+  }, [])
 
   // TODO: Maybe add a way to reset / randomize colors
 
@@ -27,7 +35,7 @@ const ThemeSwitcher = () => {
         id="theme-switcher__color"
         className="theme-switcher__input"
         value={color ? color : '#123456'}
-        onChange={(e) => themer(e.target.value)}
+        onChange={(e) => setTheme(e.target.value)}
       />
     </div>
   )
