@@ -1,11 +1,15 @@
 const fs = require('fs')
 const path = require('path')
+const util = require('util')
 const dotenv = require('next/dist/compiled/dotenv')
 const fetch = require('next/dist/compiled/node-fetch')
 const { chain } = require('stream-chain')
 const { parser } = require('stream-json')
 const { pick } = require('stream-json/filters/Pick')
 const { streamArray } = require('stream-json/streamers/StreamArray')
+const { start } = require('repl')
+
+const setImmediatePromise = util.promisify(setImmediate)
 
 dotenv.config({ path: '.env' })
 dotenv.config({ path: '.env.production' })
@@ -128,6 +132,24 @@ const init = async () => {
   const file = path.normalize(fileString)
   console.log('[Reading file]', file)
 
+  let startDate = process.argv
+    .find((arg) => arg.startsWith('--start='))
+    .replace('--start=', '')
+  if (startDate) {
+    startDate = new Date(startDate).getTime() / 1000
+  }
+
+  let endDate = process.argv
+    .find((arg) => arg.startsWith('--end='))
+    .replace('--end=', '')
+  if (endDate) {
+    endDate = new Date(endDate).getTime() / 1000
+  }
+
+  if (startDate && endDate) {
+    console.log('[Posting between dates]', startDate, endDate)
+  }
+
   const pipeline = chain([
     fs.createReadStream(file),
     parser(),
@@ -136,24 +158,52 @@ const init = async () => {
     googleToOwntracks,
   ])
 
-  let counter = 0
+  let posted = 0
+  let total = 0
   pipeline.on('data', async (data) => {
+    // Keep track of total items
+    total++
+
     if (!data) {
       return
     }
 
+    // Log progress every 100 items
+    if (total % 1000 === 0) {
+      console.log(total)
+    }
+
+    const doPost = async (loc) => {
+      if (!loc) {
+        return
+      }
+      // Check start dates and end dates
+      if (startDate && loc.tst < startDate) {
+        return
+      }
+      if (endDate && loc.tst > endDate) {
+        return
+      }
+      // Keep track of posted count
+      posted++
+      await setImmediatePromise()
+      await postLocation(loc)
+      return true
+    }
+
+    // Handle arrays and single items.
     if (Array.isArray(data)) {
       for (const item of data) {
-        counter++
-        await postLocation(item)
+        await doPost(item)
       }
     } else if (typeof data === 'object') {
-      counter++
-      await postLocation(data)
+      await doPost(data)
     }
   })
 
-  pipeline.on('end', () => console.log(`[Parsed ${counter} items]`))
+  pipeline.on('end', () =>
+    console.log(`[Posted ${posted} of ${total} total items]`)
+  )
 }
 
 init()
