@@ -34,7 +34,7 @@ const postLocation = async (data) => {
     const res = await response.json()
     return res
   } catch (err) {
-    console.log('[Error posting location]', err)
+    console.warn('[Error posting location]', err)
     return null
   }
 }
@@ -142,15 +142,15 @@ const init = async () => {
       return
     }
 
-    // TODO: Actually post location
     if (Array.isArray(data)) {
       for (const item of data) {
-        ++counter
+        counter++
+        await postLocation(item)
       }
     } else if (typeof data === 'object') {
-      ++counter
+      counter++
+      await postLocation(data)
     }
-    // console.log('[JSON Item]', item)
   })
 
   pipeline.on('end', () => console.log(`[Parsed ${counter} items]`))
