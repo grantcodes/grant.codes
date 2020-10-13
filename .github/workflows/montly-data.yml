@@ -29,6 +29,16 @@ jobs:
         run: node bin/generate-monthly-data --save
 
       - name: Commit new file
+        env:
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+          MICROPUB_TOKEN: ${{ secrets.MICROPUB_TOKEN }}
+          OWNTRACKS_URL: ${{ secrets.OWNTRACKS_URL }}
+          OWNTRACKS_USERNAME: ${{ secrets.OWNTRACKS_USERNAME }}
+          OWNTRACKS_PASSWORD: ${{ secrets.OWNTRACKS_PASSWORD }}
+          OWNTRACKS_USER: ${{ secrets.OWNTRACKS_USER }}
+          OWNTRACKS_DEVICE: ${{ secrets.OWNTRACKS_DEVICE }}
+          HOME_ASSISTANT_KEY: ${{ secrets.HOME_ASSISTANT_KEY }}
+          HOME_ASSISTANT_URL: ${{ secrets.HOME_ASSISTANT_URL }}
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
