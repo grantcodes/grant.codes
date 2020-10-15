@@ -1,14 +1,14 @@
 @use '../util/' as u;
 
 .card {
-  background-color: var(--theme-mainAlt);
+  background-color: var(--theme-main);
   padding: u.$card-padding;
   margin-bottom: u.space(2);
   border-radius: u.$border-radius;
   overflow: hidden;
-  border-bottom: 1px solid var(--theme-border);
+  border: 1px solid var(--theme-mainAlt);
   box-shadow: u.shadow();
-  @include u.glass();
+  // @include u.glass();
 
   &.is-hightlighted {
     box-shadow: 2px 0px 0 var(--theme-contrast),
@@ -17,10 +17,9 @@
   }
 }
 
-// Decided to make all cards glass now
-// .card--glass {
-//   @include u.glass();
-// }
+.card--glass {
+  @include u.glass();
+}
 
 // TODO: Convert this stuff to components
 // .card__action-name {
@@ -52,9 +51,9 @@
   display: block;
   overflow: hidden;
   clear: both;
-  // background-color: var(--theme-mainAlt);
+  background-color: var(--theme-mainAlt);
   margin: u.$card-padding 0 - u.$card-padding;
-  @include u.glass();
+  // @include u.glass();
 
   .title + & {
     margin-top: 0;
