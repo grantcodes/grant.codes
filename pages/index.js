@@ -1,13 +1,9 @@
-import Head from 'next/head'
+import { NextSeo } from 'next-seo'
 import PostList from 'components/PostList'
 
 const Home = ({ posts = [] }) => (
   <>
-    <Head>
-      <title>grant.codes</title>
-      <link rel="icon" href="/favicon.ico" />
-    </Head>
-
+    <NextSeo title="Home" />
     <PostList posts={posts} type="home" />
   </>
 )
