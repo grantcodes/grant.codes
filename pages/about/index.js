@@ -208,6 +208,24 @@ const About = () => {
             <Event
               as="li"
               className="p-experience h-event"
+              start="2019-10-21"
+              end={false}
+              place="Kinsta"
+              title="Web Developer"
+              links={['https://kinsta.com/']}
+            >
+              <p>
+                At Kinsta I am tasked with developing and maintaining the
+                WordPress website. So far there has been lots of work towards
+                modernizing templates and giving non developers more control of
+                the website content, including gradually implementing Gutenberg
+                blocks across the site.
+              </p>
+            </Event>
+
+            <Event
+              as="li"
+              className="p-experience h-event"
               start="2015-06-01"
               end="2016-04-01"
               place="Code Club DCA Dundee"
