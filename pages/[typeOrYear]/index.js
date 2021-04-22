@@ -96,24 +96,38 @@ export async function getStaticProps(ctx) {
 }
 
 export async function getStaticPaths() {
-  // Get post types to create type archives
-  const ingoredTypes = ['photos', 'journals']
-  let types = await getTypes(true)
-  types = types.filter((type) => !ingoredTypes.includes(type))
+  try {
+    // Get post types to create type archives
+    const ingoredTypes = ['photos', 'journals']
+    let types = await getTypes(true)
+    types = types.filter((type) => !ingoredTypes.includes(type))
 
-  // Get year data folders to create year archives
-  const monthFiles = getMonthDataFiles()
-  const years = new Set()
-  for (const file of monthFiles) {
-    const [year] = file.split('/')
-    years.add(year)
-  }
-  types.push(...years)
+    // Get year data folders to create year archives
+    const monthFiles = getMonthDataFiles()
+    const years = new Set()
+    for (const file of monthFiles) {
+      const [year] = file.split('/')
+      years.add(year)
+    }
+    types.push(...years)
 
-  // Create both post type and year paths
-  return {
-    paths: types.map((t) => ({ params: { typeOrYear: t } })),
-    fallback: false,
+    // Create both post type and year paths
+    return {
+      paths: types.map((t) => ({ params: { typeOrYear: t } })),
+      fallback: false,
+    }
+  } catch (err) {
+    console.error('Error getting typeoryear static paths', err)
+    return {
+      paths: [
+        { params: { typeOrYear: 'notes' } },
+        { params: { typeOrYear: 'articles' } },
+        { params: { typeOrYear: 'photos' } },
+        { params: { typeOrYear: 'likes' } },
+        { params: { typeOrYear: 'replies' } },
+      ],
+      fallback: false,
+    }
   }
 }
 
