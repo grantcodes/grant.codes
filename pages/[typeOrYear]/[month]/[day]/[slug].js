@@ -21,13 +21,13 @@ const Page = ({ posts = [] }) => {
       }}
     />
   ) : (
-      posts.map((post, i) => <Post post={post} key={`post-single-${i}`} />)
-    )
+    posts.map((post, i) => <Post post={post} key={`post-single-${i}`} />)
+  )
 }
 
 export async function getStaticPaths() {
-  // Get a max of the 500 last posts
-  const posts = await getPosts({ limit: 500 }, true)
+  // Get a max of the 250 last posts
+  const posts = await getPosts({ limit: 250 }, true)
 
   // Helper function to add 0 to the start of numbers
   const leadingZero = (num) =>
