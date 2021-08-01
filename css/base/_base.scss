@@ -12,6 +12,7 @@ body,
   padding: 0;
   margin: 0;
   min-width: 260px;
+  -webkit-print-color-adjust: exact !important;
 }
 
 /* GENERAL BASE */
