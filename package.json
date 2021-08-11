@@ -9,7 +9,7 @@
     "export": "next export"
   },
   "dependencies": {
-    "@grantcodes/themer": "^1.0.0",
+    "@grantcodes/themer": "^1.1.0",
     "@postr/core": "^1.9.0",
     "classnames": "^2.2.6",
     "dotenv": "^8.2.0",
