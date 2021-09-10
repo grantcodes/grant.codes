@@ -1,4 +1,4 @@
-import themer from '@grantcodes/themer'
+import * as themer from '@grantcodes/themer'
 
 export default function getTheme(color = false) {
   const theme = color ? themer.fromColor(color) : themer.daily()

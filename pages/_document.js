@@ -1,5 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document'
-import themer from '@grantcodes/themer'
+import { daily as dailyTheme } from '@grantcodes/themer'
 
 const url = process.env.NEXT_PUBLIC_URL
 const name = process.env.NEXT_PUBLIC_SITE_NAME
@@ -189,7 +189,7 @@ const links = [
   },
 ]
 
-const theme = themer.daily()
+const theme = dailyTheme()
 let themeCss = ':root {'
 for (const key in theme) {
   if (theme.hasOwnProperty(key)) {
