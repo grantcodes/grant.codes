@@ -19,6 +19,8 @@ const microsub = process.env.NEXT_PUBLIC_MICROSUB_ENDPOINT
 const twHandle = process.env.NEXT_PUBLIC_TWITTER_HANDLE
 const api = process.env.NEXT_PUBLIC_API_URL
 
+const theme = dailyTheme()
+
 const links = [
   {
     rel: 'apple-touch-icon',
@@ -144,6 +146,7 @@ const links = [
     href: '/icons/favicon-32x32.png',
   },
   { rel: 'shortcut icon', href: '/icons/favicon.ico' },
+  { rel: 'theme-color', content: theme.main },
   { rel: 'manifest', href: '/manifest.json' },
 
   { rel: 'self', href: url },
@@ -189,7 +192,6 @@ const links = [
   },
 ]
 
-const theme = dailyTheme()
 let themeCss = ':root {'
 for (const key in theme) {
   if (theme.hasOwnProperty(key)) {
