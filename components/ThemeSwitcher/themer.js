@@ -1,6 +1,6 @@
 import * as themer from '@grantcodes/themer'
 
-export default function getTheme(color = false) {
+export default function setTheme(color = false) {
   const theme = color ? themer.fromColor(color) : themer.daily()
 
   if (typeof window !== 'undefined') {
