@@ -11,6 +11,8 @@ export default function setTheme(color = false) {
     )
     if (color) {
       window.localStorage.setItem('theme', JSON.stringify(theme))
+    } else {
+      window.localStorage.removeItem('theme')
     }
     for (const key in theme) {
       if (theme.hasOwnProperty(key)) {
