@@ -18,9 +18,9 @@
     "leaflet": "^1.7.1",
     "micropub-helper": "^1.6.2",
     "moment": "^2.29.1",
-    "next": "^11.1.2",
+    "next": "^12.0.1",
     "next-fonts": "^1.5.1",
-    "next-seo": "^4.26.0",
+    "next-seo": "^4.28.1",
     "pigeon-maps": "^0.16.1",
     "pigeon-overlay": "^0.2.3",
     "pluralize": "^8.0.0",
@@ -31,10 +31,11 @@
     "react-leaflet": "^2.7.0",
     "react-stripe-elements": "^6.1.2",
     "recharts": "^1.8.5",
-    "sass": "^1.27.0",
-    "stripe": "^8.114.0",
+    "sass": "^1.43.4",
+    "sharp": "^0.29.2",
+    "stripe": "^8.184.0",
     "svg-inline-loader": "^0.8.2",
-    "viewport-mercator-project": "^7.0.1"
+    "viewport-mercator-project": "^7.0.4"
   },
   "prettier": {
     "semi": false,
