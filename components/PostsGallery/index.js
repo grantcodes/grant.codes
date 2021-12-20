@@ -1,11 +1,16 @@
 import React, { Fragment, useState } from 'react'
+import Image from 'next/image'
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
 import FullscreenPhoto from '../FullscreenPhoto'
 import Post from '../Post'
 import Link from '../Link'
 import getPostPhotos from './get-post-photos'
+import { nextImageLoader } from 'lib/image-proxy'
 import styles from 'css/components/posts-gallery.module.scss'
+
+const imageLoader =
+  process.env.NODE_ENV === 'production' ? null : nextImageLoader
 
 const PostsGallery = ({ posts = [], type, maxWidth = 33.333 }) => {
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(false)
@@ -59,12 +64,14 @@ const PostsGallery = ({ posts = [], type, maxWidth = 33.333 }) => {
               }}
               maxWidth={maxWidth}
             >
-              <img
+              <Image
                 className={styles.photo}
-                src={photo.thumbnail}
+                src={photo.photo}
                 width={200}
                 height={200}
-                loading="lazy"
+                layout="responsive"
+                sizes="(min-width: 1135px) 172px, (min-width: 468px) 20vw, 33vw"
+                loader={imageLoader}
               />
             </Link>
           ) : (
@@ -74,17 +81,19 @@ const PostsGallery = ({ posts = [], type, maxWidth = 33.333 }) => {
                 maxWidth={maxWidth}
               >
                 <Link to={photo.permalink} className="u-url">
-                  <img
+                  <Image
                     className={styles.photo}
                     onClick={(e) => {
                       e.preventDefault()
                       setSelectedPhotoIndex(i)
                     }}
-                    src={photo.thumbnail}
+                    src={photo.photo}
                     alt={photo.alt}
                     width={200}
                     height={200}
-                    loading="lazy"
+                    layout="responsive"
+                    sizes="(min-width: 1135px) 172px, (min-width: 468px) 20vw, 33vw"
+                    loader={imageLoader}
                   />
                   <data className="u-photo" value={photo.photo} />
                 </Link>

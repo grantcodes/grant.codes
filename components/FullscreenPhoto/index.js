@@ -28,7 +28,7 @@ const FullscreenPhoto = ({
     }
   }, [])
 
-  const handleClose = e => {
+  const handleClose = (e) => {
     if (previousUrl && typeof window !== 'undefined') {
       setPreviousUrl(false)
       window.history.replaceState({}, '', previousUrl)

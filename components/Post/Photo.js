@@ -1,4 +1,5 @@
 import React, { Fragment, useState } from 'react'
+import Image from 'next/image'
 import PropTypes from 'prop-types'
 import Link from '../Link'
 import FullscreenPhoto from '../FullscreenPhoto'

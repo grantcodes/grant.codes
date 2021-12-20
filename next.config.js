@@ -9,6 +9,9 @@ const config = {
 
     return config
   },
+  images: {
+    domains: ['images.weserv.nl', 'backend.grant.codes'],
+  },
 }
 
 module.exports = withFonts(config)

@@ -1,4 +1,5 @@
 import React from 'react'
+import imageProxy from 'lib/image-proxy'
 
 const getPostPhotos = (post) => {
   const { properties, cms } = post
@@ -9,11 +10,11 @@ const getPostPhotos = (post) => {
     return photos
   }
 
-  if (properties.name && properties.name[0]) {
+  if (properties?.name?.[0]) {
     data.name = properties.name[0]
   }
 
-  if (properties.content && properties.content[0]) {
+  if (properties?.content?.[0]) {
     let content = properties.content[0]
     if (typeof content === 'string') {
       data.content = <p dangerouslySetInnerHTML={{ __html: content }} />
@@ -24,8 +25,14 @@ const getPostPhotos = (post) => {
     }
   }
 
-  if (properties.url && properties.url[0]) {
+  if (properties?.url?.[0]) {
     data.permalink = properties.url[0]
+  }
+
+  if (process.env.NODE_ENV !== 'production' && data.permalink) {
+    data.permalink = data.permalink
+      .replace(process.env.NEXT_PUBLIC_URL, '')
+      .replace('https://grant.codes', '')
   }
 
   if (properties.photo) {
@@ -34,18 +41,18 @@ const getPostPhotos = (post) => {
       if (photo && typeof photo === 'string') {
         photoData.photo = photo
         if (
-          cms &&
-          cms.imageSizes &&
-          cms.imageSizes[photo] &&
-          cms.imageSizes[photo]['200x200'] &&
+          cms?.imageSizes?.[photo]?.['200x200'] &&
           cms.imageSizes[photo]['200x200'] !== photo
         ) {
           photoData.thumbnail = cms.imageSizes[photo]['200x200']
         } else {
           try {
             const { hostname, pathname } = new URL(photo)
-            const encodedUrl = encodeURIComponent(hostname + pathname)
-            photoData.thumbnail = `https://images.weserv.nl/?url=${encodedUrl}&w=200&h=200&t=square`
+            photoData.thumbnail = imageProxy(hostname + pathname, {
+              w: 200,
+              h: 200,
+              t: 'square',
+            })
           } catch (err) {
             console.warn('[Error with photo url]', err)
           }
@@ -55,18 +62,18 @@ const getPostPhotos = (post) => {
         photoData.photo = photo.value
         photoData.alt = photo.alt
         if (
-          cms &&
-          cms.imageSizes &&
-          cms.imageSizes[photo.value] &&
-          cms.imageSizes[photo.value]['200x200'] &&
+          cms?.imageSizes?.[photo.value]?.['200x200'] &&
           cms.imageSizes[photo.value]['200x200'] !== photo.value
         ) {
           photoData.thumbnail = cms.imageSizes[photo.value]['200x200']
         } else {
           try {
             const { hostname, pathname } = new URL(photo.value)
-            const encodedUrl = encodeURIComponent(hostname + pathname)
-            photoData.thumbnail = `https://images.weserv.nl/?url=${encodedUrl}&w=200&h=200&t=square`
+            photoData.thumbnail = imageProxy(hostname + pathname, {
+              w: 200,
+              h: 200,
+              t: 'square',
+            })
           } catch (err) {
             console.warn('[Error with photo url]', err)
           }
