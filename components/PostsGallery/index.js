@@ -10,7 +10,7 @@ import { nextImageLoader } from 'lib/image-proxy'
 import styles from 'css/components/posts-gallery.module.scss'
 
 const imageLoader =
-  process.env.NODE_ENV === 'production' ? null : nextImageLoader
+  process.env.NODE_ENV === 'production' ? undefined : nextImageLoader
 
 const PostsGallery = ({ posts = [], type, maxWidth = 33.333 }) => {
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(false)
