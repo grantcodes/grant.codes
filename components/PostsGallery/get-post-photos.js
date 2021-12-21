@@ -41,10 +41,10 @@ const getPostPhotos = (post) => {
       if (photo && typeof photo === 'string') {
         photoData.photo = photo
         if (
-          cms?.imageSizes?.[photo]?.['200x200'] &&
-          cms.imageSizes[photo]['200x200'] !== photo
+          cms?.imageSizes?.[photo]?.['200x200']?.url &&
+          cms.imageSizes[photo]['200x200']?.url !== photo
         ) {
-          photoData.thumbnail = cms.imageSizes[photo]['200x200']
+          photoData.thumbnail = cms.imageSizes[photo]['200x200'].url
         } else {
           try {
             const { hostname, pathname } = new URL(photo)
@@ -62,10 +62,10 @@ const getPostPhotos = (post) => {
         photoData.photo = photo.value
         photoData.alt = photo.alt
         if (
-          cms?.imageSizes?.[photo.value]?.['200x200'] &&
-          cms.imageSizes[photo.value]['200x200'] !== photo.value
+          cms?.imageSizes?.[photo.value]?.['200x200']?.url &&
+          cms.imageSizes[photo.value]['200x200']?.url !== photo.value
         ) {
-          photoData.thumbnail = cms.imageSizes[photo.value]['200x200']
+          photoData.thumbnail = cms.imageSizes[photo.value]['200x200'].url
         } else {
           try {
             const { hostname, pathname } = new URL(photo.value)
