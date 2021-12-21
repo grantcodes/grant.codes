@@ -1,8 +1,8 @@
 import React, { Fragment, useState } from 'react'
-import Image from 'next/image'
 import PropTypes from 'prop-types'
-import Link from '../Link'
-import FullscreenPhoto from '../FullscreenPhoto'
+import Link from '../../Link'
+import FullscreenPhoto from '../../FullscreenPhoto'
+import Image from './Image'
 
 const PostPhoto = ({ photos, imageSizes, permalink }) => {
   const [fullscreen, setFullscreen] = useState(null)
@@ -20,11 +20,14 @@ const PostPhoto = ({ photos, imageSizes, permalink }) => {
           alt = value.alt
           value = value.value
         }
+
         if (typeof value === 'string') {
-          let smallSrc = value
-          if (imageSizes && imageSizes[value] && imageSizes[value][700]) {
-            smallSrc = imageSizes[value][700]
-          }
+          const defaultImageProps = { url: value, width: null, height: null }
+          const {
+            url: src,
+            width,
+            height,
+          } = imageSizes?.[value]?.[700] ?? defaultImageProps
 
           return (
             <Link
@@ -33,12 +36,13 @@ const PostPhoto = ({ photos, imageSizes, permalink }) => {
               to={permalink}
               onClick={handleClick(value)}
             >
-              <img src={smallSrc} alt={alt} loading="lazy" />
+              <Image src={src} alt={alt} width={width} height={height} />
               <data className="u-photo" value={value} />
             </Link>
           )
         }
       })}
+
       {fullscreen !== null && (
         <FullscreenPhoto
           photo={fullscreen}
