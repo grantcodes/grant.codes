@@ -1,4 +1,4 @@
-const fetch = require('next/dist/compiled/node-fetch')
+const fetch = require('node-fetch')
 
 /**
  * Gets all posts for the given year and month

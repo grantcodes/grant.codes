@@ -1,4 +1,4 @@
-const fetch = require('next/dist/compiled/node-fetch')
+const fetch = require('node-fetch')
 
 /**
  * Get geojson features from owntracks for the given year and month

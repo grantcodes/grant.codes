@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const dotenv = require('next/dist/compiled/dotenv')
+const dotenv = require('dotenv')
 const getGeojson = require('./lib/get-monthly-geojson')
 const getPosts = require('./lib/get-monthly-posts')
 const getWeight = require('./lib/get-monthly-weight')
