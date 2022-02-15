@@ -19,7 +19,7 @@ const Profile = (props) => {
       </div>
       <h1 className="page-title">Hi! I'm Grant 👋</h1>
       <p className={styles.profile__description}>
-        I'm a Scottish web developer, currently based in Madrid.
+        I'm a Scottish web developer, currently based in Barcelona.
       </p>
       <p className={styles.profile__description}>
         I like to make, fun, usable websites.

@@ -346,11 +346,7 @@ const About = () => {
               <Details>
                 <summary>Making & DIY</summary>
                 <p>
-                  I founded{' '}
-                  <a href="https://dundeemakerspace.co.uk">Dundee MakerSpace</a>{' '}
-                  and I'm now a member of{' '}
-                  <a href="http://makespacemadrid.org/">Makespace Madrid</a>,
-                  and I've visited a few others on my travels.
+                  I founded <a href="https://dundeemakerspace.co.uk">Dundee MakerSpace</a>, former member of <a href="http://makespacemadrid.org/">Makespace Madrid</a>, and I've visited a few others on my travels.
                 </p>
                 <p>
                   In particular I enjoy making{' '}

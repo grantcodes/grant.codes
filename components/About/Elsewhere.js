@@ -94,12 +94,12 @@ const Elsewhere = ({ location }) => (
     )}
 
     <Profile name="Home address" icon={homeIcon}>
-      Barrio La Latina, Madrid, Spain
+      Gràcia, Barcelona, Spain
     </Profile>
 
     <Profile name="Work Address" icon={workIcon}>
       I work in a lovely coworking space called{' '}
-      <a href="https://quintadelsordo.com/">Quinta del Sordo</a>
+      <a href="https://www.gardencoworkingatelier.com">Garden</a>
     </Profile>
 
     {!!location && (
