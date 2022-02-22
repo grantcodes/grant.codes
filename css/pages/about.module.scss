@@ -63,14 +63,16 @@
 }
 
 .profile__avatar-marker {
+  max-width: 20rem;
+
   @media print {
     width: 20rem;
     max-width: 100%;
   }
 
   img {
-    max-width: calc(100% - 4rem);
-    max-height: calc(100% - 4rem);
+    width: calc(100vw - 4rem);
+    height: auto;
   }
 }
 

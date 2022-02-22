@@ -28,13 +28,17 @@ const Avatar = ({
       : imageProxy(author.photo, { w: size, h: size, fit: 'contain', dpr: 2 })
     : null
 
+  const LinkWrapper = noLink ? 'span' : Link
+  const linkProps = noLink ? {} : { to: author.url, className: 'u-url' }
+
   return (
     <div className={classnames(styles.author, 'h-card p-author')}>
-      <Link className="u-url" to={author.url} as={noLink ? 'span' : null}>
+      <LinkWrapper {...linkProps}>
         <img
           className={classnames(styles.thumbnail, 'u-photo')}
           src={photoUrl}
           alt={alt}
+          height={size}
           width={size}
           title={alt + author.name}
           loading="lazy"
@@ -46,7 +50,7 @@ const Avatar = ({
         >
           {author.name}
         </span>
-      </Link>
+      </LinkWrapper>
     </div>
   )
 }
