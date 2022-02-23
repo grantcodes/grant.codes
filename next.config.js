@@ -28,7 +28,7 @@ const config = {
             value: `${d.domain}.grant.codes`,
           },
         ],
-        destination: `/${d.path}/:path*`,
+        destination: `https://grant.codes/${d.path}/:path*`,
         basePath: false,
       })),
     }
