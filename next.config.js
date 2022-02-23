@@ -20,7 +20,7 @@ const config = {
   },
   rewrites() {
     return {
-      afterFiles: subdomains.map((d) => ({
+      beforeFiles: subdomains.map((d) => ({
         source: '/:path*',
         has: [
           {
@@ -29,6 +29,7 @@ const config = {
           },
         ],
         destination: `/${d.path}/:path*`,
+        basePath: false,
       })),
     }
   },
