@@ -20,7 +20,7 @@ const config = {
   },
   rewrites() {
     return {
-      beforeFiles: subdomains.map((d) => ({
+      afterFiles: subdomains.map((d) => ({
         source: '/:path*',
         has: [
           {
