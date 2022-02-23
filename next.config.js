@@ -21,14 +21,14 @@ const config = {
   rewrites() {
     return {
       beforeFiles: subdomains.map((d) => ({
-        source: '/:path*',
+        source: '/',
         has: [
           {
             type: 'host',
             value: `${d.domain}.grant.codes`,
           },
         ],
-        destination: `https://grant.codes/${d.path}/:path*`,
+        destination: `https://grant.codes/${d.path}/`,
         basePath: false,
       })),
     }
