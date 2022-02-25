@@ -1,0 +1,106 @@
+@use 'sass:math';
+@use '../../../css/util' as u;
+
+.skill {
+  font-size: 0.8rem;
+  @media print {
+    &,
+    * {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+  }
+}
+
+.name {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 1em;
+  margin: 0;
+  margin-bottom: 0.5rem;
+}
+
+$progress-height: 0.5rem;
+$progress-radius: math.div($progress-height, 2);
+
+.progress {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: $progress-height;
+  border-radius: $progress-radius;
+  overflow: visible;
+
+  &::-webkit-progress-bar {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: $progress-radius;
+  }
+
+  &::-webkit-progress-value {
+    background-color: var(--theme-complementary);
+    border-radius: $progress-radius;
+  }
+}
+
+.skillDetails {
+  overflow: hidden;
+  @media print {
+    display: none;
+  }
+}
+
+.subskills {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  padding-top: 0.5rem;
+  font-size: u.fs(-1);
+}
+
+.subskill {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.subskill__name {
+  flex-grow: 1;
+  padding-right: 0.5em;
+}
+
+$icon-size: 1.5;
+.subskill__icon {
+  display: block;
+  width: $icon-size * 1em;
+  height: $icon-size * 1em;
+  line-height: $icon-size;
+  text-align: center;
+  border-radius: u.$border-radius;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: var(--theme-mainAlt);
+  }
+}
+
+.footer {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+
+  button {
+    font-size: u.fs(-2);
+  }
+}
+
+.footer__link {
+  display: block;
+  margin-left: auto;
+
+  * {
+    display: block;
+  }
+}

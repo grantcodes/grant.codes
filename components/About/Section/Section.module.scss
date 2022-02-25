@@ -49,6 +49,14 @@ $title-size: 1.6rem;
   align-items: flex-start;
   gap: u.$about-gap;
   margin: 0;
+
+  @media print {
+    &,
+    * {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+  }
 }
 
 .subtitle {
@@ -69,5 +77,5 @@ $title-size: 1.6rem;
 
 .subcontent {
   composes: content;
-  gap: 1rem;
+  gap: 0.5rem;
 }

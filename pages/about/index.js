@@ -8,22 +8,10 @@ import Profile from 'components/About/Profile'
 import Online from 'components/About/Online'
 import InPerson from 'components/About/InPerson'
 import Event from 'components/About/Event'
-import Skill from 'components/About/Skill'
+import Skills from 'components/About/Skills'
 import getLastLocation from 'lib/get/last-location'
 import useIsPrint from 'lib/hooks/use-is-print'
 import styles from 'css/pages/about.module.scss'
-
-const Details = (props) => {
-  const isPrint = useIsPrint()
-
-  return (
-    <details
-      className={styles.details}
-      {...props}
-      open={isPrint ? true : null}
-    />
-  )
-}
 
 const About = () => {
   const [lastLocation, setLastLocation] = useState(null)
@@ -42,7 +30,7 @@ const About = () => {
           <Profile location={lastLocation} />
 
           <Section title="Find Me">
-            <SubSection title="Online">
+            <SubSection title="Online" className="hide-print">
               <Online />
             </SubSection>
             <SubSection title="In Person">
@@ -51,154 +39,7 @@ const About = () => {
           </Section>
         </div>
 
-        <Section title="Skills">
-          <SubSection title="JavaScript">
-            <ul>
-              <li>
-                <Skill
-                  name="React"
-                  href="https://reactjs.org/"
-                  knowledge={80}
-                  love={80}
-                  subSkills={[
-                    {
-                      name: 'Styled Components',
-                      href: 'https://styled-components.com/',
-                      knowledge: 60,
-                      love: 20,
-                    },
-                  ]}
-                />
-                <ul>
-                  <li>
-                    <Skill
-                      name="Styled Components"
-                      href="https://styled-components.com/"
-                      knowledge={60}
-                      love={20}
-                    />
-                  </li>
-                  <li>
-                    <Skill
-                      name="React Hooks"
-                      href="https://reactjs.org/docs/hooks-overview.html"
-                      knowledge={75}
-                      love={84}
-                    />
-                  </li>
-                  <li>
-                    <Skill
-                      name="GraphQL"
-                      href="https://graphql.org/"
-                      knowledge={55}
-                      love={66}
-                    />
-                  </li>
-                  <li>
-                    <Skill name="SSR" knowledge={70} love="100" />
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <Skill
-                  name="Node"
-                  href="https://nodejs.org/"
-                  knowledge={64}
-                  love={62}
-                />
-                <ul>
-                  <li>
-                    <Skill
-                      name="Express"
-                      href="http://expressjs.com/"
-                      knowledge={72}
-                      love={85}
-                    />
-                  </li>
-                  <li className="p-skill">
-                    <Skill
-                      name="nunjucks"
-                      href="https://mozilla.github.io/nunjucks/"
-                      knowledge={87}
-                      love={62}
-                    />
-                  </li>
-                </ul>
-              </li>
-              <li className="p-skill">
-                <a href="https://webpack.js.org/">Webpack</a>
-              </li>
-              <li className="p-skill">
-                <a href="https://p5js.org/">p5.js</a>
-              </li>
-            </ul>
-          </SubSection>
-
-          <SubSection title="WordPress">
-            <ul>
-              <li className="p-skill">WordPress Theme Development</li>
-              <li className="p-skill">WordPress Plugin Development</li>
-              <li className="p-skill">Gutenberg Block Development</li>
-              <li className="p-skill">Rest API Development</li>
-              <li className="p-skill">
-                <a href="https://timber.github.io/docs/">Timber</a>
-              </li>
-            </ul>
-          </SubSection>
-
-          <SubSection title="CSS">
-            <ul>
-              <li className="p-skill">
-                <a href="https://sass-lang.com/">Sass</a>
-              </li>
-            </ul>
-          </SubSection>
-
-          <SubSection title="HTML"></SubSection>
-
-          <SubSection title="Static Site Generators">
-            <ul>
-              <li className="p-skill">
-                <a href="https://www.gatsbyjs.org/">Gastby</a>
-              </li>
-              <li className="p-skill">
-                <a href="https://www.11ty.io/">Eleventy</a>
-              </li>
-              <li className="p-skill">
-                <a href="https://nextjs.org/">Next.js</a>
-              </li>
-              <li className="p-skill">
-                <a href="https://www.netlify.com/">Netlify</a>
-              </li>
-            </ul>
-          </SubSection>
-
-          <SubSection title="Other Stuff I'd be Happy to Work With">
-            <ul>
-              <li>
-                <a href="https://getkirby.com/">Kirby</a>
-              </li>
-              <li>
-                <a href="https://craftcms.com/">Craft CMS</a>
-              </li>
-              <li>
-                <a href="https://facebook.github.io/react-native/">
-                  React Native
-                </a>
-              </li>
-              <li>Headless CMS</li>
-              <li>
-                <a href="https://shopify.com">Shopify</a>
-              </li>
-              <li>
-                <a href="https://ghost.org">Ghost</a>
-              </li>
-              <li>
-                <a href="https://strapi.io">Strapi</a>
-              </li>
-            </ul>
-          </SubSection>
-        </Section>
+        <Skills />
 
         <Section title="Work">
           <Event
@@ -311,7 +152,7 @@ const About = () => {
           </Event>
         </Section>
 
-        <Section title="Projects">
+        <Section title="Projects" className="hide-print">
           <SubSection>
             <Websites hideTitle />
           </SubSection>
