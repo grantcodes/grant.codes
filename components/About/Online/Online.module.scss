@@ -1,0 +1,18 @@
+@use '../../../css/util' as u;
+
+.online {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.card {
+  margin: 0;
+  padding: 0.5em;
+  // font-size: u.fs(-1);
+}
+
+.icon {
+  display: block;
+  font-size: u.fs(1);
+}

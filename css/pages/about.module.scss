@@ -1,7 +1,7 @@
 @use '../util/' as u;
 
 .wrapper {
-  text-shadow: 0 0 4em rgba(0, 0, 0, 0.6);
+  // text-shadow: 0 0 4em rgba(0, 0, 0, 0.6);
 }
 
 .section {
@@ -135,6 +135,8 @@ $breakpoint: 50rem;
     width: 15rem;
     margin-right: 2rem;
     margin-bottom: 1rem;
+    position: sticky;
+    top: 0;
   }
 }
 

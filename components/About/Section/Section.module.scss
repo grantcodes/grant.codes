@@ -1,0 +1,73 @@
+@use '../../../css/util' as u;
+
+$title-size: 1.6rem;
+
+.section {
+  display: block;
+
+  & + & {
+    margin-top: 4rem;
+  }
+}
+
+.title {
+  font-size: $title-size;
+  position: sticky;
+  top: 0;
+  margin: 0;
+  width: u.$about-heading-width;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+  background-color: var(--theme-main);
+  z-index: 1;
+}
+
+.content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: u.$about-gap;
+
+  & > * {
+    margin: 0;
+  }
+
+  *:first-child {
+    margin-top: 0;
+  }
+
+  *:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.subsection {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: u.$about-gap;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 1rem;
+  position: sticky;
+  top: $title-size * 1.2;
+  width: u.$about-heading-width;
+  flex-shrink: 0;
+
+  * {
+    margin: 0;
+  }
+
+  time {
+    font-size: u.fs(-1);
+  }
+}
+
+.subcontent {
+  composes: content;
+  gap: 1rem;
+}

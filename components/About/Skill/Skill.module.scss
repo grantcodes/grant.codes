@@ -1,0 +1,36 @@
+@use 'sass:math';
+@use '../../../css/util' as u;
+
+.skill {
+  font-size: 0.8rem;
+  // padding: 1em;
+  // @include u.glass();
+}
+
+.name {
+  font-size: 1em;
+  font-weight: normal;
+  margin: 0;
+}
+
+$progress-height: 0.5rem;
+$progress-radius: math.div($progress-height, 2);
+
+.progress {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: $progress-height;
+  border-radius: $progress-radius;
+  overflow: visible;
+
+  &::-webkit-progress-bar {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: $progress-radius;
+  }
+
+  &::-webkit-progress-value {
+    background-color: var(--theme-complementary);
+    border-radius: $progress-radius;
+  }
+}
