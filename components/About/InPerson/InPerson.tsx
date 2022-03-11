@@ -29,6 +29,7 @@ const InPerson = ({ location }) => (
         </dt>
         <dd>
           {!!location.addr && <p>{location.addr}</p>}
+          {/* @ts-ignore */}
           <Map
             location={`geo:${location.lat},${location.lon}`}
             defaultWidth={500}

@@ -32,6 +32,7 @@ interface ProfileProps {
 
 const Profile = ({ href, name, icon, ...props }: ProfileProps) => (
   <Tooltip text={name} id={`online-${icon}`}>
+    {/* @ts-ignore */}
     <Card className={styles.card} style={{ margin: 0 }}>
       <a href={href} {...props} title={name}>
         <Icon icon={icon} className={styles.icon} />

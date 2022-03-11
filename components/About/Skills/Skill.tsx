@@ -26,6 +26,7 @@ const Skill = ({
   const id = `skill-${name.toLowerCase().replace(/\s/g, '-')}`
 
   return (
+    // @ts-ignore
     <Card className={classnames(styles.skill, className)}>
       <h4 className={classnames('p-skill', styles.name)}>
         <span>{name}</span>
@@ -37,6 +38,7 @@ const Skill = ({
           <Tooltip
             id={id + 'skill'}
             text={skillLevel.name}
+            // @ts-ignore
             style={{ display: 'inline' }}
             className="hide-print"
           >
@@ -75,6 +77,7 @@ const Skill = ({
       </div>
 
       <footer className={classnames(styles.footer, 'hide-print')}>
+        {/* @ts-ignore */}
         <Button floating onClick={(e) => setIsOpen(!isOpen)}>
           {isOpen ? 'Less▴' : 'More▾'}
         </Button>

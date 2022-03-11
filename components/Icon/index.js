@@ -1,6 +1,6 @@
 import classnames from 'classnames'
 
-const Icon = ({ icon, className }) => (
+const Icon = ({ icon, className = '' }) => (
   <span
     className={classnames('icon', className)}
     dangerouslySetInnerHTML={{

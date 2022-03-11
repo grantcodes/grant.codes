@@ -41,6 +41,8 @@ Map.defaultProps = {
   className: '',
   zoom: 14,
   metaWheelZoom: true,
+  defaultWidth: 300,
+  defaultHeight: 300,
 }
 
 export default Map
