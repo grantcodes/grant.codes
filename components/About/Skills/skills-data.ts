@@ -193,10 +193,10 @@ const skills: SkillsDataSection[] = [
         love: 94,
         subSkills: [
           {
-            name: 'Gastby',
-            href: 'https://www.gatsbyjs.org/',
-            knowledge: 52,
-            love: 61,
+            name: 'Next.js',
+            href: 'https://nextjs.org/',
+            knowledge: 81,
+            love: 94,
           },
           {
             name: 'Eleventy',
@@ -205,16 +205,16 @@ const skills: SkillsDataSection[] = [
             love: 88,
           },
           {
-            name: 'Next.js',
-            href: 'https://nextjs.org/',
-            knowledge: 81,
-            love: 94,
-          },
-          {
             name: 'Netlify',
             href: 'https://www.netlify.com/',
             knowledge: 60,
             love: 87,
+          },
+          {
+            name: 'Gastby',
+            href: 'https://www.gatsbyjs.org/',
+            knowledge: 52,
+            love: 61,
           },
         ],
       },
@@ -222,16 +222,16 @@ const skills: SkillsDataSection[] = [
         name: "Other Stuff I'd be Happy to Work With",
         className: 'hide-print',
         subSkills: [
-          { href: 'https://getkirby.com/', name: 'Kirby' },
           { href: 'https://craftcms.com/', name: 'Craft CMS' },
+          { href: 'https://getkirby.com/', name: 'Kirby' },
           {
             href: 'https://facebook.github.io/react-native/',
             name: 'React Native',
           },
           { name: 'Headless CMS' },
-          { href: 'https://shopify.com', name: 'Shopify' },
-          { href: 'https://ghost.org', name: 'Ghost' },
           { href: 'https://strapi.io', name: 'Strapi' },
+          { href: 'https://ghost.org', name: 'Ghost' },
+          { href: 'https://shopify.com', name: 'Shopify' },
         ],
       },
     ],

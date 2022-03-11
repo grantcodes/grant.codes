@@ -1,6 +1,7 @@
 import styles from './Online.module.scss'
 import Icon from 'components/Icon'
 import Card from 'components/Card'
+import Tooltip from 'components/Tooltip'
 
 import linkIcon from 'eva-icons/fill/svg/external-link.svg'
 import twitterIcon from 'eva-icons/fill/svg/twitter.svg'
@@ -25,84 +26,72 @@ interface ProfileProps {
   href: string
   name: string
   icon: string
-  children: React.ReactNode
   className?: string
   rel?: string
 }
 
-const Profile = ({ href, name, icon, children, ...props }: ProfileProps) => (
-  <Card className={styles.card} style={{ margin: 0 }}>
-    <a href={href} {...props} title={name}>
-      <Icon icon={icon} className={styles.icon} />
-      <span className="screen-reader-text">{name}</span>
-      <span className="screen-reader-text">{children}</span>
-    </a>
-  </Card>
+const Profile = ({ href, name, icon, ...props }: ProfileProps) => (
+  <Tooltip text={name} id={`online-${icon}`}>
+    <Card className={styles.card} style={{ margin: 0 }}>
+      <a href={href} {...props} title={name}>
+        <Icon icon={icon} className={styles.icon} />
+        <span className="screen-reader-text">{name}</span>
+      </a>
+    </Card>
+  </Tooltip>
 )
 
 const Online = () => (
   <div className={styles.online}>
     <Profile
-      name="Website"
+      name="Website grant.codes"
       icon={linkIcon}
       href="https://grant.codes"
       className="u-url"
-    >
-      grant.codes
-    </Profile>
+    ></Profile>
 
     <Profile
-      name="Email"
+      name={`Email ${process.env.NEXT_PUBLIC_AUTHOR_EMAIL}`}
       icon={emailIcon}
       className="u-email"
       href={'mailto:' + process.env.NEXT_PUBLIC_AUTHOR_EMAIL}
       rel="me"
-    >
-      {process.env.NEXT_PUBLIC_AUTHOR_EMAIL}
-    </Profile>
+    ></Profile>
 
     {!!process.env.NEXT_PUBLIC_AUTHOR_TWITTER && (
       <Profile
-        name="Twitter"
+        name={`Twitter ${userify(process.env.NEXT_PUBLIC_AUTHOR_TWITTER)}`}
         icon={twitterIcon}
         href={process.env.NEXT_PUBLIC_AUTHOR_TWITTER}
         rel="me"
-      >
-        {userify(process.env.NEXT_PUBLIC_AUTHOR_TWITTER)}
-      </Profile>
+      ></Profile>
     )}
 
     {!!process.env.NEXT_PUBLIC_AUTHOR_FACEBOOK && (
       <Profile
-        name="Facebook"
+        name={`Facebook ${userify(process.env.NEXT_PUBLIC_AUTHOR_FACEBOOK)}`}
         icon={facebookIcon}
         href={process.env.NEXT_PUBLIC_AUTHOR_FACEBOOK}
         rel="me"
-      >
-        {userify(process.env.NEXT_PUBLIC_AUTHOR_FACEBOOK)}
-      </Profile>
+      ></Profile>
     )}
 
     {!!process.env.NEXT_PUBLIC_AUTHOR_INSTAGRAM && (
       <Profile
-        name="Instagram"
+        name={`Instagram ${userify(process.env.NEXT_PUBLIC_AUTHOR_INSTAGRAM)}`}
         icon={instagramIcon}
         href={process.env.NEXT_PUBLIC_AUTHOR_INSTAGRAM}
         rel="me"
-      >
-        {userify(process.env.NEXT_PUBLIC_AUTHOR_INSTAGRAM)}
-      </Profile>
+      ></Profile>
     )}
 
     {!!process.env.NEXT_PUBLIC_AUTHOR_GITHUB && (
       <Profile
-        name="Github"
+        name={`Github ${userify(process.env.NEXT_PUBLIC_AUTHOR_GITHUB)}`}
         icon={githubIcon}
         href={process.env.NEXT_PUBLIC_AUTHOR_GITHUB}
         rel="me"
-      >
-        {userify(process.env.NEXT_PUBLIC_AUTHOR_GITHUB)}
-      </Profile>
+      ></Profile>
     )}
   </div>
 )

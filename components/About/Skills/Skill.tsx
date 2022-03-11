@@ -4,6 +4,7 @@ import classnames from 'classnames'
 import Button from 'components/Button'
 import Card from 'components/Card'
 import Icon from 'components/Icon'
+import Tooltip from 'components/Tooltip'
 import SubSkill from './SubSkill'
 import externalLink from 'eva-icons/fill/svg/external-link.svg'
 import { getLoveLevel, getSkillLevel } from './levels'
@@ -22,6 +23,7 @@ const Skill = ({
 
   const loveLevel = getLoveLevel(love)
   const skillLevel = getSkillLevel(knowledge)
+  const id = `skill-${name.toLowerCase().replace(/\s/g, '-')}`
 
   return (
     <Card className={classnames(styles.skill, className)}>
@@ -31,21 +33,34 @@ const Skill = ({
 
       {!!knowledge && (
         <>
-          Skill Level {skillLevel.emoji}
+          Knowledge{' '}
+          <Tooltip
+            id={id + 'skill'}
+            text={skillLevel.name}
+            style={{ display: 'inline' }}
+          >
+            {skillLevel.emoji}
+          </Tooltip>
           <progress className={styles.progress} value={knowledge} max="100" />
         </>
       )}
 
       {!!love && (
-        <>
-          Love Level {loveLevel.emoji}
-          <progress className={styles.progress} value={love} max="100" />
-        </>
+        <Tooltip
+          id={id + 'love'}
+          text={`Opinion: ${loveLevel.name}`}
+          className={styles.love}
+        >
+          {loveLevel.emoji}
+        </Tooltip>
       )}
 
       <div
         className={styles.skillDetails}
-        style={{ height: isOpen ? 'auto' : 0 }}
+        style={{
+          height: isOpen ? 'auto' : 0,
+          overflow: isOpen ? 'visible' : 'hidden',
+        }}
       >
         {!!description && description}
 
@@ -64,13 +79,15 @@ const Skill = ({
         </Button>
 
         {!!href && (
-          <a
-            href={href}
-            title={`More info on ${name}`}
+          <Tooltip
+            text={`More info on ${name}`}
+            id={id + 'more'}
             className={styles.footer__link}
           >
-            <Icon icon={externalLink} />
-          </a>
+            <a href={href} title={`More info on ${name}`}>
+              <Icon icon={externalLink} />
+            </a>
+          </Tooltip>
         )}
       </footer>
     </Card>

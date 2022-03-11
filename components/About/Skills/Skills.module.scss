@@ -2,7 +2,9 @@
 @use '../../../css/util' as u;
 
 .skill {
+  position: relative;
   font-size: 0.8rem;
+  overflow: visible;
   @media print {
     &,
     * {
@@ -33,7 +35,7 @@ $progress-radius: math.div($progress-height, 2);
   overflow: visible;
 
   &::-webkit-progress-bar {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: var(--theme-mainAlt);
     border-radius: $progress-radius;
   }
 
@@ -41,6 +43,12 @@ $progress-radius: math.div($progress-height, 2);
     background-color: var(--theme-complementary);
     border-radius: $progress-radius;
   }
+}
+
+.love {
+  position: absolute;
+  right: u.$card-padding;
+  top: u.$card-padding;
 }
 
 .skillDetails {

@@ -1,6 +1,7 @@
 import styles from './Skills.module.scss'
 import classnames from 'classnames'
 import Icon from 'components/Icon'
+import Tooltip from 'components/Tooltip'
 import externalLink from 'eva-icons/fill/svg/external-link.svg'
 import { getSkillLevel, getLoveLevel } from './levels'
 import { SubSkillProps } from './types'
@@ -13,34 +14,30 @@ const SubSkill = ({
 }: SubSkillProps) => {
   const loveLevel = getLoveLevel(love)
   const skillLevel = getSkillLevel(knowledge)
+  const id = `subskill-${name.toLowerCase().replace(/\s/g, '-')}`
 
   return (
     <li className={styles.subskill}>
       <span className={styles.subskill__name}>{name}</span>
       {!!love && (
-        <span
-          title={`Opinion: ${loveLevel.name}`}
-          className={styles.subskill__icon}
-        >
-          {loveLevel.emoji}
-        </span>
+        <Tooltip text={`Opinion: ${loveLevel.name}`} id={id + 'love'}>
+          <span className={styles.subskill__icon}>{loveLevel.emoji}</span>
+        </Tooltip>
       )}
       {!!knowledge && (
-        <span
-          title={`Knowledge: ${skillLevel.name}`}
-          className={styles.subskill__icon}
-        >
-          {skillLevel.emoji}
-        </span>
+        <Tooltip text={`Knowledge: ${skillLevel.name}`} id={id + 'skill'}>
+          <span className={styles.subskill__icon}>{skillLevel.emoji}</span>
+        </Tooltip>
       )}
       {!!href && (
-        <a
-          href={href}
-          title={`More info on ${name}`}
-          className={classnames(styles.link, styles.subskill__icon)}
-        >
-          <Icon icon={externalLink} />
-        </a>
+        <Tooltip text={`More info on ${name}`} id={id + 'more'}>
+          <a
+            href={href}
+            className={classnames(styles.link, styles.subskill__icon)}
+          >
+            <Icon icon={externalLink} />
+          </a>
+        </Tooltip>
       )}
     </li>
   )

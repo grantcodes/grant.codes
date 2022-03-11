@@ -1,24 +1,29 @@
+@use '../util' as u;
+
 .tile {
   display: block;
   position: relative;
   padding: 1rem;
   background-color: rgba(255, 255, 255, 0.9);
+  border-radius: u.$border-radius;
   box-shadow: 0 0.5rem 3rem rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(1rem);
   width: 48%;
   width: calc(50% - 0.5rem);
   max-width: 16rem;
   margin-bottom: 1rem;
-  transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s,
+    filter 0.2s;
+  @include u.glass();
 
-  :hover,
-  :focus {
+  &:hover,
+  &:focus {
     transform: translateY(-0.3em) scale(1.03);
     background-color: rgba(255, 255, 255, 1);
     box-shadow: 0 0.5rem 3rem rgba(0, 0, 0, 0.2);
   }
 
-  :nth-child(2n) {
+  &:nth-child(2n) {
     margin-right: 0;
   }
 }

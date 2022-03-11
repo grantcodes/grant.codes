@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import classnames from 'classnames'
 import { NextSeo } from 'next-seo'
 import Link from 'components/Link'
 import Websites from 'components/Websites'
@@ -10,7 +9,6 @@ import InPerson from 'components/About/InPerson'
 import Event from 'components/About/Event'
 import Skills from 'components/About/Skills'
 import getLastLocation from 'lib/get/last-location'
-import useIsPrint from 'lib/hooks/use-is-print'
 import styles from 'css/pages/about.module.scss'
 
 const About = () => {
@@ -154,7 +152,7 @@ const About = () => {
 
         <Section title="Projects" className="hide-print">
           <SubSection>
-            <Websites hideTitle />
+            <Websites hideTitle limit={6} />
           </SubSection>
         </Section>
 
