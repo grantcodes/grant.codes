@@ -1,0 +1,23 @@
+@use '../../css/util/' as u;
+
+.anchor {
+  position: relative;
+}
+
+.tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  // background-color: var(--theme-complementary);
+  // color: var(--theme-complementary);
+  z-index: 99;
+  line-height: 1.1;
+  padding: 0.5em;
+  border-radius: u.$border-radius;
+  font-size: u.fs(-1);
+  min-width: 8em;
+  text-align: center;
+  box-shadow: u.shadow();
+  @include u.glass();
+}

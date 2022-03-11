@@ -1,0 +1,19 @@
+@use '../../../css/util' as u;
+
+.profile {
+  display: grid;
+  gap: u.$about-gap;
+  grid-template-columns: u.$about-heading-width auto;
+  align-items: center;
+}
+
+.photo {
+  * {
+    display: block;
+    width: 100%;
+  }
+
+  img {
+    height: auto;
+  }
+}

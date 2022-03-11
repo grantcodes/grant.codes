@@ -1,5 +1,51 @@
 export default [
   {
+    slug: 'kinsta',
+    title: 'Kinsta',
+    description: 'Kinsta Premium Managed WordPress Hosting',
+    thumbnail: '/img/work/kinsta-logo.svg',
+    // screenshot: '/img/work/todomap-screenshot.jpg',
+    url: 'https://kinsta.com/',
+    content: `
+      <p>
+        <a href="https://kinsta.com">Kinsta</a> is the best WordPress Hosting
+        provider out there.
+      </p>
+      <p>
+        I was hired to help maintain and improve the public facing website.
+        Over multiple years I have helped make the website more modern, performant,
+        accessible, reliable and easier to edit for admins. 
+      </p>
+    `,
+  },
+
+  {
+    slug: 'todomap',
+    title: 'TodoMap.xyz',
+    description:
+      'TodoMap.xyz is a React app to create and manage lists of places you want to visit',
+    thumbnail: '/img/work/todomap-logo.png',
+    screenshot: '/img/work/todomap-screenshot.jpg',
+    url: 'https://todomap.xyz',
+    content: `
+      <p>
+        <a href="https://todomap.xyz">TodoMap.xyz</a> is an app to help you
+        manage lists of places you want to visit. You can list musuems you
+        want to visit in a city, new restaurants to check out at home or
+        whatever else you want!
+      </p>
+      <p>
+        I started <a href="https://todomap.xyz">TodoMap.xyz</a> to scratch my
+        own itch. No other platform really worked for me when travelling. I
+        also used it as an excuse to test out some new technologies.
+      </p>
+      <p>
+        Since then I have developed it into a fully functional react
+        progressive web app with firebase serving the data.
+      </p>`,
+  },
+
+  {
     slug: 'together',
     title: 'Together',
     description: 'Together is a social reader built for the indieweb',
@@ -53,6 +99,24 @@ export default [
   },
 
   {
+    slug: 'klueles',
+    title: 'Klueles',
+    description: 'Klueles is a WordPress & WooCommerce vintage fashion store',
+    thumbnail: '/img/work/klueles-logo.jpg',
+    screenshot: '/img/work/klueles.jpg',
+    url: 'https://klueles.com',
+    content: `
+        <p>
+          Klueles is an e-commerce site running on WordPress and WooCommerce
+          with a lot of custom design and functionality.
+        </p>
+        <p>
+          The site was designed by the wonderful
+          <a href="http://www.emilyforgot.co.uk/">Emily Alston</a>.
+        </p>`,
+  },
+
+  {
     slug: 'postrchild',
     title: 'PostrChild',
     description:
@@ -70,32 +134,6 @@ export default [
           There is a chat bot, a web app for posting galleries and a browser
           extension that allows you write content inline on your own website
           without (much) extra work.
-        </p>`,
-  },
-
-  {
-    slug: 'todomap',
-    title: 'TodoMap.xyz',
-    description:
-      'TodoMap.xyz is a React app to create and manage lists of places you want to visit',
-    thumbnail: '/img/work/todomap-logo.png',
-    screenshot: '/img/work/todomap-screenshot.jpg',
-    url: 'https://todomap.xyz',
-    content: `
-        <p>
-          <a href="https://todomap.xyz">TodoMap.xyz</a> is an app to help you
-          manage lists of places you want to visit. You can list musuems you
-          want to visit in a city, new restaurants to check out at home or
-          whatever else you want!
-        </p>
-        <p>
-          I started <a href="https://todomap.xyz">TodoMap.xyz</a> to scratch my
-          own itch. No other platform really worked for me when travelling. I
-          also used it as an excuse to test out some new technologies.
-        </p>
-        <p>
-          Since then I have developed it into a fully functional react
-          progressive web app with firebase serving the data.
         </p>`,
   },
 
@@ -123,36 +161,20 @@ export default [
       'mobbed.io is a platform to discover the best mobile app developers in the world',
     thumbnail: '/img/work/mobbedio-logo.png',
     screenshot: '/img/work/mobbed-screenshot.png',
-    url: 'https://mobbed.io',
+    // url: 'https://mobbed.io',
     content: `
-        <p>
-          With a co-founder I set up <a href="https://mobbed.io">mobbed.io</a>
-          as the go to destination to find the worlds best app developers across
-          modern platforms such as mobile, VR, bots etc.
-        </p>
-        <p>
-          It is a highly customised WordPress setup with advanced frontend
-          editing features to allow developers to submit and manage their own
-          companies.
-        </p>`,
-  },
-
-  {
-    slug: 'klueles',
-    title: 'Klueles',
-    description: 'Klueles is a WordPress & WooCommerce vintage fashion store',
-    thumbnail: '/img/work/klueles-logo.jpg',
-    screenshot: '/img/work/klueles.jpg',
-    url: 'https://klueles.com',
-    content: `
-        <p>
-          Klueles is an e-commerce site running on WordPress and WooCommerce
-          with a lot of custom design and functionality.
-        </p>
-        <p>
-          The site was designed by the wonderful
-          <a href="http://www.emilyforgot.co.uk/">Emily Alston</a>.
-        </p>`,
+      <p>
+        With a co-founder I set up mobbed.io
+        as the go to destination to find the worlds best app developers across
+        modern platforms such as mobile, VR, bots etc.
+      </p>
+      <p>
+        It was a highly customised WordPress setup with advanced frontend
+        editing features to allow developers to submit and manage their own
+        companies.
+      </p>
+      <p>Unfortunately it was shut down due to lack of time.</p>
+    `,
   },
 
   {

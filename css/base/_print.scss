@@ -1,0 +1,31 @@
+@media print {
+  body {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    page-break-after: avoid;
+  }
+
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  img,
+  tr {
+    page-break-inside: avoid;
+  }
+}
