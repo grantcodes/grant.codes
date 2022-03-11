@@ -1,3 +1,4 @@
+import classnames from 'classnames'
 import Avatar from '../../Avatar'
 import styles from './Profile.module.scss'
 
@@ -24,6 +25,13 @@ const Profile = (props) => {
         </p>
         <p className={styles.profile__description}>
           I like to make, fun, usable websites.
+        </p>
+        <p className={classnames(styles.profile__description, 'print-only')}>
+          <small style={{ display: 'block' }}>
+            This CV is a printout from{' '}
+            <a href="https://grant.codes/about">https://grant.codes/about</a>{' '}
+            check there for more detailed information on my skills and projects.
+          </small>
         </p>
       </div>
     </div>

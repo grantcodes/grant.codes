@@ -20,21 +20,30 @@ const SubSkill = ({
     <li className={styles.subskill}>
       <span className={styles.subskill__name}>{name}</span>
       {!!love && (
-        <Tooltip text={`Opinion: ${loveLevel.name}`} id={id + 'love'}>
-          <span className={styles.subskill__icon}>{loveLevel.emoji}</span>
+        <Tooltip
+          text={`Opinion: ${loveLevel.name}`}
+          id={id + 'love'}
+          className={styles.subskill__icon}
+        >
+          {loveLevel.emoji}
         </Tooltip>
       )}
       {!!knowledge && (
-        <Tooltip text={`Knowledge: ${skillLevel.name}`} id={id + 'skill'}>
-          <span className={styles.subskill__icon}>{skillLevel.emoji}</span>
+        <Tooltip
+          text={`Knowledge: ${skillLevel.name}`}
+          id={id + 'skill'}
+          className={styles.subskill__icon}
+        >
+          {skillLevel.emoji}
         </Tooltip>
       )}
       {!!href && (
-        <Tooltip text={`More info on ${name}`} id={id + 'more'}>
-          <a
-            href={href}
-            className={classnames(styles.link, styles.subskill__icon)}
-          >
+        <Tooltip
+          text={`More info on ${name}`}
+          id={id + 'more'}
+          className={styles.subskill__icon}
+        >
+          <a href={href} className={styles.link}>
             <Icon icon={externalLink} />
           </a>
         </Tooltip>

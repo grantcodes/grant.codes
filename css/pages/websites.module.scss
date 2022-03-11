@@ -1,11 +1,9 @@
 @use '../util' as u;
 
 .list {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: stretch;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(1rem, 1fr));
   list-style: none;
 
   @media (min-width: u.$mid-break) {

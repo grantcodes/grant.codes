@@ -15,6 +15,14 @@
       2px -2px 0 var(--theme-contrast), -2px 0px 0 var(--theme-contrast),
       -2px -2px 0 var(--theme-contrast);
   }
+
+  @media print {
+    display: table;
+    break-inside: avoid;
+    page-break-after: auto;
+    page-break-before: auto;
+    page-break-inside: avoid;
+  }
 }
 
 .card--glass {

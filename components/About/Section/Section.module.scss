@@ -4,9 +4,9 @@ $title-size: 1.6rem;
 
 .section {
   display: block;
-
-  & + & {
-    margin-top: 4rem;
+  margin-top: 4rem;
+  @media print {
+    margin-top: 2rem;
   }
 }
 
@@ -22,6 +22,10 @@ $title-size: 1.6rem;
   line-height: 1.2;
   background-color: var(--theme-main);
   z-index: 1;
+
+  @media print {
+    position: static;
+  }
 }
 
 .content {
@@ -51,11 +55,10 @@ $title-size: 1.6rem;
   margin: 0;
 
   @media print {
-    &,
-    * {
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
+    break-inside: avoid;
+    page-break-after: auto;
+    page-break-before: auto;
+    page-break-inside: avoid;
   }
 }
 
@@ -65,6 +68,10 @@ $title-size: 1.6rem;
   top: $title-size * 1.2;
   width: u.$about-heading-width;
   flex-shrink: 0;
+
+  @media print {
+    position: static;
+  }
 
   * {
     margin: 0;

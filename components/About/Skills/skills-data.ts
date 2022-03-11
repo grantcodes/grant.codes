@@ -151,16 +151,16 @@ const skills: SkillsDataSection[] = [
         love: 68,
         subSkills: [
           {
-            name: 'WordPress Theme Development',
+            name: 'Theme Development',
             href: '',
             knowledge: 95,
             love: 89,
           },
           {
-            name: 'WordPress Plugin Development',
+            name: 'Plugin Development',
             href: '',
-            knowledge: 95,
-            love: 89,
+            knowledge: 82,
+            love: 72,
           },
           {
             name: 'Gutenberg Block Development',
@@ -220,7 +220,6 @@ const skills: SkillsDataSection[] = [
       },
       {
         name: "Other Stuff I'd be Happy to Work With",
-        className: 'hide-print',
         subSkills: [
           { href: 'https://craftcms.com/', name: 'Craft CMS' },
           { href: 'https://getkirby.com/', name: 'Kirby' },

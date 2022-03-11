@@ -38,6 +38,7 @@ const Skill = ({
             id={id + 'skill'}
             text={skillLevel.name}
             style={{ display: 'inline' }}
+            className="hide-print"
           >
             {skillLevel.emoji}
           </Tooltip>
@@ -49,7 +50,7 @@ const Skill = ({
         <Tooltip
           id={id + 'love'}
           text={`Opinion: ${loveLevel.name}`}
-          className={styles.love}
+          className={classnames(styles.love, 'hide-print')}
         >
           {loveLevel.emoji}
         </Tooltip>

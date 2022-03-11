@@ -8,3 +8,10 @@
     display: none !important;
   }
 }
+
+.print-only {
+  display: none !important;
+  @media print {
+    display: block !important;
+  }
+}

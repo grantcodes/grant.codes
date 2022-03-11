@@ -12,12 +12,10 @@ body,
   padding: 0;
   margin: 0;
   min-width: 260px;
-  -webkit-print-color-adjust: exact !important;
 }
 
 /* GENERAL BASE */
 html {
-  background-color: var(--theme-main);
   color: var(--theme-contrast);
   fill: currentColor;
   position: relative;
@@ -25,6 +23,7 @@ html {
   cursor: -webkit-image-set(url(/img/cursor.png) 1x, url(/img/cursor-64.png) 2x)
       16 16,
     auto;
+  background-color: var(--theme-main);
   color: var(--theme-contrast);
 }
 

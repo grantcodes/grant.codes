@@ -6,11 +6,11 @@
   font-size: 0.8rem;
   overflow: visible;
   @media print {
-    &,
-    * {
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
+    position: static;
+    display: table;
+    page-break-after: auto;
+    page-break-before: auto;
+    page-break-inside: avoid;
   }
 }
 
@@ -54,7 +54,8 @@ $progress-radius: math.div($progress-height, 2);
 .skillDetails {
   overflow: hidden;
   @media print {
-    display: none;
+    display: block !important;
+    height: auto !important;
   }
 }
 
@@ -70,6 +71,14 @@ $progress-radius: math.div($progress-height, 2);
   display: flex;
   flex-direction: row;
   align-items: flex-start;
+
+  @media print {
+    display: inline-flex;
+    &::before {
+      content: '✓';
+      margin-right: 0.4em;
+    }
+  }
 }
 
 .subskill__name {
@@ -89,6 +98,10 @@ $icon-size: 1.5;
 
   &:hover {
     background-color: var(--theme-mainAlt);
+  }
+
+  @media print {
+    display: none !important;
   }
 }
 
