@@ -1,6 +1,7 @@
 @use '../../../css/util' as u;
 
 $title-size: 1.6rem;
+$breakpoint: 'min-width: 40em';
 
 .section {
   display: block;
@@ -12,19 +13,20 @@ $title-size: 1.6rem;
 
 .title {
   font-size: $title-size;
-  position: sticky;
-  top: 0;
   margin: 0;
-  width: u.$about-heading-width;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   line-height: 1.2;
-  background-color: var(--theme-main);
-  z-index: 1;
+  @media ($breakpoint) {
+    position: sticky;
+    top: 0;
+    width: u.$about-heading-width;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    z-index: 1;
 
-  @media print {
-    position: static;
+    @media print {
+      position: static;
+    }
   }
 }
 
@@ -49,10 +51,14 @@ $title-size: 1.6rem;
 
 .subsection {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: flex-start;
   gap: u.$about-gap;
   margin: 0;
+
+  @media ($breakpoint) {
+    flex-direction: row;
+  }
 
   @media print {
     break-inside: avoid;
@@ -64,13 +70,16 @@ $title-size: 1.6rem;
 
 .subtitle {
   font-size: 1rem;
-  position: sticky;
-  top: $title-size * 1.2;
-  width: u.$about-heading-width;
   flex-shrink: 0;
 
-  @media print {
-    position: static;
+  @media ($breakpoint) {
+    position: sticky;
+    top: $title-size * 1.2;
+    width: u.$about-heading-width;
+
+    @media print {
+      position: static;
+    }
   }
 
   * {

@@ -1,9 +1,11 @@
 @use '../../../css/util' as u;
 
 .profile {
-  display: grid;
-  gap: u.$about-gap;
-  grid-template-columns: u.$about-heading-width auto;
+  @media (min-width: 40em) {
+    display: grid;
+    gap: u.$about-gap;
+    grid-template-columns: u.$about-heading-width auto;
+  }
   align-items: center;
 }
 
