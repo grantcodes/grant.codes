@@ -22,7 +22,7 @@ const InPerson = ({ location }) => (
     </dd>
 
     {!!location && (
-      <>
+      <div className="hide-print">
         <dt>
           <Icon icon={pinIcon} />
           Last Seen
@@ -38,7 +38,7 @@ const InPerson = ({ location }) => (
             themed
           />
         </dd>
-      </>
+      </div>
     )}
   </dl>
 )
