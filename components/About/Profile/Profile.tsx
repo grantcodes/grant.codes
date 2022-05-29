@@ -9,9 +9,9 @@ const Profile = (props) => {
         <Avatar
           size={400}
           author={{
-            name: 'Grant Richmond',
-            photo: '/img/me.jpg',
-            url: 'https://grant.codes',
+            name: process.env.NEXT_PUBLIC_AUTHOR_NAME,
+            photo: process.env.NEXT_PUBLIC_AUTHOR_PHOTO,
+            url: process.env.NEXT_PUBLIC_URL,
           }}
           noName
           noLink
