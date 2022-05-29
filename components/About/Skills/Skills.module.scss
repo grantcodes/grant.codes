@@ -32,6 +32,9 @@ $progress-radius: math.div($progress-height, 2);
   width: 100%;
   height: $progress-height;
   border-radius: $progress-radius;
+  background-color: var(--theme-mainAlt);
+  border: none;
+  outline: none;
   overflow: visible;
 
   &::-webkit-progress-bar {
@@ -40,6 +43,11 @@ $progress-radius: math.div($progress-height, 2);
   }
 
   &::-webkit-progress-value {
+    background-color: var(--theme-complementary);
+    border-radius: $progress-radius;
+  }
+
+  &::-moz-progress-bar {
     background-color: var(--theme-complementary);
     border-radius: $progress-radius;
   }

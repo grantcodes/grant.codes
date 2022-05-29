@@ -3,11 +3,22 @@
 $title-size: 1.6rem;
 $breakpoint: 'min-width: 40em';
 
+@mixin break($before: avoid, $after: avoid, $inside: avoid) {
+  break-before: $before;
+  page-break-before: $before;
+  break-inside: $inside;
+  page-break-inside: $inside;
+  break-after: $after;
+  page-break-after: $after;
+}
+
 .section {
   display: block;
   margin-top: 4rem;
   @media print {
-    margin-top: 2rem;
+    margin: 0;
+    padding: 4rem 0;
+    @include break($inside: auto, $before: always, $after: avoid);
   }
 }
 
@@ -26,6 +37,7 @@ $breakpoint: 'min-width: 40em';
 
     @media print {
       position: static;
+      @include break($inside: avoid, $before: avoid, $after: avoid);
     }
   }
 }
@@ -35,6 +47,10 @@ $breakpoint: 'min-width: 40em';
   display: flex;
   flex-direction: column;
   gap: u.$about-gap;
+
+  @media print {
+    @include break($inside: avoid, $before: avoid, $after: avoid);
+  }
 
   & > * {
     margin: 0;
@@ -61,10 +77,7 @@ $breakpoint: 'min-width: 40em';
   }
 
   @media print {
-    break-inside: avoid;
-    page-break-after: auto;
-    page-break-before: auto;
-    page-break-inside: avoid;
+    @include break($inside: avoid, $before: avoid, $after: auto);
   }
 }
 
@@ -79,6 +92,7 @@ $breakpoint: 'min-width: 40em';
 
     @media print {
       position: static;
+      @include break($inside: avoid, $before: avoid, $after: avoid);
     }
   }
 
