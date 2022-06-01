@@ -1,0 +1,29 @@
+{
+  "postTypes": {
+    "like": 1
+  },
+  "body": {
+    "state_class": [
+      {
+        "time": "2022-05-28T11:04:10.852Z",
+        "value": "measurement"
+      },
+      {
+        "time": "2022-05-28T11:11:22.206Z",
+        "value": "measurement"
+      },
+      {
+        "time": "2022-05-29T10:37:37.137Z",
+        "value": "measurement"
+      },
+      {
+        "time": "2022-05-30T03:01:30.269Z",
+        "value": "measurement"
+      },
+      {
+        "time": "2022-05-30T03:06:03.455Z",
+        "value": "measurement"
+      }
+    ]
+  }
+}
