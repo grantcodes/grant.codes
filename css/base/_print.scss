@@ -1,11 +1,31 @@
 @media print {
+  @page {
+    margin: 1rem 0;
+    background: var(--theme-main);
+  }
+
+  // Fill whole page with color.
+  html::before {
+    content: '';
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: var(--theme-main);
+    z-index: -6; // Behind background layer.
+  }
+
   body {
+    position: relative;
     width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
     color-adjust: exact !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
+  }
+
+  .grid {
+    display: block;
   }
 
   h1,

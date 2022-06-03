@@ -220,6 +220,7 @@ const skills: SkillsDataSection[] = [
       },
       {
         name: "Other Stuff I'd be Happy to Work With",
+        className: 'hide-print',
         subSkills: [
           { href: 'https://craftcms.com/', name: 'Craft CMS' },
           { href: 'https://getkirby.com/', name: 'Kirby' },

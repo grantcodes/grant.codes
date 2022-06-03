@@ -4,12 +4,40 @@
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
+
+  @media print {
+    [aria-describedby] {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      flex-grow: 1;
+      flex-wrap: wrap;
+    }
+    [role='tooltip'] {
+      display: block !important;
+      width: min-content;
+      position: static;
+      transform: none;
+      font-size: u.fs(-1);
+      background: none;
+      box-shadow: none;
+      text-align: left;
+      padding: 0;
+      margin-top: 0.4em;
+    }
+  }
 }
 
 .card {
   margin: 0;
   padding: 0.5em;
-  // font-size: u.fs(-1);
+  text-align: center;
+  @media print {
+    box-shadow: none;
+    background: none;
+    border: none;
+    padding: 0;
+  }
 }
 
 .icon {

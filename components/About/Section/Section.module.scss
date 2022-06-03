@@ -1,7 +1,7 @@
 @use '../../../css/util' as u;
 
 $title-size: 1.6rem;
-$breakpoint: 'min-width: 40em';
+$breakpoint: 'min-width: 36em';
 
 @mixin break($before: avoid, $after: avoid, $inside: avoid) {
   break-before: $before;
@@ -17,8 +17,15 @@ $breakpoint: 'min-width: 40em';
   margin-top: 4rem;
   @media print {
     margin: 0;
-    padding: 4rem 0;
-    @include break($inside: auto, $before: always, $after: avoid);
+    padding: 0;
+    margin-bottom: 1rem;
+
+    h4 {
+      font-size: u.fs(0);
+    }
+    h5 {
+      font-size: u.fs(-0.5);
+    }
   }
 }
 
@@ -37,7 +44,7 @@ $breakpoint: 'min-width: 40em';
 
     @media print {
       position: static;
-      @include break($inside: avoid, $before: avoid, $after: avoid);
+      margin-bottom: 1rem;
     }
   }
 }
@@ -49,7 +56,8 @@ $breakpoint: 'min-width: 40em';
   gap: u.$about-gap;
 
   @media print {
-    @include break($inside: avoid, $before: avoid, $after: avoid);
+    font-size: u.fs(-1);
+    gap: 1rem;
   }
 
   & > * {
@@ -75,10 +83,6 @@ $breakpoint: 'min-width: 40em';
   @media ($breakpoint) {
     flex-direction: row;
   }
-
-  @media print {
-    @include break($inside: avoid, $before: avoid, $after: auto);
-  }
 }
 
 .subtitle {
@@ -92,7 +96,6 @@ $breakpoint: 'min-width: 40em';
 
     @media print {
       position: static;
-      @include break($inside: avoid, $before: avoid, $after: avoid);
     }
   }
 

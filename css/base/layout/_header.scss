@@ -25,6 +25,11 @@
   .container.single-article & {
     display: none;
   }
+
+  @media print {
+    position: static !important;
+    text-align: center;
+  }
 }
 
 .main-header__title {

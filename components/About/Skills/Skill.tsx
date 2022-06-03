@@ -34,7 +34,7 @@ const Skill = ({
 
       {!!knowledge && (
         <>
-          Knowledge{' '}
+          <span className={styles.progressTitle}>Knowledge</span>{' '}
           <Tooltip
             id={id + 'skill'}
             text={skillLevel.name}

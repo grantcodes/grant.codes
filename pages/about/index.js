@@ -8,6 +8,7 @@ import Online from 'components/About/Online'
 import InPerson from 'components/About/InPerson'
 import Event from 'components/About/Event'
 import Skills from 'components/About/Skills'
+import PrintPageBreak from 'components/PrintPageBreak'
 import getLastLocation from 'lib/get/last-location'
 import styles from 'css/pages/about.module.scss'
 
@@ -28,7 +29,7 @@ const About = () => {
           <Profile location={lastLocation} />
 
           <Section title="Find Me">
-            <SubSection title="Online" className="hide-print">
+            <SubSection title="Online">
               <Online />
             </SubSection>
             <SubSection title="In Person">
@@ -37,7 +38,11 @@ const About = () => {
           </Section>
         </div>
 
+        <PrintPageBreak />
+
         <Skills />
+
+        <PrintPageBreak />
 
         <Section title="Work">
           <Event
@@ -124,7 +129,7 @@ const About = () => {
 
           <Event
             as="li"
-            className="p-experience h-event"
+            className="p-experience h-event hide-print"
             start="2011-06-01"
             end="2011-08-01"
             place="University of Abertay, Dundee"
@@ -155,6 +160,8 @@ const About = () => {
             <Websites hideTitle limit={6} />
           </SubSection>
         </Section>
+
+        <PrintPageBreak />
 
         <Section title="Interests">
           <SubSection title="Travel">
@@ -193,7 +200,8 @@ const About = () => {
               <Link to="/2016/04/14/570f7196b3340f7375caa5de">
                 small electronics
               </Link>
-              , home automation, laser cutting and random low quality artwork
+              , home automation, laser cutting, screen printing and random low
+              quality artwork
             </p>
           </SubSection>
 

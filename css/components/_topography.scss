@@ -19,6 +19,9 @@
     max-width: 30rem;
     min-width: none;
   }
+  @media print {
+    background-color: var(--theme-main);
+  }
 }
 
 $animation-time: 0.7s;

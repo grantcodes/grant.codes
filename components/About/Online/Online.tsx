@@ -30,8 +30,15 @@ interface ProfileProps {
   rel?: string
 }
 
-const Profile = ({ href, name, icon, ...props }: ProfileProps) => (
-  <Tooltip text={name} id={`online-${icon}`}>
+const Profile = ({
+  id,
+  href,
+  name,
+  icon,
+  className,
+  ...props
+}: ProfileProps) => (
+  <Tooltip text={name} id={`online-${id}`} className={className}>
     {/* @ts-ignore */}
     <Card className={styles.card} style={{ margin: 0 }}>
       <a href={href} {...props} title={name}>
@@ -45,6 +52,7 @@ const Profile = ({ href, name, icon, ...props }: ProfileProps) => (
 const Online = () => (
   <div className={styles.online}>
     <Profile
+      id="web"
       name="Website grant.codes"
       icon={linkIcon}
       href="https://grant.codes"
@@ -52,6 +60,7 @@ const Online = () => (
     ></Profile>
 
     <Profile
+      id="email"
       name={`Email ${process.env.NEXT_PUBLIC_AUTHOR_EMAIL}`}
       icon={emailIcon}
       className="u-email"
@@ -61,33 +70,40 @@ const Online = () => (
 
     {!!process.env.NEXT_PUBLIC_AUTHOR_TWITTER && (
       <Profile
+        id="twitter"
         name={`Twitter ${userify(process.env.NEXT_PUBLIC_AUTHOR_TWITTER)}`}
         icon={twitterIcon}
         href={process.env.NEXT_PUBLIC_AUTHOR_TWITTER}
         rel="me"
+        className="hide-print"
       ></Profile>
     )}
 
     {!!process.env.NEXT_PUBLIC_AUTHOR_FACEBOOK && (
       <Profile
+        id="facebook"
         name={`Facebook ${userify(process.env.NEXT_PUBLIC_AUTHOR_FACEBOOK)}`}
         icon={facebookIcon}
         href={process.env.NEXT_PUBLIC_AUTHOR_FACEBOOK}
         rel="me"
+        className="hide-print"
       ></Profile>
     )}
 
     {!!process.env.NEXT_PUBLIC_AUTHOR_INSTAGRAM && (
       <Profile
+        id="instagram"
         name={`Instagram ${userify(process.env.NEXT_PUBLIC_AUTHOR_INSTAGRAM)}`}
         icon={instagramIcon}
         href={process.env.NEXT_PUBLIC_AUTHOR_INSTAGRAM}
         rel="me"
+        className="hide-print"
       ></Profile>
     )}
 
     {!!process.env.NEXT_PUBLIC_AUTHOR_GITHUB && (
       <Profile
+        id="github"
         name={`Github ${userify(process.env.NEXT_PUBLIC_AUTHOR_GITHUB)}`}
         icon={githubIcon}
         href={process.env.NEXT_PUBLIC_AUTHOR_GITHUB}
