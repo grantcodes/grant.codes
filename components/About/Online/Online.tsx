@@ -23,6 +23,7 @@ const userify = (urlString: string): string => {
 }
 
 interface ProfileProps {
+  id: string
   href: string
   name: string
   icon: string
