@@ -2,7 +2,7 @@
 
 .input,
 select,
-input,
+input:not([type='checkbox']):not([type='radio']),
 textarea {
   font-family: inherit;
   display: block;
@@ -43,6 +43,16 @@ textarea {
 input[type='radio'],
 input[type='checkbox'] {
   display: inline-block;
+  margin: 0;
+  width: 1rem;
+  height: 1rem;
+  vertical-align: middle;
+  border: 2px solid var(--main-contrast);
+  border-radius: u.$border-radius;
+  box-shadow: none;
+  outline: none;
+  background: var(--theme-mainAlt);
+  accent-color: var(--theme-contrast);
 }
 
 fieldset {

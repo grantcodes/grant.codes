@@ -1,12 +1,17 @@
+import { NextApiRequest, NextApiResponse } from 'next'
 import Stripe from 'stripe'
 
-export default async (req, res) => {
-  if (req.method === 'POST' && req.body.action === 'stripe') {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
+  if (req.method === 'POST') {
     const { token, currency, amount, monthly, description } = req.body
     if (!token || !currency || !amount) {
-      res.status(400).json({ error: 'Missing token, currency or amount' })
+      return res
+        .status(400)
+        .json({ error: 'Missing token, currency or amount' })
     }
-    const stripe = Stripe(process.env.STRIPE_PRIVATE)
+    const stripe = new Stripe(process.env.STRIPE_PRIVATE, {
+      apiVersion: '2020-08-27',
+    })
 
     try {
       if (monthly) {
@@ -31,12 +36,14 @@ export default async (req, res) => {
         console.log('[Successful recurring payment]')
         return res.json({ subscription: subscription.id })
       } else {
-        const charge = await stripe.charges.create({
+        const chargeData = {
           amount: parseInt(amount),
           currency: currency,
           description: description,
           source: token,
-        })
+        }
+        console.log('[Creating stripe charge]', chargeData)
+        const charge = await stripe.charges.create(chargeData)
         console.log('[Successful payment]')
         return res.json({ charge: charge.id })
       }
@@ -65,7 +72,6 @@ export default async (req, res) => {
 
     console.log('[Pay form redirect]', redirect)
 
-    res.writeHead(302, { Location: redirect })
+    return res.redirect(302, redirect)
   }
-  return res.status(405)
 }
