@@ -1,14 +1,25 @@
 const fetch = require('node-fetch')
 
-const ignoredAttributes = [
-  'friendly_name',
-  'icon',
-  'weight_unit',
-  'timestamp',
-  'restored',
-  'supported_features',
-  'unit_of_measurement',
+const sensors = [
+  'sensor.grant_basal_metabolism',
+  'sensor.grant_bmi',
+  'sensor.grant_body_fat',
+  'sensor.grant_body_score',
+  'sensor.grant_body_type',
+  'sensor.grant_bone_mass',
+  'sensor.grant_lean_body_mass',
+  'sensor.grant_metabolic_age',
+  'sensor.grant_muscle_mass',
+  'sensor.grant_protein',
+  'sensor.grant_visceral_fat',
+  'sensor.grant_water',
+  'sensor.grant_weight',
 ]
+
+function isNumeric(str) {
+  // if (typeof str != 'string') return false
+  return !isNaN(str) && !isNaN(parseFloat(str))
+}
 
 const getWeight = async ({ year, month }) => {
   try {
@@ -18,7 +29,6 @@ const getWeight = async ({ year, month }) => {
 
     const from = new Date(`${year}-${month}-01`)
     const to = new Date(new Date(from).setMonth(from.getMonth() + 1))
-    const sensors = ['sensor.grant_weight', 'sensor.grant_weight_2']
     const apiUrl = `${
       process.env.HOME_ASSISTANT_URL
     }/api/history/period/${from.toISOString()}?end_time=${to.toISOString()}&filter_entity_id=${Object.values(
@@ -34,35 +44,27 @@ const getWeight = async ({ year, month }) => {
       method: 'GET',
     })
     const data = await response.json()
-    const body = {
-      weight: [],
-    }
+    const body = {}
 
-    for (const change of data) {
-      for (const item of change) {
-        const time = new Date(item.last_updated)
-        if (item.state && item.state !== 'unknown') {
-          const weightVal = parseFloat(item.state)
-          if (weightVal) {
-            body.weight.push({
-              time,
-              value: weightVal,
-            })
-          }
-        }
-        if (item.attributes && typeof item.attributes === 'object') {
-          for (const attributeKey in item.attributes) {
-            if (!ignoredAttributes.includes(attributeKey)) {
-              const attributeValue = item.attributes[attributeKey]
-              if (!body[attributeKey]) {
-                body[attributeKey] = []
-              }
+    for (const sensorEntries of data) {
+      for (const entry of sensorEntries) {
+        const time = new Date(entry.last_updated)
+        const key = entry.entity_id.replace('sensor.grant_', '')
+        if (
+          entry.state &&
+          entry.state !== 'unknown' &&
+          entry.state !== 'unavailable'
+        ) {
+          const value = isNumeric(entry.state)
+            ? parseFloat(entry.state)
+            : entry.state
 
-              body[attributeKey].push({
-                time,
-                value: attributeValue,
-              })
+          if (value) {
+            if (!body[key]) {
+              body[key] = []
             }
+
+            body[key].push({ time, value })
           }
         }
       }
