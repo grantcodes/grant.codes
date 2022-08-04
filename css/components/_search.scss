@@ -15,7 +15,8 @@
   }
 }
 
-.search__input {
+// Specificity hack needed 😢
+.search .search__input:not([type='checkbox']):not([type='radio']) {
   margin: 0;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
