@@ -82,6 +82,9 @@ export async function getStaticProps(ctx) {
           for (const key in monthData.body) {
             if (monthData.body.hasOwnProperty(key)) {
               const values = monthData.body[key]
+              if (!yearData.body[key]) {
+                yearData.body[key] = []
+              }
               yearData.body[key].push(...values)
             }
           }
