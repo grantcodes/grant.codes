@@ -31,7 +31,7 @@
     "react-image-lightbox": "^5.1.4",
     "react-leaflet": "^2.7.0",
     "react-stripe-elements": "^6.1.2",
-    "recharts": "^1.8.5",
+    "recharts": "^2.1.14",
     "sass": "^1.45.0",
     "sharp": "^0.29.3",
     "stripe": "^8.194.0",
