@@ -70,11 +70,11 @@ $progress-radius: math.div($progress-height, 2);
 }
 
 .skillDetails {
-  overflow: hidden;
-  @media print {
-    display: block !important;
-    height: auto !important;
-  }
+  // overflow: hidden;
+  // @media print {
+  //   display: block !important;
+  //   height: auto !important;
+  // }
 }
 
 .subskills {
