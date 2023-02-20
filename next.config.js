@@ -7,6 +7,10 @@ const subdomains = [
 ]
 
 const config = {
+  experimental: {
+    appDir: true,
+    serverComponentsExternalPackages: ['canvas'],
+  },
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,

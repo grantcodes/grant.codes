@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import PropTypes from 'prop-types'
-import { useRouter } from 'next/router'
+import { redirect } from 'next/navigation'
 import Button from '../Button'
 
 import {
@@ -21,7 +21,6 @@ const StripeCheckout = ({
   const [canMakePayment, setCanMakePayment] = useState(false)
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(false)
-  const router = useRouter()
 
   useEffect(() => {
     setupPaymentRequest()
@@ -102,7 +101,7 @@ const StripeCheckout = ({
   }
 
   if (success) {
-    router.push('/pay/thanks')
+    redirect('/pay/thanks')
   }
 
   return (

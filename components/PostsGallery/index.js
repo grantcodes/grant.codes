@@ -1,3 +1,4 @@
+'use client'
 import React, { Fragment, useState } from 'react'
 import Image from 'next/image'
 import classnames from 'classnames'

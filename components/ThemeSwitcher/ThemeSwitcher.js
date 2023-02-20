@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useRef } from 'react'
 import setTheme from './themer'
 import useLongPress from 'lib/hooks/use-long-press'

@@ -1,24 +1,31 @@
+'use client'
+
+// TODO: update for next 13.
+
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
 import Button from '../../Button'
 
 const Pagination = ({ nextText, previousText, noNext, ...props }) => {
-  let {
-    asPath,
-    route,
-    query: { page = 1 },
-  } = useRouter()
+  // let {
+  //   asPath,
+  //   route,
+  //   query: { page = 1 },
+  // } = useRouter()
+  let page = 1
+  let route = ''
+  let asPath = ''
 
   const next = parseInt(page) + 1
   const previous = parseInt(page) - 1
 
-  if (!asPath.includes('/page/')) {
-    asPath += '/page/' + page
-    route += '/page/[page]'
-    asPath = asPath.replace('//', '/')
-    route = route.replace('//', '/')
-  }
+  // if (!asPath.includes('/page/')) {
+  //   asPath += '/page/' + page
+  //   route += '/page/[page]'
+  //   asPath = asPath.replace('//', '/')
+  //   route = route.replace('//', '/')
+  // }
 
   return (
     <nav className="pagination" {...props}>

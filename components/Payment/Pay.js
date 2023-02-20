@@ -1,9 +1,10 @@
+'use client'
+
 import React, { useState, useEffect } from 'react'
 import Head from 'next/head'
-import { useRouter } from 'next/router'
+import { redirect } from 'next/navigation'
 import { StripeProvider, Elements } from 'react-stripe-elements'
 import StripeCheckout from './StripeCheckout'
-import { NextSeo } from 'next-seo'
 import Card from '../Card'
 import Button from '../Button'
 
@@ -14,8 +15,8 @@ const Pay = ({
   code,
   monthly = false,
   reason = null,
+  title = 'Pay Me!',
 }) => {
-  const router = useRouter()
   const [stripe, setStripe] = useState(null)
 
   const loadStripe = () => {
@@ -42,14 +43,8 @@ const Pay = ({
     }
   }
 
-  let title = `Pay me ${symbol}${amount}`
-  if (monthly) {
-    title += ' Monthly'
-  }
-
   return (
     <>
-      <NextSeo title={title} />
       <h1 className="page-title">{title}</h1>
       <Card>
         {paymentLink ? (
@@ -58,7 +53,7 @@ const Pay = ({
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => {
-              router.push('/pay/thanks')
+              redirect('/pay/thanks')
             }}
           >
             Click to pay {symbol + amount}

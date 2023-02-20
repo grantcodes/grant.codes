@@ -26,11 +26,7 @@ const WrappedLink = ({ to = null, as = null, linkAs = null, ...props }) => {
     return <a href={to} {...props} />
   }
 
-  return (
-    <Link href={to} as={linkAs || as}>
-      <a {...props} />
-    </Link>
-  )
+  return <Link href={to} as={linkAs || as} {...props}></Link>
 }
 
 export default WrappedLink

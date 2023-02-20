@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from 'react'
 import classnames from 'classnames'
 import styles from './Tooltip.module.scss'
@@ -25,7 +27,7 @@ const Tooltip = ({ children, id, text, className, ...props }: TooltipProps) => {
       <span
         id={id}
         className={styles.tooltip}
-        role="tooltip"
+        role='tooltip'
         hidden={!open}
         style={{ display: open ? 'block' : 'none' }}
       >

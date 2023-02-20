@@ -1,5 +1,4 @@
 import currencies from './currencies'
-import { NextSeo } from 'next-seo'
 import Card from '../Card'
 import Button from '../Button'
 import styles from 'css/pages/payment.module.scss'
@@ -15,7 +14,6 @@ const PaymentForm = ({ monthly = false }) => {
     <>
       <h1 className="page-title">Give Me Money!</h1>
       <Card>
-        <NextSeo title="Pay Me" />
         <p>First I need to know how much you are paying me</p>
 
         <form method="post" action="/api/pay">

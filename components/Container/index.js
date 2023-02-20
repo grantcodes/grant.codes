@@ -4,7 +4,6 @@ import Topography from 'components/Topography'
 import Header from './Header'
 import Nav from './Nav'
 import Footer from './Footer'
-import Meta from './DefaultMeta'
 
 // const Topography = asyncComponent({
 //   loader: () =>
@@ -13,9 +12,8 @@ import Meta from './DefaultMeta'
 //       : Promise.resolve(() => null),
 // })
 
-const Container = ({ children, className }) => (
+const Container = ({ children, className = '' }) => (
   <>
-    <Meta />
     <div className={classnames('grid', 'container', className)}>
       <Header />
       <Nav />

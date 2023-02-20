@@ -1,9 +1,11 @@
+'use client'
+
 import React, { useState } from 'react'
 import classnames from 'classnames'
 import Link from '../../Link'
 import Search from './Search'
 import Icon from 'components/Icon'
-import useContext from 'lib/hooks/use-context'
+// import useContext from 'lib/hooks/use-context'
 import menuIcon from 'eva-icons/fill/svg/menu.svg'
 import closeIcon from 'eva-icons/fill/svg/close.svg'
 
@@ -12,7 +14,9 @@ const shownLinkCount = 4
 const Nav = () => {
   const [targeted, setTargeted] = useState(false)
   const [moreHidden, setMoreHidden] = useState(true)
-  const { isAdmin } = useContext()
+  // TODO: Admin functionality.
+  // const { isAdmin } = useContext()
+  const isAdmin = false
 
   const navLinks = [
     {
