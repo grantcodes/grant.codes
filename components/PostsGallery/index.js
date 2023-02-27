@@ -70,7 +70,6 @@ const PostsGallery = ({ posts = [], type, maxWidth = 33.333 }) => {
                 src={photo.photo}
                 width={200}
                 height={200}
-                layout="responsive"
                 sizes="(min-width: 1135px) 172px, (min-width: 468px) 20vw, 33vw"
                 loader={imageLoader}
               />

@@ -1,12 +1,12 @@
-import { NextSeo } from 'next-seo'
 import classnames from 'classnames'
 import pluralize from 'pluralize'
 import Card from 'components/Card'
-import LeafletMap from 'components/LeafletMap'
+// import LeafletMap from 'components/LeafletMap'
 import Button from 'components/Button'
 import BodyGraph from './BodyGraph'
 import styles from 'css/pages/monthly-summary.module.scss'
 
+// TODO: SEO Title
 const DataSummary = ({
   title,
   postTypes,
@@ -15,7 +15,6 @@ const DataSummary = ({
   pagination = null,
 }) => (
   <>
-    <NextSeo title={title} />
     <h1 className="page-title">{title}</h1>
 
     {!!postTypes && (
@@ -35,13 +34,14 @@ const DataSummary = ({
       </Card>
     )}
 
-    {!!geojson && (
+    {/* TODO: Get map working again */}
+    {/* {!!geojson && (
       <Card title="Map">
         <div className="card__breakout">
           <LeafletMap geojson={geojson} />
         </div>
       </Card>
-    )}
+    )} */}
 
     {!!body && (
       <Card title="Body">

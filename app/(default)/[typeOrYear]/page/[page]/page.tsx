@@ -1,34 +1,28 @@
 import PostList from 'components/PostList'
+import getPosts from 'lib/get/posts'
 import getTypes from 'lib/get/post-types'
 import getPageCount from 'lib/get/page-count'
 
-const Page = ({ posts = [] }) => (
-  <>
-    <PostList posts={posts} type="home" />
-  </>
-)
+const Page = async ({ params }) => {
+  const posts = await getPosts({ query: params })
+  return <PostList posts={posts} type='home' params={params} />
+}
 
-export async function getStaticPaths() {
-  const paths = []
+export async function generateStaticParams () {
+  const params = []
   const ingoredTypes = ['photos', 'journals']
   // Get all types
   let types = await getTypes(true)
-  types = types.filter((type) => !ingoredTypes.includes(type))
+  types = types.filter(type => !ingoredTypes.includes(type))
   for (const type of types) {
     // Get post count for each post type
     const pageCount = await getPageCount({ type })
     for (let pageNumber = 1; pageNumber < pageCount; pageNumber++) {
-      paths.push({ params: { page: `${pageNumber}`, typeOrYear: type } })
+      params.push({ page: `${pageNumber}`, typeOrYear: type })
     }
   }
 
-  // Return the paths, with a fallback to dynamically new / old categories
-  return {
-    paths,
-    fallback: true,
-  }
+  return params
 }
-
-export { getStaticProps } from 'lib/get/posts'
 
 export default Page

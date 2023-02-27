@@ -1,6 +1,5 @@
-import Script from 'next/script'
+import type { Metadata } from 'next'
 import { daily as dailyTheme } from '@grantcodes/themer'
-import Container from 'components/Container'
 
 // TODO: Improve this?
 import 'css/base/index.scss'
@@ -9,13 +8,13 @@ import 'css/pages/index.scss'
 import 'react-image-lightbox/style.css'
 import 'leaflet/dist/leaflet.css'
 
-const url = process.env.NEXT_PUBLIC_URL
-const name = process.env.NEXT_PUBLIC_SITE_NAME
-const description = process.env.NEXT_PUBLIC_META_DESCRIPTION
-const image = JSON.parse(process.env.NEXT_PUBLIC_META_IMAGE)
-const authorName = process.env.NEXT_PUBLIC_AUTHOR_NAME
+const url = process.env.NEXT_PUBLIC_URL ?? ''
+const name = process.env.NEXT_PUBLIC_SITE_NAME ?? ''
+const description = process.env.NEXT_PUBLIC_META_DESCRIPTION ?? ''
+const image = JSON.parse(process.env.NEXT_PUBLIC_META_IMAGE ?? '')
+const authorName = process.env.NEXT_PUBLIC_AUTHOR_NAME ?? ''
 const authorPhoto = process.env.NEXT_PUBLIC_AUTHOR_PHOTO
-const authorEmail = process.env.NEXT_PUBLIC_AUTHOR_EMAIL
+const authorEmail = process.env.NEXT_PUBLIC_AUTHOR_EMAIL ?? ''
 const fb = process.env.NEXT_PUBLIC_AUTHOR_FACEBOOK
 const tw = process.env.NEXT_PUBLIC_AUTHOR_TWITTER
 const ig = process.env.NEXT_PUBLIC_AUTHOR_INSTAGRAM
@@ -24,7 +23,7 @@ const micropub = process.env.NEXT_PUBLIC_MICROPUB_URL
 const hub = process.env.NEXT_PUBLIC_HUB
 const indieauth = process.env.NEXT_PUBLIC_INDIEAUTH_ENDPOINT
 const microsub = process.env.NEXT_PUBLIC_MICROSUB_ENDPOINT
-const twHandle = process.env.NEXT_PUBLIC_TWITTER_HANDLE
+const twHandle = process.env.NEXT_PUBLIC_TWITTER_HANDLE ?? ''
 const api = process.env.NEXT_PUBLIC_API_URL
 
 const theme = dailyTheme()
@@ -148,20 +147,20 @@ export default function RootLayout ({
   )
 }
 
-export const metadata = {
+export const metadata: Metadata = {
   title: {
     default: name,
     template: `%s ⁂ ${name}`,
   },
   applicationName: name,
   description: description,
-  authors: [{ name: authorName, url: url, email: authorEmail }],
+  authors: [{ name: authorName, url: url }],
   creator: authorName,
   publisher: authorName,
   formatDetection: {
-    email: 'no',
-    address: 'no',
-    telephone: 'no',
+    email: false,
+    address: false,
+    telephone: false,
   },
   themeColor: theme.main,
   manifest: '/manifest.json',
@@ -284,9 +283,9 @@ export const metadata = {
     ],
   },
   openGraph: {
+    type: 'website',
     title: name,
     description,
-    type: 'website',
     locale: 'en_GB',
     url: url,
     site_name: name,
@@ -294,8 +293,7 @@ export const metadata = {
   },
   twitter: {
     creator: `@${twHandle}`,
-    handle: twHandle,
     site: twHandle,
-    cardType: 'summary_large_image',
+    card: 'summary_large_image',
   },
 }

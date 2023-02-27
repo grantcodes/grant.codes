@@ -6,7 +6,7 @@ const Page = async ({ params }) => {
     query: { ...params, typeOrYear: 'photo' },
     limit: 50,
   })
-  return <PostList posts={posts} type='photos' title='Photos' />
+  return <PostList posts={posts} type='photos' title='Photos' params={params} />
 }
 
 export default Page

@@ -242,12 +242,12 @@ const Post = ({ compact, post, className = '' }) => {
 
         {property('checkin', ({ value }) => (
           <div className="card__breakout">
-            <Map
+            {/* <Map
               location={value}
               defaultWidth={528}
               defaultHeight={224}
               theme="basic"
-            />
+            /> */}
           </div>
         ))}
 

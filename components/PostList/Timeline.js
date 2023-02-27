@@ -1,4 +1,3 @@
-import React from 'react'
 import Post from '../Post'
 import Pagination from '../Container/Pagination'
 

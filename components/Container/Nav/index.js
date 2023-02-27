@@ -14,7 +14,7 @@ const shownLinkCount = 4
 const Nav = () => {
   const [targeted, setTargeted] = useState(false)
   const [moreHidden, setMoreHidden] = useState(true)
-  // TODO: Admin functionality.
+  // TODO: Admin functionality. next/headers/previewData doesn't work atm because this is a client component.
   // const { isAdmin } = useContext()
   const isAdmin = false
 

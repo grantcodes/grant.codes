@@ -27,10 +27,6 @@
 
 .photo {
   display: block;
-  width: 100%;
+  aspect-ratio: 1;
   object-fit: cover;
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
 }

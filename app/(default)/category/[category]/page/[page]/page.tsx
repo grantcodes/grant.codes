@@ -8,7 +8,7 @@ const Page = async ({ params }) => {
 
   return (
     <>
-      <PostList posts={posts} type='home' />
+      <PostList posts={posts} type='home' params={params} />
     </>
   )
 }

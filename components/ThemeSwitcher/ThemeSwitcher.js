@@ -38,8 +38,6 @@ const ThemeSwitcher = () => {
     }
   }, [])
 
-  // TODO: Maybe add a way to reset / randomize colors
-
   return (
     <div className="theme-switcher" {...longPressProps}>
       <label htmlFor="theme-switcher__color" className="theme-switcher__label">

@@ -1,11 +1,11 @@
-import NotFound from '../NotFound'
+import { notFound } from 'next/navigation'
 import Timeline from './Timeline'
 import Gallery from './Gallery'
 import Map from './Map'
 
-const PostList = ({ posts, type = '', title = '' }) => {
+const PostList = ({ posts, type = '', title = '', params = {} }) => {
   if (posts && posts.length === 0) {
-    return <NotFound />
+    return notFound()
   }
 
   let Layout = Timeline
@@ -18,7 +18,7 @@ const PostList = ({ posts, type = '', title = '' }) => {
       break
   }
 
-  return <Layout posts={posts} title={title} />
+  return <Layout posts={posts} title={title} params={params} />
 }
 
 export default PostList

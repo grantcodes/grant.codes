@@ -1,3 +1,5 @@
+'use client'
+
 import { LineChart, Line, Tooltip, ResponsiveContainer } from 'recharts'
 
 const BodyGraph = (props) => {

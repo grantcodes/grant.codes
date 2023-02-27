@@ -3,7 +3,7 @@ import getPosts from 'lib/get/posts'
 
 const Home = async ({ params }) => {
   const posts = await getPosts({ query: params })
-  return <PostList posts={posts} type='home' />
+  return <PostList posts={posts} type='home' params={params} />
 }
 
 export const metadata = {

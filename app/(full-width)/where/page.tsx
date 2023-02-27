@@ -1,27 +1,9 @@
-'use client'
-
-import { useState, useEffect } from 'react'
 import classnames from 'classnames'
-import moment from 'moment'
-import Map from 'components/Map'
-import getLastLocation from 'lib/get/last-location'
 import styles from 'css/pages/where.module.scss'
+import { WhereLocation } from './components/Location'
+import type { Metadata } from 'next'
 
 const Where = () => {
-  const [location, setLocation] = useState(null)
-
-  // Get location on mount
-  useEffect(() => {
-    getLastLocation()
-      .then(loc => {
-        setLocation(loc)
-      })
-      .catch(err => {
-        console.error('Error getting location', err)
-        setLocation(false)
-      })
-  }, [])
-
   return (
     <>
       <div className={styles.wrapper}>
@@ -30,31 +12,7 @@ const Where = () => {
         <div className={classnames('card card--glass', styles.card)}>
           <noscript>Sorry, you need JS enabled to find out where I am</noscript>
 
-          {location === null && (
-            <p>Finding {process.env.NEXT_PUBLIC_AUTHOR_NAME}...</p>
-          )}
-
-          {location === false && (
-            <p>{process.env.NEXT_PUBLIC_AUTHOR_NAME} not found 🕵️‍</p>
-          )}
-
-          {!!location && (
-            <>
-              <p>
-                {process.env.NEXT_PUBLIC_AUTHOR_NAME} was last spotted{' '}
-                {moment(location.isotst).fromNow()}
-                {!!location.addr && `at ${location.addr}`}
-              </p>
-              <dl className={styles['device-info']}>
-                {!!location.batt && (
-                  <>
-                    <dt>🔋 Battery %</dt>
-                    <dd>{location.batt}</dd>
-                  </>
-                )}
-              </dl>
-            </>
-          )}
+          <WhereLocation />
         </div>
       </div>
 
@@ -70,11 +28,11 @@ const Where = () => {
   )
 }
 
-export default Where
-
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Where am I?',
   robots: {
     index: false,
   },
 }
+
+export default Where

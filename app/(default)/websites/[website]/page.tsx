@@ -33,23 +33,15 @@ const Website = ({ title, screenshot, url, content = '' }) => (
   </Card>
 )
 
-// export const getStaticProps = ({ params }) => {
-//   const slug = params.website
-//   return {
-//     props: websites.find(website => website.slug === slug),
-//   }
-// }
-
-// /**
-//  * Get all websites as static paths
-//  */
-// export const getStaticPaths = () => ({
-//   paths: websites.map(website => ({ params: { website: website.slug } })),
-//   fallback: false,
-// })
-
 export async function generateStaticParams () {
   return websites.map(website => ({ website: website.slug }))
+}
+
+export async function generateMetadata ({ params }) {
+  const website = websites.find(w => w.slug === params?.website)
+  return {
+    title: website?.title ?? 'Project',
+  }
 }
 
 export default function WebsitePage ({ params }) {
@@ -60,12 +52,4 @@ export default function WebsitePage ({ params }) {
   }
 
   return <Website {...website} />
-}
-
-// TODO: Not working for some reason.
-export async function generateMetadata ({ params }) {
-  const website = websites.find(w => w.slug === params?.website)
-  return {
-    title: website?.title ?? 'Project',
-  }
 }

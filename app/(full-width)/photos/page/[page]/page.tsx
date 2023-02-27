@@ -8,7 +8,9 @@ const Page = async ({ params }) => {
     query: { ...params, typeOrYear: 'photos' },
     limit: 50,
   })
-  return <PostList posts={posts} type='photos' title={`Photos`} />
+  return (
+    <PostList posts={posts} type='photos' title={`Photos`} params={params} />
+  )
 }
 
 export async function getStaticPaths () {
