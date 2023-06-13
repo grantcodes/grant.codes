@@ -18,7 +18,7 @@ const config = {
   images: {
     domains: ['images.weserv.nl', 'backend.grant.codes'],
   },
-  rewrites() {
+  async rewrites() {
     return {
       beforeFiles: subdomains.map((d) => ({
         source: '/',
@@ -32,6 +32,15 @@ const config = {
         basePath: false,
       })),
     }
+  },
+  async redirects() {
+    return [
+      {
+        source: '/.well-known/:wellknown*',
+        destination: 'https://fed.brid.gy/.well-known/:wellknown*',
+        permanent: false,
+      },
+    ]
   },
 }
 
