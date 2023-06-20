@@ -1,7 +1,7 @@
 import pluralize from 'pluralize'
 import micropub from 'lib/micropub'
 
-const getPostTypes = async (plural = false) => {
+const getPostTypes = async (plural: boolean = false): Promise<string[]> => {
   try {
     const { 'post-types': types = [] } = await micropub.query('post-types')
 

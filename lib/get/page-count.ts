@@ -1,4 +1,4 @@
-const getPageCount = async (query = {}, limit = 10) => {
+const getPageCount = async (query = {}, limit = 10): Promise<number> => {
   const url = process.env.NEXT_PUBLIC_API_URL + '/api/page-count'
   let headers = {
     Accept: 'application/json',
