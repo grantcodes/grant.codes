@@ -1,10 +1,27 @@
 import classnames from 'classnames'
 import pluralize from 'pluralize'
 import Card from 'components/Card'
-// import LeafletMap from 'components/LeafletMap'
-import Button from 'components/Button'
+import { LeafletMap } from 'components/LeafletMap'
+import { Button, ButtonProps } from 'components/Button'
 import BodyGraph from './BodyGraph'
 import styles from 'css/pages/monthly-summary.module.scss'
+
+interface DataSummaryPostTypes {
+  [postTypeKey: string]: number
+}
+
+interface DataSummaryPagination {
+  next?: ButtonProps
+  previous?: ButtonProps
+}
+
+interface DataSummaryProps {
+  title: string
+  postTypes: DataSummaryPostTypes
+  geojson: any
+  body: any
+  pagination?: DataSummaryPagination
+}
 
 // TODO: SEO Title
 const DataSummary = ({
@@ -12,15 +29,15 @@ const DataSummary = ({
   postTypes,
   geojson,
   body,
-  pagination = null,
-}) => (
+  pagination,
+}: DataSummaryProps) => (
   <>
-    <h1 className="page-title">{title}</h1>
+    <h1 className='page-title'>{title}</h1>
 
     {!!postTypes && (
-      <Card title="Posts">
+      <Card title='Posts'>
         <ul className={classnames('card__breakout', styles.counts)}>
-          {Object.keys(postTypes).map((type) => (
+          {Object.keys(postTypes).map(type => (
             <li className={styles.counts__count} key={`type-${type}`}>
               <span className={styles.counts__count__number}>
                 {postTypes[type].toString()}
@@ -35,22 +52,22 @@ const DataSummary = ({
     )}
 
     {/* TODO: Get map working again */}
-    {/* {!!geojson && (
-      <Card title="Map">
-        <div className="card__breakout">
+    {!!geojson && (
+      <Card title='Map'>
+        <div className='card__breakout'>
           <LeafletMap geojson={geojson} />
         </div>
       </Card>
-    )} */}
+    )}
 
     {!!body && (
-      <Card title="Body">
+      <Card title='Body'>
         <BodyGraph {...body} />
       </Card>
     )}
 
     {!!pagination && (
-      <nav className="pagination">
+      <nav className='pagination'>
         {!!pagination.previous && (
           <Button
             to={pagination.previous.to}
@@ -70,4 +87,4 @@ const DataSummary = ({
   </>
 )
 
-export default DataSummary
+export { DataSummary }

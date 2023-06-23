@@ -1,5 +1,5 @@
 import PostList from 'components/PostList'
-import DataSummary from 'components/DataSummary'
+import { DataSummary } from 'components/DataSummary'
 import getTypes from 'lib/get/post-types'
 import getMonthData from 'lib/get/month-data'
 import getMonthDataFiles from 'lib/get/month-data-files'

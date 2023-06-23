@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation'
 import { StripeProvider, Elements } from 'react-stripe-elements'
 import StripeCheckout from './StripeCheckout'
 import Card from '../Card'
-import Button from '../Button'
+import { Button } from '../Button'
 
 const Pay = ({
   paymentLink,

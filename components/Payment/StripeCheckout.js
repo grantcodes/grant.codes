@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import PropTypes from 'prop-types'
 import { redirect } from 'next/navigation'
-import Button from '../Button'
+import { Button } from '../Button'
 
 import {
   injectStripe,

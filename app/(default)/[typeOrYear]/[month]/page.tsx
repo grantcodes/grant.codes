@@ -1,4 +1,4 @@
-import DataSummary from 'components/DataSummary'
+import { DataSummary } from 'components/DataSummary'
 import getMonthData from 'lib/get/month-data'
 import getMonthDataFiles from 'lib/get/month-data-files'
 

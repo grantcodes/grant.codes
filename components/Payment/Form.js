@@ -1,6 +1,6 @@
 import currencies from './currencies'
 import Card from '../Card'
-import Button from '../Button'
+import { Button } from '../Button'
 import styles from 'css/pages/payment.module.scss'
 
 let reason = ''

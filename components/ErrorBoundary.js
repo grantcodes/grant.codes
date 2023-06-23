@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import ErrorMessage from './ErrorMessage'
-import Button from './Button'
+import { Button } from './Button'
 
 class ErrorBoundary extends Component {
   constructor(props) {

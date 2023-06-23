@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import Button from '../../Button'
+import { Button } from '../../Button'
 import Icon from '../../Icon'
 import searchIcon from 'eva-icons/fill/svg/search.svg'
 

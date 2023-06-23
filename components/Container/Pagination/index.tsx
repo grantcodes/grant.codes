@@ -4,7 +4,7 @@
 //       But it's the best way to get access to the router.
 
 import { usePathname } from 'next/navigation'
-import Button from 'components/Button'
+import { Button } from 'components/Button'
 
 interface PaginationProps extends React.HTMLAttributes<HTMLElement> {
   nextText: string

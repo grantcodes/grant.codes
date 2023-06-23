@@ -1,5 +1,5 @@
 import Tile from 'components/Websites/Tile'
-import Button from 'components/Button'
+import { Button } from 'components/Button'
 import websites from 'data/websites'
 import styles from 'css/pages/websites.module.scss'
 

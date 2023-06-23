@@ -2,7 +2,7 @@
 
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
-import PigeonMap from 'pigeon-maps'
+import { Map as PigeonMap } from 'pigeon-maps'
 import AvatarMarker from './AvatarMarker'
 import getLatLngFromMf2 from './lib/getLatLngFromMf2'
 import styles from '../../css/components/map.module.scss'

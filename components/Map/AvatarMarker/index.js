@@ -1,6 +1,6 @@
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
-import Overlay from 'pigeon-overlay'
+import { Overlay } from 'pigeon-maps'
 import styles from 'css/components/map.module.scss'
 
 const AvatarMarker = ({ image, alt, highlight, ...props }) => (
