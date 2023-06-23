@@ -1,6 +1,10 @@
+import { NextApiRequest, NextApiResponse } from 'next'
 import auth from 'lib/auth'
 
-export default async function loginRoute(req, res) {
+export default async function loginRoute (
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   if (req?.query?.code) {
     try {
       const { code } = req.query
@@ -19,5 +23,5 @@ export default async function loginRoute(req, res) {
     return res.end()
   }
 
-  return res.error({ error: 'Something not defined' })
+  return res.status(500).send({ error: 'Something not defined' })
 }

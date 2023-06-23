@@ -1,4 +1,6 @@
-export default async (req, res) => {
+import { NextApiRequest, NextApiResponse } from 'next'
+
+export default async (req: NextApiRequest, res: NextApiResponse) => {
   let location = false
   try {
     const url = process.env.OWNTRACKS_URL
@@ -25,7 +27,7 @@ export default async (req, res) => {
     }
   } catch (err) {
     console.error('[Error getting owntracks location]', err)
-    throw new Error('Error getting owntracks location')
+    return res.status(500).send({ error: 'Error getting owntracks location' })
   }
 
   res.statusCode = 200
