@@ -61,16 +61,28 @@ const Footer = () => (
     <p className="h-card screen-reader-text">
       <span className="p-name">{process.env.NEXT_PUBLIC_AUTHOR_NAME}</span>
       <br />
-      <a href={process.env.NEXT_PUBLIC_URL} className="u-url">
+      <a href={process.env.NEXT_PUBLIC_URL} className="u-url" rel="me">
         {process.env.NEXT_PUBLIC_SITE_NAME}
       </a>
       <a
-        className="u-email"
+        className="p-email"
         href={'mailto:' + process.env.NEXT_PUBLIC_AUTHOR_EMAIL}
       >
         {process.env.NEXT_PUBLIC_AUTHOR_EMAIL}
       </a>
+      {!!process.env.NEXT_PUBLIC_META_DESCRIPTION && (
+        <data
+          className="p-note"
+          value={process.env.NEXT_PUBLIC_META_DESCRIPTION}
+        />
+      )}
       <data className="u-photo" value={process.env.NEXT_PUBLIC_AUTHOR_PHOTO} />
+      {!!process.env.NEXT_PUBLIC_AUTHOR_FEATURED && (
+        <data
+          className="u-featured"
+          value={process.env.NEXT_PUBLIC_AUTHOR_FEATURED}
+        />
+      )}
     </p>
     <ThemeSwitcher />
   </footer>
