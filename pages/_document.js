@@ -190,6 +190,11 @@ const links = [
     title: `${name} | microformats2 json feed`,
     href: `${micropub}/plugin/feeds/mf2json`,
   },
+  {
+    rel: 'pgpkey',
+    type: 'application/pgp-keys',
+    href: '/key.gpg',
+  },
 ]
 
 let themeCss = ':root {'
