@@ -1,6 +1,6 @@
 'use client'
 import React, { Fragment, useState } from 'react'
-import Image from "next/legacy/image"
+import Image from "next/image"
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
 import FullscreenPhoto from '../FullscreenPhoto'
@@ -70,9 +70,12 @@ const PostsGallery = ({ posts = [], type, maxWidth = 33.333 }) => {
                 src={photo.photo}
                 width={200}
                 height={200}
-                sizes="(min-width: 1135px) 172px, (min-width: 468px) 20vw, 33vw"
                 loader={imageLoader}
-              />
+                sizes="(min-width: 1135px) 172px, (min-width: 468px) 20vw, 33vw"
+                style={{
+                  maxWidth: "100%",
+                  height: "auto"
+                }} />
             </Link>
           ) : (
             <Fragment key={'posts-gallery-photo-' + i}>
@@ -91,10 +94,12 @@ const PostsGallery = ({ posts = [], type, maxWidth = 33.333 }) => {
                     alt={photo.alt}
                     width={200}
                     height={200}
-                    layout="responsive"
-                    sizes="(min-width: 1135px) 172px, (min-width: 468px) 20vw, 33vw"
                     loader={imageLoader}
-                  />
+                    sizes="(min-width: 1135px) 172px, (min-width: 468px) 20vw, 33vw"
+                    style={{
+                      width: "100%",
+                      height: "auto"
+                    }} />
                   <data className="u-photo" value={photo.photo} />
                 </Link>
               </div>
@@ -136,7 +141,7 @@ const PostsGallery = ({ posts = [], type, maxWidth = 33.333 }) => {
         />
       )}
     </Fragment>
-  )
+  );
 }
 
 PostsGallery.propTypes = {

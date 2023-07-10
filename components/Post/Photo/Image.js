@@ -1,5 +1,5 @@
 import React from 'react'
-import Image from "next/legacy/image"
+import Image from "next/image"
 import PropTypes from 'prop-types'
 
 const PostPhotoImage = ({
@@ -17,9 +17,12 @@ const PostPhotoImage = ({
         width={width}
         height={height}
         className={className}
-        layout="responsive"
-      />
-    )
+        sizes="100vw"
+        style={{
+          width: "100%",
+          height: "auto"
+        }} />
+    );
   }
 
   return <img src={src} alt={alt} className={className} loading="lazy" />
