@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Lightbox from 'react-image-lightbox'
@@ -17,7 +19,7 @@ const FullscreenPhoto = ({
   previousPhoto,
 }) => {
   const [open, setOpen] = useState(true)
-  const [previousUrl, setPreviousUrl] = useState(previousUrl)
+  const [previousUrl, setPreviousUrl] = useState(null)
 
   useEffect(() => {
     if (typeof window !== 'undefined' && !previousUrl) {
