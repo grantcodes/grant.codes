@@ -1,6 +1,6 @@
 'use client'
 import React, { Fragment, useState } from 'react'
-import Image from 'next/image'
+import Image from "next/legacy/image"
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
 import FullscreenPhoto from '../FullscreenPhoto'
