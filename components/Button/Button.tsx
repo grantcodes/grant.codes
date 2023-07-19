@@ -14,6 +14,7 @@ interface ButtonProps
   floating?: boolean
   to?: string
   as?: LinkProps['as']
+  target?: string
 }
 
 const Button = ({

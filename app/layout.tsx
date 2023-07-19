@@ -5,7 +5,6 @@ import { daily as dailyTheme } from '@grantcodes/themer'
 import 'css/base/index.scss'
 import 'css/components/index.scss'
 import 'css/pages/index.scss'
-import 'react-image-lightbox/style.css'
 import 'leaflet/dist/leaflet.css'
 
 const url = process.env.NEXT_PUBLIC_URL ?? ''

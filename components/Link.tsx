@@ -6,6 +6,7 @@ interface LinkProps extends Omit<NextLinkProps, 'href'> {
   linkAs?: string | React.ReactElement
   children?: React.ReactNode
   style?: React.CSSProperties
+  className?: string
 }
 
 const WrappedLink = ({ to, as, linkAs, ...props }: LinkProps) => {
