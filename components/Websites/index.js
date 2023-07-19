@@ -3,7 +3,7 @@ import { Button } from 'components/Button'
 import websites from 'data/websites'
 import styles from 'css/pages/websites.module.scss'
 
-const Websites = ({ limit = null }) => {
+const Websites = ({ limit = 0 }) => {
   const items = limit ? websites.slice(0, limit) : websites
   const showMore = limit && websites.length > limit
 

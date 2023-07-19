@@ -2,7 +2,7 @@ import styles from './Section.module.scss'
 import classnames from 'classnames'
 
 interface AboutSubSectionProps {
-  title: string
+  title?: string
   children: React.ReactNode
   className?: string
 }
@@ -13,7 +13,7 @@ const AboutSubSection = ({
   className,
 }: AboutSubSectionProps) => (
   <div className={classnames(styles.subsection, className)}>
-    <h3 className={styles.subtitle}>{title}</h3>
+    {!!title && <h3 className={styles.subtitle}>{title}</h3>}
     <div className={styles.subcontent}>{children}</div>
   </div>
 )

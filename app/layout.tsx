@@ -101,7 +101,7 @@ const links = [
   },
 ]
 
-export default function RootLayout ({
+export default function RootLayout({
   // Layouts must accept a children prop.
   // This will be populated with nested layouts or pages
   children,
@@ -109,7 +109,7 @@ export default function RootLayout ({
   children: React.ReactNode
 }) {
   return (
-    <html lang='en'>
+    <html lang="en">
       <head>
         {/* Script to load theme without flash */}
         <script
@@ -288,7 +288,7 @@ export const metadata: Metadata = {
     description,
     locale: 'en_GB',
     url: url,
-    site_name: name,
+    siteName: name,
     images: [image],
   },
   twitter: {

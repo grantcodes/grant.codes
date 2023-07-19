@@ -9,8 +9,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         .status(400)
         .json({ error: 'Missing token, currency or amount' })
     }
-    const stripe = new Stripe(process.env.STRIPE_PRIVATE, {
-      apiVersion: '2020-08-27',
+    const stripe = new Stripe(process.env.STRIPE_PRIVATE as string, {
+      apiVersion: '2022-11-15',
     })
 
     try {

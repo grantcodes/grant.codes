@@ -7,11 +7,14 @@ const getPageCount = async (query = {}, limit = 10): Promise<number> => {
   }
 
   try {
+    const controller = new AbortController()
+    setTimeout(() => controller.abort(), 15000)
+
     const res = await fetch(url, {
       headers,
       method: 'POST',
       body: JSON.stringify({ query, limit }),
-      timeout: 15000,
+      signal: controller.signal,
     })
 
     const { pageCount = 0 } = await res.json()

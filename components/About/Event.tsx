@@ -15,7 +15,7 @@ interface EventProps {
 const Event = ({
   place,
   start,
-  end = null,
+  end,
   title,
   children,
   links = [],

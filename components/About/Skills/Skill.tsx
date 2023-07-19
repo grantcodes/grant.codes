@@ -23,7 +23,7 @@ const Skill = ({
         <span>{name}</span>
       </h4>
 
-      {!!love && (
+      {!!love && !!loveLevel && (
         <Tooltip
           id={id + 'love'}
           text={`Opinion: ${loveLevel.name}`}

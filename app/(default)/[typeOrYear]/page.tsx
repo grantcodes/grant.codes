@@ -5,9 +5,18 @@ import getMonthData from 'lib/get/month-data'
 import getMonthDataFiles from 'lib/get/month-data-files'
 import getPosts from 'lib/get/posts'
 
-async function getYearData (year) {
+interface YearData {
+  year: number
+  postTypes?: { [key: string]: number }
+  geojson?: any
+  body?: { [key: string]: string[] }
+}
+
+async function getYearData(year): Promise<YearData> {
   // Is a year archive.
-  let yearData = {}
+  let yearData: YearData = {
+    year,
+  }
   for (let month = 1; month < 13; month++) {
     const monthData = getMonthData(year, month)
     if (!monthData) {
@@ -63,7 +72,7 @@ async function getYearData (year) {
     }
   }
 
-  return { year, ...yearData }
+  return { ...yearData }
 }
 
 const Page = async ({ params }) => {
@@ -80,11 +89,11 @@ const Page = async ({ params }) => {
         pagination={{
           previous: {
             to: '/[typeOrYear]',
-            linkAs: previousLink,
+            as: previousLink,
           },
           next: {
             to: '/[typeOrYear]',
-            linkAs: nextLink,
+            as: nextLink,
           },
         }}
       />
@@ -94,28 +103,30 @@ const Page = async ({ params }) => {
     const posts = await getPosts({
       query: { ...params },
     })
-    return <PostList posts={posts} type='home' params={params} />
+    return <PostList posts={posts} type="home" params={params} />
   }
 }
 
-export async function generateStaticParams () {
+export async function generateStaticParams() {
   try {
     // Get post types to create type archives
     const ingoredTypes = ['photos', 'journals']
     let types = await getTypes(true)
-    types = types.filter(type => !ingoredTypes.includes(type))
+    types = types.filter((type) => !ingoredTypes.includes(type))
 
     // Get year data folders to create year archives
     const monthFiles = getMonthDataFiles()
-    const years = new Set()
+    const years: string[] = []
     for (const file of monthFiles) {
-      const [year] = file.split('/')
-      years.add(year)
+      let [year] = file.split('/')
+      if (!years.includes(year)) {
+        years.push(year)
+      }
     }
     types.push(...years)
 
     // Create both post type and year paths
-    return types.map(t => ({ typeOrYear: t }))
+    return types.map((t) => ({ typeOrYear: t }))
   } catch (err) {
     console.error('Error getting typeoryear static paths', err)
     return [

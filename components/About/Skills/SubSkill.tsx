@@ -5,12 +5,7 @@ import externalLink from 'eva-icons/fill/svg/external-link.svg'
 import { getLoveLevel } from './levels'
 import { SubSkillProps } from './types'
 
-const SubSkill = ({
-  knowledge = 0,
-  love = 0,
-  name,
-  href = null,
-}: SubSkillProps) => {
+const SubSkill = ({ knowledge = 0, love = 0, name, href }: SubSkillProps) => {
   const loveLevel = getLoveLevel(love)
   const id = `subskill-${name.toLowerCase().replace(/\s/g, '-')}`
 
@@ -28,7 +23,7 @@ const SubSkill = ({
           </a>
         </Tooltip>
       )}
-      {!!love && (
+      {!!love && !!loveLevel && (
         <Tooltip
           text={`Opinion: ${loveLevel.name}`}
           id={id + 'love'}

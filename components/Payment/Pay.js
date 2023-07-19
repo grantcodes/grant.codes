@@ -9,7 +9,7 @@ import Card from '../Card'
 import { Button } from '../Button'
 
 const Pay = ({
-  paymentLink,
+  paymentLink = null,
   amount,
   symbol,
   code,

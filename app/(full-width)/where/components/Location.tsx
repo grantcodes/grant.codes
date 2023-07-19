@@ -4,19 +4,17 @@ import { useState, useEffect } from 'react'
 import classnames from 'classnames'
 import moment from 'moment'
 import Map from 'components/Map'
-import getLastLocation from 'lib/get/last-location'
+import getLastLocation, { LocationResult } from 'lib/get/last-location'
 import styles from 'css/pages/where.module.scss'
 
 const WhereLocation = () => {
-  const [location, setLocation] = useState(null)
+  const [location, setLocation] = useState<LocationResult | null | false>(null)
 
   // Get location on mount
   useEffect(() => {
     getLastLocation()
-      .then(loc => {
-        setLocation(loc)
-      })
-      .catch(err => {
+      .then(setLocation)
+      .catch((err) => {
         console.error('Error getting location', err)
         setLocation(false)
       })
