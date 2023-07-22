@@ -1,6 +1,6 @@
 import micropub from 'lib/micropub'
 
-const getCategories = async () => {
+const getCategories = async (): Promise<string[]> => {
   try {
     const { categories } = await micropub.query('categories')
     return categories
