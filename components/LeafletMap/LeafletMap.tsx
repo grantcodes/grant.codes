@@ -1,28 +1,12 @@
 'use client'
 
-import { useEffect } from 'react'
 import {
   MapContainer,
   MapContainerProps,
   TileLayer,
-  GeoJSON,
   GeoJSONProps,
-  useMap,
 } from 'react-leaflet'
-
-const Route = ({ data }) => {
-  const map = useMap()
-
-  useEffect(() => {
-    // TODO: Fix types
-    const layer: any = Object.values(map._layers).find((l: any) => l.feature)
-    if (layer?.getBounds) {
-      map.fitBounds(layer.getBounds(), { padding: [10, 10] })
-    }
-  }, [map])
-
-  return <GeoJSON data={data} />
-}
+import { Route } from './Route'
 
 interface LeafletMapProps extends MapContainerProps {
   geojson?: GeoJSONProps['data']
@@ -35,6 +19,7 @@ const LeafletMap = ({ geojson, ...props }: LeafletMapProps) => {
     zoom: 4,
   }
   const mapProps = { ...defaultProps, ...props }
+
   return (
     <MapContainer {...mapProps}>
       <TileLayer

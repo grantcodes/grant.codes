@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Script from 'next/script'
 import { daily as dailyTheme } from '@grantcodes/themer'
 
 // TODO: Improve this?
@@ -110,38 +111,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Script to load theme without flash */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              var theme = localStorage.getItem('theme');
-              if (theme) {
-                theme = JSON.parse(theme);
-                if (theme) {
-                  Object.keys(theme).forEach(function(key) {
-                    var color = theme[key];
-                    if (typeof color !== 'string' && color._rgb) {
-                      color = 'rgba(' + color._rgb.join(',') + ')';
-                    } 
-                    if (Array.isArray(color)) {
-                      color.forEach(function(c, i) {
-                        window.document.documentElement.style.setProperty('--theme-' + key + '-' + i, c.toString());
-                      });
-                    } else {
-                      window.document.documentElement.style.setProperty('--theme-' + key, color.toString());
-                    }
-                  }) 
-                }
-              } 
-            `,
-          }}
-        />
         {/* Just stuff that doesn't work in the default metadata for now */}
         {links.map(({ key, ...props }) => (
           <link key={key} {...props} />
         ))}
       </head>
       <body>{children}</body>
+      {/* Script to load theme without flash */}
+      <Script strategy="beforeInteractive" src="/load-theme.js" />
     </html>
   )
 }
