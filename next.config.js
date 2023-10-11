@@ -8,7 +8,6 @@ const subdomains = [
 
 const config = {
   experimental: {
-    appDir: true,
     serverComponentsExternalPackages: ['canvas'],
   },
   webpack(config) {
