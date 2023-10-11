@@ -28,7 +28,7 @@ const getPosts = async ({ year, month }) => {
     console.log(`[Got ${posts.length} posts for ${year}/${month}]`)
     return posts
   } catch (err) {
-    console.warn('[Error getting posts]', err)
+    console.warn('[Error getting monthly posts]', err)
     return []
   }
 }
