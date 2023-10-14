@@ -10,11 +10,11 @@ const Page = async ({ params }) => {
   return <PostList posts={posts} type='home' params={params} />
 }
 
-export async function generateStaticParams () {
-  // Get all categories
-  const categories = await getCategories()
+// export async function generateStaticParams () {
+//   // Get all categories
+//   const categories = await getCategories()
 
-  return categories.map(category => ({ category }))
-}
+//   return categories.map(category => ({ category }))
+// }
 
 export default Page

@@ -50,18 +50,18 @@ const MonthlySummary = async ({ params }) => {
   )
 }
 
-export const generateStaticParams = async () => {
-  const files = getMonthDataFiles()
-  const params = files.map(file => {
-    const [year, month] = file.split('/')
-    return {
-      year,
-      month: leadingZero(month),
-      typeOrYear: year,
-    }
-  })
+// export const generateStaticParams = async () => {
+//   const files = getMonthDataFiles()
+//   const params = files.map(file => {
+//     const [year, month] = file.split('/')
+//     return {
+//       year,
+//       month: leadingZero(month),
+//       typeOrYear: year,
+//     }
+//   })
 
-  return params
-}
+//   return params
+// }
 
 export default MonthlySummary

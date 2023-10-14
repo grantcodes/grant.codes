@@ -13,12 +13,12 @@ const Page = async ({ params }) => {
 
   return (
     <>
-      <PostList posts={posts} type="home" params={params} />
+      <PostList posts={posts} type='home' params={params} />
     </>
   )
 }
 
-export async function generateStaticParams(): Promise<PageParams[]> {
+export async function generateStaticParams (): Promise<PageParams[]> {
   const categoryPages: PageParams[] = []
 
   // Get all categories

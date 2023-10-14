@@ -12,7 +12,7 @@ interface YearData {
   body?: { [key: string]: string[] }
 }
 
-async function getYearData(year): Promise<YearData> {
+async function getYearData (year): Promise<YearData> {
   // Is a year archive.
   let yearData: YearData = {
     year,
@@ -103,41 +103,41 @@ const Page = async ({ params }) => {
     const posts = await getPosts({
       query: { ...params },
     })
-    return <PostList posts={posts} type="home" params={params} />
+    return <PostList posts={posts} type='home' params={params} />
   }
 }
 
-export async function generateStaticParams() {
-  try {
-    // Get post types to create type archives
-    const ingoredTypes = ['photos', 'journals']
-    let types = await getTypes(true)
-    types = types.filter((type) => !ingoredTypes.includes(type))
+// export async function generateStaticParams() {
+//   try {
+//     // Get post types to create type archives
+//     const ingoredTypes = ['photos', 'journals']
+//     let types = await getTypes(true)
+//     types = types.filter((type) => !ingoredTypes.includes(type))
 
-    // Get year data folders to create year archives
-    const monthFiles = getMonthDataFiles()
-    const years: string[] = []
-    for (const file of monthFiles) {
-      let [year] = file.split('/')
-      if (!years.includes(year)) {
-        years.push(year)
-      }
-    }
-    types.push(...years)
+//     // Get year data folders to create year archives
+//     const monthFiles = getMonthDataFiles()
+//     const years: string[] = []
+//     for (const file of monthFiles) {
+//       let [year] = file.split('/')
+//       if (!years.includes(year)) {
+//         years.push(year)
+//       }
+//     }
+//     types.push(...years)
 
-    // Create both post type and year paths
-    return types.map((t) => ({ typeOrYear: t }))
-  } catch (err) {
-    console.error('Error getting typeoryear static paths', err)
-    return [
-      { typeOrYear: 'notes' },
-      { typeOrYear: 'articles' },
-      { typeOrYear: 'photos' },
-      { typeOrYear: 'likes' },
-      { typeOrYear: 'replies' },
-    ]
-  }
-}
+//     // Create both post type and year paths
+//     return types.map((t) => ({ typeOrYear: t }))
+//   } catch (err) {
+//     console.error('Error getting typeoryear static paths', err)
+//     return [
+//       { typeOrYear: 'notes' },
+//       { typeOrYear: 'articles' },
+//       { typeOrYear: 'photos' },
+//       { typeOrYear: 'likes' },
+//       { typeOrYear: 'replies' },
+//     ]
+//   }
+// }
 
 export { generateMetadata } from 'lib/get/metadata'
 
