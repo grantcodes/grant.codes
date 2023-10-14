@@ -20,8 +20,7 @@
     "leaflet": "^1.9.4",
     "micropub-helper": "^1.6.2",
     "moment": "^2.29.4",
-    "next": "^13.5.3",
-    "next-fonts": "^1.5.1",
+    "next": "^13.5.4",
     "node-fetch": "^3.3.2",
     "photoswipe": "^5.4.2",
     "pigeon-maps": "^0.21.3",
@@ -33,7 +32,7 @@
     "react-leaflet": "^4.2.1",
     "react-photoswipe-gallery": "^2.2.7",
     "recharts": "^2.8.0",
-    "sass": "^1.68.0",
+    "sass": "^1.69.2",
     "sharp": "^0.32.6",
     "svg-inline-loader": "^0.8.2",
     "viewport-mercator-project": "^7.0.4"
@@ -44,7 +43,7 @@
     "trailingComma": "es5"
   },
   "devDependencies": {
-    "@types/react": "^18.2.23",
+    "@types/react": "^18.2.28",
     "canvas": "^2.11.2",
     "typescript": "^5.2.2"
   }

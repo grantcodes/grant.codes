@@ -1,5 +1,3 @@
-const withFonts = require('next-fonts')
-
 const subdomains = [
   { domain: 'where.is', path: '/where' },
   { domain: 'who.is', path: '/about' },
@@ -47,4 +45,4 @@ const config = {
   },
 }
 
-module.exports = withFonts(config)
+module.exports = config
