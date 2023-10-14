@@ -1,3 +1,3 @@
-import { Loader } from './Loader'
+'use client'
 
-export { Loader as LeafletMap }
+export * from './LeafletMap'
