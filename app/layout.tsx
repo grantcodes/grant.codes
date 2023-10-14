@@ -115,6 +115,7 @@ export default function RootLayout ({
         {links.map(({ key, ...props }) => (
           <link key={key} {...props} />
         ))}
+        <style>{themeCss}</style>
       </head>
       <body>{children}</body>
       {/* Script to load theme without flash */}
