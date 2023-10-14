@@ -14,7 +14,7 @@ const Page = async ({ params }) => {
 
 export async function generateStaticParams () {
   // Get a max of the 250 last posts
-  const posts = await getPosts({ limit: 250 })
+  const posts = await getPosts({ limit: 25 })
 
   // Helper function to add 0 to the start of numbers
   const leadingZero = num =>
