@@ -1,8 +1,10 @@
-import { NextApiRequest, NextApiResponse } from 'next'
 // import Stripe from '@stripe/stripe-js'
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
-  return res.status(501).json({ error: 'Payments are currently disabled' })
+export async function POST (req: Request) {
+  return Response.json(
+    { error: 'Payments are currently disabled' },
+    { status: 501 }
+  )
   // if (req.method === 'POST') {
   //   const { token, currency, amount, monthly, description } = req.body
   //   if (!token || !currency || !amount) {

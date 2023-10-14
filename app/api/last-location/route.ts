@@ -1,6 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next'
-
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export async function GET (req: Request) {
   let location = false
   try {
     const url = process.env.OWNTRACKS_URL
@@ -27,10 +25,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
   } catch (err) {
     console.error('[Error getting owntracks location]', err)
-    return res.status(500).send({ error: 'Error getting owntracks location' })
+    return Response.json(
+      { error: 'Error getting owntracks location' },
+      { status: 500 }
+    )
   }
 
-  res.statusCode = 200
-  res.setHeader('Content-Type', 'application/json')
-  return res.end(JSON.stringify({ location }))
+  return Response.json({ location }, { status: 200 })
 }
