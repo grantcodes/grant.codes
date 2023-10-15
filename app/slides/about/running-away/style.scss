@@ -1,0 +1,14 @@
+.slide-background.ma-puss {
+  opacity: 0.2 !important;
+}
+
+.reveal .slides section .fragment.pale-blue-dot {
+  opacity: 1;
+  visibility: visible;
+  border: none;
+  transition: transform 5s ease-in;
+  transform-origin: 76% 56%;
+}
+.reveal .slides section .fragment.pale-blue-dot.current-fragment {
+  transform: scale(16);
+}

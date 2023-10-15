@@ -32,6 +32,7 @@
     "react-leaflet": "^4.2.1",
     "react-photoswipe-gallery": "^2.2.7",
     "recharts": "^2.8.0",
+    "reveal.js": "^4.6.1",
     "sass": "^1.69.2",
     "sharp": "^0.32.6",
     "svg-inline-loader": "^0.8.2",
