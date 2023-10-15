@@ -15,7 +15,6 @@ if (theme) {
           )
         })
       } else {
-        console.log('color', color)
         window.document.body.style.setProperty(
           '--theme-' + key,
           color.toString()

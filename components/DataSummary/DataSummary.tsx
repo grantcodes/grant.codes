@@ -32,12 +32,12 @@ const DataSummary = ({
   pagination,
 }: DataSummaryProps) => (
   <>
-    <h1 className="page-title">{title}</h1>
+    <h1 className='page-title'>{title}</h1>
 
     {!!postTypes && (
-      <Card title="Posts">
+      <Card title='Posts'>
         <ul className={classnames('card__breakout', styles.counts)}>
-          {Object.keys(postTypes).map((type) => (
+          {Object.keys(postTypes).map(type => (
             <li className={styles.counts__count} key={`type-${type}`}>
               <span className={styles.counts__count__number}>
                 {postTypes[type].toString()}
@@ -53,21 +53,21 @@ const DataSummary = ({
 
     {/* TODO: Get map working again */}
     {!!geojson && (
-      <Card title="Map">
-        <div className="card__breakout">
+      <Card title='Map'>
+        <div className='card__breakout'>
           <LeafletMap geojson={geojson} />
         </div>
       </Card>
     )}
 
     {!!body && (
-      <Card title="Body">
+      <Card title='Body'>
         <BodyGraph {...body} />
       </Card>
     )}
 
     {!!pagination && (
-      <nav className="pagination">
+      <nav className='pagination'>
         {!!pagination.previous && (
           <Button to={pagination.previous.to} as={pagination.previous.as}>
             Previous

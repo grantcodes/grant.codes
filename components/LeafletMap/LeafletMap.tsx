@@ -31,4 +31,5 @@ const LeafletMap = ({ geojson, ...props }: LeafletMapProps) => {
   )
 }
 
+export type { LeafletMapProps }
 export { LeafletMap }
