@@ -12,7 +12,7 @@ import 'reveal.js/plugin/highlight/monokai.css'
 import 'reveal.js/dist/theme/simple.css'
 import './slides.scss'
 
-const Reveal: React.FC = ({ children }: { children: React.ReactNode }) => {
+const Reveal = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     let reveal = new RevealJs({
       controls: false,
