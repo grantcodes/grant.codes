@@ -6,14 +6,22 @@ interface CategoryInfo {
   slug: string
 }
 
+let categoriesCache: CategoryInfo[] = []
+
 const getCategories = async (): Promise<CategoryInfo[]> => {
   try {
+    if (categoriesCache.length) {
+      return categoriesCache
+    }
+
     const { categories } = await micropub.query('categories')
 
-    return categories.map((category: string) => ({
+    categoriesCache = categories.map((category: string) => ({
       name: category,
       slug: slugify(category, { lower: true }),
     }))
+
+    return categoriesCache
   } catch (err) {
     console.warn('Error getting categories', err)
     return []

@@ -23,15 +23,23 @@ const DEFAULT_POST_TYPES: string[] = [
   'journal',
 ]
 
+let cachedPostTypes: string[] = []
+
 const getPostTypes = async (plural: boolean = false): Promise<string[]> => {
   try {
+    if (cachedPostTypes.length) {
+      return cachedPostTypes
+    }
+
     const { 'post-types': types = [] } = await micropub.query('post-types')
 
     if (plural) {
       return types.map(type => pluralize(type.type))
     }
 
-    return types.map(type => type.type)
+    cachedPostTypes = types.map(type => type.type)
+
+    return cachedPostTypes
   } catch (err) {
     console.error('Error getting post types', err?.error?.response || err)
     return DEFAULT_POST_TYPES
