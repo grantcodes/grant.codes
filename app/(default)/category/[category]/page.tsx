@@ -1,20 +1,37 @@
 import PostList from 'components/PostList'
 import getCategories from 'lib/get/categories'
 import getPosts from 'lib/get/posts'
-
-// TODO: Add titles to category pages.
+import { notFound } from 'next/navigation'
 
 const Page = async ({ params }) => {
-  const posts = await getPosts({ query: params })
+  const categorySlug = params.category
 
-  return <PostList posts={posts} type='home' params={params} />
+  const allCategories = await getCategories()
+  const category = allCategories.find(cat => cat.slug === categorySlug)
+
+  if (!category) {
+    return notFound()
+  }
+
+  const posts = await getPosts({
+    query: { category: category.name, type: 'all' },
+  })
+
+  return (
+    <PostList
+      title={`Category: ${category.name ?? category.slug}`}
+      posts={posts}
+      type='home'
+      params={params}
+    />
+  )
 }
 
-// export async function generateStaticParams () {
-//   // Get all categories
-//   const categories = await getCategories()
+export async function generateStaticParams () {
+  // Get all categories
+  const categories = await getCategories()
 
-//   return categories.map(category => ({ category }))
-// }
+  return categories.map(({ slug }) => ({ category: slug }))
+}
 
 export default Page
