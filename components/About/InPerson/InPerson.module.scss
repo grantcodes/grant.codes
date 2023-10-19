@@ -1,13 +1,23 @@
 @use '../../../css/util' as u;
 
-.online {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
+.list {
+  dt {
+    margin-block-start: 1rem;
+    margin-block-end: 0.5rem;
+  }
+
+  dd {
+    margin: 0;
+  }
 }
 
-.card {
-  margin: 0;
-  padding: 1em;
-  font-size: u.fs(-1);
+.map {
+  padding: 0;
+
+  & > *:first-child:last-child {
+    max-height: 14rem;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+  }
 }
