@@ -1,5 +1,3 @@
-const withFonts = require('next-fonts')
-
 const subdomains = [
   { domain: 'where.is', path: '/where' },
   { domain: 'who.is', path: '/about' },
@@ -7,6 +5,9 @@ const subdomains = [
 ]
 
 const config = {
+  experimental: {
+    serverComponentsExternalPackages: ['canvas'],
+  },
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
@@ -44,4 +45,4 @@ const config = {
   },
 }
 
-module.exports = withFonts(config)
+module.exports = config

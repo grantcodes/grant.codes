@@ -12,12 +12,9 @@
 .photo {
   max-width: 20rem;
 
-  * {
-    display: block;
-    width: 100%;
-  }
-
   img {
+    display: block;
     height: auto;
+    width: 100%;
   }
 }

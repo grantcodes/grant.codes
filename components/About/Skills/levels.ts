@@ -60,20 +60,22 @@ const skillLevels: Array<Level> = [
   },
 ].reverse()
 
-const getSkillLevel = (value: number): Level => {
+const getSkillLevel = (value: number): Level | null => {
   for (const skillLevel of skillLevels) {
     if (value >= skillLevel.start) {
       return skillLevel
     }
   }
+  return null
 }
 
-const getLoveLevel = (value: number): Level => {
+const getLoveLevel = (value: number): Level | null => {
   for (const loveLevel of loveLevels) {
     if (value >= loveLevel.start) {
       return loveLevel
     }
   }
+  return null
 }
 
 export { getLoveLevel, getSkillLevel }

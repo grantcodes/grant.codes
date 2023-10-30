@@ -1,0 +1,93 @@
+@use 'css/util' as u;
+
+body {
+  background-color: var(--theme-main) !important;
+}
+
+// Lets overwrite some Reveal.js styles
+.reveal {
+  --r-background-color: var(--theme-main);
+  --r-main-font: #{u.$font-h};
+  --r-main-color: var(--theme-contrast);
+  --r-heading-font: var(--r-main-font);
+  --r-heading-color: var(--r-main-color);
+  --r-heading-line-height: 1.2;
+  --r-heading-font-weight: 900;
+  --r-code-font: #{u.$font-mono};
+  --r-link-color: var(--theme-contrast);
+  --r-link-color-dark: inherit;
+  --r-link-color-hover: currentColor;
+  --r-selection-background-color: var(--theme-complementary);
+  --r-selection-color: var(--theme-contrast);
+}
+
+.background-layer {
+  z-index: 0;
+}
+
+.reveal {
+  .progress {
+    color: var(--theme-complementary);
+  }
+
+  a {
+    text-decoration: underline;
+    &:hover,
+    &:focus {
+      text-decoration: underline wavy;
+      color: var(--r-link-color-hover);
+    }
+  }
+
+  .fragment.highlight.visible,
+  .fragment.highlight-blue.visible {
+    color: var(--theme-complementary);
+  }
+
+  .fragment.highlight-red.visible {
+    color: var(--theme-gradient-4);
+  }
+
+  pre {
+    font-family: u.$font-mono;
+    display: block;
+    font-size: 0.9rem;
+    width: 100%;
+    overflow: auto;
+    padding: 0;
+    border-radius: u.$border-radius;
+    font-weight: normal;
+    @include u.glass();
+
+    code {
+      padding: 1rem 1.2rem !important;
+      display: block;
+      line-height: 1.2;
+    }
+  }
+
+  blockquote {
+    display: block;
+    text-align: left;
+    border-left: 0.2rem solid;
+    background: var(--theme-main);
+    padding: u.space() u.space(2);
+    font-style: italic;
+    box-shadow: none;
+
+    footer {
+      font-size: 0.7em;
+      font-style: normal;
+    }
+  }
+
+  // Styles for slides with background images
+  section[data-background],
+  section[data-background-image],
+  section[data-background-video],
+  section[data-background-iframe] {
+    --r-main-color: white;
+    --r-heading-color: white;
+    --r-heading-text-shadow: 0 0 0.3em rgba(0, 0, 0, 0.9);
+  }
+}

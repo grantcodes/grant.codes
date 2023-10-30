@@ -1,8 +1,9 @@
-import React, { Fragment, useState } from 'react'
+'use client'
+
+import { Fragment } from 'react'
 import Image from 'next/image'
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
-import FullscreenPhoto from '../FullscreenPhoto'
 import Post from '../Post'
 import Link from '../Link'
 import getPostPhotos from './get-post-photos'
@@ -13,11 +14,6 @@ const imageLoader =
   process.env.NODE_ENV === 'production' ? undefined : nextImageLoader
 
 const PostsGallery = ({ posts = [], type, maxWidth = 33.333 }) => {
-  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(false)
-  const [originalUrl, setOriginalUrl] = useState(
-    typeof window !== 'undefined' ? window.location.href : null
-  )
-
   const getPhotos = (posts) => {
     let photos = []
     for (const post of posts) {
@@ -26,31 +22,10 @@ const PostsGallery = ({ posts = [], type, maxWidth = 33.333 }) => {
     return photos
   }
 
-  const getSelectedPhotos = () => {
-    const photos = getPhotos(posts)
-    if (selectedPhotoIndex !== false) {
-      return {
-        current: photos[selectedPhotoIndex],
-        next:
-          selectedPhotoIndex < photos.length
-            ? photos[selectedPhotoIndex + 1]
-            : null,
-        previous:
-          selectedPhotoIndex > 0 ? photos[selectedPhotoIndex - 1] : null,
-      }
-    }
-    return {
-      current: null,
-      next: null,
-      previous: null,
-    }
-  }
-
   const photos = getPhotos(posts)
-  const selectedPhotos = getSelectedPhotos()
 
   return (
-    <Fragment>
+    <>
       <div className={styles.gallery}>
         {photos.map((photo, i) =>
           type === 'feed' ? (
@@ -58,20 +33,18 @@ const PostsGallery = ({ posts = [], type, maxWidth = 33.333 }) => {
               className={styles.item}
               key={'posts-gallery-photo-' + i}
               to={photo.permalink}
-              onClick={(e) => {
-                e.preventDefault()
-                setSelectedPhotoIndex(i)
-              }}
-              maxWidth={maxWidth}
             >
               <Image
                 className={styles.photo}
                 src={photo.photo}
                 width={200}
                 height={200}
-                layout="responsive"
-                sizes="(min-width: 1135px) 172px, (min-width: 468px) 20vw, 33vw"
                 loader={imageLoader}
+                sizes="(min-width: 1135px) 172px, (min-width: 468px) 20vw, 33vw"
+                style={{
+                  maxWidth: '100%',
+                  height: 'auto',
+                }}
               />
             </Link>
           ) : (
@@ -83,17 +56,16 @@ const PostsGallery = ({ posts = [], type, maxWidth = 33.333 }) => {
                 <Link to={photo.permalink} className="u-url">
                   <Image
                     className={styles.photo}
-                    onClick={(e) => {
-                      e.preventDefault()
-                      setSelectedPhotoIndex(i)
-                    }}
                     src={photo.photo}
                     alt={photo.alt}
                     width={200}
                     height={200}
-                    layout="responsive"
-                    sizes="(min-width: 1135px) 172px, (min-width: 468px) 20vw, 33vw"
                     loader={imageLoader}
+                    sizes="(min-width: 1135px) 172px, (min-width: 468px) 20vw, 33vw"
+                    style={{
+                      width: '100%',
+                      height: 'auto',
+                    }}
                   />
                   <data className="u-photo" value={photo.photo} />
                 </Link>
@@ -115,27 +87,7 @@ const PostsGallery = ({ posts = [], type, maxWidth = 33.333 }) => {
           ))}
         </div>
       )}
-
-      {!!selectedPhotos.current && (
-        <FullscreenPhoto
-          originalUrl={originalUrl}
-          {...selectedPhotos.current}
-          nextPhoto={selectedPhotos.next}
-          previousPhoto={selectedPhotos.previous}
-          onClose={() => setSelectedPhotoIndex(false)}
-          onNext={() => {
-            if (selectedPhotos.next) {
-              setSelectedPhotoIndex(selectedPhotoIndex + 1)
-            }
-          }}
-          onPrevious={() => {
-            if (selectedPhotos.previous) {
-              setSelectedPhotoIndex(selectedPhotoIndex - 1)
-            }
-          }}
-        />
-      )}
-    </Fragment>
+    </>
   )
 }
 

@@ -17,7 +17,7 @@ const skills: SkillsDataSection[] = [
           {
             name: 'Accessibility',
             love: 100,
-            knowledge: 76,
+            knowledge: 79,
           },
         ],
       },
@@ -44,6 +44,12 @@ const skills: SkillsDataSection[] = [
             love: 72,
           },
           {
+            name: 'Tailwind',
+            href: 'https://tailwindcss.com/',
+            knowledge: 50,
+            love: 50,
+          },
+          {
             name: 'Styled Components',
             href: 'https://styled-components.com/',
             knowledge: 70,
@@ -66,7 +72,7 @@ const skills: SkillsDataSection[] = [
             name: 'Next.js',
             href: 'https://nextjs.org/',
             knowledge: 86,
-            love: 97,
+            love: 92,
           },
           {
             name: 'React Hooks',
@@ -109,8 +115,8 @@ const skills: SkillsDataSection[] = [
           {
             name: 'TypeScript',
             href: 'https://www.typescriptlang.org/',
-            knowledge: 40,
-            love: 83,
+            knowledge: 64,
+            love: 88,
           },
           {
             name: 'Webpack',
@@ -125,16 +131,22 @@ const skills: SkillsDataSection[] = [
             love: 76,
           },
           {
+            name: 'Web Components',
+            href: 'https://developer.mozilla.org/en-US/docs/Web/API/Web_Components',
+            knowledge: 50,
+            love: 82,
+          },
+          {
+            name: 'Svelt',
+            href: 'https://svelte.dev/',
+            knowledge: 40,
+            love: 70,
+          },
+          {
             href: 'https://vuejs.org/',
             name: 'Vue.js',
             knowledge: 1,
             love: 63,
-          },
-          {
-            href: 'https://svelt.org',
-            name: 'Svelt',
-            knowledge: 1,
-            love: 67,
           },
         ],
       },
@@ -199,6 +211,12 @@ const skills: SkillsDataSection[] = [
             love: 94,
           },
           {
+            name: 'Astro',
+            href: 'https://astro.build/',
+            knowledge: 60,
+            love: 90,
+          },
+          {
             name: 'Eleventy',
             href: 'https://www.11ty.io/',
             knowledge: 65,
@@ -208,7 +226,7 @@ const skills: SkillsDataSection[] = [
             name: 'Netlify',
             href: 'https://www.netlify.com/',
             knowledge: 60,
-            love: 87,
+            love: 80,
           },
           {
             name: 'Gastby',
@@ -223,7 +241,6 @@ const skills: SkillsDataSection[] = [
         className: 'hide-print',
         subSkills: [
           { href: 'https://craftcms.com/', name: 'Craft CMS' },
-          { href: 'https://getkirby.com/', name: 'Kirby' },
           {
             href: 'https://facebook.github.io/react-native/',
             name: 'React Native',

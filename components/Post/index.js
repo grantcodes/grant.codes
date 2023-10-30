@@ -5,15 +5,16 @@ import moment from 'moment'
 import Link from '../Link'
 import Card from '../Card'
 import PostContent from './Content'
-import Map from '../Map'
+// TODO: Map has issues with next.js 13
+// import Map from '../Map'
 import Photo from './Photo'
 import Comments from './Comments'
 import Children from './Children'
 import Admin from './Admin'
 import Footer from './Footer'
-import Button from '../Button'
+import { Button } from '../Button'
 import Icon from '../Icon'
-import useContext from 'lib/hooks/use-context'
+// import useContext from 'lib/hooks/use-context'
 import reply from 'eva-icons/fill/svg/corner-up-left.svg'
 import bookmark from 'eva-icons/fill/svg/bookmark.svg'
 import repost from 'eva-icons/fill/svg/repeat.svg'
@@ -29,7 +30,9 @@ const eventTimeDisplayOptions = {
 }
 
 const Post = ({ compact, post, className = '' }) => {
-  const { isAdmin } = useContext()
+  // TODO: Admin functionality
+  const isAdmin = false
+  // const { isAdmin } = useContext()
 
   if (!post) {
     return null
@@ -239,35 +242,37 @@ const Post = ({ compact, post, className = '' }) => {
 
         {property('checkin', ({ value }) => (
           <div className="card__breakout">
-            <Map
+            {/* <Map
               location={value}
               defaultWidth={528}
               defaultHeight={224}
               theme="basic"
-            />
+            /> */}
           </div>
         ))}
 
         {property('location', ({ value }) => (
           <Fragment>
-            {value.properties && value.properties.name && value.properties.url && (
-              <h6 className="p-location h-card">
-                At{' '}
-                <Link
-                  className="u-url p-name p-org"
-                  to={value.properties.url[0]}
-                >
-                  {value.properties.name[0]}
-                </Link>
-              </h6>
-            )}
+            {value.properties &&
+              value.properties.name &&
+              value.properties.url && (
+                <h6 className="p-location h-card">
+                  At{' '}
+                  <Link
+                    className="u-url p-name p-org"
+                    to={value.properties.url[0]}
+                  >
+                    {value.properties.name[0]}
+                  </Link>
+                </h6>
+              )}
             <div className="card__breakout">
-              <Map
+              {/* <Map
                 location={value}
                 defaultWidth={528}
                 defaultHeight={224}
                 theme="basic"
-              />
+              /> */}
             </div>
           </Fragment>
         ))}

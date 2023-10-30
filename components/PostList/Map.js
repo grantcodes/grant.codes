@@ -3,7 +3,7 @@ import PostsMap from '../PostsMap'
 
 const Map = ({ posts, title }) => (
   <>
-    <PostsMap title={title} posts={posts} />}
+    <PostsMap title={title} posts={posts} />
     <Pagination
       style={{
         position: 'fixed',

@@ -1,5 +1,6 @@
+'use client'
 import React, { useState } from 'react'
-import Button from 'components/Button'
+import { Button } from 'components/Button'
 import BackfillMap from './BackfillMap'
 import twitter from 'eva-icons/fill/svg/twitter.svg'
 import x from 'eva-icons/fill/svg/close.svg'

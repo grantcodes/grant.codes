@@ -1,9 +1,7 @@
 import Icon from '../../Icon'
 import ThemeSwitcher from '../../ThemeSwitcher'
-import twitter from 'eva-icons/fill/svg/twitter.svg'
 import instagram from 'eva-icons/fill/svg/camera.svg'
 import email from 'eva-icons/fill/svg/email.svg'
-import facebook from 'eva-icons/fill/svg/facebook.svg'
 import github from 'eva-icons/fill/svg/github.svg'
 
 const Footer = () => (
@@ -17,26 +15,6 @@ const Footer = () => (
         <Icon icon={email} />
         <span className="screen-reader-text">Email</span>
       </a>
-      {!!process.env.NEXT_PUBLIC_AUTHOR_TWITTER && (
-        <a
-          className="main-footer__icon"
-          href={process.env.NEXT_PUBLIC_AUTHOR_TWITTER}
-          rel="me"
-        >
-          <Icon icon={twitter} />
-          <span className="screen-reader-text">Twitter</span>
-        </a>
-      )}
-      {!!process.env.NEXT_PUBLIC_AUTHOR_FACEBOOK && (
-        <a
-          className="main-footer__icon"
-          href={process.env.NEXT_PUBLIC_AUTHOR_FACEBOOK}
-          rel="me"
-        >
-          <Icon icon={facebook} />
-          <span className="screen-reader-text">Facebook</span>
-        </a>
-      )}
       {!!process.env.NEXT_PUBLIC_AUTHOR_INSTAGRAM && (
         <a
           className="main-footer__icon"

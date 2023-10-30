@@ -1,12 +1,16 @@
+import { redirect } from 'next/navigation'
 import currencies from './currencies'
 
-export const getServerSideProps = ({ query, res }) => {
+export const getData = async ({ params, searchParams, monthly = false }) => {
   let symbol = null
   let code = null
   let amount = null
-  const reason = query.reason || null
+  let title = 'Pay Me!'
+  const reason = searchParams?.reason
 
-  const amountString = query.amount
+  const amountString = decodeURIComponent(
+    params?.amount ?? searchParams?.amount ?? ''
+  )
   for (const currencySymbol in currencies) {
     if (currencies.hasOwnProperty(currencySymbol)) {
       if (amountString.startsWith(currencySymbol)) {
@@ -22,20 +26,23 @@ export const getServerSideProps = ({ query, res }) => {
     amount = parseFloat(amountString.replace(',', ''))
   }
 
-  if ((!symbol || !code || !amount) && res) {
+  if (!symbol || !code || !amount) {
     console.log('[Unknown payment - redirecting]')
-    res.writeHead(302, { Location: '/pay' })
-    return res.end()
+    return redirect('/pay')
+  }
+
+  title = `Pay me ${symbol}${amount}`
+  if (monthly) {
+    title += ' monthly'
   }
 
   console.log('[Payment]', { symbol, code, amount })
 
   return {
-    props: {
-      symbol,
-      code,
-      amount,
-      reason,
-    },
+    symbol,
+    code,
+    amount,
+    reason,
+    title,
   }
 }
