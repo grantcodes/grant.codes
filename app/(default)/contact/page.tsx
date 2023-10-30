@@ -18,14 +18,6 @@ const Contact = () => (
             </a>
           </li>
         )}
-        {!!process.env.NEXT_PUBLIC_AUTHOR_TWITTER && (
-          <li>
-            <a href='https://twitter.com/messages/compose?recipient_id=1121850384'>
-              <Icon className={styles.icon} icon={twitterIcon} />
-              Twitter DM
-            </a>
-          </li>
-        )}
       </ul>
     </Card>
   </>
