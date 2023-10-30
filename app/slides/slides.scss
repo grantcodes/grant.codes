@@ -16,7 +16,7 @@ body {
   --r-code-font: #{u.$font-mono};
   --r-link-color: var(--theme-contrast);
   --r-link-color-dark: inherit;
-  --r-link-color-hover: inherit;
+  --r-link-color-hover: currentColor;
   --r-selection-background-color: var(--theme-complementary);
   --r-selection-color: var(--theme-contrast);
 }
@@ -35,6 +35,7 @@ body {
     &:hover,
     &:focus {
       text-decoration: underline wavy;
+      color: var(--r-link-color-hover);
     }
   }
 
