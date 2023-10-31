@@ -219,7 +219,7 @@ export default () => (
           <li className="fragment">DIY</li>
         </ul>
 
-        <aside className="note">
+        <aside className="notes">
           <ul>
             <li>
               As I think you all know there are many options for building a
