@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Viewport } from 'next'
 import Script from 'next/script'
 import { daily as dailyTheme } from '@grantcodes/themer'
 
@@ -140,7 +141,6 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  themeColor: theme.main,
   manifest: '/manifest.json',
 
   verification: {
@@ -274,4 +274,8 @@ export const metadata: Metadata = {
     site: twHandle,
     card: 'summary_large_image',
   },
+}
+
+export const viewport: Viewport = {
+  themeColor: theme.main,
 }
