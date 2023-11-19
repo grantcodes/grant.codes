@@ -9,7 +9,7 @@ import mentionTypes from './mention-types'
 
 const separator = ' ● '
 
-const Footer = ({ post, compact = true }) => {
+const Footer = ({ post, compact = true, children }) => {
   if (!post) {
     // TODO: This is bit of a hack for some other issue
     return null
@@ -63,6 +63,12 @@ const Footer = ({ post, compact = true }) => {
 
   return (
     <footer className="card__breakout post__footer">
+      {children && (
+        <>
+          {children} {separator}
+        </>
+      )}
+
       {actionText + ' '}
       {!!post.properties.url && (
         <Link className="u-url" to={post.properties.url[0]}>
