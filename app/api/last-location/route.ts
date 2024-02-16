@@ -1,4 +1,6 @@
-export async function GET (req: Request) {
+export const dynamic = 'force-dynamic'
+
+export async function GET(req: Request) {
   let location = false
   try {
     const url = process.env.OWNTRACKS_URL
@@ -17,6 +19,7 @@ export async function GET (req: Request) {
           Authorization: `Basic ${auth}`,
         },
         method: 'GET',
+        cache: 'no-store',
       }
     )
     const data = await response.json()

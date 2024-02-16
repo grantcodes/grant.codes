@@ -88,6 +88,7 @@ const StripeCheckout = ({
         amount: amount * 100,
       }),
       headers: { 'content-type': 'application/json' },
+      cache: 'no-store',
     })
 
     return response.ok

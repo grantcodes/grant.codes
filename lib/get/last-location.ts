@@ -34,6 +34,7 @@ export default async function getLastLocation(): Promise<LocationResult | null> 
         'Content-Type': 'application/json',
       },
       method: 'GET',
+      cache: 'no-store',
     })
     const { location } = await res.json()
     return location
