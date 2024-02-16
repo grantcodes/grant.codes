@@ -1,12 +1,15 @@
-const fs = require('fs')
-const path = require('path')
-const dotenv = require('dotenv')
-const getGeojson = require('./lib/get-monthly-geojson')
-const getPosts = require('./lib/get-monthly-posts')
-const getWeight = require('./lib/get-monthly-weight')
+import { fileURLToPath } from 'node:url'
+import { dirname, join } from 'node:path'
+import { mkdirSync, writeFileSync } from 'node:fs'
+import dotenv from 'dotenv'
+import getGeojson from './lib/get-monthly-geojson.js'
+import getPosts from './lib/get-monthly-posts.js'
+import getWeight from './lib/get-monthly-weight.js'
 
 dotenv.config({ path: '.env' })
 dotenv.config({ path: '.env.production' })
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const getData = async ({ year, month } = {}) => {
   console.log(`[Getting data for ${year}/${month}]`)
@@ -72,9 +75,9 @@ const init = async () => {
     if (saveData) {
       console.log('[Saving data to disk]')
       const json = JSON.stringify(data, null, 2)
-      const dir = path.join(__dirname, '..', 'data', 'monthly', year.toString())
-      fs.mkdirSync(dir, { recursive: true })
-      fs.writeFileSync(`${dir}/${month}.json`, json)
+      const dir = join(__dirname, '..', 'data', 'monthly', year.toString())
+      mkdirSync(dir, { recursive: true })
+      writeFileSync(`${dir}/${month}.json`, json)
     } else {
       console.log('[Got data]')
       console.log(data)

@@ -1,5 +1,3 @@
-const fetch = require('node-fetch')
-
 /**
  * Gets all posts for the given year and month
  * @param {object} options Year and month to search for
@@ -33,4 +31,4 @@ const getPosts = async ({ year, month }) => {
   }
 }
 
-module.exports = getPosts
+export default getPosts

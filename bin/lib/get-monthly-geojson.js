@@ -1,5 +1,3 @@
-const fetch = require('node-fetch')
-
 /**
  * Get geojson features from owntracks for the given year and month
  * @param {object} options The year and month to search for
@@ -36,4 +34,4 @@ const getGeojson = async ({ year, month }) => {
   }
 }
 
-module.exports = getGeojson
+export default getGeojson

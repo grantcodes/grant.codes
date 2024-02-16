@@ -2,6 +2,7 @@
   "name": "grant.codes",
   "version": "0.2.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

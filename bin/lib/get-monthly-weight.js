@@ -1,5 +1,3 @@
-const fetch = require('node-fetch')
-
 const sensors = [
   'sensor.grant_basal_metabolism',
   'sensor.grant_bmi',
@@ -89,4 +87,4 @@ const getWeight = async ({ year, month }) => {
   }
 }
 
-module.exports = getWeight
+export default getWeight
