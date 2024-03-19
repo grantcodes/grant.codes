@@ -1,3 +1,4 @@
+import Container from 'components/Container'
 import PostList from 'components/PostList'
 import { DataSummary } from 'components/DataSummary'
 import getTypes from 'lib/get/post-types'
@@ -12,7 +13,7 @@ interface YearData {
   body?: { [key: string]: string[] }
 }
 
-async function getYearData (year): Promise<YearData> {
+async function getYearData(year): Promise<YearData> {
   // Is a year archive.
   let yearData: YearData = {
     year,
@@ -103,16 +104,24 @@ const Page = async ({ params }) => {
     const posts = await getPosts({
       query: { ...params },
     })
-    return <PostList posts={posts} type='home' params={params} />
+
+    const isArticle =
+      posts.length === 1 && posts[0]?.cms?.postType === 'article'
+
+    return (
+      <Container className={isArticle ? 'single-article' : ''}>
+        <PostList posts={posts} type="home" params={params} />
+      </Container>
+    )
   }
 }
 
-export async function generateStaticParams () {
+export async function generateStaticParams() {
   try {
     // Get post types to create type archives
     const ingoredTypes = ['photos', 'journals']
     let types = await getTypes(true)
-    types = types.filter(type => !ingoredTypes.includes(type))
+    types = types.filter((type) => !ingoredTypes.includes(type))
 
     // Get year data folders to create year archives
     const monthFiles = getMonthDataFiles()
@@ -126,7 +135,7 @@ export async function generateStaticParams () {
     types.push(...years)
 
     // Create both post type and year paths
-    return types.map(t => ({ typeOrYear: t }))
+    return types.map((t) => ({ typeOrYear: t }))
   } catch (err) {
     console.error('Error getting typeoryear static paths', err)
     return [
