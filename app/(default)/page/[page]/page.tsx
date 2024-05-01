@@ -22,16 +22,16 @@ const Home = async ({ params }) => {
 //   title: 'Home', // TODO: Home page 2
 // }
 
-export async function generateStaticParams (): Promise<PageParams[]> {
-  // Count how many pages are needed
-  const pageCount = await getPageCount()
-  const pages: PageParams[] = []
-  for (let pageNumber = 1; pageNumber < pageCount; pageNumber++) {
-    pages.push({ page: `${pageNumber}` })
-  }
+// export async function generateStaticParams (): Promise<PageParams[]> {
+//   // Count how many pages are needed
+//   const pageCount = await getPageCount()
+//   const pages: PageParams[] = []
+//   for (let pageNumber = 1; pageNumber < pageCount; pageNumber++) {
+//     pages.push({ page: `${pageNumber}` })
+//   }
 
-  return pages
-}
+//   return pages
+// }
 
 export { generateMetadata } from 'lib/get/metadata'
 

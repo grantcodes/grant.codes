@@ -26,29 +26,29 @@ const Page = async ({ params }) => {
       <PostList
         title={`Category: ${category.name} page ${params.page}`}
         posts={posts}
-        type='home'
+        type="home"
         params={params}
       />
     </>
   )
 }
 
-export async function generateStaticParams (): Promise<PageParams[]> {
-  const categoryPages: PageParams[] = []
+// export async function generateStaticParams (): Promise<PageParams[]> {
+//   const categoryPages: PageParams[] = []
 
-  // Get all categories
-  const categories = await getCategories()
+//   // Get all categories
+//   const categories = await getCategories()
 
-  for (const category of categories) {
-    // Get post count for each category
-    const pageCount = await getPageCount({ category: category.name })
+//   for (const category of categories) {
+//     // Get post count for each category
+//     const pageCount = await getPageCount({ category: category.name })
 
-    for (let pageNumber = 1; pageNumber < pageCount; pageNumber++) {
-      categoryPages.push({ page: `${pageNumber}`, category: category.slug })
-    }
-  }
+//     for (let pageNumber = 1; pageNumber < pageCount; pageNumber++) {
+//       categoryPages.push({ page: `${pageNumber}`, category: category.slug })
+//     }
+//   }
 
-  return categoryPages
-}
+//   return categoryPages
+// }
 
 export default Page

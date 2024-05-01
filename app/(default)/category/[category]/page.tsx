@@ -21,17 +21,17 @@ const Page = async ({ params }) => {
     <PostList
       title={`Category: ${category.name ?? category.slug}`}
       posts={posts}
-      type='home'
+      type="home"
       params={params}
     />
   )
 }
 
-export async function generateStaticParams () {
-  // Get all categories
-  const categories = await getCategories()
+// export async function generateStaticParams () {
+//   // Get all categories
+//   const categories = await getCategories()
 
-  return categories.map(({ slug }) => ({ category: slug }))
-}
+//   return categories.map(({ slug }) => ({ category: slug }))
+// }
 
 export default Page
