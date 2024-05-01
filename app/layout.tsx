@@ -101,7 +101,7 @@ const links = [
   },
 ]
 
-export default function RootLayout ({
+export default function RootLayout({
   // Layouts must accept a children prop.
   // This will be populated with nested layouts or pages
   children,
@@ -109,7 +109,7 @@ export default function RootLayout ({
   children: React.ReactNode
 }) {
   return (
-    <html lang='en'>
+    <html lang="en">
       <head>
         {/* Just stuff that doesn't work in the default metadata for now */}
         {links.map(({ key, ...props }) => (
@@ -119,7 +119,7 @@ export default function RootLayout ({
       </head>
       <body>{children}</body>
       {/* Script to load theme without flash */}
-      <Script strategy='beforeInteractive' src='/load-theme.js' />
+      <Script strategy="beforeInteractive" src="/load-theme.js" />
     </html>
   )
 }
@@ -140,7 +140,6 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  themeColor: theme.main,
   manifest: '/manifest.json',
 
   verification: {
@@ -274,4 +273,8 @@ export const metadata: Metadata = {
     site: twHandle,
     card: 'summary_large_image',
   },
+}
+
+export const viewport = {
+  themeColor: theme.main,
 }
