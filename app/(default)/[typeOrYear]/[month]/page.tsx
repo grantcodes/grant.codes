@@ -38,30 +38,30 @@ const MonthlySummary = async ({ params }) => {
       title={`Monthly Summary ${year}/${month}`}
       pagination={{
         previous: {
-          to: '/[typeOrYear]/[month]',
-          linkAs: previousLink,
+          // to: '/[typeOrYear]/[month]',
+          to: previousLink,
         },
         next: {
-          to: '/[typeOrYear]/[month]',
-          linkAs: nextLink,
+          // to: '/[typeOrYear]/[month]',
+          to: nextLink,
         },
       }}
     />
   )
 }
 
-export const generateStaticParams = async () => {
-  const files = getMonthDataFiles()
-  const params = files.map(file => {
-    const [year, month] = file.split('/')
-    return {
-      year,
-      month: leadingZero(month),
-      typeOrYear: year,
-    }
-  })
+// export const generateStaticParams = async () => {
+//   const files = getMonthDataFiles()
+//   const params = files.map((file) => {
+//     const [year, month] = file.split('/')
+//     return {
+//       year,
+//       month: leadingZero(month),
+//       typeOrYear: year,
+//     }
+//   })
 
-  return params
-}
+//   return params
+// }
 
 export default MonthlySummary
