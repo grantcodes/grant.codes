@@ -26,11 +26,23 @@ const About = () => {
 
         <PrintPageBreak />
 
-        <Skills />
-
-        <PrintPageBreak />
-
         <Section title="Work">
+          <Event
+            className="p-experience h-event"
+            start={new Date('2019-10-21')}
+            place="Kinsta"
+            title="Frontend Web Developer"
+            links={['https://kinsta.com/']}
+          >
+            <p>
+              At Kinsta I have been a major contributor to modernizing and
+              maintaining the website technology stack at scale, performing
+              accessibility audits, performance improvements, enabling non
+              developers to easily create beautiful marketing content, and much
+              more
+            </p>
+          </Event>
+
           <Event
             className="p-experience h-event"
             start={new Date('2013-05-01')}
@@ -42,22 +54,6 @@ const About = () => {
               clients on a variety of different projects. Mainly WordPress and
               React based websites. I have not died of starvation so I consider
               myself to be a successful freelancer!
-            </p>
-          </Event>
-
-          <Event
-            className="p-experience h-event"
-            start={new Date('2019-10-21')}
-            place="Kinsta"
-            title="Web Developer"
-            links={['https://kinsta.com/']}
-          >
-            <p>
-              At Kinsta I am tasked with developing and maintaining the
-              WordPress website. So far there has been lots of work towards
-              modernizing templates and giving non developers more control of
-              the website content, including gradually implementing Gutenberg
-              blocks across the site.
             </p>
           </Event>
 
@@ -85,12 +81,12 @@ const About = () => {
               Initially hired as a junior developer and promoted to senior
               developer I was in charge of regularly building various WordPress,
               static and custom sites as well as managing a small developer team
-              and relations with clients.
+              and relations with clients
             </p>
           </Event>
 
           <Event
-            className="p-experience h-event"
+            className="p-experience h-event hide-print"
             start={new Date('2011-09-01')}
             end={new Date('2012-05-01')}
             place="The Social Learning Space"
@@ -98,7 +94,7 @@ const About = () => {
           >
             <p>
               I created many applications to assist college students
-              transitioning to university.
+              transitioning to university
             </p>
             <p>
               Also occasionally helped to teach some technical university
@@ -115,7 +111,7 @@ const About = () => {
           >
             <p>
               Developed “FIT” which allowed clients to input various financial
-              data and receive advice on improving profitability.
+              data and receive advice on improving profitability
             </p>
           </Event>
         </Section>
@@ -132,6 +128,10 @@ const About = () => {
             <p>Graduated with first class honours</p>
           </Event>
         </Section>
+
+        <PrintPageBreak />
+
+        <Skills />
 
         <Section title="Projects" className="hide-print">
           <SubSection>
@@ -158,7 +158,7 @@ const About = () => {
           </SubSection>
 
           <SubSection title="Cooking">
-            <p>I enjoy cooking (and eating) new things.</p>
+            <p>I enjoy cooking (and eating) new things</p>
             <p>
               I even made my own{' '}
               <a href="https://recipes.grant.codes/">recipe website</a>
@@ -171,7 +171,7 @@ const About = () => {
               <a href="https://dundeemakerspace.co.uk">Dundee MakerSpace</a>,
               former member of{' '}
               <a href="http://makespacemadrid.org/">Makespace Madrid</a>, and
-              I've visited a few others on my travels.
+              I've visited many others on my travels
             </p>
             <p>
               In particular I enjoy making{' '}
@@ -189,7 +189,7 @@ const About = () => {
               <a href="https://indieweb.org">Indieweb</a> movement and make a{' '}
               <a href="https://postr.dev">bunch</a>{' '}
               <a href="https://alltogethernow.io">of</a>{' '}
-              <a href="https://postrchild.com">tools</a> in that space.
+              <a href="https://postrchild.com">tools</a> in that space
             </p>
           </SubSection>
 

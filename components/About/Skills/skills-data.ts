@@ -115,14 +115,14 @@ const skills: SkillsDataSection[] = [
           {
             name: 'TypeScript',
             href: 'https://www.typescriptlang.org/',
-            knowledge: 64,
-            love: 88,
+            knowledge: 84,
+            love: 95,
           },
           {
             name: 'Webpack',
             href: 'https://webpack.js.org/',
             knowledge: 72,
-            love: 85,
+            love: 50,
           },
           {
             name: 'P5.js',
@@ -133,8 +133,8 @@ const skills: SkillsDataSection[] = [
           {
             name: 'Web Components',
             href: 'https://developer.mozilla.org/en-US/docs/Web/API/Web_Components',
-            knowledge: 50,
-            love: 82,
+            knowledge: 70,
+            love: 92,
           },
           {
             name: 'Svelt',
@@ -213,7 +213,7 @@ const skills: SkillsDataSection[] = [
           {
             name: 'Astro',
             href: 'https://astro.build/',
-            knowledge: 60,
+            knowledge: 80,
             love: 90,
           },
           {
@@ -232,7 +232,7 @@ const skills: SkillsDataSection[] = [
             name: 'Gastby',
             href: 'https://www.gatsbyjs.org/',
             knowledge: 52,
-            love: 61,
+            love: 40,
           },
         ],
       },
