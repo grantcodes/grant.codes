@@ -58,7 +58,7 @@ const About = () => {
           </Event>
 
           <Event
-            className="p-experience h-event"
+            className="p-experience h-event hide-print"
             start={new Date('2015-06-01')}
             end={new Date('2016-04-01')}
             place="Code Club DCA Dundee"
@@ -117,6 +117,20 @@ const About = () => {
         </Section>
 
         <Section title="Education">
+          <Event
+            className="p-education h-event"
+            start={new Date('2024-03-11')}
+            end={new Date('2024-05-31')}
+            place="Climatebase"
+            title="Climatebase Fellowship Cohort 5"
+            links={['https://climatebase.org/fellowship']}
+          >
+            <p>
+              I was selected to join Cohort 5 of the Climatebase Fellowship, a
+              climate career accelerator to learn about the problems our planet
+              is facing, what we can do about it and how I can contribute
+            </p>
+          </Event>
           <Event
             className="p-education h-event"
             start={new Date('2008-09-01')}
