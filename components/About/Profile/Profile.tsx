@@ -2,7 +2,7 @@ import classnames from 'classnames'
 import Avatar from '../../Avatar'
 import styles from './Profile.module.scss'
 
-const Profile = props => {
+const Profile = (props) => {
   return (
     <div {...props} className={styles.profile}>
       <div className={styles.photo}>

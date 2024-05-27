@@ -1,4 +1,7 @@
 import { Metadata } from 'next'
+import Image from 'next/image'
+
+import carbonEstimatesScreenshot from './img/carbon-estimates.webp'
 
 export const metadata: Metadata = {
   title: 'Net0.1',
@@ -109,6 +112,19 @@ export default () => (
 
       <section>
         <h3>Detailed CO2 estimation</h3>
+        <Image
+          src={carbonEstimatesScreenshot}
+          alt="Screenshot showing the Net0.1 carbon estimate tool"
+          className="fragment"
+        />
+        <aside className="notes">
+          <ul>
+            <li>
+              Developer tools which appear when you're working on your website
+            </li>
+            <li>Uses an existing CO2 estimiation library</li>
+          </ul>
+        </aside>
       </section>
 
       <section>
@@ -144,43 +160,72 @@ export default () => (
         </aside>
       </section>
 
-      <section>
-        <h3>Available now</h3>
-        <p>
-          <a href="https://github.com/grantcodes/net0">
-            github.com/grantcodes/net0
-          </a>
-        </p>
+      <section data-background-iframe="https://net0.grant.codes">
+        <div
+          style={{
+            width: 'fit-content',
+            padding: '1em',
+            margin: 'auto',
+            borderRadius: '.5em',
+            background: 'rgba(19,23,31,0.9)',
+            backdropFilter: 'blur(.2em)',
+          }}
+        >
+          <h3>Available now 🎉</h3>
+          <p>
+            <a href="https://net0.grant.codes">net0.grant.codes</a>
+          </p>
+        </div>
       </section>
     </section>
 
     <section>
       <section>
-        <h2>Going forward</h2>
+        <h2>Next steps</h2>
         <ul>
-          <li className="fragment">
-            I'll keep working away on it as time allows
-          </li>
-          <li className="fragment">Standalone CO2 estimation</li>
+          <li className="fragment">Improved, standalone CO2 estimation</li>
+          <li className="fragment">Prettier & more powerful</li>
+          <li className="fragment">Fellow feedback</li>
           <li className="fragment">Lets make some websites</li>
-          <li className="fragment">Get on board</li>
         </ul>
+
+        <aside className="notes">
+          <ul>
+            <li>Co2 estimation is not very accurate</li>
+            <li>
+              Just a starting point, would love to add more expected features
+              like testing, analytics and more templates
+            </li>
+            <li>
+              Welcome any feedback, happy to have technical or non-technical
+              contributors
+            </li>
+            <li>
+              There are many capstone projects need websites, lets work together
+            </li>
+          </ul>
+        </aside>
       </section>
 
       <section>
         <h3>Business ideas</h3>
         <ul>
           <li className="fragment">CO2 estimation tool</li>
-          <li className="fragment">Sustainable design & dev firm</li>
+          <li className="fragment">Sustainable design studio</li>
           <li className="fragment">Website builder for non-technical folk</li>
-          <li className="fragment">
-            More features:
-            <ul>
-              <li>Analytics</li>
-              <li>More granular</li>
-            </ul>
-          </li>
         </ul>
+        <aside className="notes">
+          <ul>
+            <li>This is my seed to grow a more sustainable web</li>
+            <li>
+              There are a few business opportunities I'd love to explore
+              (perhaps with a cofounder)
+            </li>
+            <li>
+              CO2 tool was a pleasant surprise and maybe the most unique feature
+            </li>
+          </ul>
+        </aside>
       </section>
     </section>
 
