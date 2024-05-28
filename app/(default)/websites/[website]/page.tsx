@@ -33,9 +33,9 @@ const Website = ({ title, screenshot, url, content = '' }) => (
   </Card>
 )
 
-// export async function generateStaticParams() {
-//   return websites.map((website) => ({ website: website.slug }))
-// }
+export async function generateStaticParams() {
+  return websites.map((website) => ({ website: website.slug }))
+}
 
 export async function generateMetadata({ params }) {
   const website = websites.find((w) => w.slug === params?.website)
