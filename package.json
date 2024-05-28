@@ -12,7 +12,7 @@
   "dependencies": {
     "@grantcodes/themer": "^2.0.0",
     "@postr/core": "^1.10.1",
-    "@stripe/react-stripe-js": "^2.7.0",
+    "@stripe/react-stripe-js": "^2.7.1",
     "@stripe/stripe-js": "^2.4.0",
     "classnames": "^2.5.1",
     "dotenv": "^16.4.5",
@@ -23,7 +23,7 @@
     "moment": "^2.30.1",
     "next": "^14.2.3",
     "node-fetch": "^3.3.2",
-    "photoswipe": "^5.4.3",
+    "photoswipe": "^5.4.4",
     "pigeon-maps": "^0.21.5",
     "pigeon-overlay": "^0.2.3",
     "pluralize": "^8.0.0",
@@ -32,10 +32,10 @@
     "react-dom": "18.3.1",
     "react-leaflet": "^4.2.1",
     "react-photoswipe-gallery": "^2.2.7",
-    "recharts": "^2.12.6",
+    "recharts": "^2.12.7",
     "reveal.js": "^4.6.1",
-    "sass": "^1.76.0",
-    "sharp": "^0.33.3",
+    "sass": "^1.77.2",
+    "sharp": "^0.33.4",
     "slugify": "^1.6.6",
     "supports-color": "^8.1.1",
     "svg-inline-loader": "^0.8.2",
@@ -47,7 +47,7 @@
     "trailingComma": "es5"
   },
   "devDependencies": {
-    "@types/react": "^18.3.1",
+    "@types/react": "^18.3.3",
     "canvas": "^2.11.2",
     "typescript": "^5.4.5"
   }

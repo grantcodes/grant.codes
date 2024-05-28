@@ -34,8 +34,9 @@ export default () => (
         <a href="https://grant.codes">grant.codes</a>
         <aside className="notes">
           <ul>
+            <li>Frontend web developer</li>
+            <li>Over ten years of experience, shifting to the climate space</li>
             <li>Of course find everything on my website</li>
-            <li>If you don't know me - frontend web developer</li>
           </ul>
         </aside>
       </section>
@@ -57,14 +58,17 @@ export default () => (
         <aside className="notes">
           <ul>
             <li>
-              If the internet was a country it would be the 4th largest polluter
+              Though you feel like just looking at a web page on your phone
+              can't cause much harm, as we all know, the small things add up
             </li>
-            <li>But the emissions are not as obvious</li>
-            <li>It's not just one little website on your phone</li>
             <li>
-              There are multiple hops across many running computers, one website
-              can load any number of resources behind the scenes, but it's not
-              so well known.
+              There are multiple hops across many servers, all using energy and
+              one website can load any number of resources behind the scenes
+              (analytics, ads, images, videos, etc.)
+            </li>
+            <li>
+              But perhaps the biggest issue is that these emissions are not
+              obvious and very difficult to measure
             </li>
           </ul>
         </aside>
@@ -105,24 +109,13 @@ export default () => (
           <ul>
             <li>What is a starter kit?</li>
             <li>For developers</li>
-            <li>Get up and running fast</li>
-          </ul>
-        </aside>
-      </section>
-
-      <section>
-        <h3>Detailed CO2 estimation</h3>
-        <Image
-          src={carbonEstimatesScreenshot}
-          alt="Screenshot showing the Net0.1 carbon estimate tool"
-          className="fragment"
-        />
-        <aside className="notes">
-          <ul>
             <li>
-              Developer tools which appear when you're working on your website
+              Get up and running fast, with certain decisions already made for
+              you
             </li>
-            <li>Uses an existing CO2 estimiation library</li>
+            <li>
+              Lets jump into some of the features, and reasons you'd use this
+            </li>
           </ul>
         </aside>
       </section>
@@ -143,19 +136,41 @@ export default () => (
       </section>
 
       <section>
-        <h3>Static by default</h3>
-        <p>But dynamic if needed</p>
-      </section>
-
-      <section>
-        <h3>Built in documentation</h3>
-      </section>
-
-      <section>
-        <h3>i18n / Translation</h3>
+        <h3>Features</h3>
+        <ul>
+          <li className="fragment">
+            Static by default (but dynamic if needed)
+          </li>
+          <li className="fragment">Built in documentation</li>
+          <li className="fragment">i18n / Translation</li>
+        </ul>
         <aside className="notes">
           <ul>
-            <li>Reach more people</li>
+            <li>Static sites are much more efficient</li>
+            <li>
+              It's very common to have documention when building digital
+              products, so it's nice to have that built in
+            </li>
+            <li>Translatable to reach more of the planet</li>
+            <li>Also a little demo of my favourite feature</li>
+          </ul>
+        </aside>
+      </section>
+
+      <section>
+        <h3>Detailed CO2 estimation</h3>
+        <Image
+          src={carbonEstimatesScreenshot}
+          alt="Screenshot showing the Net0.1 carbon estimate tool"
+          className="fragment"
+        />
+        <aside className="notes">
+          <ul>
+            <li>Estimate the impact of each part of your code</li>
+            <li>
+              Developer tools which appear when you're working on your website
+            </li>
+            <li>Uses an existing CO2 estimiation library</li>
           </ul>
         </aside>
       </section>
