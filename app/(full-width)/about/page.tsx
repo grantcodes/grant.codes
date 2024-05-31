@@ -35,11 +35,15 @@ const About = () => {
             links={['https://kinsta.com/']}
           >
             <p>
-              At Kinsta I have been a major contributor to modernizing and
-              maintaining the website technology stack at scale, performing
-              accessibility audits, performance improvements, enabling non
-              developers to easily create beautiful marketing content, and much
-              more
+              At Kinsta I have been a major contributor to the high traffic
+              marketing website, seeing the marketing team grow from 1 to over
+              30 people
+            </p>
+            <p>
+              Responsibilities included modernizing the technology stack,
+              performing accessibility audits, performance improvements,
+              enabling non developers to easily create beautiful marketing
+              content, and much more
             </p>
           </Event>
 
@@ -52,8 +56,7 @@ const About = () => {
             <p>
               As a freelance web developer I have worked with a number of
               clients on a variety of different projects. Mainly WordPress and
-              React based websites. I have not died of starvation so I consider
-              myself to be a successful freelancer!
+              React based websites for small to medium size businesses
             </p>
           </Event>
 
@@ -171,14 +174,6 @@ const About = () => {
             </p>
           </SubSection>
 
-          <SubSection title="Cooking">
-            <p>I enjoy cooking (and eating) new things</p>
-            <p>
-              I even made my own{' '}
-              <a href="https://recipes.grant.codes/">recipe website</a>
-            </p>
-          </SubSection>
-
           <SubSection title="Making & DIY">
             <p>
               I founded{' '}
@@ -204,14 +199,6 @@ const About = () => {
               <a href="https://postr.dev">bunch</a>{' '}
               <a href="https://alltogethernow.io">of</a>{' '}
               <a href="https://postrchild.com">tools</a> in that space
-            </p>
-          </SubSection>
-
-          <SubSection title="Movies & TV">
-            <p>A lot of the usual suspects!</p>
-            <p>
-              You can see exactly what I have been watching{' '}
-              <a href="https://grant.codes/watches">here</a>
             </p>
           </SubSection>
         </Section>
