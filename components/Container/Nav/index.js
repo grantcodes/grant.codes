@@ -91,7 +91,6 @@ const Nav = () => {
       <a
         className="main-nav-toggle"
         href="#nav"
-        aria-hidden="true"
         title="menu"
         onClick={(e) => {
           e.preventDefault()
@@ -99,6 +98,7 @@ const Nav = () => {
         }}
       >
         <Icon icon={targeted ? closeIcon : menuIcon} />
+        <span className="screen-reader-text">Jump to menu</span>
       </a>
 
       <nav

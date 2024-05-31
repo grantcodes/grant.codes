@@ -41,7 +41,7 @@ const ThemeSwitcher = () => {
   return (
     <div className="theme-switcher" {...longPressProps}>
       <label htmlFor="theme-switcher__color" className="theme-switcher__label">
-        <span role="img" alt="Theme Color">
+        <span role="img" title="Theme Color">
           🎨
         </span>
       </label>

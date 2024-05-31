@@ -26,7 +26,11 @@ function Search() {
         window.location.href = `/search/${search.replace(' ', '+')}`
       }}
     >
+      <label htmlFor="nav-search" className="screen-reader-text">
+        Search
+      </label>
       <input
+        id="nav-search"
         className="search__input"
         type="search"
         value={search}

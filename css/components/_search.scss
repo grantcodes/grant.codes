@@ -9,9 +9,15 @@
   margin-bottom: 1rem;
   box-shadow: u.shadow(2);
   border-radius: u.$border-radius;
+  border: 2px solid var(--theme-complementary);
   font-size: 1rem;
+  transition: border-color 0.2s;
   @media (min-width: u.$mid-break) {
     font-size: 0.9rem;
+  }
+
+  &:has(.search__input:focus-visible, .search__button:focus-visible) {
+    border-color: var(--theme-contrast);
   }
 }
 

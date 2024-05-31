@@ -209,6 +209,7 @@ const skills: SkillsDataSection[] = [
             href: 'https://nextjs.org/',
             knowledge: 81,
             love: 94,
+            id: 'next-ssg',
           },
           {
             name: 'Astro',

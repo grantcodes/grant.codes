@@ -5,9 +5,15 @@ import externalLink from 'eva-icons/fill/svg/external-link.svg'
 import { getLoveLevel } from './levels'
 import { SubSkillProps } from './types'
 
-const SubSkill = ({ knowledge = 0, love = 0, name, href }: SubSkillProps) => {
+const SubSkill = ({
+  knowledge = 0,
+  love = 0,
+  name,
+  href,
+  id: manualId,
+}: SubSkillProps) => {
   const loveLevel = getLoveLevel(love)
-  const id = `subskill-${name.toLowerCase().replace(/\s/g, '-')}`
+  const id = `subskill-${manualId ?? name.toLowerCase().replace(/\s/g, '-')}`
 
   return (
     <li className={styles.subskill}>
@@ -20,6 +26,9 @@ const SubSkill = ({ knowledge = 0, love = 0, name, href }: SubSkillProps) => {
         >
           <a href={href} className={styles.link}>
             <Icon icon={externalLink} />
+            <span className="screen-reader-text">
+              More info on {styles.subskill__name}
+            </span>
           </a>
         </Tooltip>
       )}

@@ -14,7 +14,7 @@ const Websites = ({ limit = 0 }) => {
           <Tile key={`website-tile-${website.slug}`} {...website} />
         ))}
       </div>
-      {showMore && (
+      {showMore === true && (
         <Button small to="/websites">
           View All
         </Button>

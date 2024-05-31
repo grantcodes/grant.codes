@@ -5,6 +5,7 @@ export interface SubSkillProps {
   href?: string
   love?: number
   knowledge?: number
+  id?: string
 }
 
 export interface SkillProps extends SubSkillProps {
