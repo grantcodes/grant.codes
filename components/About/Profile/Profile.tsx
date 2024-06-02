@@ -2,9 +2,18 @@ import classnames from 'classnames'
 import Avatar from '../../Avatar'
 import styles from './Profile.module.scss'
 
-const Profile = (props) => {
+interface ProfileProps {
+  vertical?: boolean
+}
+
+const Profile = ({ vertical = false }: ProfileProps) => {
+  console.log({ vertical })
+  const wrapperClass = classnames(styles.profile, {
+    [styles['profile--vertical']]: vertical,
+  })
+
   return (
-    <div {...props} className={styles.profile}>
+    <div className={wrapperClass}>
       <div className={styles.photo}>
         <Avatar
           size={400}

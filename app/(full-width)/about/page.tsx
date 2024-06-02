@@ -1,7 +1,7 @@
 import Link from 'components/Link'
 import Websites from 'components/Websites'
 import { Section, SubSection } from 'components/About/Section'
-import Profile from './components/AboutProfile'
+import Profile from 'components/About/Profile'
 import InPerson from './components/AboutInPerson'
 import Online from 'components/About/Online'
 import Event from 'components/About/Event'

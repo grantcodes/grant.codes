@@ -3,8 +3,22 @@ import Timeline from './Timeline'
 import Gallery from './Gallery'
 import Map from './Map'
 
-const PostList = ({ posts, type = '', title = '', params = {} }) => {
-  if (posts && posts.length === 0) {
+interface PostListProps {
+  posts: any[]
+  type?: string
+  title?: string
+  params?: any
+  ignoreNotFound?: boolean
+}
+
+const PostList = ({
+  posts,
+  type = '',
+  title = '',
+  params = {},
+  ignoreNotFound = false,
+}: PostListProps) => {
+  if (posts && posts.length === 0 && !ignoreNotFound) {
     return notFound()
   }
 
@@ -18,7 +32,8 @@ const PostList = ({ posts, type = '', title = '', params = {} }) => {
       break
   }
 
+  // @ts-ignore
   return <Layout posts={posts} title={title} params={params} />
 }
 
-export default PostList
+export { PostList }

@@ -9,6 +9,15 @@
   align-items: center;
 }
 
+.profile--vertical {
+  @media (min-width: 36em) {
+    display: block;
+  }
+  .photo {
+    max-width: 14rem;
+  }
+}
+
 .photo {
   max-width: 20rem;
 

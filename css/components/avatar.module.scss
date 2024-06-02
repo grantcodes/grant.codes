@@ -41,6 +41,7 @@ $emoji-placeholders: map(
   transition: box-shadow 0.2s;
   clip-path: url(#topography-clip);
   clip-path: url(#topography-clip--rotating);
+  will-change: transform;
   text-indent: -2em;
 
   /* Make the image a square */
