@@ -2,6 +2,7 @@ import { SkillProps } from './types'
 
 interface SkillsDataSection {
   name: string
+  className?: string
   skills: SkillProps[]
 }
 
@@ -10,14 +11,37 @@ const skills: SkillsDataSection[] = [
     name: 'HTML',
     skills: [
       {
-        name: 'Semantic HTML5',
+        name: 'HTML5',
         love: 100,
         knowledge: 96,
         subSkills: [
           {
+            name: 'Semantic HTML',
+            love: 100,
+            knowledge: 96,
+          },
+          {
             name: 'Accessibility',
             love: 100,
             knowledge: 79,
+          },
+          {
+            name: 'ARIA',
+            href: 'https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA',
+            knowledge: 70,
+            love: 100,
+          },
+          {
+            name: 'Performance',
+            href: 'https://web.dev/vitals/',
+            knowledge: 86,
+            love: 89,
+          },
+          {
+            name: 'SEO',
+            href: 'https://moz.com/beginners-guide-to-seo',
+            knowledge: 70,
+            love: 50,
           },
         ],
       },
@@ -32,16 +56,28 @@ const skills: SkillsDataSection[] = [
         knowledge: 98,
         subSkills: [
           {
+            name: 'Design Systems',
+            href: 'https://www.designsystems.com/',
+            knowledge: 75,
+            love: 94,
+          },
+          {
+            name: 'Logical Properties',
+            href: 'https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Logical_Properties',
+            knowledge: 90,
+            love: 94,
+          },
+          {
             name: 'SCSS',
             href: 'https://sass-lang.com/',
             knowledge: 96,
-            love: 90,
+            love: 84,
           },
           {
             name: 'CSS Modules',
             href: 'https://github.com/css-modules/css-modules',
             knowledge: 76,
-            love: 72,
+            love: 84,
           },
           {
             name: 'Tailwind',
@@ -110,7 +146,6 @@ const skills: SkillsDataSection[] = [
       },
       {
         name: 'Misc JS & tools',
-        className: 'hide-print',
         subSkills: [
           {
             name: 'TypeScript',
@@ -119,22 +154,16 @@ const skills: SkillsDataSection[] = [
             love: 95,
           },
           {
-            name: 'Webpack',
-            href: 'https://webpack.js.org/',
-            knowledge: 72,
-            love: 50,
-          },
-          {
-            name: 'P5.js',
-            href: 'https://p5js.org/',
-            knowledge: 20,
-            love: 76,
-          },
-          {
             name: 'Web Components',
             href: 'https://developer.mozilla.org/en-US/docs/Web/API/Web_Components',
             knowledge: 70,
             love: 92,
+          },
+          {
+            name: 'Storybook',
+            href: 'https://storybook.js.org/',
+            knowledge: 76,
+            love: 80,
           },
           {
             name: 'Svelt',
@@ -148,6 +177,24 @@ const skills: SkillsDataSection[] = [
             knowledge: 1,
             love: 63,
           },
+          {
+            name: 'P5.js',
+            href: 'https://p5js.org/',
+            knowledge: 20,
+            love: 76,
+          },
+          {
+            name: 'Vite',
+            href: 'https://vitejs.dev/',
+            knowledge: 40,
+            love: 73,
+          },
+          {
+            name: 'Webpack',
+            href: 'https://webpack.js.org/',
+            knowledge: 72,
+            love: 50,
+          },
         ],
       },
     ],
@@ -155,10 +202,12 @@ const skills: SkillsDataSection[] = [
 
   {
     name: 'WordPress',
+    className: 'hide-print',
     skills: [
       {
         name: 'WordPress',
         href: 'https://wordpress.org/',
+        className: 'hide-print',
         knowledge: 88,
         love: 68,
         subSkills: [
@@ -201,6 +250,40 @@ const skills: SkillsDataSection[] = [
     name: 'Other Tools',
     skills: [
       {
+        name: 'Common Tools',
+        subSkills: [
+          {
+            name: 'GitHub',
+            href: 'https://github.com',
+            knowledge: 90,
+            love: 88,
+          },
+          {
+            name: 'Figma',
+            href: 'https://www.figma.com/',
+            knowledge: 53,
+            love: 76,
+          },
+          {
+            name: 'Docker',
+            href: 'https://www.docker.com/',
+            knowledge: 60,
+            love: 78,
+          },
+          {
+            name: 'Analytics',
+            knowledge: 70,
+            love: 21,
+          },
+          {
+            name: 'HubSpot',
+            href: 'https://www.hubspot.com/',
+            knowledge: 68,
+            love: 34,
+          },
+        ],
+      },
+      {
         name: 'Static Site Generators',
         love: 94,
         subSkills: [
@@ -230,6 +313,18 @@ const skills: SkillsDataSection[] = [
             love: 80,
           },
           {
+            name: 'Hugo',
+            href: 'https://gohugo.io/',
+            knowledge: 50,
+            love: 63,
+          },
+          {
+            name: 'Jekyll',
+            href: 'https://jekyllrb.com/',
+            knowledge: 63,
+            love: 43,
+          },
+          {
             name: 'Gastby',
             href: 'https://www.gatsbyjs.org/',
             knowledge: 52,
@@ -237,6 +332,7 @@ const skills: SkillsDataSection[] = [
           },
         ],
       },
+
       {
         name: "Other Stuff I'd be Happy to Work With",
         className: 'hide-print',

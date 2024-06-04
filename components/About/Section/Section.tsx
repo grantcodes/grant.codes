@@ -5,13 +5,21 @@ interface AboutSectionProps {
   title: string
   children: React.ReactNode
   className?: string
+  contentClassName?: string
+  titleClassName?: string
 }
 
-const AboutSection = ({ title, children, className }: AboutSectionProps) => {
+const AboutSection = ({
+  title,
+  children,
+  className,
+  contentClassName,
+  titleClassName,
+}: AboutSectionProps) => {
   return (
     <section className={cx(styles.section, className)}>
-      <h2 className={styles.title}>{title}</h2>
-      <div className={styles.content}>{children}</div>
+      <h2 className={cx(styles.title, titleClassName)}>{title}</h2>
+      <div className={cx(styles.content, contentClassName)}>{children}</div>
     </section>
   )
 }

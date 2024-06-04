@@ -15,7 +15,7 @@ const AboutInPerson = () => {
       .catch((err) => setLastLocation(false))
   }, [])
   return (
-    <SubSection title="In Person">
+    <SubSection className="hide-print" title="In Person">
       <InPerson location={lastLocation} />
     </SubSection>
   )

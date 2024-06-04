@@ -9,6 +9,31 @@
   dd {
     margin: 0;
   }
+
+  @media print {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+
+    div {
+      position: relative;
+      width: 50%;
+      padding-inline-start: u.fs(1);
+      padding-inline-start: calc(#{u.fs(1)} + 0.25rem);
+    }
+
+    dt,
+    dd {
+      margin: 0;
+      line-height: 1.1;
+    }
+
+    :global(.icon) {
+      position: absolute;
+      inset-inline-start: 0;
+      font-size: u.fs(1);
+    }
+  }
 }
 
 .map {

@@ -24,6 +24,7 @@ const Event = ({
 }: EventProps) => (
   <div className={classnames(styles.subsection, className)} {...props}>
     <div className={styles.subtitle}>
+      <h4 className="p-name">{title}</h4>
       {!!place && <h5 className="p-location">{place}</h5>}
       <time className="dt-start" dateTime={moment(start).format()}>
         {moment(start).format('MMMM YYYY')}
@@ -38,10 +39,9 @@ const Event = ({
       )}
     </div>
     <div className={styles.subcontent}>
-      <h4 className="p-name">{title}</h4>
       <div className="p-summary">{children}</div>
       {links.map((link) => (
-        <a href={link} key={link}>
+        <a href={link} key={link} className="hide-print">
           {new URL(link).hostname}
         </a>
       ))}

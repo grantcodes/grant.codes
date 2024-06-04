@@ -1,3 +1,4 @@
+import cx from 'classnames'
 import Link from 'components/Link'
 import Websites from 'components/Websites'
 import { Section, SubSection } from 'components/About/Section'
@@ -16,19 +17,17 @@ const About = () => {
         <div className="h-card p-contact">
           <Profile />
 
-          <Section title="Find Me">
-            <SubSection title="Online">
+          <Section title="Find Me" titleClassName="hide-print">
+            <SubSection title="Online" titleClassName="invisible-print">
               <Online />
             </SubSection>
             <InPerson />
           </Section>
         </div>
 
-        <PrintPageBreak />
-
-        <Section title="Work">
+        <Section title="Work History">
           <Event
-            className="p-experience h-event"
+            className={cx(styles.printCard, 'p-experience h-event')}
             start={new Date('2019-10-21')}
             place="Kinsta"
             title="Frontend Web Developer"
@@ -48,7 +47,7 @@ const About = () => {
           </Event>
 
           <Event
-            className="p-experience h-event"
+            className={cx(styles.printCard, 'p-experience h-event')}
             start={new Date('2013-05-01')}
             place="grant.codes"
             title="Freelance Web Developer"
@@ -68,17 +67,17 @@ const About = () => {
             title="Volunteer Tutor"
           >
             <p>
-              Helped young kids learn scratch and other basic programming skills
-              as part of code club at the Dundee Arts Cinema
+              Helped kids learn scratch and other basic programming skills as
+              part of code club at the Dundee Arts Cinema
             </p>
           </Event>
 
           <Event
-            className="p-experience h-event"
+            className={cx(styles.printCard, 'p-experience h-event')}
             start={new Date('2012-08-01')}
             end={new Date('2013-12-01')}
             place="Hit Reach"
-            title="Junior / Senior Web Developer"
+            title="Senior Web Developer"
           >
             <p>
               Initially hired as a junior developer and promoted to senior
@@ -121,11 +120,11 @@ const About = () => {
 
         <Section title="Education">
           <Event
-            className="p-education h-event"
+            className={cx(styles.printCard, 'p-education h-event')}
             start={new Date('2024-03-11')}
             end={new Date('2024-05-31')}
             place="Climatebase"
-            title="Climatebase Fellowship Cohort 5"
+            title="Fellowship Cohort 5"
             links={['https://climatebase.org/fellowship']}
           >
             <p>
@@ -135,7 +134,7 @@ const About = () => {
             </p>
           </Event>
           <Event
-            className="p-education h-event"
+            className={cx(styles.printCard, 'p-education h-event')}
             start={new Date('2008-09-01')}
             end={new Date('2012-07-01')}
             place="Abertay University, Dundee"
@@ -156,13 +155,11 @@ const About = () => {
           </SubSection>
         </Section>
 
-        <PrintPageBreak />
-
         <Section title="Interests">
-          <SubSection title="Travel">
+          <SubSection title="Travel" className={styles.printCard}>
             <p>
-              I did the digital nomad thing for a couple of years, and hope to
-              go back to being somewhat nomadic in the future
+              I sold all my stuff and went traveling for a couple of years while
+              working remotely
             </p>
             <p>
               I <Link to="/2017/06/13/theflyingscotsvan">built</Link> and lived
@@ -174,7 +171,7 @@ const About = () => {
             </p>
           </SubSection>
 
-          <SubSection title="Making & DIY">
+          <SubSection title="Making & DIY" className={styles.printCard}>
             <p>
               I founded{' '}
               <a href="https://dundeemakerspace.co.uk">Dundee MakerSpace</a>,
@@ -192,7 +189,7 @@ const About = () => {
             </p>
           </SubSection>
 
-          <SubSection title="Indieweb">
+          <SubSection title="Indieweb" className={styles.printCard}>
             <p>
               I am a supporter of the{' '}
               <a href="https://indieweb.org">Indieweb</a> movement and make a{' '}
@@ -203,6 +200,20 @@ const About = () => {
           </SubSection>
         </Section>
       </div>
+      <p className={cx('print-only')}>
+        <small
+          style={{
+            marginBlockStart: '2rem',
+            fontSize: '0.6em',
+            display: 'block',
+          }}
+        >
+          This CV is a printout from{' '}
+          <a href="https://grant.codes/about">https://grant.codes/about</a>{' '}
+          check there for more detailed information on my work, skills and
+          projects
+        </small>
+      </p>
     </div>
   )
 }

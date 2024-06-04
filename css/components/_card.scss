@@ -1,27 +1,13 @@
 @use '../util/' as u;
 
 .card {
-  background-color: var(--theme-main);
-  padding: u.$card-padding;
-  margin-bottom: u.space(2);
-  border-radius: u.$border-radius;
-  overflow: hidden;
-  border: 1px solid var(--theme-mainAlt);
-  box-shadow: u.shadow();
-  // @include u.glass();
+  @include u.card();
+  margin-bottom: space(2);
 
   &.is-hightlighted {
     box-shadow: 2px 0px 0 var(--theme-contrast),
       2px -2px 0 var(--theme-contrast), -2px 0px 0 var(--theme-contrast),
       -2px -2px 0 var(--theme-contrast);
-  }
-
-  @media print {
-    display: table;
-    break-inside: avoid;
-    page-break-after: auto;
-    page-break-before: auto;
-    page-break-inside: avoid;
   }
 }
 

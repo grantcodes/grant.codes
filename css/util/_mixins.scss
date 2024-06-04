@@ -1,5 +1,6 @@
 // TODO: Fix up functions
 @use 'sass:math';
+@use './variables' as u;
 
 @function fs($size: 0) {
   @return math.pow(1.4, $size) * 1rem;
@@ -23,4 +24,13 @@
   //     : rgba(255,255,255,.05);
   // @return $size * 1px $size * 1px $size * 4px $shadow;
   // @return none;
+}
+
+@mixin card() {
+  background-color: var(--theme-main);
+  padding: u.$card-padding;
+  border-radius: u.$border-radius;
+  overflow: hidden;
+  border: 1px solid var(--theme-mainAlt);
+  box-shadow: shadow();
 }

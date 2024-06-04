@@ -32,10 +32,11 @@ $breakpoint: 'min-width: 36em';
 .title {
   font-size: $title-size;
   margin: 0;
+  margin-block-end: 0.5rem;
   line-height: 1.2;
   @media ($breakpoint) {
-    position: sticky;
-    top: 0;
+    // position: sticky;
+    // top: 0;
     width: u.$about-heading-width;
     white-space: nowrap;
     overflow: hidden;
@@ -45,6 +46,7 @@ $breakpoint: 'min-width: 36em';
     @media print {
       position: static;
       margin-bottom: 1rem;
+      font-size: u.fs(1);
     }
   }
 }
@@ -63,6 +65,13 @@ $breakpoint: 'min-width: 36em';
   & > * {
     margin: 0;
   }
+
+  p:first-child {
+    margin-block-start: 0;
+  }
+  p:last-child {
+    margin-block-end: 0;
+  }
 }
 
 .subsection {
@@ -75,15 +84,25 @@ $breakpoint: 'min-width: 36em';
   @media ($breakpoint) {
     flex-direction: row;
   }
+
+  // @media print {
+  //   &:not(:first-child) {
+  //     padding-block-start: 1rem;
+  //     border-block-start: 2px solid var(--theme-border);
+  //   }
+  // }
 }
 
 .subtitle {
   font-size: 1rem;
   flex-shrink: 0;
+  margin-block-start: 0;
+  line-height: 1.2;
+  @media print {
+    font-size: u.fs(-0.5);
+  }
 
   @media ($breakpoint) {
-    position: sticky;
-    top: $title-size * 1.2;
     width: u.$about-heading-width;
 
     @media print {
@@ -95,8 +114,23 @@ $breakpoint: 'min-width: 36em';
     margin: 0;
   }
 
+  h4,
+  h5 {
+    font-size: 1em;
+    display: inline;
+    &:last-of-type::after {
+      content: '';
+      display: block;
+    }
+  }
+
   time {
     font-size: u.fs(-1);
+  }
+
+  :global(.p-name + .p-location::before) {
+    content: ' @ ';
+    margin-block-end: 0;
   }
 }
 

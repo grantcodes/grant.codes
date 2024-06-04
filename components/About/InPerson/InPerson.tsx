@@ -1,3 +1,4 @@
+import cx from 'classnames'
 import styles from './InPerson.module.scss'
 import Icon from 'components/Icon'
 import Map from 'components/Map'
@@ -9,18 +10,26 @@ import workIcon from 'eva-icons/fill/svg/briefcase.svg'
 
 const InPerson = ({ location }) => (
   <dl className={styles.list}>
-    <dt>
-      <Icon icon={homeIcon} /> Home Address
-    </dt>
-    <dd>Gràcia, Barcelona, Spain</dd>
+    <div>
+      <dt>
+        <Icon icon={homeIcon} /> Home Address
+      </dt>
+      <dd>
+        <address style={{ fontStyle: 'normal' }}>
+          Gràcia, Barcelona, Spain
+        </address>
+      </dd>
+    </div>
 
-    <dt>
-      <Icon icon={workIcon} /> Work Address
-    </dt>
-    <dd>
-      I work in a lovely coworking space called{' '}
-      <a href="https://www.gardencoworkingatelier.com">Garden</a>
-    </dd>
+    <div>
+      <dt>
+        <Icon icon={workIcon} /> Work Address
+      </dt>
+      <dd>
+        I work in a lovely coworking space called{' '}
+        <a href="https://www.gardencoworkingatelier.com">Garden</a>
+      </dd>
+    </div>
 
     {!!location && (
       <div className="hide-print">

@@ -16,6 +16,12 @@
   }
 }
 
+.invisible-print {
+  @media print {
+    visibility: hidden !important;
+  }
+}
+
 .print-only {
   display: none !important;
   @media print {

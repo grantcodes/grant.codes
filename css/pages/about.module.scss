@@ -3,6 +3,12 @@
 .wrapper {
   max-width: 42rem;
   @media print and (min-width: 30em) {
-    padding: 2rem;
+    padding-inline: 2rem;
+  }
+}
+
+.printCard {
+  @media print {
+    @include u.card();
   }
 }

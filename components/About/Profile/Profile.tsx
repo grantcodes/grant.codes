@@ -36,13 +36,6 @@ const Profile = ({ vertical = false }: ProfileProps) => {
         <p className={styles.profile__description}>
           I like to make fun, accessible, sustainable websites
         </p>
-        <p className={classnames(styles.profile__description, 'print-only')}>
-          <small style={{ display: 'block' }}>
-            This CV is a printout from{' '}
-            <a href="https://grant.codes/about">https://grant.codes/about</a>{' '}
-            check there for more detailed information on my skills and projects
-          </small>
-        </p>
       </div>
     </div>
   )

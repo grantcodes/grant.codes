@@ -8,9 +8,10 @@
   @media print {
     [aria-describedby] {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       align-items: flex-start;
       flex-grow: 1;
+      gap: 0.25rem;
       flex-wrap: wrap;
     }
     [role='tooltip'] {
@@ -23,7 +24,7 @@
       box-shadow: none;
       text-align: left;
       padding: 0;
-      margin-top: 0.4em;
+      margin: 0;
     }
   }
 }
@@ -38,6 +39,11 @@
     border: none;
     padding: 0;
   }
+}
+
+.profile {
+  display: flex;
+  flex-direction: row;
 }
 
 .icon {

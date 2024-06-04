@@ -57,7 +57,7 @@ const Online = () => (
       name="Website grant.codes"
       icon={linkIcon}
       href="https://grant.codes"
-      className="u-url"
+      className="u-url hide-print"
     ></Profile>
 
     <Profile
