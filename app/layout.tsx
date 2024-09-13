@@ -128,7 +128,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(url),
   title: {
     default: name,
-    template: `%s ⁂ ${name}`,
+    template: `%s – ${name}`,
   },
   applicationName: name,
   description: description,

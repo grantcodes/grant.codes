@@ -10,7 +10,7 @@ const DefaultMeta = () => (
   <>
     <DefaultSeo
       title={name}
-      titleTemplate={`%s ⁂ ${name}`}
+      titleTemplate={`%s – ${name}`}
       description={description}
       canonical={url}
       openGraph={{
