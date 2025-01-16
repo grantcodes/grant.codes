@@ -2,7 +2,7 @@ import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 import { mkdirSync, writeFileSync } from 'node:fs'
 import dotenv from 'dotenv'
-import getGeojson from './lib/get-monthly-geojson.js'
+import getPoints from './lib/get-monthly-points.js'
 import getPosts from './lib/get-monthly-posts.js'
 import getWeight from './lib/get-monthly-weight.js'
 
@@ -30,9 +30,28 @@ const getData = async ({ year, month } = {}) => {
     }
   }
 
-  // Get owntracks data
-  const geojson = await getGeojson({ year, month })
-  if (geojson?.geometry?.coordinates?.length) {
+  // Get dawarich data
+  const points = await getPoints({ year, month })
+  if (points?.length) {
+    const geojson = {
+      type: 'Feature',
+      properties: {},
+      geometry: {
+        type: 'LineString',
+        coordinates: [],
+      },
+    }
+
+    for (const { latitude, longitude } of points) {
+      try {
+        const lat = parseFloat(latitude)
+        const lon = parseFloat(longitude)
+        geojson.geometry.coordinates.push([lat, lon])
+      } catch (err) {
+        console.error(err)
+        continue
+      }
+    }
     data.geojson = geojson
   }
 

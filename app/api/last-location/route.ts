@@ -3,20 +3,15 @@ export const dynamic = 'force-dynamic'
 export async function GET(req: Request) {
   let location = false
   try {
-    const url = process.env.OWNTRACKS_URL
-    const username = process.env.OWNTRACKS_USERNAME
-    const password = process.env.OWNTRACKS_PASSWORD
-    const user = process.env.OWNTRACKS_USER
-    const device = process.env.OWNTRACKS_DEVICE
-    const auth = Buffer.from(`${username}:${password}`).toString('base64')
+    const url = process.env.DAWARICH_URL
+    const apiKey = process.env.DAWARICH_API_KEY
 
     const response = await fetch(
-      `${url}/api/0/last/?user=${user}&device=${device}`,
+      `${url}/api/v1/points?api_key=${apiKey}&per_page=1`,
       {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          Authorization: `Basic ${auth}`,
         },
         method: 'GET',
         cache: 'no-store',
@@ -27,9 +22,9 @@ export async function GET(req: Request) {
       location = data[0]
     }
   } catch (err) {
-    console.error('[Error getting owntracks location]', err)
+    console.error('[Error getting dawarich location]', err)
     return Response.json(
-      { error: 'Error getting owntracks location' },
+      { error: 'Error getting dawarich location' },
       { status: 500 }
     )
   }

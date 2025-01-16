@@ -252,6 +252,7 @@ const Uses = () => (
         </dd>
         <dt>Location tracking</dt>
         <dd>
+          <a href="https://dawarich.app">Dawarich</a> &{' '}
           <a href="https://owntracks.org/">Owntracks</a>
         </dd>
         <dt>Podcasts</dt>

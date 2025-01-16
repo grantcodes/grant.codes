@@ -7,23 +7,16 @@ const Where = () => {
   return (
     <>
       <div className={styles.wrapper}>
-        <h2 className='page-title'>Where am I?</h2>
+        <h2 className="page-title">Where am I?</h2>
 
-        <div className={classnames('card card--glass', styles.card)}>
-          <noscript>Sorry, you need JS enabled to find out where I am</noscript>
+        <noscript>
+          <div className={classnames('card card--glass', styles.card)}>
+            Sorry, you need JS enabled to find out where I am
+          </div>
+        </noscript>
 
-          <WhereLocation />
-        </div>
+        <WhereLocation />
       </div>
-
-      {/* <Map
-        themed
-        className={styles.map}
-        location={location ? `geo:${location.lat},${location.lon}` : 'geo:0,0'}
-        zoom={location ? 12 : 3}
-        defaultWidth={1200}
-        defaultHeight={1200}
-      /> */}
     </>
   )
 }

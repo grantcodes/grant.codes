@@ -1,28 +1,32 @@
 export interface LocationResult {
-  _type: string
-  BSSID: string
-  SSID: string
-  acc: number
-  alt: number
-  batt: number
-  bs: number
-  conn: string
-  created_at: number
-  lat: number
-  lon: number
-  m: number
-  t: string
-  tid: string
-  tst: number
-  vac: number
-  vel: number
+  id: number
+  battery_status?: string
+  ping?: number
+  battery: number
+  tracker_id: string
   topic: string
-  username: string
-  device: string
-  ghash: string
-  isotst: string
-  disptst: string
-  addr?: string
+  altitude: number
+  longitude: number | string
+  velocity: number | string
+  trigger: string
+  bssid?: string
+  ssid?: string
+  connection: string
+  vertical_accuracy: number
+  accuracy: number
+  timestamp: number
+  latitude: number | string
+  mode?: number
+  raw_data?: string
+  import_id?: string
+  city?: string
+  country?: string
+  created_at?: string
+  updated_at?: string
+  user_id?: number
+  geodata: any
+  visit_id?: string
+  reverse_geocoded_at?: string
 }
 
 export default async function getLastLocation(): Promise<LocationResult | null> {
