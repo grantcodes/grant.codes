@@ -4,9 +4,8 @@ import Card from 'components/Card'
 import Tooltip from 'components/Tooltip'
 
 import linkIcon from 'eva-icons/fill/svg/external-link.svg'
-import twitterIcon from 'eva-icons/fill/svg/twitter.svg'
+import linkedInIcon from 'eva-icons/fill/svg/linkedin.svg'
 import githubIcon from 'eva-icons/fill/svg/github.svg'
-import facebookIcon from 'eva-icons/fill/svg/facebook.svg'
 import instagramIcon from 'eva-icons/fill/svg/camera.svg'
 import emailIcon from 'eva-icons/fill/svg/email.svg'
 
@@ -69,27 +68,23 @@ const Online = () => (
       rel="me"
     ></Profile>
 
-    {!!process.env.NEXT_PUBLIC_AUTHOR_TWITTER && (
+    {!!process.env.NEXT_PUBLIC_AUTHOR_GITHUB && (
       <Profile
-        id="twitter"
-        name={`Twitter ${userify(process.env.NEXT_PUBLIC_AUTHOR_TWITTER)}`}
-        icon={twitterIcon}
-        href={process.env.NEXT_PUBLIC_AUTHOR_TWITTER}
+        id="github"
+        name={`Github ${userify(process.env.NEXT_PUBLIC_AUTHOR_GITHUB)}`}
+        icon={githubIcon}
+        href={process.env.NEXT_PUBLIC_AUTHOR_GITHUB}
         rel="me"
-        className="hide-print"
       ></Profile>
     )}
 
-    {!!process.env.NEXT_PUBLIC_AUTHOR_FACEBOOK && (
-      <Profile
-        id="facebook"
-        name={`Facebook ${userify(process.env.NEXT_PUBLIC_AUTHOR_FACEBOOK)}`}
-        icon={facebookIcon}
-        href={process.env.NEXT_PUBLIC_AUTHOR_FACEBOOK}
-        rel="me"
-        className="hide-print"
-      ></Profile>
-    )}
+    <Profile
+      id="linkedin"
+      name="LinkedIn @grantcodes"
+      icon={linkedInIcon}
+      href="https://www.linkedin.com/in/grantcodes/"
+      rel="me"
+    ></Profile>
 
     {!!process.env.NEXT_PUBLIC_AUTHOR_INSTAGRAM && (
       <Profile
@@ -99,16 +94,6 @@ const Online = () => (
         href={process.env.NEXT_PUBLIC_AUTHOR_INSTAGRAM}
         rel="me"
         className="hide-print"
-      ></Profile>
-    )}
-
-    {!!process.env.NEXT_PUBLIC_AUTHOR_GITHUB && (
-      <Profile
-        id="github"
-        name={`Github ${userify(process.env.NEXT_PUBLIC_AUTHOR_GITHUB)}`}
-        icon={githubIcon}
-        href={process.env.NEXT_PUBLIC_AUTHOR_GITHUB}
-        rel="me"
       ></Profile>
     )}
   </div>

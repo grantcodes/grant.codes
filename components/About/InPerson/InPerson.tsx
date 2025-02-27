@@ -1,4 +1,3 @@
-import cx from 'classnames'
 import styles from './InPerson.module.scss'
 import Icon from 'components/Icon'
 import Map from 'components/Map'
