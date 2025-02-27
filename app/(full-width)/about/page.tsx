@@ -28,7 +28,18 @@ const About = () => {
         <Section title="Work History">
           <Event
             className={cx(styles.printCard, 'p-experience h-event')}
+            start={new Date('2025-03-01')}
+            place="Exnaton"
+            title="Frontend Developer"
+            links={['https://www.exnaton.com/en']}
+          >
+            <p>My climate journey begins!</p>
+          </Event>
+
+          <Event
+            className={cx(styles.printCard, 'p-experience h-event')}
             start={new Date('2019-10-21')}
+            end={new Date('2025-02-27')}
             place="Kinsta"
             title="Frontend Web Developer"
             links={['https://kinsta.com/']}
@@ -49,6 +60,7 @@ const About = () => {
           <Event
             className={cx(styles.printCard, 'p-experience h-event')}
             start={new Date('2013-05-01')}
+            end={new Date('2024-05-01')}
             place="grant.codes"
             title="Freelance Web Developer"
           >
