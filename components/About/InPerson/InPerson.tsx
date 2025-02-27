@@ -16,7 +16,7 @@ const InPerson = ({ location }) => (
       </dt>
       <dd>
         <address style={{ fontStyle: 'normal' }}>
-          Gràcia, Barcelona, Spain
+          El Clot, Barcelona, Spain
         </address>
       </dd>
     </div>
