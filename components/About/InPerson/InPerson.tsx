@@ -26,7 +26,7 @@ const InPerson = ({ location }) => (
       </dt>
       <dd>
         I work in a lovely coworking space called{' '}
-        <a href="https://www.gardencoworkingatelier.com">Garden</a>
+        <a href="https://akasha.barcelona">AKASHA Hub</a>
       </dd>
     </div>
 
