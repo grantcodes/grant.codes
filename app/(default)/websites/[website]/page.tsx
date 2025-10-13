@@ -37,14 +37,16 @@ export async function generateStaticParams() {
   return websites.map((website) => ({ website: website.slug }))
 }
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata(props) {
+  const params = await props.params;
   const website = websites.find((w) => w.slug === params?.website)
   return {
     title: website?.title ?? 'Project',
   }
 }
 
-export default function WebsitePage({ params }) {
+export default async function WebsitePage(props) {
+  const params = await props.params;
   const website = websites.find((w) => w.slug === params?.website)
 
   if (!website) {

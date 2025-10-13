@@ -3,7 +3,8 @@ import getTypes from 'lib/get/post-types'
 import getPageCount from 'lib/get/page-count'
 import getPosts from 'lib/get/posts'
 
-const Page = async ({ params }) => {
+const Page = async props => {
+  const params = await props.params;
   const posts = await getPosts({
     query: { ...params, typeOrYear: 'photos' },
     limit: 50,

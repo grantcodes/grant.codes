@@ -3,7 +3,8 @@ import getCategories from 'lib/get/categories'
 import getPosts from 'lib/get/posts'
 import { notFound } from 'next/navigation'
 
-const Page = async ({ params }) => {
+const Page = async props => {
+  const params = await props.params;
   const categorySlug = params.category
 
   const allCategories = await getCategories()

@@ -9,7 +9,8 @@ interface PageParams {
   category: string
 }
 
-const Page = async ({ params }) => {
+const Page = async props => {
+  const params = await props.params;
   const allCategories = await getCategories()
   const category = allCategories.find(cat => cat.slug === params.category)
 

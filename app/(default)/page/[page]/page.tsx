@@ -6,7 +6,8 @@ export interface PageParams {
   page: string
 }
 
-const Home = async ({ params }) => {
+const Home = async props => {
+  const params = await props.params;
   const posts = await getPosts({ query: params })
   return (
     <PostList
@@ -33,6 +34,7 @@ export async function generateStaticParams (): Promise<PageParams[]> {
   return pages
 }
 
-export { generateMetadata } from 'lib/get/metadata'
+export { /* @next-codemod-error `generateMetadata` export is re-exported. Check if this component uses `params` or `searchParams`*/
+generateMetadata } from 'lib/get/metadata'
 
 export default Home

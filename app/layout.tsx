@@ -127,10 +127,10 @@ export default function RootLayout({
 					<link key={key} {...props} />
 				))}
 				<style>{themeCss}</style>
+				{/* Script to load theme without flash */}
+				<Script strategy="beforeInteractive" src="/load-theme.js" />
 			</head>
 			<body>{children}</body>
-			{/* Script to load theme without flash */}
-			<Script strategy="beforeInteractive" src="/load-theme.js" />
 		</html>
 	);
 }

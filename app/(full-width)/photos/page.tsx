@@ -1,7 +1,8 @@
 import PostList from 'components/PostList'
 import getPosts from 'lib/get/posts'
 
-const Page = async ({ params }) => {
+const Page = async props => {
+  const params = await props.params;
   const posts = await getPosts({
     query: { ...params, typeOrYear: 'photo' },
     limit: 50,

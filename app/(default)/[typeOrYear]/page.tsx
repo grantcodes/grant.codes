@@ -75,7 +75,8 @@ async function getYearData (year): Promise<YearData> {
   return { ...yearData }
 }
 
-const Page = async ({ params }) => {
+const Page = async props => {
+  const params = await props.params;
   if (parseInt(params.typeOrYear)) {
     // Is a year summary.
     const yearInt = parseInt(params.typeOrYear)
@@ -139,6 +140,7 @@ export async function generateStaticParams () {
   }
 }
 
-export { generateMetadata } from 'lib/get/metadata'
+export { /* @next-codemod-error `generateMetadata` export is re-exported. Check if this component uses `params` or `searchParams`*/
+generateMetadata } from 'lib/get/metadata'
 
 export default Page

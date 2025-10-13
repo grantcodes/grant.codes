@@ -65,32 +65,6 @@ const DefaultMeta = () => (
 				},
 			]}
 		/>
-		{/* Script to load theme without flash */}
-		<script
-			dangerouslySetInnerHTML={{
-				__html: `
-          var theme = localStorage.getItem('theme');
-          if (theme) {
-            theme = JSON.parse(theme);
-            if (theme) {
-              Object.keys(theme).forEach(function(key) {
-                var color = theme[key];
-                if (typeof color !== 'string' && color._rgb) {
-                  color = 'rgba(' + color._rgb.join(',') + ')';
-                } 
-                if (Array.isArray(color)) {
-                  color.forEach(function(c, i) {
-                    window.document.documentElement.style.setProperty('--theme-' + key + '-' + i, c.toString());
-                  });
-                } else {
-                  window.document.documentElement.style.setProperty('--theme-' + key, color.toString());
-                }
-              }) 
-            }
-          } 
-        `,
-			}}
-		/>
 	</>
 );
 

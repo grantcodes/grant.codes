@@ -2,7 +2,8 @@ import { notFound } from 'next/navigation'
 import Post from 'components/Post'
 import getPosts from 'lib/get/posts'
 
-const Page = async ({ params }) => {
+const Page = async props => {
+  const params = await props.params;
   const posts = await getPosts({ query: params })
 
   if (!posts || !posts.length) {

@@ -8,7 +8,8 @@ interface PageParams {
   typeOrYear: string
 }
 
-const Page = async ({ params }) => {
+const Page = async props => {
+  const params = await props.params;
   const posts = await getPosts({ query: params })
   return <PostList posts={posts} type='home' params={params} />
 }

@@ -3,7 +3,7 @@ import React from 'react'
 
 interface LinkProps extends Omit<NextLinkProps, 'href'> {
   to?: string
-  linkAs?: string | React.ReactElement
+  linkAs?: string | React.ReactElement<any>
   children?: React.ReactNode
   style?: React.CSSProperties
   className?: string

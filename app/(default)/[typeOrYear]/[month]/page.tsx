@@ -6,7 +6,8 @@ const leadingZero = num =>
   parseInt(num) < 10 && parseInt(num) > 0 ? `0${num}` : `${num}`
 
 // TODO: Improve data fetching
-const MonthlySummary = async ({ params }) => {
+const MonthlySummary = async props => {
+  const params = await props.params;
   if (
     !params.typeOrYear ||
     !params.month ||
