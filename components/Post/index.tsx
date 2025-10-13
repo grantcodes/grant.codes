@@ -292,7 +292,7 @@ const Post = ({ compact = false, post, className = "" }: PostProps) => {
 				))}
 
 				<Footer post={post} compact={compact} />
-				{isAdmin && <Admin post={post} />}
+				{isAdmin && <Admin post={post}>{null}</Admin>}
 			</Card>
 
 			{!compact && <Comments post={post} />}

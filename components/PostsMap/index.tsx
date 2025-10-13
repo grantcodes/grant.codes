@@ -38,7 +38,7 @@ const PostsMap = ({ title, posts }: PostsMapProps) => {
 		});
 	};
 
-	const viewport = getBoundaries();
+	const viewport = getBoundaries() ?? { latitude: 0, longitude: 0, zoom: 3 };
 
 	return (
 		<>
@@ -54,12 +54,16 @@ const PostsMap = ({ title, posts }: PostsMapProps) => {
 				defaultHeight={1200}
 			>
 				{posts.map((post) => {
-					let center = null;
+					let center: [number, number] | null = null;
 					if (post.properties.location) {
-						center = getLatLngFromMf2(post.properties.location[0]);
+						center = getLatLngFromMf2(post.properties.location[0]) as
+							| [number, number]
+							| null;
 					}
 					if (post.properties.checkin) {
-						center = getLatLngFromMf2(post.properties.checkin[0]);
+						center = getLatLngFromMf2(post.properties.checkin[0]) as
+							| [number, number]
+							| null;
 					}
 					if (center === null) {
 						return null;

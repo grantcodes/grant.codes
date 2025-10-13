@@ -48,6 +48,7 @@ const PostsGallery = ({
 							<Image
 								className={styles.photo}
 								src={photo.photo}
+								alt=""
 								width={200}
 								height={200}
 								loader={imageLoader}
@@ -62,7 +63,7 @@ const PostsGallery = ({
 						<Fragment key={"posts-gallery-photo-" + i}>
 							<div
 								className={classnames("h-cite", styles.item)}
-								maxWidth={maxWidth}
+								style={{ maxWidth: maxWidth }}
 							>
 								<Link to={photo.permalink} className="u-url">
 									<Image

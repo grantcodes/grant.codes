@@ -22,7 +22,7 @@ const PostMarker = ({ post, ...markerProps }: PostMarkerProps) => {
 			/>
 			<div
 				className={styles["post-container"]}
-				open={open}
+				data-open={open}
 				onClick={() => setOpen(false)}
 			>
 				<div className={styles.posts}>

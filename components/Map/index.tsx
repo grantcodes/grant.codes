@@ -33,7 +33,7 @@ const Map = ({
 	...mapProps
 }: MapProps) => {
 	// Get the center from the location provided
-	const center = getLatLngFromMf2(location) ?? [0, 0];
+	const center = (getLatLngFromMf2(location) ?? [0, 0]) as [number, number];
 
 	const provider = (x: number, y: number, z: number) =>
 		`https://api.mapbox.com/styles/v1/grantcodes/ckctekw712q2k1jph87kqekjk/tiles/256/${z}/${x}/${y}@2x?access_token=${process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}`;
