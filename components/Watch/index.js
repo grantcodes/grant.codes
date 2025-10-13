@@ -54,22 +54,30 @@ const Trakt = ({ plays, last_watched_at: lastWatch, movie, ...props }) => (
 export default function Watch({ post, compact }) {
   return (
     <Card>
-      <Banner
-        background={
-          !!post.properties.featured ? post.properties.featured[0] : null
-        }
-      >
-        {!!post.properties.photo && post.properties.photo[0] && (
-          <Poster src={post.properties.photo[0].value} alt="" />
-        )}
+      {!!post.properties.photo && post.properties.photo[0] && (
+        <img
+          src={post.properties.photo[0].value}
+          alt=""
+          style={{
+            display: 'block',
+            maxHeight: '12em',
+            maxWidth: '100%',
+            width: 'auto',
+            height: 'auto',
+            float: 'left',
+            marginRight: 'var(--card-padding)',
+            borderRadius: 'var(--border-radius)',
+            border: '1px solid var(--theme-border)'
+          }}
+        />
+      )}
 
-        {!!post.properties.trakt && (
-          <Trakt
-            {...post.properties.trakt[0]}
-            url={post.properties['watch-of'][0]}
-          />
-        )}
-      </Banner>
+      {!!post.properties.trakt && (
+        <Trakt
+          {...post.properties.trakt[0]}
+          url={post.properties['watch-of'][0]}
+        />
+      )}
       <Footer post={post} />
       <Admin post={post} />
       {!compact && <Comments post={post} />}

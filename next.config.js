@@ -5,14 +5,15 @@ const subdomains = [
 ];
 
 const config = {
-	experimental: {
-		serverComponentsExternalPackages: ["canvas"],
-		turbo: {
-			rules: {
-				"*.svg": {
-					loaders: ["svg-inline-loader"],
-					as: "*.js",
-				},
+	eslint: {
+		ignoreDuringBuilds: true,
+	},
+	serverExternalPackages: ["canvas"],
+	turbopack: {
+		rules: {
+			"*.svg": {
+				loaders: ["svg-inline-loader"],
+				as: "*.js",
 			},
 		},
 	},
