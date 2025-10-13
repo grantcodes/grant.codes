@@ -16,9 +16,10 @@ const NewPostTemplate = () => (
 				],
 				photo: [""],
 				url: [
-					typeof window !== "undefined"
+					(typeof window !== "undefined"
 						? window.location.href
-						: process.env.NEXT_PUBLIC_URL?.replace(/['"]+/g, ""),
+						: (process.env.NEXT_PUBLIC_URL ?? "")
+					).replace(/['"]+/g, ""),
 				],
 			},
 			cms: { postType: "article" },
