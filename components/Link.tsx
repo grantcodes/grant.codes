@@ -1,41 +1,36 @@
-import Link, { LinkProps as NextLinkProps } from 'next/link'
-import React from 'react'
+import Link from "next/link";
+import type { LinkProps as NextLinkProps } from "next/link";
+import type React from "react";
 
-interface LinkProps extends Omit<NextLinkProps, 'href'> {
-  to?: string
-  linkAs?: string | React.ReactElement<any>
-  children?: React.ReactNode
-  style?: React.CSSProperties
-  className?: string
+interface LinkProps extends Omit<NextLinkProps, "href"> {
+	to?: string;
+	children?: React.ReactNode;
+	style?: React.CSSProperties;
+	className?: string;
 }
 
-const WrappedLink = ({ to, as, linkAs, ...props }: LinkProps) => {
-  if (!to) {
-    return props.children
-  }
+const WrappedLink = ({ to, ...props }: LinkProps) => {
+	if (!to) {
+		return props.children;
+	}
 
-  const publicUrl = process.env.NEXT_PUBLIC_URL ?? ''
+	const publicUrl = process.env.NEXT_PUBLIC_URL ?? "";
 
-  if (to?.startsWith(publicUrl) || to?.startsWith('https://grant.codes')) {
-    to = to.replace(publicUrl, '')
-    to = to.replace('https://grant.codes', '')
+	if (to?.startsWith(publicUrl) || to?.startsWith("https://grant.codes")) {
+		to = to.replace(publicUrl, "");
+		to = to.replace("https://grant.codes", "");
+	}
 
-    if (!as && !linkAs && to.split('/').length === 5) {
-      linkAs = to
-      to = '/[typeOrYear]/[month]/[day]/[slug]'
-    }
-  }
+	if (to === "") {
+		to = "/";
+	}
 
-  if (to === '') {
-    to = '/'
-  }
+	if (to?.startsWith("http")) {
+		return <a href={to} {...props} />;
+	}
 
-  if (to && to.startsWith('http')) {
-    return <a href={to} {...props} />
-  }
+	// In App Router, use the actual URL directly as href
+	return <Link href={to} {...props}></Link>;
+};
 
-  // @ts-ignore
-  return <Link href={to} as={linkAs || as} {...props}></Link>
-}
-
-export default WrappedLink
+export default WrappedLink;

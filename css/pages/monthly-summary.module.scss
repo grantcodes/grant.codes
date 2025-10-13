@@ -25,3 +25,9 @@
   font-size: u.fs(1);
   text-transform: capitalize;
 }
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
