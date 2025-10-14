@@ -63,7 +63,7 @@ const PostsGallery = ({
 						<Fragment key={"posts-gallery-photo-" + i}>
 							<div
 								className={classnames("h-cite", styles.item)}
-								style={{ maxWidth: maxWidth }}
+								style={{ maxWidth: `${maxWidth}%` }}
 							>
 								<Link to={photo.permalink} className="u-url">
 									<Image
