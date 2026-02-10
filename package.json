@@ -12,11 +12,11 @@
   "dependencies": {
     "@grantcodes/themer": "^2.0.0",
     "@postr/core": "^1.10.3",
-    "@stripe/react-stripe-js": "^2.7.1",
-    "@stripe/stripe-js": "^2.4.0",
+    "@stripe/react-stripe-js": "^5.6.0",
+    "@stripe/stripe-js": "^5.6.0",
     "@theothergothamdev/pluralize-ts": "^1.1.0",
     "classnames": "^2.5.1",
-    "dotenv": "^16.4.5",
+    "dotenv": "^16.6.1",
     "eva-icons": "^1.1.3",
     "indieauth-helper": "^1.0.2",
     "leaflet": "^1.9.4",
@@ -32,10 +32,10 @@
     "react-dom": "19.2.4",
     "react-leaflet": "^5.0.0",
     "react-photoswipe-gallery": "^2.2.7",
-    "recharts": "^2.12.7",
+    "recharts": "^2.15.4",
     "reveal.js": "^4.6.1",
-    "sass": "^1.77.2",
-    "sharp": "^0.33.4",
+    "sass": "^1.97.3",
+    "sharp": "^0.34.5",
     "slugify": "^1.6.6",
     "supports-color": "^8.1.1",
     "svg-inline-loader": "^0.8.2",
@@ -52,6 +52,7 @@
     "canvas": "^2.11.2",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
-    "typescript": "^5.4.5"
+    "node-gyp": "^10.1.0",
+    "typescript": "^5.9.3"
   }
 }
