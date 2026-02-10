@@ -287,5 +287,5 @@ export const metadata: Metadata = {
 };
 
 export const viewport = {
-	themeColor: theme.main,
+	themeColor: (theme as any).main || '#000000',
 };

@@ -5,9 +5,6 @@ const subdomains = [
 ];
 
 const config = {
-	eslint: {
-		ignoreDuringBuilds: true,
-	},
 	serverExternalPackages: ["canvas"],
 	turbopack: {
 		rules: {
@@ -26,7 +23,16 @@ const config = {
 		return config;
 	},
 	images: {
-		domains: ["images.weserv.nl", "backend.grant.codes"],
+		remotePatterns: [
+			{
+				protocol: "https",
+				hostname: "images.weserv.nl",
+			},
+			{
+				protocol: "https",
+				hostname: "backend.grant.codes",
+			},
+		],
 	},
 	async rewrites() {
 		return {

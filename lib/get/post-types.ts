@@ -1,4 +1,4 @@
-import pluralize from 'pluralize'
+import pluralize from '@theothergothamdev/pluralize-ts'
 import micropub from 'lib/micropub'
 
 const DEFAULT_POST_TYPES: string[] = [

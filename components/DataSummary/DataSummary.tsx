@@ -1,5 +1,5 @@
 import classnames from "classnames";
-import pluralize from "pluralize";
+import pluralize from "@theothergothamdev/pluralize-ts";
 import Card from "components/Card";
 import { LeafletMap } from "components/LeafletMap";
 import { Button, ButtonProps } from "components/Button";

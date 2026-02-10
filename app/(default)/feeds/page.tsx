@@ -1,4 +1,4 @@
-import pluralize from 'pluralize'
+import pluralize from '@theothergothamdev/pluralize-ts'
 import Card from 'components/Card'
 import getCategories from 'lib/get/categories'
 import getPostTypes from 'lib/get/post-types'
