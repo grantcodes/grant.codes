@@ -39,7 +39,7 @@ const Skill = ({
         {subSkills.length > 0 && (
           <ul className={styles.subskills}>
             {subSkills.map((skill) => (
-              <SubSkill {...skill} />
+              <SubSkill key={skill.id ?? skill.name} {...skill} />
             ))}
           </ul>
         )}

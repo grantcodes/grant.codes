@@ -33,7 +33,11 @@ const About = () => {
             title="Frontend Developer"
             links={['https://www.exnaton.com/en']}
           >
-            <p>My climate journey begins!</p>
+            <p>
+              Working on the core product at a climate tech startup — building
+              components, design systems, and data-rich energy dashboards, with
+              a big focus on modernising the frontend and growing the company.
+            </p>
           </Event>
 
           <Event
@@ -45,15 +49,11 @@ const About = () => {
             links={['https://kinsta.com/']}
           >
             <p>
-              At Kinsta I have been a major contributor to the high traffic
-              marketing website, seeing the marketing team grow from 1 to over
-              30 people
-            </p>
-            <p>
-              Responsibilities included modernizing the technology stack,
-              performing accessibility audits, performance improvements,
-              enabling non developers to easily create beautiful marketing
-              content, and much more
+              I was a core contributor to a high-traffic marketing website,
+              working alongside a team that grew from 1 to over 30 people.
+              Modernising the tech stack, running accessibility audits,
+              improving performance, and building tooling so non-developers
+              could create great content without needing me every five minutes.
             </p>
           </Event>
 
@@ -65,9 +65,8 @@ const About = () => {
             title="Freelance Web Developer"
           >
             <p>
-              As a freelance web developer I have worked with a number of
-              clients on a variety of different projects. Mainly WordPress and
-              React based websites for small to medium size businesses
+              Over a decade of freelance work building WordPress and React sites
+              for all kinds of small and medium-sized businesses.
             </p>
           </Event>
 
@@ -79,8 +78,8 @@ const About = () => {
             title="Volunteer Tutor"
           >
             <p>
-              Helped kids learn scratch and other basic programming skills as
-              part of code club at the Dundee Arts Cinema
+              Taught kids Scratch and basic programming at Code Club, hosted at
+              the Dundee Contemporary Arts cinema.
             </p>
           </Event>
 
@@ -92,10 +91,9 @@ const About = () => {
             title="Senior Web Developer"
           >
             <p>
-              Initially hired as a junior developer and promoted to senior
-              developer I was in charge of regularly building various WordPress,
-              static and custom sites as well as managing a small developer team
-              and relations with clients
+              Started as a junior developer and promoted to senior within a
+              year. Built WordPress, static, and custom sites, managed a small
+              dev team, and dealt with clients.
             </p>
           </Event>
 
@@ -107,12 +105,9 @@ const About = () => {
             title="Web Developer"
           >
             <p>
-              I created many applications to assist college students
-              transitioning to university
-            </p>
-            <p>
-              Also occasionally helped to teach some technical university
-              modules
+              Built web apps to help college students make the jump to
+              university, and occasionally helped teach technical university
+              modules.
             </p>
           </Event>
 
@@ -124,8 +119,8 @@ const About = () => {
             title="Web Developer"
           >
             <p>
-              Developed “FIT” which allowed clients to input various financial
-              data and receive advice on improving profitability
+              Built "FIT" — a tool that let clients input their financial data
+              and get actionable advice on improving profitability.
             </p>
           </Event>
         </Section>
@@ -140,9 +135,9 @@ const About = () => {
             links={['https://climatebase.org/fellowship']}
           >
             <p>
-              I was selected to join Cohort 5 of the Climatebase Fellowship, a
-              climate career accelerator to learn about the problems our planet
-              is facing, what we can do about it and how I can contribute
+              Selected for Cohort 5 of the Climatebase Fellowship — a climate
+              career accelerator where I learned about the problems our planet
+              is facing, what we can do about it, and how I can contribute.
             </p>
           </Event>
           <Event
