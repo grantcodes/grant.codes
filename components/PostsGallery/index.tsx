@@ -6,11 +6,7 @@ import classnames from "classnames";
 import Post from "../Post";
 import Link from "../Link";
 import getPostPhotos from "./get-post-photos";
-import { nextImageLoader } from "lib/image-proxy";
 import styles from "css/components/posts-gallery.module.scss";
-
-const imageLoader =
-	process.env.NODE_ENV === "production" ? undefined : nextImageLoader;
 
 type GalleryType = "collection" | "feed";
 
@@ -51,7 +47,6 @@ const PostsGallery = ({
 								alt=""
 								width={200}
 								height={200}
-								loader={imageLoader}
 								sizes="(min-width: 1135px) 172px, (min-width: 468px) 20vw, 33vw"
 								style={{
 									maxWidth: "100%",
@@ -72,7 +67,6 @@ const PostsGallery = ({
 										alt={photo.alt}
 										width={200}
 										height={200}
-										loader={imageLoader}
 										sizes="(min-width: 1135px) 172px, (min-width: 468px) 20vw, 33vw"
 										style={{
 											width: "100%",

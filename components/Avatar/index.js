@@ -1,7 +1,6 @@
 import classnames from 'classnames'
 import Link from '../Link'
 import getAuthor from 'lib/get/author'
-import imageProxy from '../../lib/image-proxy'
 import styles from 'css/components/avatar.module.scss'
 
 const Avatar = ({
@@ -10,7 +9,6 @@ const Avatar = ({
   noLink = false,
   noName = false,
   size = 20,
-  noProxy = false,
 }) => {
   if (!author) {
     return null
@@ -22,11 +20,7 @@ const Avatar = ({
     return null
   }
 
-  const photoUrl = author.photo
-    ? noProxy
-      ? author.photo
-      : imageProxy(author.photo, { w: size, h: size, fit: 'contain', dpr: 2 })
-    : null
+  const photoUrl = author.photo || null
 
   const LinkWrapper = noLink ? 'span' : Link
   const linkProps = noLink ? {} : { to: author.url, className: 'u-url' }

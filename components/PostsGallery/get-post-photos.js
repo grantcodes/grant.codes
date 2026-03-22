@@ -1,5 +1,4 @@
 import React from 'react'
-import imageProxy from 'lib/image-proxy'
 
 const getPostPhotos = (post) => {
   const { properties, cms } = post
@@ -45,17 +44,6 @@ const getPostPhotos = (post) => {
           cms.imageSizes[photo]['200x200']?.url !== photo
         ) {
           photoData.thumbnail = cms.imageSizes[photo]['200x200'].url
-        } else {
-          try {
-            const { hostname, pathname } = new URL(photo)
-            photoData.thumbnail = imageProxy(hostname + pathname, {
-              w: 200,
-              h: 200,
-              t: 'square',
-            })
-          } catch (err) {
-            console.warn('[Error with photo url]', err)
-          }
         }
         photos.push(photoData)
       } else if (typeof photo === 'object' && photo.value) {
@@ -66,17 +54,6 @@ const getPostPhotos = (post) => {
           cms.imageSizes[photo.value]['200x200']?.url !== photo.value
         ) {
           photoData.thumbnail = cms.imageSizes[photo.value]['200x200'].url
-        } else {
-          try {
-            const { hostname, pathname } = new URL(photo.value)
-            photoData.thumbnail = imageProxy(hostname + pathname, {
-              w: 200,
-              h: 200,
-              t: 'square',
-            })
-          } catch (err) {
-            console.warn('[Error with photo url]', err)
-          }
         }
         photos.push(photoData)
       }
