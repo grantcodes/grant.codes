@@ -76,6 +76,8 @@ const Feeds = async () => {
 
 export default Feeds
 
+export const revalidate = 43200
+
 export const metadata = {
   title: 'Feeds',
 }

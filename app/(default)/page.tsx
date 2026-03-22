@@ -17,4 +17,6 @@ export const metadata = {
   title: 'Home',
 }
 
+export const revalidate = 43200
+
 export default Home
