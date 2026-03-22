@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ViewTransition } from "react";
 import Script from "next/script";
 import { daily as dailyTheme } from "@grantcodes/themer";
 
@@ -130,7 +131,9 @@ export default function RootLayout({
 				{/* Script to load theme without flash */}
 				<Script strategy="beforeInteractive" src="/load-theme.js" />
 			</head>
-			<body>{children}</body>
+			<body>
+					<ViewTransition>{children}</ViewTransition>
+				</body>
 		</html>
 	);
 }
