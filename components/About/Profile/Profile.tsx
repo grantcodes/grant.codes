@@ -24,7 +24,6 @@ const Profile = ({ vertical = false }: ProfileProps) => {
           }}
           noName
           noLink
-          noProxy
         />
       </div>
       <div className={styles.content}>

@@ -26,13 +26,10 @@ const config = {
 		remotePatterns: [
 			{
 				protocol: "https",
-				hostname: "images.weserv.nl",
-			},
-			{
-				protocol: "https",
 				hostname: "backend.grant.codes",
 			},
 		],
+		minimumCacheTTL: 604800,
 	},
 	async rewrites() {
 		return {

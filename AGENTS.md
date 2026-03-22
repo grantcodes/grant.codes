@@ -111,7 +111,6 @@ grant.codes/
 │   ├── get/                    # Data-fetching helpers (posts, categories, years, metadata)
 │   ├── hooks/                  # Custom React hooks
 │   ├── normalize-mf2.js        # Cleans and deduplicates MF2 post data
-│   ├── image-proxy.js          # Builds weserv.nl proxy URLs
 │   ├── auth.js                 # IndieAuth client instance
 │   └── micropub.js             # Micropub client instance
 └── public/                     # Static assets
@@ -158,9 +157,9 @@ Always pass posts through this before rendering.
 
 Year/type archive pages use `generateStaticParams()` to pre-render routes at build time. `lib/get/years.ts` and `lib/get/post-types.ts` provide the param values.
 
-### Image Proxying
+### Image Optimization
 
-External images are proxied via `images.weserv.nl`. Use `lib/image-proxy.js` to construct proxy URLs rather than using image URLs directly.
+Images from `backend.grant.codes` are optimized by Next.js automatically. The `images.remotePatterns` config in `next.config.js` is locked to `backend.grant.codes` only. Cached images expire after 7 days (`minimumCacheTTL: 604800`). Do not add external image proxy services.
 
 ---
 
