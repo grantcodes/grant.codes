@@ -5,6 +5,9 @@ const subdomains = [
 ];
 
 const config = {
+	experimental: {
+		viewTransition: true,
+	},
 	serverExternalPackages: ["canvas"],
 	turbopack: {
 		rules: {

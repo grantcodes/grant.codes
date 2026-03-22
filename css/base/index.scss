@@ -54,3 +54,32 @@
 @import './layout/nav';
 @import './layout/footer';
 @import './print';
+
+// View Transitions
+::view-transition-old(root) {
+  animation: view-fade-out 0.2s ease;
+}
+
+::view-transition-new(root) {
+  animation: view-fade-in 0.2s ease;
+}
+
+@keyframes view-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes view-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
