@@ -12,7 +12,7 @@ const Page = async props => {
 
 export default Page
 
-export const revalidate = 43200
+export const revalidate = 1800
 
 export const metadata = {
   title: 'Photos',

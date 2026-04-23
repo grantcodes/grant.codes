@@ -18,8 +18,10 @@ export async function generateStaticParams () {
   const posts = await getPosts({ limit: 25 })
 
   // Helper function to add 0 to the start of numbers
-  const leadingZero = num =>
-    parseInt(num) < 10 && parseInt(num) > 0 ? `0${num}` : `${num}`
+  const leadingZero = num => {
+    const n = parseInt(num)
+    return n < 10 && n > 0 ? `0${n}` : `${n}`
+  }
 
   // Get the url params for each
   const params = posts.map(post => {
