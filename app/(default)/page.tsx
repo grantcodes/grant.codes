@@ -6,7 +6,7 @@ const Home = async props => {
   const params = await props.params;
   const posts = await getPosts({ query: params })
 
-  if (!posts) {
+  if (!posts || !posts.length) {
     return <Profile vertical />
   }
 
@@ -17,6 +17,6 @@ export const metadata = {
   title: 'Home',
 }
 
-export const revalidate = 43200
+export const revalidate = 1800
 
 export default Home

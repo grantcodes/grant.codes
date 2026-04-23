@@ -1,9 +1,12 @@
+import { notFound } from "next/navigation";
 import { DataSummary } from "components/DataSummary";
 import getMonthData from "lib/get/month-data";
 import getMonthDataFiles from "lib/get/month-data-files";
 
-const leadingZero = (num) =>
-	parseInt(num) < 10 && parseInt(num) > 0 ? `0${num}` : `${num}`;
+const leadingZero = (num) => {
+	const n = parseInt(num);
+	return n < 10 && n > 0 ? `0${n}` : `${n}`;
+};
 
 // TODO: Improve data fetching
 const MonthlySummary = async (props) => {
@@ -14,12 +17,12 @@ const MonthlySummary = async (props) => {
 		!parseInt(params.typeOrYear) ||
 		!parseInt(params.month)
 	) {
-		throw new Error("Year or month is not defined");
+		notFound();
 	}
 
 	const data = getMonthData(params.typeOrYear, params.month);
 	if (!data) {
-		throw new Error("No data returned");
+		notFound();
 	}
 
 	const { typeOrYear: year, month } = params;
@@ -30,7 +33,7 @@ const MonthlySummary = async (props) => {
 		monthInt === 12 ? "01" : leadingZero(monthInt + 1)
 	}`;
 	const previousLink = `/${monthInt === 1 ? yearInt - 1 : year}/${
-		month === 1 ? 12 : leadingZero(monthInt - 1)
+		monthInt === 1 ? 12 : leadingZero(monthInt - 1)
 	}`;
 
 	return (
