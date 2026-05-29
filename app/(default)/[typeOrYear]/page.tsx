@@ -1,6 +1,5 @@
 import PostList from "components/PostList";
 import { DataSummary } from "components/DataSummary";
-import getTypes from "lib/get/post-types";
 import getMonthData from "lib/get/month-data";
 import getMonthDataFiles from "lib/get/month-data-files";
 import getPosts from "lib/get/posts";
@@ -108,12 +107,7 @@ const Page = async (props) => {
 
 export async function generateStaticParams() {
 	try {
-		// Get post types to create type archives
-		const ingoredTypes = ["photos", "journals"];
-		let types = await getTypes(true);
-		types = types.filter((type) => !ingoredTypes.includes(type));
-
-		// Get year data folders to create year archives
+		// Only prebuild year archives. Type archives are generated on demand.
 		const monthFiles = getMonthDataFiles();
 		const years: string[] = [];
 		for (const file of monthFiles) {
@@ -122,19 +116,11 @@ export async function generateStaticParams() {
 				years.push(year);
 			}
 		}
-		types.push(...years);
 
-		// Create both post type and year paths
-		return types.map((t) => ({ typeOrYear: t }));
+		return years.map((year) => ({ typeOrYear: year }));
 	} catch (err) {
 		console.error("Error getting typeoryear static paths", err);
-		return [
-			{ typeOrYear: "notes" },
-			{ typeOrYear: "articles" },
-			{ typeOrYear: "photos" },
-			{ typeOrYear: "likes" },
-			{ typeOrYear: "replies" },
-		];
+		return [];
 	}
 }
 

@@ -1,5 +1,8 @@
+import normalizeSearchQuery from 'lib/get/normalize-search-query'
+
 const getPageCount = async (query = {}, limit = 10): Promise<number> => {
   const url = process.env.NEXT_PUBLIC_API_URL + '/api/page-count'
+  const normalizedQuery = normalizeSearchQuery(query)
   let headers = {
     Accept: 'application/json',
     'Content-Type': 'application/json',
@@ -13,7 +16,7 @@ const getPageCount = async (query = {}, limit = 10): Promise<number> => {
     const res = await fetch(url, {
       headers,
       method: 'POST',
-      body: JSON.stringify({ query, limit }),
+      body: JSON.stringify({ query: normalizedQuery, limit }),
       signal: controller.signal,
     })
 

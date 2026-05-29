@@ -28,11 +28,4 @@ const Page = async props => {
   )
 }
 
-export async function generateStaticParams () {
-  // Get all categories
-  const categories = await getCategories()
-
-  return categories.map(({ slug }) => ({ category: slug }))
-}
-
 export default Page

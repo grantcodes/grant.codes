@@ -1,7 +1,6 @@
 import PostList from 'components/PostList'
 import getPosts from 'lib/get/posts'
 import getCategories from 'lib/get/categories'
-import getPageCount from 'lib/get/page-count'
 import { notFound } from 'next/navigation'
 
 interface PageParams {
@@ -19,7 +18,7 @@ const Page = async props => {
   }
 
   const posts = await getPosts({
-    query: { category: category.name, type: 'all' },
+    query: { category: category.name, type: 'all', page: params.page },
   })
 
   return (
@@ -32,24 +31,6 @@ const Page = async props => {
       />
     </>
   )
-}
-
-export async function generateStaticParams (): Promise<PageParams[]> {
-  const categoryPages: PageParams[] = []
-
-  // Get all categories
-  const categories = await getCategories()
-
-  for (const category of categories) {
-    // Get post count for each category
-    const pageCount = await getPageCount({ category: category.name })
-
-    for (let pageNumber = 1; pageNumber < pageCount; pageNumber++) {
-      categoryPages.push({ page: `${pageNumber}`, category: category.slug })
-    }
-  }
-
-  return categoryPages
 }
 
 export default Page
