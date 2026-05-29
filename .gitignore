@@ -28,3 +28,5 @@ yarn-error.log*
 # app stuff
 backend/.data
 backend
+.planning
+.planning/
