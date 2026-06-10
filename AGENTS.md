@@ -6,7 +6,7 @@ Instructions for AI agents and coding assistants working in this repository.
 
 ## Project Overview
 
-This is the frontend for **grant.codes**, a personal IndieWeb website. It is built with Next.js (App Router) and communicates with a separate backend service for content storage and retrieval.
+This is the **grant.codes** monorepo. It contains both the frontend and backend services for the grant.codes IndieWeb website, managed as a pnpm workspace.
 
 The site is **IndieWeb-first**: all content is stored as [Microformats2 (MF2)](https://microformats.org/wiki/microformats2) JSON, posted via [Micropub](https://micropub.spec.indieweb.org/), authenticated via [IndieAuth](https://indieauth.spec.indieweb.org/), and federated via [Webmention](https://webmention.net/).
 
@@ -14,14 +14,14 @@ The site is **IndieWeb-first**: all content is stored as [Microformats2 (MF2)](h
 
 ## Architecture
 
-Two separate services run the site:
+Two separate services run the site, both in this repo:
 
 | Service | Location | Description |
 |---|---|---|
-| **Frontend** | This repo (root) | Next.js 16 App Router, port 3000 |
-| **Backend** | `backend/` | Express + Hono API server, port 4000 |
+| **Frontend** | `apps/web` | Next.js 16 App Router, port 3000 |
+| **Backend** | `apps/api` | Express + Hono API server, port 4000 |
 
-`backend/` is a **separate git repository** that lives alongside this one. It is listed in `.gitignore` and is not part of this repo's git history. Do not treat it as part of this package.
+The backend was imported into `apps/api` as a one-time snapshot from the previously standalone `backend.grant.codes` repository.
 
 **Data flow:**
 
@@ -63,57 +63,56 @@ Page component
 ## Project Structure
 
 ```
-grant.codes/
-├── app/                        # Next.js App Router
-│   ├── layout.tsx              # Root HTML shell; injects theme, IndieWeb <link> tags, PWA metadata
-│   ├── (default)/              # Standard pages wrapped in <Container> (header + nav + footer)
-│   │   ├── page.tsx            # Home page
-│   │   ├── [typeOrYear]/       # Post-type archive (/notes) or year summary (/2023)
-│   │   │   └── [month]/[day]/  # Full date-based archive routing
-│   │   ├── category/
-│   │   ├── search/[search]/
-│   │   ├── feeds/
-│   │   ├── contact/
-│   │   ├── uses/
-│   │   ├── websites/
-│   │   └── pay/
-│   ├── (article)/new/          # New post composer (Micropub write UI)
-│   ├── (full-width)/           # Pages without Container wrapper
-│   │   ├── about/              # Profile / CV
-│   │   ├── where/              # Live location (fetches from Dawarich)
-│   │   └── photos/             # Photo gallery
-│   ├── api/
-│   │   ├── last-location/      # Proxies Dawarich location API
-│   │   ├── revalidate/         # On-demand ISR revalidation
-│   │   └── pay/                # Stripe payment intent
-│   ├── slides/                 # Reveal.js presentations
-│   └── not-found.tsx
-├── backend/                    # Separate git repo — Express + Hono API (port 4000)
-├── background-generator/       # Standalone Vite app for generating site backgrounds
-├── bin/                        # CLI scripts
-│   ├── generate-monthly-data.js  # Pulls posts / GPS / body data → data/monthly/
-│   └── dawarich-to-immich.js
-├── components/
-│   ├── Post/                   # Core post renderer — handles all MF2 post types
-│   ├── PostList/               # List, gallery, timeline, map views
-│   ├── Container/              # Site shell: Header, Footer, Nav, Pagination
-│   ├── About/                  # Profile, skills, presence sections
-│   ├── DataSummary/            # Year-in-review charts and visualisations
-│   └── ...                     # UI primitives: Card, Button, Icon, Toast, Tooltip
-├── css/
-│   ├── base/                   # Reset, fonts, typography, forms, layout
-│   ├── components/             # Per-component styles
-│   ├── pages/                  # Per-page styles (some CSS Modules)
-│   └── util/                   # Mixins and utilities
-├── data/
-│   └── monthly/                # Auto-generated JSON — DO NOT edit manually
-├── lib/
-│   ├── get/                    # Data-fetching helpers (posts, categories, years, metadata)
-│   ├── hooks/                  # Custom React hooks
-│   ├── normalize-mf2.js        # Cleans and deduplicates MF2 post data
-│   ├── auth.js                 # IndieAuth client instance
-│   └── micropub.js             # Micropub client instance
-└── public/                     # Static assets
+grant.codes/                         # pnpm workspace root
+├── apps/
+│   ├── api/                         # Express + Hono backend (port 4000)
+│   │   ├── src/                     #   TypeScript source
+│   │   ├── tests/                   #   Node test runner tests
+│   │   ├── static/                  #   Static assets served by the API
+│   │   ├── dist/                    #   Compiled JS output
+│   │   ├── .env.example             #   Backend-only env template
+│   │   ├── nixpacks.toml            #   Deploy config (Nixpacks)
+│   │   ├── tsconfig.json            #   strict TS config
+│   │   └── package.json             #   `@grant.codes/api`
+│   └── web/                         # Next.js 16 frontend (port 3000)
+│       ├── app/                     #   App Router pages/layouts/API routes
+│       │   ├── layout.tsx           #   Root HTML shell; theme, IndieWeb <link> tags, PWA metadata
+│       │   ├── (default)/           #   Standard pages (home, archive, categories, search, etc.)
+│       │   │   ├── page.tsx         #   Home page
+│       │   │   ├── [typeOrYear]/    #   Post-type archive (/notes) or year summary (/2023)
+│       │   │   │   └── [month]/[day]/
+│       │   │   ├── category/
+│       │   │   ├── search/[search]/
+│       │   │   ├── feeds/
+│       │   │   ├── contact/
+│       │   │   ├── uses/
+│       │   │   ├── websites/
+│       │   │   └── pay/
+│       │   ├── (article)/new/       #   New post composer (Micropub write UI)
+│       │   ├── (full-width)/        #   Pages without Container wrapper
+│       │   │   ├── about/
+│       │   │   ├── where/
+│       │   │   └── photos/
+│       │   ├── api/                 #   Next route handlers (revalidate, pay, last-location)
+│       │   ├── slides/              #   Reveal.js presentations
+│       │   └── not-found.tsx
+│       ├── components/              #   React components (Post, PostList, Container, About, etc.)
+│       ├── css/                     #   SCSS base, components, pages, utilities
+│       ├── lib/                     #   Data fetching, auth, Micropub client, MF2 normalizer
+│       ├── public/                  #   Static assets served by Next.js
+│       ├── data/monthly/            #   Auto-generated JSON — DO NOT edit manually
+│       ├── bin/                     #   CLI scripts (generate-monthly-data, dawarich-to-immich)
+│       ├── next.config.js           #   Subdomain rewrites, image config, SVG loader
+│       ├── tsconfig.json            #   Next.js TS config (strict: false)
+│       ├── nixpacks.toml            #   Deploy config (Nixpacks)
+│       └── package.json             #   `@grant.codes/web`
+├── background-generator/            # Standalone Vite app for generating site backgrounds
+├── .github/workflows/
+│   └── montly-data.yml              # Monthly data generation workflow
+├── pnpm-workspace.yaml              # Workspace package config + native-module allowlist
+├── nixpacks.toml                    # Root deploy config (orchestrates entire monorepo build)
+├── AGENTS.md                        # This file
+└── package.json                     # Root workspace orchestration scripts
 ```
 
 ---
@@ -221,24 +220,45 @@ Images from `backend.grant.codes` are optimized by Next.js automatically. The `i
 Run from the repo root:
 
 ```bash
-npm run dev      # Start Next.js dev server (port 3000)
-npm run build    # Production build
-npm start        # Start production server
+npm run dev       # Start Next.js dev server (port 3000)
+npm run dev:api   # Start API server (port 4000)
+npm run build     # Build both apps (web then api)
+npm run build:web # Build only the frontend
+npm run build:api # Build only the backend
+npm start         # Start production Next.js server
+npm run start:api # Start production API server
+npm test          # Run API tests
 ```
 
-The backend is a separate service. To run the full stack locally, start the backend independently from `backend/`.
+The backend is a separate service. To run the full stack locally in separate terminals:
 
-Environment variables are read from `.env.local`. Key variables:
-- `NEXT_PUBLIC_API_URL` — URL of the backend API (e.g. `http://localhost:4000`)
+```bash
+# Terminal 1: API server
+npm run dev:api
+
+# Terminal 2: Frontend dev server
+npm run dev
+```
+
+Environment variables:
+- **Root `.env`** — shared/public vars loaded by both apps (Next.js public env vars, API URL)
+- **`apps/web/.env`** — frontend-specific env (overrides root `.env`)
+- **`apps/api/.env.local`** — backend-specific secrets (not tracked; copy from `apps/api/.env.example`)
+- The API dev script loads `../../.env` (root) and `.env.local` (app-local) via `--env-file` flags.
+
+Key variables:
+- `NEXT_PUBLIC_API_URL` — URL of the backend API (defaults to `https://backend.grant.codes` in production, `http://localhost:4000` locally)
 
 ---
 
 ## Gotchas
 
 - **`data/monthly/`** is auto-generated by the GitHub Actions workflow (`.github/workflows/montly-data.yml`) on the 1st of each month. Do not edit these files manually.
-- **`backend/`** is a separate git repository and separate Node service. It is gitignored from this repo. Do not assume changes here are reflected there or vice versa.
+- **`apps/api`** was imported as a one-time snapshot from the previously standalone `backend.grant.codes` repo. No git history was preserved.
 - **`moment`** is the date library in use. Do not introduce `dayjs`, `date-fns`, or `luxon`.
-- **`strict: false`** in `tsconfig.json` is deliberate. The codebase predates strict mode adoption; turning it on will generate hundreds of errors.
+- **pnpm workspace** is the monorepo manager. The root does not have a `package-lock.json`; only `pnpm-lock.yaml` is tracked. Use `pnpm install` or `npm install` (which pnpm intercepts) — never `npm ci`.
+- **Native modules** (`canvas`, `sharp`) are allowed to build via `pnpm-workspace.yaml` `allowBuilds`. The root and per-app `nixpacks.toml` files supply required system packages (`cairo`, `pango`, `python312`, etc.). If a new native dep is added, it must be listed in both `pnpm-workspace.yaml` `allowBuilds` and the relevant `nixpacks.toml` `aptPkgs`/`nixPkgs`.
+- **`strict: false`** in `apps/web/tsconfig.json` is deliberate. The frontend predates strict mode adoption; turning it on will generate hundreds of errors. The backend (`apps/api/tsconfig.json`) uses `strict: true` — keep it that way.
 - **SVGs** are inlined via `svg-inline-loader` — import them as React components, not as image URLs.
 - **`background-generator/`** is a standalone Vite app with its own `package.json`. Run it independently; it is not part of the Next.js build.
 - The `.well-known/` path is redirected to `fed.brid.gy` for ActivityPub federation — do not add local handlers under that path.

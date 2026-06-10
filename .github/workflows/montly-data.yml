@@ -22,8 +22,13 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.3.0
+
       - name: Install dependencies
-        run: npm install
+        run: pnpm install --frozen-lockfile
 
       - name: Generate data for the previous month
         env:
@@ -33,13 +38,14 @@ jobs:
           DAWARICH_API_KEY: ${{ secrets.DAWARICH_API_KEY }}
           HOME_ASSISTANT_KEY: ${{ secrets.HOME_ASSISTANT_KEY }}
           HOME_ASSISTANT_URL: ${{ secrets.HOME_ASSISTANT_URL }}
+        working-directory: apps/web
         run: node bin/generate-monthly-data --save
 
       - name: Commit new file
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add data/monthly
+          git add apps/web/data/monthly
           git commit -m "Add new montly data file" -a
 
       - name: Push changes

@@ -1,0 +1,13 @@
+[phases.setup]
+nixPkgs=['...', 'python312', 'gccStdenv', 'cairo']
+aptPkgs=['build-essential', 'libcairo2-dev', 'libpango1.0-dev', 'libjpeg-dev', 'libgif-dev', 'librsvg2-dev']
+
+# pnpm workspace root is the monorepo root; navigate up for install/build
+[phases.install]
+cmds=['cd ../.. && pnpm install --frozen-lockfile']
+
+[phases.build]
+cmds=['cd ../.. && pnpm --filter web build']
+
+[start]
+cmd='cd ../.. && pnpm --filter web start'
