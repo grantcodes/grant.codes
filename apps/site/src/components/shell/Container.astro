@@ -1,0 +1,49 @@
+---
+// Site shell container — wraps page content in grid layout with header, nav, footer, and topography
+// Ported from apps/web/components/Container/index.js
+//
+// Props:
+//   className: string — additional grid class (e.g. 'single-article', 'right-aligned right-aligned--wide-content')
+
+import Header from './Header.astro'
+import Nav from './Nav.astro'
+import Footer from './Footer.astro'
+import Topography from './Topography.astro'
+
+export interface Props {
+  className?: string
+}
+
+const { className = '' } = Astro.props
+---
+
+<div class={`grid container ${className}`}>
+  <Header />
+  <Nav />
+  <main class="main-content">
+    <slot />
+  </main>
+  <Footer />
+</div>
+
+<div class="background-layer">
+  <div style="position: absolute; top: 0; right: 0;">
+    <Topography />
+  </div>
+</div>
+
+<svg
+  class="topography-clip-paths"
+  version="1.1"
+  xmlns="http://www.w3.org/2000/svg"
+  width="0"
+  height="0"
+  viewBox="0 0 100 100"
+  style="position: absolute;"
+>
+  <defs>
+    <clipPath id="topography-clip" clipPathUnits="objectBoundingBox" transform="scale(0.01)">
+      <path d="M 78.956816,94.835588 C 65.625376,103.13287 42.050856,100.43882 27.470196,93.746774 12.889014,87.054987 -0.62446252,67.284526 0.02231499,50.841644 0.6688317,34.398246 8.3427947,12.782914 22.898418,6.2004991 37.454563,-0.38191765 56.971076,-2.9578225 71.920501,4.6840516 86.869927,12.325617 96.700947,35.435522 99.522777,51.125185 102.3446,66.814332 92.288777,86.538361 78.957336,94.83564 Z" />
+    </clipPath>
+  </defs>
+</svg>

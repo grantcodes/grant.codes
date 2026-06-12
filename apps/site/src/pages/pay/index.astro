@@ -1,0 +1,42 @@
+---
+// Pay — landing page
+//
+// Status: LANDING PAGE ONLY — Stripe payment flow deferred
+// Cutover-blocker: NO — payment functionality is can-slip.
+// This page preserves the route for subdomain routing (pay.grant.codes -> /pay).
+//
+// Original behavior (apps/web):
+// - Payment form with Stripe integration (currently commented as broken)
+// - Routes: /pay, /pay/[amount], /pay/[amount]/monthly, /pay/monthly, /pay/thanks
+// - BaseLayout
+// - Stripe charge API at POST /api/pay (returns 501)
+//
+// Astro approach (static mode):
+// - Static landing page explaining payment options
+// - Stripe integration and amount routes explicitly deferred
+// - /pay/thanks preserved as static page
+
+import BaseLayout from '../../layouts/BaseLayout.astro'
+const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
+---
+
+<BaseLayout title="Pay Me!" canonicalUrl={`${siteUrl}/pay`}>
+  <h2 class="page-title">Pay Me!</h2>
+
+  <div class="card card--glass" style="padding: 1.5rem;">
+    <p style="margin-top: 0;">Support my work and the things I create.</p>
+
+    <p>Payment functionality (Stripe integration) is currently being redeveloped.
+    Please check back later or get in touch via the <a href="/contact">contact page</a>.</p>
+
+    <hr style="border: none; border-top: 1px solid var(--g-color-border-default); margin: 1.5rem 0;" />
+
+    <p style="font-size: 0.8rem; opacity: 0.6; margin-bottom: 0;">
+      <strong>Previously available routes:</strong>
+      <code>/pay/[amount]</code>,
+      <code>/pay/[amount]/monthly</code>,
+      <code>/pay/monthly</code>
+      — these are deferred pending Stripe re-integration.
+    </p>
+  </div>
+</BaseLayout>

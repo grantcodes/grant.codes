@@ -1,0 +1,194 @@
+---
+// Photos Gallery — responsive image grid with MF2 semantics
+// Ported from apps/web/components/PostsGallery/index.tsx + get-post-photos.js
+//
+// Cutover-blocker: YES — photos are a significant content type on the site
+// and the gallery is the primary browse surface for photo content.
+//
+// Usage: <PhotosGallery posts={posts} type="feed" maxWidth={20} />
+// - type "feed": renders linked images + hidden full MF2 entries for crawlability
+// - type "collection": renders images with h-cite markup
+// - maxWidth: max width percentage for each item
+
+import { normalizeInternalUrl } from '../lib/url'
+
+export interface Props {
+  posts: any[]
+  type?: 'feed' | 'collection'
+  maxWidth?: number
+}
+
+const { posts = [], type = 'feed', maxWidth = 20 } = Astro.props
+
+// Extract all photos from an array of posts (same logic as apps/web get-post-photos.js)
+function getPostPhotos(post: any): any[] {
+  const properties = post?.properties ?? {}
+  const photos: any[] = []
+
+  if (!properties.photo || !Array.isArray(properties.photo)) {
+    return photos
+  }
+
+  const permalink = normalizeInternalUrl(properties.url?.[0])
+  const name = properties.name?.[0] ?? null
+
+  for (const photo of properties.photo) {
+    if (!photo) continue
+
+    const photoData: Record<string, any> = {}
+    if (name) photoData.name = name
+    if (permalink) photoData.permalink = permalink
+
+    if (typeof photo === 'string') {
+      photoData.photo = photo
+      // Try to get thumbnail from cms data
+      if (post?.cms?.imageSizes?.[photo]?.['200x200']?.url) {
+        photoData.thumbnail = post.cms.imageSizes[photo]['200x200'].url
+      }
+      photos.push(photoData)
+    } else if (typeof photo === 'object' && photo.value) {
+      photoData.photo = photo.value
+      photoData.alt = photo.alt ?? ''
+      if (post?.cms?.imageSizes?.[photo.value]?.['200x200']?.url) {
+        photoData.thumbnail = post.cms.imageSizes[photo.value]['200x200'].url
+      }
+      photos.push(photoData)
+    }
+  }
+
+  return photos
+}
+
+// Collect all photos across all posts
+const allPhotos = posts.flatMap((post) => getPostPhotos(post))
+
+// Dev mode URL replacement for local builds
+const devMode = import.meta.env.DEV
+const localUrl = 'http://localhost:3000'
+const remoteUrl = 'https://grant.codes'
+const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
+---
+
+{
+  allPhotos.length > 0 && (
+    <div class="photos-gallery">
+      {allPhotos.map((photo, i) => {
+        // Resolve URL — replace localhost for dev mode
+        let src = photo.thumbnail || photo.photo
+        if (devMode) {
+          src = src.replace(localUrl, remoteUrl)
+        }
+        const alt = photo.alt ?? ''
+
+        if (type === 'feed') {
+          return (
+            <a
+              class="photos-gallery__item"
+              href={photo.permalink ?? '#'}
+            >
+              <img
+                class="photos-gallery__photo"
+                src={src}
+                alt={alt}
+                loading="lazy"
+                width={200}
+                height={200}
+              />
+            </a>
+          )
+        }
+        return (
+          <div
+            class="photos-gallery__item h-cite"
+            style={`max-width: ${maxWidth}%`}
+          >
+            <a href={photo.permalink ?? '#'} class="u-url">
+              <img
+                class="photos-gallery__photo"
+                src={src}
+                alt={alt}
+                loading="lazy"
+                width={200}
+                height={200}
+                style="width: 100%; height: auto;"
+              />
+              <data class="u-photo" value={photo.photo ?? ''} />
+            </a>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+<!-- Hidden MF2 entries for crawlability -->
+{type === 'feed' && posts.length > 0 && (
+  <div class="screen-reader-text">
+    {posts.map((post, i) => {
+      const properties = post?.properties ?? {}
+      const url = normalizeInternalUrl(properties.url?.[0])
+      const content = properties.content?.[0] ?? null
+      const published = properties.published?.[0] ?? null
+      const photos = properties.photo ?? []
+
+      let contentHtml = ''
+      if (content?.html) contentHtml = content.html
+      else if (content?.value) contentHtml = content.value
+      else if (typeof content === 'string') contentHtml = content
+
+      return (
+        <article class="h-entry">
+          {published && <time class="dt-published" datetime={published}>{published}</time>}
+          {url && <a class="u-url" href={url}>{url}</a>}
+          {photos.map((p: any, j: number) => {
+            const val = typeof p === 'object' && p.value ? p.value : (typeof p === 'string' ? p : '')
+            return <data class="u-photo" value={val} />
+          })}
+          {contentHtml && <div class="e-content">{contentHtml}</div>}
+          <span class="p-author h-card">
+            <span class="p-name">{authorName}</span>
+          </span>
+        </article>
+      )
+    })}
+  </div>
+)}
+
+<style>
+  .photos-gallery {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: stretch;
+    overflow: hidden;
+  }
+
+  .photos-gallery__item {
+    display: block;
+    flex-grow: 1;
+    overflow: hidden;
+    position: relative;
+    width: 20%;
+    max-width: 20%;
+  }
+
+  .photos-gallery__item a {
+    display: block;
+  }
+
+  .photos-gallery__photo {
+    display: block;
+    aspect-ratio: 1;
+    object-fit: cover;
+    max-width: 100%;
+    height: auto;
+  }
+
+  @media (max-width: 30rem) {
+    .photos-gallery__item {
+      width: 33.333%;
+      max-width: 33.333%;
+    }
+  }
+</style>

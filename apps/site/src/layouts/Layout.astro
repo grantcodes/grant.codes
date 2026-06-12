@@ -1,0 +1,145 @@
+---
+// Root layout — full metadata and IndieWeb links
+// Ported from apps/web/app/layout.tsx
+
+import '@grantcodes/ui/styles/base.css'
+import '@grantcodes/ui/styles/themes/grantcodes.css'
+import '../styles/site.css'
+
+// ── Environment ──
+const url = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
+const name = import.meta.env.NEXT_PUBLIC_SITE_NAME ?? ''
+const description = import.meta.env.NEXT_PUBLIC_META_DESCRIPTION ?? ''
+const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? ''
+const authorEmail = import.meta.env.NEXT_PUBLIC_AUTHOR_EMAIL ?? ''
+const twHandle = import.meta.env.NEXT_PUBLIC_TWITTER_HANDLE ?? ''
+const api = import.meta.env.NEXT_PUBLIC_API_URL ?? 'https://backend.grant.codes'
+const micropub = import.meta.env.NEXT_PUBLIC_MICROPUB_URL ?? `${api}/micropub`
+const hub = import.meta.env.NEXT_PUBLIC_HUB ?? ''
+const indieauth = import.meta.env.NEXT_PUBLIC_INDIEAUTH_ENDPOINT ?? 'https://indieauth.com/auth'
+const microsub = import.meta.env.NEXT_PUBLIC_MICROSUB_ENDPOINT ?? ''
+const metaImageRaw = import.meta.env.NEXT_PUBLIC_META_IMAGE ?? ''
+
+function parseJsonEnv<T>(value: string | undefined, fallback: T): T {
+  if (!value) return fallback
+  try {
+    return JSON.parse(value) as T
+  } catch {
+    return fallback
+  }
+}
+
+const image = parseJsonEnv<{ url?: string; src?: string; width?: number; height?: number }>(metaImageRaw, {
+  url: '/img/og-default.jpg',
+})
+const ogImage = image.src || image.url || '/img/og-default.jpg'
+
+const themeColor = '#111111'
+
+// ── IndieWeb <link> tags ──
+const indiewebLinks = [
+  { rel: 'self', href: url },
+  { rel: 'canonical', href: url },
+  { rel: 'authorization_endpoint', href: indieauth },
+  { rel: 'token_endpoint', href: `${api}/token` },
+  { rel: 'hub', href: hub },
+  { rel: 'microsub', href: microsub },
+  { rel: 'micropub', href: micropub },
+  { rel: 'webmention', href: `${micropub}/plugin/webmention` },
+  { rel: 'alternate', type: 'application/jf2feed+json', title: `${name} | jf2 feed`, href: `${micropub}/plugin/feeds/jf2` },
+  { rel: 'alternate', type: 'application/json', title: `${name} | json feed`, href: `${micropub}/plugin/feeds/json` },
+  { rel: 'alternate', type: 'application/atom+xml', title: `${name} | atom feed`, href: `${micropub}/plugin/feeds/atom` },
+  { rel: 'alternate', type: 'application/rss+xml', title: `${name} | rss feed`, href: `${micropub}/plugin/feeds/rss` },
+  { rel: 'alternate', type: 'application/mf2+json', title: `${name} | microformats2 json feed`, href: `${micropub}/plugin/feeds/mf2json` },
+]
+
+// ── Props ──
+export interface Props {
+  title?: string
+  description?: string
+  canonicalUrl?: string
+}
+
+const { title: pageTitle, description: pageDescription, canonicalUrl } = Astro.props
+const fullTitle = pageTitle ? `${pageTitle} – ${name}` : name
+const ogDescription = pageDescription ?? description
+const ogUrl = canonicalUrl ?? url
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={ogDescription} />
+    <meta name="application-name" content={name} />
+    <meta name="creator" content={authorName} />
+    <meta name="publisher" content={authorName} />
+    <meta name="referrer" content="origin" />
+    <meta name="format-detection" content="email=no, address=no, telephone=no" />
+    <meta name="theme-color" content={themeColor} />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href={ogUrl} />
+
+    <!-- IndieWeb links -->
+    {indiewebLinks.map((link) => (
+      <link {...link} />
+    ))}
+
+    <!-- Verification (IndieAuth rel=me) -->
+    <link rel="me" href={url} />
+    <link rel="me" href={`mailto:${authorEmail}`} />
+
+    <!-- Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Icons -->
+    <link rel="icon" sizes="16x16" href="/icons/favicon-16x16.png" />
+    <link rel="icon" sizes="228x228" href="/icons/coast-228x228.png" />
+    <link rel="icon" sizes="32x32" href="/icons/favicon-32x32.png" />
+    <link rel="shortcut icon" href="/icons/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="57x57" href="/icons/apple-touch-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="60x60" href="/icons/apple-touch-icon-60x60.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/icons/apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/icons/apple-touch-icon-76x76.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/icons/apple-touch-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/icons/apple-touch-icon-120x120.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/icons/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/icons/apple-touch-icon-152x152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon-180x180.png" />
+
+    <!-- Apple WebApp -->
+    <meta name="apple-mobile-web-app-title" content={name} />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 1)" href="/icons/apple-touch-startup-image-320x460.png" />
+    <link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 2)" href="/icons/apple-touch-startup-image-640x920.png" />
+    <link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" href="/icons/apple-touch-startup-image-640x1096.png" />
+    <link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" href="/icons/apple-touch-startup-image-750x1294.png" />
+    <link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 736px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 3)" href="/icons/apple-touch-startup-image-1182x2208.png" />
+    <link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 736px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 3)" href="/icons/apple-touch-startup-image-1242x2148.png" />
+    <link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 1)" href="/icons/apple-touch-startup-image-748x1024.png" />
+    <link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 2)" href="/icons/apple-touch-startup-image-1496x2048.png" />
+    <link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 1)" href="/icons/apple-touch-startup-image-768x1004.png" />
+    <link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)" href="/icons/apple-touch-startup-image-1536x2008.png" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={ogUrl} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={ogDescription} />
+    <meta property="og:site_name" content={name} />
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:image" content={ogImage.startsWith('http') ? ogImage : `${url}${ogImage}`} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content={`@${twHandle}`} />
+    <meta name="twitter:site" content={twHandle} />
+
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

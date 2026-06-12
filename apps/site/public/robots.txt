@@ -1,0 +1,7 @@
+User-Agent: *
+Disallow: 
+Disallow: /media
+Disallow: /slides
+Disallow: /img
+Disallow: /js
+Disallow: /page

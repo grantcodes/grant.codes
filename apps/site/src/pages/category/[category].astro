@@ -1,0 +1,104 @@
+---
+// Category detail — posts filtered by category
+// Ported from apps/web/app/(default)/category/[category]/page.tsx
+//
+// Uses the Postr content collection with route-layer filtering
+// instead of direct API fetching. Posts matching the category are
+// filtered in-memory from the canonical `posts` collection.
+
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import PostCard from '../../components/PostCard.astro'
+import { getCollection } from 'astro:content'
+import getCategories from '../../lib/categories'
+
+export async function getStaticPaths() {
+  const allCategories = await getCategories()
+  // Generate first 50 categories to keep build time manageable
+  return allCategories.slice(0, 50).map((cat) => ({
+    params: { category: cat.slug },
+  }))
+}
+
+const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
+const { category: categorySlug } = Astro.params
+
+// Look up the category
+const allCategories = await getCategories()
+const category = allCategories.find((cat) => cat.slug === categorySlug)
+
+const categoryName = category?.name ?? categorySlug ?? ''
+const pageTitle = category ? `Category: ${category.name}` : `Category: ${categorySlug}`
+
+// Fetch and filter from the canonical collection
+let posts: any[] = []
+let totalPages = 1
+
+if (category) {
+  const allEntries = await getCollection('posts')
+  const allPosts = allEntries.map((entry) => entry.data)
+
+  // Filter posts whose category array includes the matching category name
+  const filtered = allPosts.filter((post) => {
+    const cats = post?.properties?.category ?? []
+    return cats.some((c: any) => {
+      const catName = typeof c === 'object' ? c.value ?? c : c
+      return String(catName).toLowerCase() === categoryName.toLowerCase()
+    })
+  })
+
+  // Sort by canonical date descending
+  filtered.sort((a, b) => {
+    const dateA = a?._postr?.date ?? ''
+    const dateB = b?._postr?.date ?? ''
+    return dateB.localeCompare(dateA)
+  })
+
+  // In-memory pagination — first page, 25 per page
+  const PER_PAGE = 25
+  totalPages = Math.max(Math.ceil(filtered.length / PER_PAGE), 1)
+  posts = filtered.slice(0, PER_PAGE)
+}
+
+// Pagination
+const prevHref = ''
+const nextHref = totalPages > 1 ? `/category/${categorySlug}/page/2` : ''
+---
+
+<BaseLayout
+  title={pageTitle}
+  canonicalUrl={`${siteUrl}/category/${categorySlug}`}
+>
+  <h2 class="page-title">{pageTitle}</h2>
+
+  {!category && (
+    <div class="card card--glass" style="text-align: center; padding: 2rem;">
+      <p>Category not found: {categorySlug}.</p>
+      <p><a href="/category">← All Categories</a></p>
+    </div>
+  )}
+
+  {category && posts.length === 0 && (
+    <div class="card card--glass" style="text-align: center; padding: 2rem;">
+      <p>No posts found in category "{categoryName}".</p>
+    </div>
+  )}
+
+  {category && posts.length > 0 && (
+    <>
+      <div class="post-list">
+        {posts.map((post) => (
+          <PostCard post={post} compact />
+        ))}
+      </div>
+
+      {totalPages > 1 && (
+        <grantcodes-pagination
+          previous-href={prevHref}
+          next-href={nextHref}
+          page={1}
+          pages={totalPages}
+        />
+      )}
+    </>
+  )}
+</BaseLayout>

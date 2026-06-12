@@ -1,0 +1,153 @@
+---
+// Archive route — handles both type (e.g. /likes) and year (e.g. /2023) archives
+// Ported from apps/web/app/(default)/[typeOrYear]/page.tsx
+//
+// Uses the Postr content collection with route-layer filtering
+// instead of direct API fetching. All posts matching the type or year
+// from the canonical `posts` collection are rendered with in-memory
+// pagination.
+//
+// NOTE: 'notes', 'articles', and 'photos' have dedicated routes and are
+// deliberately excluded from this catch-all archive route.
+
+import BaseLayout from '../layouts/BaseLayout.astro'
+import PostCard from '../components/PostCard.astro'
+import { getCollection } from 'astro:content'
+import { getMetadata } from '../lib/metadata'
+import getMonthDataFiles from '../lib/month-data-files'
+
+// Map URL slug (plural form) to canonical cms.postType value (singular form).
+// Derived from normalize-search-query.ts TYPE_ALIASES.
+const TYPE_SLUG_MAP: Record<string, string> = {
+  likes: 'like',
+  replies: 'reply',
+  bookmarks: 'bookmark',
+  reposts: 'repost',
+  checkins: 'checkin',
+  events: 'event',
+  videos: 'video',
+  audio: 'audio',
+  collections: 'collection',
+  journals: 'journal',
+  listens: 'listen',
+  quotes: 'quotation',
+  reads: 'read',
+  rsvps: 'rsvp',
+  watches: 'watch',
+}
+
+export async function getStaticPaths() {
+  // Pre-generate all type archives and year archives
+  // NOTE: 'notes', 'articles', and 'photos' have dedicated routes and are
+  // deliberately excluded from this catch-all archive route.
+  const types = [
+    'likes', 'replies', 'bookmarks', 'reposts', 'checkins',
+    'events', 'videos', 'audio', 'collections', 'journals',
+    'listens', 'quotes', 'reads', 'rsvps', 'watches',
+  ]
+
+  // Read available years from monthly data files
+  const dataDir = new URL('../../data/monthly/', import.meta.url).pathname
+  const monthFiles = getMonthDataFiles(dataDir)
+  const yearsSet = new Set<string>()
+  for (const file of monthFiles) {
+    const [year] = file.split('/')
+    if (year) yearsSet.add(year)
+  }
+  const years = Array.from(yearsSet).sort()
+
+  return [
+    ...types.map((type) => ({ params: { typeOrYear: type } })),
+    ...years.map((year) => ({ params: { typeOrYear: year } })),
+  ]
+}
+
+const { typeOrYear } = Astro.params
+const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
+
+// Determine title via getMetadata
+const meta = await getMetadata({ params: { typeOrYear } })
+const pageTitle = meta?.title ?? typeOrYear ?? ''
+
+// Determine if this is a year or type archive
+const isYear = /^\d{4}$/.test(typeOrYear ?? '')
+
+// Fetch all entries from the canonical posts collection and filter
+const allEntries = await getCollection('posts')
+const allPosts = allEntries.map((entry) => entry.data)
+
+// Filter by type or year from the collection.
+// Uses the canonical `_postr` date metadata (baked in at load time)
+// instead of digging into MF2 properties directly.
+let filtered: any[]
+if (isYear) {
+  filtered = allPosts.filter((post) => {
+    const yr = post?._postr?.year
+    return yr !== undefined && String(yr) === typeOrYear
+  })
+} else {
+  const postType = TYPE_SLUG_MAP[typeOrYear ?? ''] ?? typeOrYear
+  filtered = allPosts.filter((post) => post?.cms?.postType === postType)
+}
+
+// Sort by canonical date descending (most recent first)
+// ISO 8601 strings sort lexicographically in UTC, so localeCompare works.
+filtered.sort((a, b) => {
+  const dateA = a?._postr?.date ?? ''
+  const dateB = b?._postr?.date ?? ''
+  return dateB.localeCompare(dateA)
+})
+
+// In-memory pagination
+// - For years: show ALL posts on the year page with adjacent-year navigation
+// - For types: show first 25 per page with page-based pagination
+const PER_PAGE = 25
+const totalPages = Math.max(Math.ceil(filtered.length / PER_PAGE), 1)
+const pagePosts = isYear ? filtered : filtered.slice(0, PER_PAGE)
+
+// Pagination links
+const baseUrl = `/${typeOrYear}`
+const prevHref =
+  isYear && parseInt(typeOrYear ?? '0') > 2000
+    ? `/${parseInt(typeOrYear ?? '0') - 1}`
+    : ''
+const nextHref = isYear
+  ? `/${parseInt(typeOrYear ?? '0') + 1}`
+  : totalPages > 1
+    ? `${baseUrl}/page/2`
+    : ''
+---
+
+<BaseLayout
+  title={pageTitle}
+  canonicalUrl={`${siteUrl}/${typeOrYear}`}
+>
+  <h2 class="page-title">
+    {isYear ? `Year Summary ${pageTitle}` : `${pageTitle}`}
+  </h2>
+
+  {pagePosts.length === 0 && (
+    <div class="card card--glass" style="text-align: center; padding: 2rem;">
+      <p>No posts found for {typeOrYear}.</p>
+    </div>
+  )}
+
+  {pagePosts.length > 0 && (
+    <>
+      <div class="post-list">
+        {pagePosts.map((post) => (
+          <PostCard post={post} compact />
+        ))}
+      </div>
+
+      {(prevHref || nextHref) && (
+        <grantcodes-pagination
+          previous-href={prevHref}
+          next-href={nextHref}
+          page={isYear ? parseInt(typeOrYear ?? '0') : 1}
+          pages={isYear ? 20 : totalPages}
+        />
+      )}
+    </>
+  )}
+</BaseLayout>

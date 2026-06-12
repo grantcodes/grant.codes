@@ -1,0 +1,19 @@
+---
+// Article page layout — shell with narrow/article container
+import Layout from './Layout.astro'
+import Container from '../components/shell/Container.astro'
+
+export interface Props {
+  title?: string
+  description?: string
+  canonicalUrl?: string
+}
+
+const { title, description, canonicalUrl } = Astro.props
+---
+
+<Layout title={title} description={description} canonicalUrl={canonicalUrl}>
+  <Container className="single-article">
+    <slot />
+  </Container>
+</Layout>

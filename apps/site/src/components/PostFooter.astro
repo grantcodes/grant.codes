@@ -1,0 +1,145 @@
+---
+// Post footer — action text, permalink, author, categories, syndication, mention counts
+// Ported from apps/web/components/Post/Footer.js
+
+import { normalizeInternalUrl } from '../lib/url'
+
+export interface Props {
+  post: any
+  compact?: boolean
+}
+
+const { post, compact = true } = Astro.props
+
+if (!post || !post.properties) return
+
+const properties = post.properties
+const postType = post?.cms?.postType ?? null
+
+// Determine action text based on post type
+let actionText = 'Posted'
+if (postType) {
+  switch (postType) {
+    case 'like': actionText = 'Liked'; break
+    case 'repost': actionText = 'Reposted'; break
+    case 'quotation': actionText = 'Quoted'; break
+    case 'reply': actionText = 'Replied'; break
+    case 'rsvp': actionText = 'RSVPed'; break
+    case 'bookmark': actionText = 'Bookmarked'; break
+  }
+} else if (properties['like-of']) {
+  actionText = 'Liked'
+} else if (properties['repost-of']) {
+  actionText = 'Reposted'
+} else if (properties['quotation-of']) {
+  actionText = 'Quoted'
+} else if (properties['in-reply-to']) {
+  actionText = 'Replied'
+} else if (properties['rsvp']) {
+  actionText = 'RSVPed'
+} else if (properties['bookmark-of']) {
+  actionText = 'Bookmarked'
+}
+
+const url = normalizeInternalUrl(properties.url?.[0])
+const published = properties.published?.[0] ?? null
+const category = properties.category ?? []
+const syndication = properties.syndication ?? []
+
+// Format relative date
+function formatRelativeDate(dateStr: string): string {
+  const d = new Date(dateStr)
+  const now = new Date()
+  const diffMs = now.getTime() - d.getTime()
+  const diffMins = Math.floor(diffMs / 60000)
+  const diffHours = Math.floor(diffMins / 60)
+  const diffDays = Math.floor(diffHours / 24)
+
+  if (diffMins < 1) return 'just now'
+  if (diffMins < 60) return `${diffMins} minutes ago`
+  if (diffHours < 24) return `${diffHours} hours ago`
+  if (diffDays < 7) return `${diffDays} days ago`
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+}
+
+// Count mentions (likes, reposts, comments, etc.)
+const mentionCounts: Array<{ key: string; label: string }> = [
+  { key: 'like', label: 'Likes' },
+  { key: 'repost', label: 'Reposts' },
+  { key: 'comment', label: 'Comments' },
+  { key: 'webmention', label: 'Other Mentions' },
+]
+
+const separator = ' ● '
+const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
+---
+
+<footer class="card__breakout post__footer">
+  {actionText}{' '}
+  {url && (
+    <a href={url} class="u-url">
+      {published ? (
+        <time class="dt-published" datetime={published}>{formatRelativeDate(published)}</time>
+      ) : 'Permalink'}
+    </a>
+  )}
+  {!url && published && (
+    <time class="dt-published" datetime={published}>{formatRelativeDate(published)}</time>
+  )}
+
+  {separator}
+
+  <span class="p-author h-card">
+    <span class="p-name">{authorName}</span>
+  </span>
+
+  {/* Mention counts (compact view only) */}
+  {compact && mentionCounts.map(({ key, label }) => {
+    const count = Array.isArray(properties[key]) ? properties[key].length : 0
+    if (count === 0) return null
+    return (
+      <>
+        {separator}
+        {url ? (
+          <a href={`${url}#${key === 'like' ? 'likes' : key === 'repost' ? 'reposts' : key === 'comment' ? 'comments' : 'webmentions'}`}>
+            {count} {label}
+          </a>
+        ) : (
+          <span>{count} {label}</span>
+        )}
+      </>
+    )
+  })}
+
+  {/* Categories */}
+  {category.length > 0 && (
+    <>
+      {separator}{'Categories: '}
+      {category.map((cat: any) => {
+        const catName = typeof cat === 'object' ? cat.value ?? cat : cat
+        if (typeof catName !== 'string') return null
+        return (
+          <span>
+            <a href={`/category/${encodeURIComponent(catName)}`} class="p-category">#{catName}</a>{' '}
+          </span>
+        )
+      })}
+    </>
+  )}
+
+  {/* Syndication links */}
+  {syndication.length > 0 && (
+    <>
+      {separator}{'Also on: '}
+      {syndication.map((synd: any) => {
+        const syndUrl = typeof synd === 'string' ? synd : synd?.value ?? ''
+        if (!syndUrl) return null
+        return (
+          <a href={syndUrl} class="u-syndication">
+            {new URL(syndUrl).hostname}{' '}
+          </a>
+        )
+      })}
+    </>
+  )}
+</footer>

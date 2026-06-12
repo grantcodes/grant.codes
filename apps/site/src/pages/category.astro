@@ -1,0 +1,30 @@
+---
+// Category index — lists all categories
+// Ported from apps/web/app/(default)/category/page.tsx
+
+import BaseLayout from '../layouts/BaseLayout.astro'
+import getCategories from '../lib/categories'
+
+const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
+const categories = await getCategories()
+---
+
+<BaseLayout title="Categories" canonicalUrl={`${siteUrl}/category`}>
+  <h2 class="page-title">Categories</h2>
+
+  <div class="card">
+    {categories.length === 0 ? (
+      <p>No categories found.</p>
+    ) : (
+      <ul style="column-count: 3; column-gap: 2rem; list-style: none; padding: 0; margin: 0;">
+        {categories.map(({ name, slug }) => (
+          <li style="break-inside: avoid; margin-bottom: 0.3rem;">
+            <a href={`/category/${slug}`} style="font-size: 0.9rem;">
+              {name}
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+</BaseLayout>

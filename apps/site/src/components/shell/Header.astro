@@ -1,0 +1,11 @@
+---
+// Site header — site name link
+// Ported from apps/web/components/Container/Header/index.js
+const siteName = import.meta.env.NEXT_PUBLIC_SITE_NAME ?? 'grant.codes'
+---
+
+<header class="main-header">
+  <h1 class="main-header__title">
+    <a href="/" class="main-header__title__link">{siteName}</a>
+  </h1>
+</header>

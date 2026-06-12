@@ -1,0 +1,207 @@
+---
+// Post card for list rendering — compact MF2-aware post entry
+// Ported from apps/web/components/Post/index.tsx + PostList/Timeline.js
+// Wave 8: enhanced with proper action labels, hidden author h-card, better mention rendering
+
+import { normalizeInternalUrl, rewriteContentHtml } from '../lib/url'
+
+export interface Props {
+  post: any
+  compact?: boolean
+}
+
+const { post, compact = true } = Astro.props
+
+if (!post) return
+
+const postType = post?.cms?.postType ?? null
+const properties = post?.properties ?? {}
+const name = properties.name?.[0] ?? null
+const content = properties.content?.[0] ?? null
+const summary = properties.summary?.[0] ?? null
+const published = properties.published?.[0] ?? null
+const url = normalizeInternalUrl(properties.url?.[0])
+const photo = properties.photo?.[0] ?? null
+const category = properties.category ?? []
+
+// Mention properties
+// MF2 allows these to be strings (plain URL) or objects (embedded h-cite/h-entry).
+// Normalise to just the URL string for rendering.
+const getMentionUrl = (val: any): string | null => {
+  if (!val) return null
+  if (typeof val === 'string') return val
+  if (typeof val === 'object' && val.properties?.url?.[0]) return val.properties.url[0]
+  if (typeof val === 'object' && val.value) return val.value
+  return null
+}
+
+const likeOf = getMentionUrl(properties['like-of']?.[0])
+const repostOf = getMentionUrl(properties['repost-of']?.[0])
+const inReplyTo = getMentionUrl(properties['in-reply-to']?.[0])
+const bookmarkOf = getMentionUrl(properties['bookmark-of']?.[0])
+const rsvp = properties.rsvp?.[0] ?? null
+
+// Get action label
+function getActionLabel(): string {
+  if (postType === 'like' || likeOf) return 'Liked'
+  if (postType === 'repost' || repostOf) return 'Reposted'
+  if (postType === 'reply' || inReplyTo) return rsvp ? 'RSVPed' : 'Replied'
+  if (postType === 'bookmark' || bookmarkOf) return 'Bookmarked'
+  return ''
+}
+
+const actionLabel = getActionLabel()
+
+// Format date
+let dateDisplay = ''
+if (published) {
+  const d = new Date(published)
+  const now = new Date()
+  const diffMs = now.getTime() - d.getTime()
+  const diffMins = Math.floor(diffMs / 60000)
+  const diffHours = Math.floor(diffMins / 60)
+  const diffDays = Math.floor(diffHours / 24)
+
+  if (diffMins < 1) dateDisplay = 'just now'
+  else if (diffMins < 60) dateDisplay = `${diffMins} minutes ago`
+  else if (diffHours < 24) dateDisplay = `${diffHours} hours ago`
+  else if (diffDays < 7) dateDisplay = `${diffDays} days ago`
+  else dateDisplay = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+}
+
+// Render content HTML safely
+function renderContent(c: any): string {
+  let html = ''
+  if (c?.html) html = c.html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+  else if (c?.value) html = `<p>${c.value}</p>`
+  else if (typeof c === 'string') html = `<p>${c}</p>`
+
+  // Rewrite internal grant.codes URLs to be relative
+  return rewriteContentHtml(html)
+}
+
+// Photo helper
+function getPhotoUrl(p: any): string {
+  if (typeof p === 'object' && p.value) return p.value
+  if (typeof p === 'string') return p
+  return ''
+}
+
+const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
+---
+
+<article class={`post post--${postType ?? 'unknown'} h-entry`}>
+  <div class="card">
+
+    <!-- Post title -->
+    {name && (
+      <header class="post__header">
+        <h1 class="post__title p-name">{name}</h1>
+      </header>
+    )}
+
+    <!-- Action label (Liked, Reposted, etc.) -->
+    {actionLabel && !name && (
+      <p class="card__breakout post__action" style="font-weight: bold;">
+        {actionLabel}
+      </p>
+    )}
+
+    <!-- Mention actions -->
+    {likeOf && (
+      <p class="card__breakout post__action">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle; margin-right: 0.2em;">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <a class="u-like-of" href={likeOf}>{likeOf.replace(/^https?:\/\//, '').slice(0, 60)}</a>
+      </p>
+    )}
+    {repostOf && (
+      <p class="card__breakout post__action">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle; margin-right: 0.2em;">
+          <polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+        </svg>
+        <a class="u-repost-of" href={repostOf}>{repostOf.replace(/^https?:\/\//, '').slice(0, 60)}</a>
+      </p>
+    )}
+    {inReplyTo && (
+      <p class="card__breakout post__action">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle; margin-right: 0.2em;">
+          <polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/>
+        </svg>
+        {rsvp ? <>RSVPed <span class="p-rsvp">{rsvp}</span> to </> : 'Replied to '}
+        <a class="u-in-reply-to" href={inReplyTo}>{inReplyTo.replace(/^https?:\/\//, '').slice(0, 60)}</a>
+      </p>
+    )}
+    {bookmarkOf && (
+      <p class="card__breakout post__action">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle; margin-right: 0.2em;">
+          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+        </svg>
+        <a class="u-bookmark-of" href={bookmarkOf}>{bookmarkOf.replace(/^https?:\/\//, '').slice(0, 60)}</a>
+      </p>
+    )}
+
+    <!-- Photo -->
+    {photo && (
+      <div class="card__breakout">
+        {url ? (
+          <a href={url}>
+            <img src={getPhotoUrl(photo)} alt="" class="u-photo" loading="lazy" />
+          </a>
+        ) : (
+          <img src={getPhotoUrl(photo)} alt="" class="u-photo" loading="lazy" />
+        )}
+      </div>
+    )}
+
+    <!-- Content/Summary -->
+    {content && (
+      <div class="post__content e-content" set:html={renderContent(content)} />
+    )}
+    {!content && summary && (
+      <div class="post__content e-content" set:html={renderContent(summary)} />
+    )}
+
+    <!-- For articles in compact: read more button -->
+    {compact && postType === 'article' && content && url && (
+      <div style="text-align: center; padding: 1rem;">
+        <a href={url} class="button">Read full post</a>
+      </div>
+    )}
+
+    <!-- Footer: permalink + categories -->
+    <footer class="card__breakout post__footer">
+      {(actionLabel ? `${actionLabel} ` : 'Posted ')}
+
+      {url ? (
+        <a href={url} class="u-url">
+          {published ? <time class="dt-published" datetime={published}>{dateDisplay}</time> : 'Permalink'}
+        </a>
+      ) : (
+        published && <time class="dt-published" datetime={published}>{dateDisplay}</time>
+      )}
+
+      {' ● '}
+      <span class="p-author h-card">
+        <span class="p-name">{authorName}</span>
+      </span>
+
+      {category.length > 0 && (
+        <>
+          {' ● Categories: '}
+          {category.map((cat: any) => {
+            const catName = typeof cat === 'object' ? cat.value ?? cat : cat
+            if (typeof catName !== 'string') return null
+            return <><a href={`/category/${encodeURIComponent(catName)}`} class="p-category">#{catName}</a>{' '}</>
+          })}
+        </>
+      )}
+    </footer>
+
+    <!-- Hidden author h-card for MF2 crawlability -->
+    <span class="p-author h-card screen-reader-text">
+      <span class="p-name">{authorName}</span>
+    </span>
+  </div>
+</article>

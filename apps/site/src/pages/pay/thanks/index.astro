@@ -1,0 +1,21 @@
+---
+// Pay thanks — static thank you page
+//
+// Status: IMPLEMENTED — static fallback
+// Cutover-blocker: NO — payment functionality is can-slip.
+//
+// Original behavior (apps/web):
+// - Static thank-you page, robots: noindex
+// - Shows "I'm Rich!" message with Card component
+
+import BaseLayout from '../../../layouts/BaseLayout.astro'
+const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
+---
+
+<BaseLayout title="Thank You!" canonicalUrl={`${siteUrl}/pay/thanks`}>
+  <h2 class="page-title">Thank You!</h2>
+
+  <div class="card card--glass" style="padding: 1.5rem;">
+    <p style="margin-top: 0;">Thank you very much for paying me. It is much appreciated.</p>
+  </div>
+</BaseLayout>

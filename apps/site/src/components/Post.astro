@@ -1,0 +1,264 @@
+---
+// Full MF2-aware post renderer for single post pages
+// Ported from apps/web/components/Post/index.tsx and supporting components
+//
+// Supports: note, article, photo, reply, repost, like, bookmark, video,
+//           audio, event, checkin, rsvp, quotation, collection
+//
+// Renders proper MF2 classes for IndieWeb semantics:
+//   h-entry, p-name, e-content, u-photo, u-url, dt-published, p-category,
+//   u-like-of, u-repost-of, u-in-reply-to, u-bookmark-of, u-featured,
+//   u-video, u-audio, dt-start, dt-end, p-location, p-rsvp, u-syndication
+
+import PostFooter from './PostFooter.astro'
+import PostCard from './PostCard.astro'
+import { normalizeInternalUrl, rewriteContentHtml } from '../lib/url'
+
+export interface Props {
+  post: any
+  compact?: boolean
+}
+
+const { post, compact = false } = Astro.props
+
+const hasPost = !!(post && post.properties)
+
+// Guard: if no post, render nothing
+if (!hasPost) return
+
+const properties = post.properties
+const postType = post?.cms?.postType ?? null
+
+const name = properties.name?.[0] ?? null
+const content = properties.content?.[0] ?? null
+const summary = properties.summary?.[0] ?? null
+const url = normalizeInternalUrl(properties.url?.[0])
+const featured = properties.featured?.[0] ?? null
+
+// Mention properties
+const likeOf = properties['like-of']?.[0] ?? null
+const repostOf = properties['repost-of']?.[0] ?? null
+const inReplyTo = properties['in-reply-to']?.[0] ?? null
+const bookmarkOf = properties['bookmark-of']?.[0] ?? null
+const quotationOf = properties['quotation-of']?.[0] ?? null
+const rsvp = properties.rsvp?.[0] ?? null
+
+// Media
+const photo = properties.photo ?? []
+const video = properties.video ?? []
+const audio = properties.audio ?? []
+
+// Event properties
+const start = properties.start?.[0] ?? null
+const end = properties.end?.[0] ?? null
+const location = properties.location?.[0] ?? null
+
+// Post children (gallery of referenced posts)
+const children = post.children ?? null
+
+// References (like-of, repost-of referenced post data)
+const references = post.references ?? null
+
+// Helper functions
+function getUrl(value: any): string {
+  if (typeof value === 'string') return value
+  if (typeof value === 'object' && value?.value) return value.value
+  return ''
+}
+
+function renderContent(content: any): string {
+  let html = ''
+  if (content?.html) {
+    html = content.html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+  }
+  else if (content?.value) {
+    html = `<p>${content.value}</p>`
+  }
+  else if (typeof content === 'string') {
+    html = `<p>${content}</p>`
+  }
+
+  // Rewrite internal grant.codes URLs to be relative
+  return rewriteContentHtml(html)
+}
+
+const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
+---
+
+<article
+  class={`post post--${postType ?? 'unknown'} h-entry`}
+>
+
+  {/* Featured image (e.g., article header image) */}
+  {featured && (
+    <header class="card__breakout post__header post__header--featured" style={`background-image: url(${featured})`}>
+      <data class="u-featured" value={featured} />
+      {name && <h1 class="post__title p-name">{name}</h1>}
+    </header>
+  )}
+
+  {/* Name/title (not featured header) */}
+  {!featured && name && (
+    <header class="post__header card__breakout--padded">
+      <h1 class="post__title p-name">{name}</h1>
+    </header>
+  )}
+
+  {/* ── Mention actions (like, repost, reply, bookmark, quotation) ── */}
+
+  {likeOf && (
+    <p class="card__breakout post__action">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 0.3em;">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+      </svg>
+      Liked{' '}
+      <a class="u-like-of" href={getUrl(likeOf)}>{getUrl(likeOf).replace(/^https?:\/\//, '')}</a>
+    </p>
+  )}
+
+  {bookmarkOf && (
+    <p class="card__breakout post__action">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 0.3em;">
+        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+      </svg>
+      Bookmarked{' '}
+      <a class="u-bookmark-of" href={getUrl(bookmarkOf)}>{getUrl(bookmarkOf).replace(/^https?:\/\//, '')}</a>
+    </p>
+  )}
+
+  {repostOf && (
+    <p class="card__breakout post__action">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 0.3em;">
+        <polyline points="17 1 21 5 17 9"/>
+        <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+        <polyline points="7 23 3 19 7 15"/>
+        <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+      </svg>
+      Reposted{' '}
+      <a class="u-repost-of" href={getUrl(repostOf)}>{getUrl(repostOf).replace(/^https?:\/\//, '')}</a>
+    </p>
+  )}
+
+  {quotationOf && (
+    <p class="card__breakout post__action">
+      Quoted{' '}
+      <a class="u-quotation-of" href={getUrl(quotationOf)}>{getUrl(quotationOf).replace(/^https?:\/\//, '')}</a>
+    </p>
+  )}
+
+  {inReplyTo && (
+    <p class="card__breakout post__action">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 0.3em;">
+        <polyline points="9 17 4 12 9 7"/>
+        <path d="M20 18v-2a4 4 0 0 0-4-4H4"/>
+      </svg>
+      {rsvp ? (
+        <>
+          RSVPed <span class="p-rsvp">{rsvp}</span> to{' '}
+        </>
+      ) : 'Replied to '}
+      <a class="u-in-reply-to" href={getUrl(inReplyTo)}>{getUrl(inReplyTo).replace(/^https?:\/\//, '')}</a>
+    </p>
+  )}
+
+  {/* ── Photos ── */}
+  {photo.length > 0 && (
+    <div class="card__breakout post__photos">
+      {photo.map((p: any, i: number) => {
+        const src = typeof p === 'object' ? p.value ?? '' : p
+        const alt = typeof p === 'object' ? p.alt ?? '' : ''
+        return (
+          <figure>
+            <img src={src} alt={alt} loading="lazy" />
+            <data class="u-photo" value={src} />
+          </figure>
+        )
+      })}
+    </div>
+  )}
+
+  {/* ── Video ── */}
+  {video.length > 0 && video.map((v: any) => (
+    <div class="card__breakout">
+      <video class="u-video" src={getUrl(v)} controls />
+    </div>
+  ))}
+
+  {/* ── Audio ── */}
+  {audio.length > 0 && audio.map((a: any) => (
+    <div class="card__breakout">
+      <audio class="u-audio" src={getUrl(a)} controls></audio>
+    </div>
+  ))}
+
+  {/* ── Summary (shown for articles in compact or without content) ── */}
+  {summary && ((compact && postType === 'article') || !content) && (
+    <div class="card__breakout--padded">
+      <p class="p-summary">{typeof summary === 'string' ? summary : summary.value ?? ''}</p>
+    </div>
+  )}
+
+  {/* ── Content ── */}
+  {content && (
+    <div class="post__content e-content" set:html={renderContent(content)} />
+  )}
+
+  {/* Compact mode: article read more link */}
+  {compact && postType === 'article' && content && url && (
+    <div class="card__breakout--padded" style="text-align: center; padding: 1rem;">
+      <a href={url} class="button" aria-hidden="true">Read full post</a>
+    </div>
+  )}
+
+  {/* ── Event properties (start/end) ── */}
+  {start && (
+    <div class="card__breakout--padded">
+      <h6 style="margin-bottom: 0;">Start</h6>
+      <time class="dt-start" datetime={start}>{new Date(start).toLocaleString()}</time>
+    </div>
+  )}
+  {end && (
+    <div class="card__breakout--padded">
+      <h6 style="margin-bottom: 0;">End</h6>
+      <time class="dt-end" datetime={end}>{new Date(end).toLocaleString()}</time>
+    </div>
+  )}
+
+  {/* ── Location ── */}
+  {location && location.properties?.name?.[0] && location.properties?.url?.[0] && (
+    <div class="card__breakout--padded p-location h-card">
+      At{' '}
+      <a class="u-url p-name p-org" href={location.properties.url[0]}>
+        {location.properties.name[0]}
+      </a>
+    </div>
+  )}
+
+  {/* ── Post children (gallery of referenced posts) ── */}
+  {children && Array.isArray(children) && children.length > 0 && (
+    <div class="card__breakout post__children">
+      {children.map((child: any) => (
+        <PostCard post={child} compact />
+      ))}
+    </div>
+  )}
+
+  {/* ── References (like-of/repost-of referenced post data) ── */}
+  {/* Only show references for post types where they provide meaningful context */}
+  {references && Object.keys(references).length > 0 && (likeOf || repostOf || inReplyTo || bookmarkOf) && (
+    <div class="card__breakout post__references">
+      {Object.values(references).map((refPost: any) => (
+        <PostCard post={refPost} compact />
+      ))}
+    </div>
+  )}
+
+  {/* ── Footer ── */}
+  <PostFooter post={post} compact={compact} />
+
+  <!-- Hidden author h-card -->
+  <span class="p-author h-card screen-reader-text">
+    <span class="p-name">{authorName}</span>
+  </span>
+
+</article>

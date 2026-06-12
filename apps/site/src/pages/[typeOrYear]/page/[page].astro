@@ -1,0 +1,182 @@
+---
+// Type/year archive pagination — /likes/page/2, /2024/page/2, etc.
+// Ported from apps/web/app/(default)/[typeOrYear]/page/[page]/page.tsx
+//
+// Uses the Postr content collection with route-layer filtering
+// instead of direct API fetching. Computes total pages from the
+// in-memory collection so that every page is pre-rendered at build time.
+//
+// NOTE: 'notes', 'articles', and 'photos' have dedicated paginated routes
+// and are deliberately excluded from this catch-all pagination route.
+
+import BaseLayout from '../../../layouts/BaseLayout.astro'
+import PostCard from '../../../components/PostCard.astro'
+import { getCollection } from 'astro:content'
+import { getMetadata } from '../../../lib/metadata'
+import getMonthDataFiles from '../../../lib/month-data-files'
+
+// Map URL slug (plural form) to canonical cms.postType value (singular form).
+// Defined at module level for the main body scope. A copy is also kept
+// inside getStaticPaths since Astro compiles that export separately.
+const TYPE_SLUG_MAP: Record<string, string> = {
+  likes: 'like',
+  replies: 'reply',
+  bookmarks: 'bookmark',
+  reposts: 'repost',
+  checkins: 'checkin',
+  events: 'event',
+  videos: 'video',
+  audio: 'audio',
+  collections: 'collection',
+  journals: 'journal',
+  listens: 'listen',
+  quotes: 'quotation',
+  reads: 'read',
+  rsvps: 'rsvp',
+  watches: 'watch',
+}
+
+export async function getStaticPaths() {
+  // Pre-generate pagination for all type archives and year archives
+  // NOTE: 'notes', 'articles', and 'photos' have dedicated paginated routes
+  const types = [
+    'likes', 'replies', 'bookmarks', 'reposts', 'checkins',
+    'events', 'videos', 'audio', 'collections', 'journals',
+    'listens', 'quotes', 'reads', 'rsvps', 'watches',
+  ]
+
+  // Type slug map (duplicated here — Astro compiles getStaticPaths as a
+  // separate export and module-level constants are not accessible within it).
+  const slugMap: Record<string, string> = {
+    likes: 'like',
+    replies: 'reply',
+    bookmarks: 'bookmark',
+    reposts: 'repost',
+    checkins: 'checkin',
+    events: 'event',
+    videos: 'video',
+    audio: 'audio',
+    collections: 'collection',
+    journals: 'journal',
+    listens: 'listen',
+    quotes: 'quotation',
+    reads: 'read',
+    rsvps: 'rsvp',
+    watches: 'watch',
+  }
+
+  // Read available years from monthly data files
+  const dataDir = new URL('../../../../data/monthly/', import.meta.url).pathname
+  const monthFiles = getMonthDataFiles(dataDir)
+  const yearsSet = new Set<string>()
+  for (const file of monthFiles) {
+    const [year] = file.split('/')
+    if (year) yearsSet.add(year)
+  }
+  const years = Array.from(yearsSet).sort()
+
+  // Load the full collection once to compute page counts
+  const allEntries = await getCollection('posts')
+  const allPosts = allEntries.map((entry) => entry.data)
+
+  const PER_PAGE = 25
+  const paths: { params: { typeOrYear: string; page: string } }[] = []
+
+  // Generate page paths for each type
+  for (const slug of types) {
+    const postType = slugMap[slug]
+    const count = allPosts.filter((p) => p?.cms?.postType === postType).length
+    const totalPages = Math.max(Math.ceil(count / PER_PAGE), 1)
+    for (let i = 2; i <= totalPages; i++) {
+      paths.push({ params: { typeOrYear: slug, page: String(i) } })
+    }
+  }
+
+  // Generate page paths for each year
+  for (const yr of years) {
+    const count = allPosts.filter((p) => {
+      const postrYr = p?._postr?.year
+      return postrYr !== undefined && String(postrYr) === yr
+    }).length
+    const totalPages = Math.max(Math.ceil(count / PER_PAGE), 1)
+    for (let i = 2; i <= totalPages; i++) {
+      paths.push({ params: { typeOrYear: yr, page: String(i) } })
+    }
+  }
+
+  return paths
+}
+
+const { typeOrYear, page } = Astro.params
+const pageNum = parseInt(page ?? '2')
+const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
+const isYear = /^\d{4}$/.test(typeOrYear ?? '')
+
+// Get metadata for page title
+const meta = await getMetadata({ params: { typeOrYear, page } })
+const pageTitle = meta?.title ?? `${typeOrYear} page ${page}`
+
+// Fetch and filter from the canonical collection
+const allEntries = await getCollection('posts')
+const allPosts = allEntries.map((entry) => entry.data)
+
+// Filter by type or year using canonical date metadata
+let filtered: any[]
+if (isYear) {
+  filtered = allPosts.filter((post) => {
+    const yr = post?._postr?.year
+    return yr !== undefined && String(yr) === typeOrYear
+  })
+} else {
+  const postType = TYPE_SLUG_MAP[typeOrYear ?? ''] ?? typeOrYear
+  filtered = allPosts.filter((post) => post?.cms?.postType === postType)
+}
+
+// Sort by canonical date descending
+filtered.sort((a, b) => {
+  const dateA = a?._postr?.date ?? ''
+  const dateB = b?._postr?.date ?? ''
+  return dateB.localeCompare(dateA)
+})
+
+// In-memory pagination
+const PER_PAGE = 25
+const totalPages = Math.max(Math.ceil(filtered.length / PER_PAGE), 1)
+const startIndex = (pageNum - 1) * PER_PAGE
+const pagePosts = filtered.slice(startIndex, startIndex + PER_PAGE)
+
+// Calculate prev/next
+const prevPage = pageNum > 1 ? pageNum - 1 : null
+const nextPage = pageNum < totalPages ? pageNum + 1 : null
+const baseUrl = `/${typeOrYear}`
+const prevHref =
+  prevPage === 1 ? baseUrl : prevPage ? `${baseUrl}/page/${prevPage}` : ''
+const nextHref = nextPage ? `${baseUrl}/page/${nextPage}` : ''
+---
+
+<BaseLayout title={pageTitle} canonicalUrl={`${siteUrl}${baseUrl}/page/${page}`}>
+  <h2 class="page-title">{pageTitle}</h2>
+
+  {pagePosts.length === 0 && (
+    <div class="card card--glass" style="text-align: center; padding: 2rem;">
+      <p>No posts found for {typeOrYear} on page {pageNum}.</p>
+    </div>
+  )}
+
+  {pagePosts.length > 0 && (
+    <>
+      <div class="post-list">
+        {pagePosts.map((post) => (
+          <PostCard post={post} compact />
+        ))}
+      </div>
+
+      <grantcodes-pagination
+        previous-href={prevHref}
+        next-href={nextHref}
+        page={pageNum}
+        pages={totalPages}
+      />
+    </>
+  )}
+</BaseLayout>

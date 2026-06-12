@@ -1,0 +1,127 @@
+---
+// Category pagination — /category/:category/page/:page
+// Ported from apps/web/app/(default)/category/[category]/page/[page]/page.tsx
+//
+// Uses the Postr content collection with route-layer filtering
+// instead of direct API fetching. Computes total pages from the
+// in-memory collection so that every page is pre-rendered at build time.
+
+import BaseLayout from '../../../../layouts/BaseLayout.astro'
+import PostCard from '../../../../components/PostCard.astro'
+import { getCollection } from 'astro:content'
+import getCategories from '../../../../lib/categories'
+
+export async function getStaticPaths() {
+  const allCategories = await getCategories()
+  // Pick the first 20 categories for build-time generation
+  const subset = allCategories.slice(0, 20)
+  const paths: { params: { category: string; page: string } }[] = []
+
+  // Load the collection once to compute page counts for each category
+  const allEntries = await getCollection('posts')
+  const allPosts = allEntries.map((entry) => entry.data)
+
+  const PER_PAGE = 25
+
+  for (const cat of subset) {
+    const catName = cat.name
+    const count = allPosts.filter((post) => {
+      const cats = post?.properties?.category ?? []
+      return cats.some((c: any) => {
+        const name = typeof c === 'object' ? c.value ?? c : c
+        return String(name).toLowerCase() === catName.toLowerCase()
+      })
+    }).length
+
+    const totalPages = Math.max(Math.ceil(count / PER_PAGE), 1)
+    for (let i = 2; i <= totalPages && i <= 3; i++) {
+      paths.push({ params: { category: cat.slug, page: String(i) } })
+    }
+  }
+
+  return paths
+}
+
+const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
+const { category: categorySlug, page } = Astro.params
+const pageNum = parseInt(page ?? '1')
+
+// Look up the category
+const allCategories = await getCategories()
+const category = allCategories.find((cat) => cat.slug === categorySlug)
+const categoryName = category?.name ?? categorySlug ?? ''
+const pageTitle = category
+  ? `Category: ${category.name} page ${pageNum}`
+  : `Category: ${categorySlug} page ${pageNum}`
+
+// Fetch and filter from the canonical collection
+let posts: any[] = []
+let totalPages = 1
+
+if (category) {
+  const allEntries = await getCollection('posts')
+  const allPosts = allEntries.map((entry) => entry.data)
+
+  const filtered = allPosts.filter((post) => {
+    const cats = post?.properties?.category ?? []
+    return cats.some((c: any) => {
+      const catName = typeof c === 'object' ? c.value ?? c : c
+      return String(catName).toLowerCase() === categoryName.toLowerCase()
+    })
+  })
+
+  // Sort by canonical date descending
+  filtered.sort((a, b) => {
+    const dateA = a?._postr?.date ?? ''
+    const dateB = b?._postr?.date ?? ''
+    return dateB.localeCompare(dateA)
+  })
+
+  // In-memory pagination
+  const PER_PAGE = 25
+  totalPages = Math.max(Math.ceil(filtered.length / PER_PAGE), 1)
+  const startIndex = (pageNum - 1) * PER_PAGE
+  posts = filtered.slice(startIndex, startIndex + PER_PAGE)
+}
+
+// Calculate prev/next
+const prevPage = pageNum > 1 ? pageNum - 1 : null
+const nextPage = pageNum < totalPages ? pageNum + 1 : null
+const baseUrl = `/category/${categorySlug}`
+const prevHref = prevPage ? `${baseUrl}/page/${prevPage}` : ''
+const nextHref = nextPage ? `${baseUrl}/page/${nextPage}` : ''
+---
+
+<BaseLayout title={pageTitle} canonicalUrl={`${siteUrl}${baseUrl}/page/${page}`}>
+  <h2 class="page-title">{pageTitle}</h2>
+
+  {!category && (
+    <div class="card card--glass" style="text-align: center; padding: 2rem;">
+      <p>Category not found: {categorySlug}.</p>
+      <p><a href="/category">← All Categories</a></p>
+    </div>
+  )}
+
+  {category && posts.length === 0 && (
+    <div class="card card--glass" style="text-align: center; padding: 2rem;">
+      <p>No posts found for "{categoryName}" on page {pageNum}.</p>
+    </div>
+  )}
+
+  {category && posts.length > 0 && (
+    <>
+      <div class="post-list">
+        {posts.map((post) => (
+          <PostCard post={post} compact />
+        ))}
+      </div>
+
+      <grantcodes-pagination
+        previous-href={prevHref}
+        next-href={nextHref}
+        page={pageNum}
+        pages={totalPages}
+      />
+    </>
+  )}
+</BaseLayout>

@@ -1,0 +1,110 @@
+---
+// Single post route — e.g. /2024/05/03/climatebase-week-2
+// Ported from apps/web/app/(default)/[typeOrYear]/[month]/[day]/[slug]/page.tsx
+// Wave 8: MF2-aware single post rendering with proper post-type support
+// Wave 10: migrated from direct API fetch to canonical posts collection
+
+import ArticleLayout from '@/layouts/ArticleLayout.astro'
+import Post from '@/components/Post.astro'
+import { getCollection } from 'astro:content'
+import { getMetadata } from '@/lib/metadata'
+
+export async function getStaticPaths() {
+  // Generate a route for every post in the canonical collection.
+  // Path parts are extracted from the absolute permalink URL
+  // (properties.url[0]) so the generated path always matches the
+  // link that PostCard and other components render. This avoids
+  // 404s caused by mismatches between _postr-derived dates and
+  // the actual permalink structure.
+  //
+  // Note: parsePermalinkPath is defined as an inner function because
+  // Astro compiles getStaticPaths into a separate chunk where
+  // module-scope functions are not accessible at runtime.
+
+  /**
+   * Parse year/month/day/slug from an absolute post permalink URL.
+   *
+   * Accepts URLs like:
+   *   https://grant.codes/2024/05/03/climatebase-week-2
+   *   https://grant.codes/2020/05/29/10-26-12
+   *
+   * Returns null when the URL is missing, unparseable, or has fewer
+   * than 4 path segments (year/month/day/slug).
+   */
+  function parsePermalinkPath(urlStr: string): {
+    typeOrYear: string
+    month: string
+    day: string
+    slug: string
+  } | null {
+    try {
+      const url = new URL(urlStr)
+      const parts = url.pathname.replace(/\/$/, '').split('/').filter(Boolean)
+      if (parts.length >= 4) {
+        return {
+          typeOrYear: parts[0],
+          month: parts[1],
+          day: parts[2],
+          slug: parts.slice(3).join('/'),
+        }
+      }
+    } catch {
+      // URL parse failure — skip this entry
+    }
+    return null
+  }
+
+  const allEntries = await getCollection('posts')
+
+  return allEntries
+    .map((entry) => {
+      const post = entry.data
+      const url = post?.properties?.url?.[0]
+      if (!url) return null
+      const parsed = parsePermalinkPath(String(url))
+      if (!parsed) return null
+      return { params: parsed }
+    })
+    .filter(Boolean)
+}
+
+const { typeOrYear, month, day, slug } = Astro.params
+
+const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
+
+// Build the expected canonical URL for this route and look it up
+// by matching the entry's absolute permalink (properties.url[0]).
+// This is more reliable than matching _postr dates + slug because
+// it avoids created vs published date mismatches.
+const expectedUrl = `${siteUrl}/${typeOrYear}/${month}/${day}/${slug}`
+const allEntries = await getCollection('posts')
+const allPosts = allEntries.map((entry) => entry.data)
+const post = allPosts.find((p) => {
+  const entryUrl = String(p?.properties?.url?.[0] ?? '')
+  return entryUrl === expectedUrl
+}) ?? null
+
+// Generate metadata from post
+const meta = post ? await getMetadata({ params: { typeOrYear, month, day, slug }, post }) : await getMetadata({ params: { typeOrYear, month, day, slug } })
+const pageTitle = meta?.title ?? `${typeOrYear}/${month}/${day}/${slug}`
+const pageDescription = meta?.description ?? ''
+const canonicalUrl = `${siteUrl}/${typeOrYear}/${month}/${day}/${slug}`
+---
+
+<ArticleLayout title={pageTitle} description={pageDescription} canonicalUrl={canonicalUrl}>
+  <!--- Single post content -->
+  {!post && (
+    <div class="card card--glass" style="text-align: center; padding: 2rem;">
+      <h2>Post not found</h2>
+      <p style="font-size: 0.8rem; opacity: 0.7;">
+        This post could not be found. It may have been removed or the URL is incorrect.
+      </p>
+      <p><a href="/">← Back to home</a></p>
+    </div>
+  )}
+
+  {post && (
+    <Post post={post} />
+  )}
+
+</ArticleLayout>

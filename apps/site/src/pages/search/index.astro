@@ -1,0 +1,209 @@
+---
+// Search page — minimal client-bridged search
+//
+// Status: MINIMAL IMPLEMENTATION — can-slip surface
+// Cutover-blocker: NO — search is explicitly can-slip. This page provides a
+// search form and client-side result rendering. Full SSR search requires
+// hybrid/server mode and is tracked as a post-cutover improvement.
+//
+// Original behavior (apps/web):
+// - RSC at /search/[search] calls getPosts({ query: { search: params.search } })
+// - Renders PostList with results
+// - Pagination at /search/[search]/page/[page]
+//
+// Astro approach (static mode):
+// - Form submits GET to /search?q=query
+// - Static page loads, client JS reads ?q= param and fetches from backend API
+// - Renders results inline via DOM
+// - No-JS fallback: shows search form with message
+//
+// Upgrade path: switch to hybrid output (output: 'hybrid') to enable true
+// server-side search routes at /search/[search] with getPosts.
+
+import BaseLayout from '../../layouts/BaseLayout.astro'
+
+const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
+const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
+const apiUrl = import.meta.env.NEXT_PUBLIC_API_URL ?? 'https://backend.grant.codes'
+---
+
+<BaseLayout title="Search" canonicalUrl={`${siteUrl}/search`}>
+  <h2 class="page-title">Search</h2>
+
+  <div class="card card--glass" style="padding: 1.5rem; margin-bottom: 1.5rem;">
+    <form class="search search--page" method="GET" action="/search">
+      <label for="search-page-input" class="screen-reader-text">Search posts</label>
+      <input
+        id="search-page-input"
+        class="search__input"
+        type="search"
+        name="q"
+        placeholder={`Search ${authorName}'s posts...`}
+        autofocus
+      />
+      <button class="search__button" type="submit">
+        <span class="screen-reader-text">Search</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </button>
+    </form>
+  </div>
+
+  <!-- Search results container -- populated by client JS -->
+  <div id="search-results" class="post-list" aria-live="polite">
+    <noscript>
+      <div class="card card--glass" style="text-align: center; padding: 2rem;">
+        <p>JavaScript is required to perform a search.</p>
+        <p style="font-size: 0.8rem; opacity: 0.7;">
+          Enable JavaScript or use your browser's find-in-page feature.
+        </p>
+      </div>
+    </noscript>
+  </div>
+</BaseLayout>
+
+<script define:vars={{ apiUrl, siteUrl }} is:inline>
+  // @ts-nocheck -- client-side search DOM logic
+  (function() {
+    var urlParams = new URLSearchParams(window.location.search)
+    var query = urlParams.get('q')
+    if (!query || !query.trim()) return
+
+    var container = document.getElementById('search-results')
+    if (!container) return
+
+    // Loading state
+    container.innerHTML = '<div class="card card--glass" style="text-align: center; padding: 2rem;"><p>Searching...</p></div>'
+
+    fetch(apiUrl + '/api/search', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        query: { search: query.trim() },
+        limit: 50,
+        showAll: true,
+      }),
+    })
+      .then(function(res) {
+        if (!res.ok) throw new Error('API returned ' + res.status)
+        return res.json()
+      })
+      .then(function(posts) {
+        if (!Array.isArray(posts) || posts.length === 0) {
+          container.innerHTML = '<div class="card card--glass" style="text-align: center; padding: 2rem;">' +
+            '<p>No results found for "<strong>' + escapeHtml(query) + '</strong>".</p></div>'
+          return
+        }
+
+        var html = '<div style="font-size: 0.8rem; opacity: 0.6; margin-bottom: 1rem;">' +
+          posts.length + ' result' + (posts.length !== 1 ? 's' : '') +
+          ' for "<strong>' + escapeHtml(query) + '</strong>"</div>'
+
+        posts.forEach(function(post) {
+          html += renderPostCard(post, siteUrl)
+        })
+
+        container.innerHTML = html
+      })
+      .catch(function(err) {
+        console.error('[search] fetch failed:', err)
+        container.innerHTML = '<div class="card card--glass" style="text-align: center; padding: 2rem;">' +
+          '<p>Search failed. Please try again later.</p>' +
+          '<p style="font-size: 0.7rem; opacity: 0.5;">' + escapeHtml(String(err)) + '</p></div>'
+      })
+
+    function escapeHtml(str) {
+      var div = document.createElement('div')
+      div.appendChild(document.createTextNode(str))
+      return div.innerHTML
+    }
+
+    function renderPostCard(post, siteUrl) {
+      var props = post && post.properties ? post.properties : {}
+      var name = props.name ? props.name[0] : null
+      var content = props.content ? props.content[0] : null
+      var published = props.published ? props.published[0] : null
+      var url = props.url ? props.url[0] : '#'
+      var photo = props.photo ? props.photo[0] : null
+      var categories = props.category || []
+
+      // Normalize URL (strip absolute prefix)
+      if (url && url.indexOf(siteUrl) === 0) {
+        url = url.slice(siteUrl.length) || '/'
+      } else if (url && url.indexOf('https://grant.codes') === 0) {
+        url = url.slice('https://grant.codes'.length) || '/'
+      }
+
+      // Content HTML
+      var contentHtml = ''
+      if (content && content.html) {
+        var html = content.html.replace(/href="https:\/\/grant\.codes\//g, 'href="/')
+        contentHtml = '<div class="e-content" style="margin-top: 0.5rem;">' + html + '</div>'
+      } else if (content && typeof content === 'string') {
+        contentHtml = '<div class="e-content" style="margin-top: 0.5rem;">' + escapeHtml(content) + '</div>'
+      }
+
+      // Photo
+      var photoHtml = ''
+      if (photo) {
+        var photoUrl = typeof photo === 'string' ? photo : (photo.url || '')
+        photoHtml = '<img src="' + escapeHtml(photoUrl) + '" alt="" class="u-photo" ' +
+          'style="max-width: 100%; border-radius: 0.4rem; margin-top: 0.5rem;" loading="lazy" />'
+      }
+
+      // Categories
+      var categoryHtml = ''
+      if (categories.length > 0) {
+        categoryHtml = '<div style="margin-top: 0.5rem; font-size: 0.7rem; opacity: 0.5;">'
+        for (var ci = 0; ci < categories.length; ci++) {
+          categoryHtml += '<span class="p-category" style="margin-right: 0.3rem;">' + escapeHtml(categories[ci]) + '</span>'
+        }
+        categoryHtml += '</div>'
+      }
+
+      // Date
+      var dateHtml = ''
+      if (published) {
+        try {
+          var d = new Date(published)
+          dateHtml = '<time class="dt-published" datetime="' + published + '" ' +
+            'style="font-size: 0.7rem; opacity: 0.5;">' +
+            d.toLocaleDateString('en-GB', {
+              year: 'numeric', month: 'short', day: 'numeric'
+            }) + '</time>'
+        } catch(e) {
+          dateHtml = '<span style="font-size: 0.7rem; opacity: 0.5;">' + escapeHtml(published) + '</span>'
+        }
+      }
+
+      // Assemble card
+      var card = '<article class="h-entry" style="margin-bottom: 1.5rem; ' +
+        'padding-bottom: 1.5rem; border-bottom: 1px solid var(--g-color-border-default);">'
+
+      if (name) {
+        card += '<h3 class="p-name" style="margin: 0 0 0.25rem;">' +
+          '<a href="' + escapeHtml(url) + '" class="u-url">' + escapeHtml(name) + '</a></h3>'
+      } else {
+        card += '<a href="' + escapeHtml(url) + '" class="u-url" style="display:none;">permalink</a>'
+      }
+
+      card += photoHtml + contentHtml + categoryHtml
+
+      if (dateHtml) {
+        card += '<div style="margin-top: 0.5rem;">' + dateHtml + '</div>'
+      }
+
+      // Hidden author h-card for MF2 parsers
+      card += '<div class="p-author h-card screen-reader-text">' +
+        '<span class="p-name">Grant Richmond</span></div>'
+
+      card += '</article>'
+      return card
+    }
+  })()
+</script>

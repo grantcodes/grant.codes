@@ -1,0 +1,50 @@
+---
+// Post photo renderer — renders photo array with u-photo MF2 class
+// Ported from apps/web/components/Post/Photo/Photo.tsx
+
+export interface Props {
+  photos: any[]
+  permalink?: string
+}
+
+const { photos, permalink } = Astro.props
+
+function getPhotoUrl(value: any): string {
+  if (typeof value === 'object' && value.value) {
+    return value.value
+  }
+  if (typeof value === 'string') {
+    return value
+  }
+  return ''
+}
+
+function getPhotoAlt(value: any): string {
+  if (typeof value === 'object' && value.alt) {
+    return value.alt
+  }
+  return ''
+}
+---
+
+{photos && photos.length > 0 && (
+  <div class="card__breakout post__photos">
+    {photos.map((photo) => {
+      const src = getPhotoUrl(photo)
+      const alt = getPhotoAlt(photo)
+      const rawValue = typeof photo === 'object' && photo.value ? photo.value : photo
+      return (
+        <figure>
+          {permalink ? (
+            <a href={permalink}>
+              <img src={src} alt={alt} loading="lazy" />
+            </a>
+          ) : (
+            <img src={src} alt={alt} loading="lazy" />
+          )}
+          <data class="u-photo" value={typeof rawValue === 'string' ? rawValue : ''} />
+        </figure>
+      )
+    })}
+  </div>
+)}

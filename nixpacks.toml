@@ -11,3 +11,21 @@ cmds=['pnpm run build']
 
 [start]
 cmd='pnpm run start'
+
+# ── Routing & Header Parity (deployment layer) ──
+# Next.js rewrites/redirects/headers are NOT handled by Astro static output.
+# The following must be configured at the web server / reverse proxy / CDN layer:
+#
+# 1. Subdomain → path rewrites (moved from apps/web/next.config.js):
+#    where.is.grant.codes  →  /where
+#    who.is.grant.codes    →  /about
+#    pay.grant.codes       →  /pay
+#
+# 2. .well-known redirect:
+#    /.well-known/(.*)  →  https://fed.brid.gy/.well-known/$1  (307)
+#
+# 3. Fonts CORS headers:
+#    /fonts/(.*)  →  Access-Control-Allow-Origin: *
+#
+# 4. Rollback: keep apps/web intact. Revert root package.json scripts to
+#    point back to `--filter web` and redeploy.

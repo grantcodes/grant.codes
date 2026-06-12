@@ -1,0 +1,113 @@
+---
+// Site navigation
+// Ported from apps/web/components/Container/Nav/index.js
+// Plain HTML/CSS with minimal inline JS for mobile toggle
+
+const webringId = import.meta.env.NEXT_PUBLIC_INDIEWEBRING_ID ?? ''
+
+const navLinks = [
+  { text: 'About', to: '/about' },
+  { text: 'Contact', to: '/contact' },
+  { text: 'Projects', to: '/websites' },
+  { text: 'Updates', to: '/' },
+  { text: 'Likes', to: '/likes' },
+  { text: 'Photos', to: '/photos' },
+  { text: 'Galleries', to: '/collections' },
+  { text: 'Replies', to: '/replies' },
+]
+
+const shownLinkCount = 4
+---
+
+<a
+  href="#nav"
+  class="main-nav-toggle"
+  title="menu"
+  aria-label="Toggle navigation"
+>
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <line x1="3" y1="6" x2="21" y2="6" />
+    <line x1="3" y1="12" x2="21" y2="12" />
+    <line x1="3" y1="18" x2="21" y2="18" />
+  </svg>
+  <span class="screen-reader-text">Jump to menu</span>
+</a>
+
+<nav id="nav" class="main-nav">
+  <ul class="main-nav__ul">
+    {navLinks.map((link, i) => (
+      <li class="main-nav__li">
+        {i === shownLinkCount && (
+          <a href="#nav" class="main-nav__link main-nav__link--more" id="nav-more-toggle">
+            More...
+          </a>
+        )}
+        <a
+          href={link.to}
+          class={i >= shownLinkCount ? 'main-nav__link main-nav__link--hidden' : 'main-nav__link'}
+        >
+          {link.text}
+        </a>
+      </li>
+    ))}
+  </ul>
+
+  <!-- Search form -->
+  <form class="search" method="GET" action="/search">
+    <label for="nav-search" class="screen-reader-text">Search</label>
+    <input
+      id="nav-search"
+      class="search__input"
+      type="search"
+      name="q"
+      placeholder="Search..."
+    />
+    <button class="search__button" type="submit">
+      <span class="screen-reader-text">Search</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </button>
+  </form>
+
+  {webringId && (
+    <div class="main-nav__link main-nav__link--webring">
+      <a
+        title="Previous IndieWeb site"
+        href={`https://xn--sr8hvo.ws/${webringId}/previous`}
+      >
+        <span role="img" aria-label="Previous IndieWeb site">👈</span>
+      </a>
+      <span title="An IndieWeb webring" role="img" aria-label="An IndieWeb webring">🕸💍</span>
+      <a
+        title="Next IndieWeb site"
+        href={`https://xn--sr8hvo.ws/${webringId}/next`}
+      >
+        <span role="img" aria-label="Next IndieWeb site">👉</span>
+      </a>
+    </div>
+  )}
+</nav>
+
+<script>
+  // Mobile nav toggle & more/less
+  const toggle = document.querySelector('.main-nav-toggle')
+  const nav = document.querySelector('.main-nav')
+  const moreToggle = document.getElementById('nav-more-toggle')
+
+  toggle?.addEventListener('click', (e) => {
+    e.preventDefault()
+    nav?.classList.toggle('is-target')
+  })
+
+  moreToggle?.addEventListener('click', (e) => {
+    e.preventDefault()
+    const hidden = nav?.querySelectorAll('.main-nav__link--hidden') as NodeListOf<HTMLElement> | undefined
+    const isHidden = hidden?.[0]?.style?.display !== 'block'
+    hidden?.forEach((el) => {
+      el.style.display = isHidden ? 'block' : ''
+    })
+    if (moreToggle) moreToggle.textContent = isHidden ? 'Less...' : 'More...'
+  })
+</script>

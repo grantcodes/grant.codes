@@ -1,0 +1,32 @@
+---
+// Post content renderer — safely renders HTML content with MF2 e-content class
+// Ported from apps/web/components/Post/Content.js
+
+import { rewriteContentHtml } from '../lib/url'
+
+export interface Props {
+  content: any
+}
+
+const { content } = Astro.props
+
+function renderContent(content: any): string {
+  let html = ''
+  if (content?.html) {
+    html = content.html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+  }
+  else if (content?.value) {
+    html = `<p>${content.value}</p>`
+  }
+  else if (typeof content === 'string') {
+    html = `<p>${content}</p>`
+  }
+
+  // Rewrite internal grant.codes URLs to be relative
+  return rewriteContentHtml(html)
+}
+---
+
+{content && (
+  <div class="post__content e-content" set:html={renderContent(content)} />
+)}

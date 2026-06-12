@@ -1,0 +1,105 @@
+---
+// Feed types listing — Atom, RSS, JSON Feed, JF2, MF2 JSON
+// Ported from apps/web/app/(default)/feeds/page.tsx
+//
+// Cutover-blocker: YES — feeds are an essential IndieWeb feature and
+// the listing page provides access to all available feed formats.
+//
+// Original behavior:
+// - Calls getPostTypes() and getCategories() (both local, no API)
+// - Renders three card sections: Main Feeds, Type Feeds, Category Feeds
+// - Feed URLs: {MICROPUB_URL}/plugin/feeds/{format}
+// - Type feeds: links to {baseUrl}/{format}/type/{type} inside <details><summary>
+// - Category feeds: links to {baseUrl}/{format}/category/{slug} inside <details><summary>
+
+import BaseLayout from '../layouts/BaseLayout.astro'
+import getPostTypes from '../lib/post-types'
+import getCategories from '../lib/categories'
+
+const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
+const micropubUrl = import.meta.env.NEXT_PUBLIC_MICROPUB_URL ?? 'http://localhost:4000/micropub'
+const baseUrl = `${micropubUrl}/plugin/feeds`
+
+const feedTypes = [
+  { id: 'atom', name: 'Atom' },
+  { id: 'rss', name: 'RSS' },
+  { id: 'json', name: 'JSON Feed' },
+  { id: 'jf2', name: 'JSON Feed 2' },
+  { id: 'mf2json', name: 'Microformats 2 JSON' },
+]
+
+const postTypes = await getPostTypes()
+const categories = await getCategories()
+
+// Basic pluralization helper (replaces @theothergothamdev/pluralize-ts)
+function pluralize(word: string): string {
+  // Simple rules for common post types
+  if (word.endsWith('s') || word.endsWith('x') || word.endsWith('ch') || word.endsWith('sh')) {
+    return word + 'es'
+  }
+  if (word.endsWith('y') && !['a', 'e', 'i', 'o', 'u'].includes(word[word.length - 2])) {
+    return word.slice(0, -1) + 'ies'
+  }
+  return word + 's'
+}
+---
+
+<BaseLayout title="Feeds" canonicalUrl={`${siteUrl}/feeds`}>
+  <h2 class="page-title">Feeds</h2>
+
+  <!-- Main Feeds -->
+  <grantcodes-card>
+    <span slot="header">Main Feeds</span>
+    <ul>
+      {feedTypes.map((ft) => (
+        <li>
+          <a href={`${baseUrl}/${ft.id}`}>{ft.name}</a>
+        </li>
+      ))}
+    </ul>
+  </grantcodes-card>
+
+  <!-- Type Feeds -->
+  <grantcodes-card>
+    <span slot="header">Type Feeds</span>
+    {postTypes.length === 0 ? (
+      <p>No post types available.</p>
+    ) : (
+      postTypes.map((pt) => (
+        <details>
+          <summary style="text-transform: capitalize;">
+            {pluralize(pt)}
+          </summary>
+          <ul>
+            {feedTypes.map((ft) => (
+              <li>
+                <a href={`${baseUrl}/${ft.id}/type/${pt}`}>{ft.name}</a>
+              </li>
+            ))}
+          </ul>
+        </details>
+      ))
+    )}
+  </grantcodes-card>
+
+  <!-- Category Feeds -->
+  <grantcodes-card>
+    <span slot="header">Category Feeds</span>
+    {categories.length === 0 ? (
+      <p>No categories available.</p>
+    ) : (
+      categories.map((cat) => (
+        <details>
+          <summary>{cat.name}</summary>
+          <ul>
+            {feedTypes.map((ft) => (
+              <li>
+                <a href={`${baseUrl}/${ft.id}/category/${cat.slug}`}>{ft.name}</a>
+              </li>
+            ))}
+          </ul>
+        </details>
+      ))
+    )}
+  </grantcodes-card>
+</BaseLayout>

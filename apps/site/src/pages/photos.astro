@@ -1,0 +1,65 @@
+---
+// Photos gallery — grid of photo posts
+// Ported from apps/web/app/(full-width)/photos/page.tsx
+//
+// Uses the Postr content collection with route-layer filtering
+// instead of direct API fetching. All photo-type posts from the
+// canonical `posts` collection are rendered here with in-memory
+// pagination.
+//
+// Original behavior:
+// - getPosts({ query: { typeOrYear: 'photo' }, limit: 50 })
+// - Renders PostList with type='photos' → Gallery layout → PostsGallery with maxWidth={20}
+// - Pagination: <Pagination noNext={posts.length < 50} />
+
+import FullWidthLayout from '../layouts/FullWidthLayout.astro'
+import PhotosGallery from '../components/PhotosGallery.astro'
+import { getCollection } from 'astro:content'
+
+const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
+
+// Fetch all entries from the canonical posts collection and filter for photos.
+// Sorting by canonical date (newest first) ensures deterministic output.
+const allEntries = await getCollection('posts')
+const allPhotos = allEntries
+  .map((entry) => entry.data)
+  .filter((post) => post?.cms?.postType === 'photo')
+  .sort((a, b) => {
+    const dateA = a?._postr?.date ?? ''
+    const dateB = b?._postr?.date ?? ''
+    return dateB.localeCompare(dateA)
+  })
+
+// In-memory pagination — first page, 50 per page
+const PER_PAGE = 50
+const totalPages = Math.max(Math.ceil(allPhotos.length / PER_PAGE), 1)
+const posts = allPhotos.slice(0, PER_PAGE)
+
+// Pagination — no "previous" on page 1, show "next" if there are more pages
+const nextHref = totalPages > 1 ? '/photos/page/2' : ''
+---
+
+<FullWidthLayout title="Photos" canonicalUrl={`${siteUrl}/photos`}>
+  <h2 class="page-title">Photos</h2>
+
+  {posts.length === 0 && (
+    <div class="card card--glass" style="text-align: center; padding: 2rem;">
+      <p>No photos found.</p>
+    </div>
+  )}
+
+  {posts.length > 0 && (
+    <>
+      <PhotosGallery posts={posts} type="feed" maxWidth={20} />
+
+      {nextHref && (
+        <grantcodes-pagination
+          previous-href=""
+          next-href={nextHref}
+          page={1}
+          pages={totalPages}
+        />
+      )}
+    </>
+  )}
+</FullWidthLayout>

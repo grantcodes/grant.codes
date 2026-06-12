@@ -1,0 +1,72 @@
+---
+// Homepage — fetches recent posts via Postr content loader and renders as a timeline
+//
+// Ported from apps/web/app/(default)/page.tsx
+// Wave 9 (003): migrated from direct getPosts() to Postr content collection
+//   - Posts are fetched via the content layer (astro:content getCollection)
+//   - The Postr loader handles API reachability, normalizes MF2, and
+//     returns entries that work directly with PostCard
+//   - Pagination kept as a separate direct API call via getPageCount()
+
+import BaseLayout from '../layouts/BaseLayout.astro'
+import PostCard from '../components/PostCard.astro'
+import { getCollection } from 'astro:content'
+import getPageCount from '../lib/page-count'
+
+const apiUrl = import.meta.env.NEXT_PUBLIC_API_URL ?? 'https://backend.grant.codes'
+const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
+const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
+
+// Fetch posts via Postr content loader.
+// The loader gracefully returns an empty array when the API is unreachable
+// (logs a warning, does not fail the build).
+// The collection contains all public posts, sorted by canonical date
+// (newest first) by the loader. Slice to the most recent 10 for the
+// homepage timeline.
+const collectionEntries = await getCollection('posts')
+const posts = collectionEntries
+  .map((entry) => entry.data)
+  .sort((a, b) => {
+    const dateA = a?._postr?.date ?? ''
+    const dateB = b?._postr?.date ?? ''
+    return dateB.localeCompare(dateA)
+  })
+  .slice(0, 10)
+
+// Pagination — direct API call for total page count.
+// Kept as a separate concern; the loader does not expose page counts.
+let totalPages = 1
+try {
+  totalPages = Math.max(await getPageCount({}, 10, { apiUrl }), 1)
+} catch {
+  // silently fall back to single page
+}
+---
+
+<BaseLayout title="Home" canonicalUrl={siteUrl}>
+  {posts.length === 0 && (
+    <div class="card card--glass" style="text-align: center; padding: 2rem;">
+      <h2>{authorName}</h2>
+      <p>No posts to display yet.</p>
+    </div>
+  )}
+
+  {posts.length > 0 && (
+    <>
+      <div class="post-list">
+        {posts.map((post) => (
+          <PostCard post={post} compact />
+        ))}
+      </div>
+
+      {totalPages > 1 && (
+        <grantcodes-pagination
+          previous-href=""
+          next-href="/page/2"
+          page={1}
+          pages={totalPages}
+        />
+      )}
+    </>
+  )}
+</BaseLayout>

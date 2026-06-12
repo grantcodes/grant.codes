@@ -1,0 +1,97 @@
+---
+// Test page for the Postr content collection loader.
+//
+// This page verifies that the content layer loads, normalises, and
+// renders entries from the `posts` collection defined in
+// `src/content.config.ts`. It is not a production route — it exists
+// solely to prove Wave 1 of the Postr Astro integration.
+//
+// Once the loader is proven, this page can be removed or replaced by
+// production routes migrated to content collections.
+
+import BaseLayout from '../layouts/BaseLayout.astro'
+import PostCard from '../components/PostCard.astro'
+import { getCollection } from 'astro:content'
+
+const posts = await getCollection('posts')
+const entryCount = posts.length
+const apiUrl = import.meta.env.NEXT_PUBLIC_API_URL ?? 'https://backend.grant.codes'
+
+// Derive post type from the first entry for display purposes
+const firstEntryData = entryCount > 0 ? posts[0].data : null
+const firstPostType = firstEntryData?.cms?.postType ?? 'unknown'
+---
+
+<BaseLayout title="Postr Loader Test">
+  <main style="max-width: 640px; margin: 0 auto; padding: 2rem 1rem;">
+    <h1>Postr Loader Test</h1>
+
+    <section style="margin-bottom: 2rem;">
+      <h2>Loader Status</h2>
+      <ul>
+        <li><strong>API URL:</strong> <code>{apiUrl}</code></li>
+        <li><strong>Entries loaded:</strong> {entryCount}</li>
+        {entryCount > 0 && (
+          <>
+            <li><strong>First post type:</strong> <code>{firstPostType}</code></li>
+            <li><strong>First entry ID:</strong> <code>{posts[0].id}</code></li>
+          </>
+        )}
+      </ul>
+    </section>
+
+    <!-- Offline / empty state -->
+    {entryCount === 0 && (
+      <div class="card card--glass" style="text-align: center; padding: 2rem;">
+        <h2>No posts loaded</h2>
+        <p style="font-size: 0.9rem; opacity: 0.7;">
+          The backend at <code>{apiUrl}</code> was unreachable or returned no results.
+          This is expected during static build if the API server is offline.
+        </p>
+        <p style="font-size: 0.8rem; opacity: 0.5;">
+          Start the API server with <code>npm run dev:api</code> from the repo root
+          and rebuild to see loaded content.
+        </p>
+      </div>
+    )}
+
+    <!-- Loaded entries -->
+    {entryCount > 0 && (
+      <section>
+        <h2>Loaded Entries ({entryCount})</h2>
+        <div class="post-list">
+          {posts.map((entry) => (
+            <PostCard post={entry.data} />
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Raw data inspector (dev-only, collapsed by default) -->
+    {entryCount > 0 && (
+      <details style="margin-top: 3rem;">
+        <summary style="cursor: pointer; font-weight: bold;">
+          Raw collection data (debug)
+        </summary>
+        <pre style="font-size: 0.75rem; max-height: 500px; overflow: auto; background: #1a1a1a; color: #e0e0e0; padding: 1rem; border-radius: 8px; margin-top: 0.5rem;">
+<code>{JSON.stringify({ entryCount, entries: posts.slice(0, 5).map(e => ({ id: e.id, keys: Object.keys(e.data) })) }, null, 2)}</code>
+        </pre>
+      </details>
+    )}
+  </main>
+</BaseLayout>
+
+<style>
+  .post-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .card--glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+</style>

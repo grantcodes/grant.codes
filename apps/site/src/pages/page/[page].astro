@@ -1,0 +1,76 @@
+---
+// Homepage pagination — /page/2, /page/3, etc.
+// Ported from apps/web/app/(default)/page/[page]/page.tsx
+//
+// Uses the Postr content collection with in-memory slicing/pagination.
+// Computes total pages from the canonical collection so that every page
+// is pre-rendered at build time.
+
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import PostCard from '../../components/PostCard.astro'
+import { getCollection } from 'astro:content'
+
+export async function getStaticPaths() {
+  const allEntries = await getCollection('posts')
+  const totalPages = Math.max(Math.ceil(allEntries.length / 10), 1)
+
+  // Pre-generate all pages (page 1 is /, start from page 2)
+  return Array.from({ length: totalPages - 1 }, (_, i) => ({
+    params: { page: String(i + 2) },
+  }))
+}
+
+const { page } = Astro.params
+
+const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
+const pageNum = parseInt(page ?? '2')
+
+// Fetch all entries from the canonical posts collection
+const allEntries = await getCollection('posts')
+const posts = allEntries
+  .map((entry) => entry.data)
+  .sort((a, b) => {
+    const dateA = a?._postr?.date ?? ''
+    const dateB = b?._postr?.date ?? ''
+    return dateB.localeCompare(dateA)
+  })
+
+// In-memory pagination — 10 per page (matching original homepage)
+const PER_PAGE = 10
+const totalPages = Math.max(Math.ceil(posts.length / PER_PAGE), 1)
+const startIndex = (pageNum - 1) * PER_PAGE
+const pagePosts = posts.slice(startIndex, startIndex + PER_PAGE)
+
+const pageTitle = `Page ${pageNum}`
+const prevPage = pageNum > 1 ? pageNum - 1 : null
+const nextPage = pageNum < totalPages ? pageNum + 1 : null
+const prevHref = prevPage ? (prevPage === 1 ? '/' : `/page/${prevPage}`) : ''
+const nextHref = nextPage ? `/page/${nextPage}` : ''
+---
+
+<BaseLayout title={pageTitle} canonicalUrl={`${siteUrl}/page/${page}`}>
+  <h2 class="page-title">{pageTitle}</h2>
+
+  {pagePosts.length === 0 && (
+    <div class="card card--glass" style="text-align: center; padding: 2rem;">
+      <p>No posts found on page {pageNum}.</p>
+    </div>
+  )}
+
+  {pagePosts.length > 0 && (
+    <>
+      <div class="post-list">
+        {pagePosts.map((post) => (
+          <PostCard post={post} compact />
+        ))}
+      </div>
+
+      <grantcodes-pagination
+        previous-href={prevHref}
+        next-href={nextHref}
+        page={pageNum}
+        pages={totalPages}
+      />
+    </>
+  )}
+</BaseLayout>

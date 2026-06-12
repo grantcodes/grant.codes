@@ -1,0 +1,817 @@
+---
+// About page — CV with h-resume MF2 semantics
+// Ported from apps/web/app/(full-width)/about/page.tsx
+
+import FullWidthLayout from '../layouts/FullWidthLayout.astro'
+import websites from '../../../web/data/websites.js'
+import skillsDataRaw from '../data/skills-data.js'
+
+interface SubSkillItem {
+  name: string
+  href?: string
+  love?: number
+  knowledge?: number
+  className?: string
+}
+
+interface SkillItem {
+  name: string
+  href?: string
+  love?: number
+  knowledge?: number
+  className?: string
+  subSkills?: SubSkillItem[]
+}
+
+interface SkillSection {
+  name: string
+  className?: string
+  skills: SkillItem[]
+}
+
+const skillsData = skillsDataRaw as SkillSection[]
+
+const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
+const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
+const authorEmail = import.meta.env.NEXT_PUBLIC_AUTHOR_EMAIL ?? ''
+const authorPhoto = import.meta.env.NEXT_PUBLIC_AUTHOR_PHOTO ?? ''
+const authorGithub = import.meta.env.NEXT_PUBLIC_AUTHOR_GITHUB ?? ''
+const authorInstagram = import.meta.env.NEXT_PUBLIC_AUTHOR_INSTAGRAM ?? ''
+
+function fmtDate(date: Date): string {
+  const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December',
+  ]
+  return `${months[date.getMonth()]} ${date.getFullYear()}`
+}
+
+function isoDate(date: Date): string {
+  return date.toISOString()
+}
+
+const now = new Date()
+const upcomingWebsites = websites.slice(0, 6)
+---
+
+<FullWidthLayout title="About Me" canonicalUrl={`${siteUrl}/about`}>
+  <div class="about-wrapper">
+    <div class="h-resume">
+      <div class="h-card p-contact">
+
+        <!-- Profile -->
+        <div class="about-profile">
+          <div class="about-profile__photo">
+            {authorPhoto && (
+              <img
+                class="u-photo"
+                src={authorPhoto}
+                alt={authorName}
+                width="400"
+                height="400"
+                loading="lazy"
+              />
+            )}
+          </div>
+          <div class="about-profile__content">
+            <h1 class="page-title">Hi! I'm Grant 👋</h1>
+            <p class="about-profile__description">
+              I'm a frontend engineer, originally from Scotland, currently based in Barcelona
+            </p>
+            <p class="about-profile__description">
+              I like to make fun, accessible, sustainable websites
+            </p>
+          </div>
+        </div>
+
+        <!-- Find Me -->
+        <section class="about-section">
+          <h2 class="about-section__title hide-print">Find Me</h2>
+          <div class="about-section__content">
+            <!-- Online -->
+            <div class="about-subsection invisible-print">
+              <h3 class="about-subsection__title">Online</h3>
+              <div class="about-subsection__content">
+                <div class="about-online">
+                  <div class="card about-online__card u-url hide-print">
+                    <a href={siteUrl} title="Website grant.codes" rel="me">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="about-online__icon" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+                      <span class="screen-reader-text">Website grant.codes</span>
+                    </a>
+                  </div>
+                  <div class="card about-online__card u-email">
+                    <a href={`mailto:${authorEmail}`} title={`Email ${authorEmail}`} rel="me">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="about-online__icon" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>
+                      <span class="screen-reader-text">Email {authorEmail}</span>
+                    </a>
+                  </div>
+                  {authorGithub && (
+                    <div class="card about-online__card">
+                      <a href={authorGithub} title={`Github ${authorGithub}`} rel="me">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="about-online__icon" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77 5.44 5.44 0 004 11.52c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 21.13V22"/></svg>
+                        <span class="screen-reader-text">Github</span>
+                      </a>
+                    </div>
+                  )}
+                  <div class="card about-online__card">
+                    <a href="https://www.linkedin.com/in/grantcodes/" title="LinkedIn @grantcodes" rel="me">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="about-online__icon" aria-hidden="true"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                      <span class="screen-reader-text">LinkedIn @grantcodes</span>
+                    </a>
+                  </div>
+                  {authorInstagram && (
+                    <div class="card about-online__card hide-print">
+                      <a href={authorInstagram} title={`Instagram ${authorInstagram}`} rel="me">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="about-online__icon" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                        <span class="screen-reader-text">Instagram</span>
+                      </a>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <!-- In Person (static — client-side location deferred) -->
+            <div class="about-subsection hide-print">
+              <h3 class="about-subsection__title">In Person</h3>
+              <div class="about-subsection__content">
+                <p>Currently based in Barcelona, Spain</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Work History -->
+      <section class="about-section">
+        <h2 class="about-section__title">Work History</h2>
+        <div class="about-section__content">
+          <!-- Exnaton -->
+          <div class="about-subsection p-experience h-event about-print-card">
+            <div class="about-subsection__title">
+              <h4 class="p-name">Frontend Developer</h4>
+              <h5 class="p-location">Exnaton</h5>
+              <time class="dt-start" datetime={isoDate(new Date('2025-03-01'))}>
+                {fmtDate(new Date('2025-03-01'))}
+              </time> —{' '}
+              <time datetime={isoDate(now)}>current</time>
+            </div>
+            <div class="about-subsection__content">
+              <div class="p-summary">
+                <p>
+                  Working on the core product at a climate tech startup — building
+                  components, design systems, and data-rich energy dashboards, with
+                  a big focus on modernising the frontend and growing the company.
+                </p>
+              </div>
+              <a href="https://www.exnaton.com/en" class="hide-print">exnaton.com</a>
+            </div>
+          </div>
+
+          <!-- Kinsta -->
+          <div class="about-subsection p-experience h-event about-print-card">
+            <div class="about-subsection__title">
+              <h4 class="p-name">Frontend Web Developer</h4>
+              <h5 class="p-location">Kinsta</h5>
+              <time class="dt-start" datetime={isoDate(new Date('2019-10-21'))}>
+                {fmtDate(new Date('2019-10-21'))}
+              </time> —{' '}
+              <time class="dt-end" datetime={isoDate(new Date('2025-02-27'))}>
+                {fmtDate(new Date('2025-02-27'))}
+              </time>
+            </div>
+            <div class="about-subsection__content">
+              <div class="p-summary">
+                <p>
+                  I was a core contributor to a high-traffic marketing website,
+                  working alongside a team that grew from 1 to over 30 people.
+                  Modernising the tech stack, running accessibility audits,
+                  improving performance, and building tooling so non-developers
+                  could create great content without needing me every five minutes.
+                </p>
+              </div>
+              <a href="https://kinsta.com/" class="hide-print">kinsta.com</a>
+            </div>
+          </div>
+
+          <!-- Freelance -->
+          <div class="about-subsection p-experience h-event about-print-card">
+            <div class="about-subsection__title">
+              <h4 class="p-name">Freelance Web Developer</h4>
+              <h5 class="p-location">grant.codes</h5>
+              <time class="dt-start" datetime={isoDate(new Date('2013-05-01'))}>
+                {fmtDate(new Date('2013-05-01'))}
+              </time> —{' '}
+              <time class="dt-end" datetime={isoDate(new Date('2024-05-01'))}>
+                {fmtDate(new Date('2024-05-01'))}
+              </time>
+            </div>
+            <div class="about-subsection__content">
+              <div class="p-summary">
+                <p>
+                  Over a decade of freelance work building WordPress and React sites
+                  for all kinds of small and medium-sized businesses.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Code Club -->
+          <div class="about-subsection p-experience h-event hide-print">
+            <div class="about-subsection__title">
+              <h4 class="p-name">Volunteer Tutor</h4>
+              <h5 class="p-location">Code Club DCA Dundee</h5>
+              <time class="dt-start" datetime={isoDate(new Date('2015-06-01'))}>
+                {fmtDate(new Date('2015-06-01'))}
+              </time> —{' '}
+              <time class="dt-end" datetime={isoDate(new Date('2016-04-01'))}>
+                {fmtDate(new Date('2016-04-01'))}
+              </time>
+            </div>
+            <div class="about-subsection__content">
+              <div class="p-summary">
+                <p>
+                  Taught kids Scratch and basic programming at Code Club, hosted at
+                  the Dundee Contemporary Arts cinema.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hit Reach -->
+          <div class="about-subsection p-experience h-event about-print-card">
+            <div class="about-subsection__title">
+              <h4 class="p-name">Senior Web Developer</h4>
+              <h5 class="p-location">Hit Reach</h5>
+              <time class="dt-start" datetime={isoDate(new Date('2012-08-01'))}>
+                {fmtDate(new Date('2012-08-01'))}
+              </time> —{' '}
+              <time class="dt-end" datetime={isoDate(new Date('2013-12-01'))}>
+                {fmtDate(new Date('2013-12-01'))}
+              </time>
+            </div>
+            <div class="about-subsection__content">
+              <div class="p-summary">
+                <p>
+                  Started as a junior developer and promoted to senior within a
+                  year. Built WordPress, static, and custom sites, managed a small
+                  dev team, and dealt with clients.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- The Social Learning Space -->
+          <div class="about-subsection p-experience h-event hide-print">
+            <div class="about-subsection__title">
+              <h4 class="p-name">Web Developer</h4>
+              <h5 class="p-location">The Social Learning Space</h5>
+              <time class="dt-start" datetime={isoDate(new Date('2011-09-01'))}>
+                {fmtDate(new Date('2011-09-01'))}
+              </time> —{' '}
+              <time class="dt-end" datetime={isoDate(new Date('2012-05-01'))}>
+                {fmtDate(new Date('2012-05-01'))}
+              </time>
+            </div>
+            <div class="about-subsection__content">
+              <div class="p-summary">
+                <p>
+                  Built web apps to help college students make the jump to
+                  university, and occasionally helped teach technical university
+                  modules.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Abertay University -->
+          <div class="about-subsection p-experience h-event hide-print">
+            <div class="about-subsection__title">
+              <h4 class="p-name">Web Developer</h4>
+              <h5 class="p-location">University of Abertay, Dundee</h5>
+              <time class="dt-start" datetime={isoDate(new Date('2011-06-01'))}>
+                {fmtDate(new Date('2011-06-01'))}
+              </time> —{' '}
+              <time class="dt-end" datetime={isoDate(new Date('2011-08-01'))}>
+                {fmtDate(new Date('2011-08-01'))}
+              </time>
+            </div>
+            <div class="about-subsection__content">
+              <div class="p-summary">
+                <p>
+                  Built "FIT" — a tool that let clients input their financial data
+                  and get actionable advice on improving profitability.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Education -->
+      <section class="about-section">
+        <h2 class="about-section__title">Education</h2>
+        <div class="about-section__content">
+          <!-- Climatebase -->
+          <div class="about-subsection p-education h-event about-print-card">
+            <div class="about-subsection__title">
+              <h4 class="p-name">Fellowship Cohort 5</h4>
+              <h5 class="p-location">Climatebase</h5>
+              <time class="dt-start" datetime={isoDate(new Date('2024-03-11'))}>
+                {fmtDate(new Date('2024-03-11'))}
+              </time> —{' '}
+              <time class="dt-end" datetime={isoDate(new Date('2024-05-31'))}>
+                {fmtDate(new Date('2024-05-31'))}
+              </time>
+            </div>
+            <div class="about-subsection__content">
+              <div class="p-summary">
+                <p>
+                  Selected for Cohort 5 of the Climatebase Fellowship — a climate
+                  career accelerator where I learned about the problems our planet
+                  is facing, what we can do about it, and how I can contribute.
+                </p>
+              </div>
+              <a href="https://climatebase.org/fellowship" class="hide-print">climatebase.org</a>
+            </div>
+          </div>
+
+          <!-- Abertay University -->
+          <div class="about-subsection p-education h-event about-print-card">
+            <div class="about-subsection__title">
+              <h4 class="p-name">Web Design & Development BSc (Hons)</h4>
+              <h5 class="p-location">Abertay University, Dundee</h5>
+              <time class="dt-start" datetime={isoDate(new Date('2008-09-01'))}>
+                {fmtDate(new Date('2008-09-01'))}
+              </time> —{' '}
+              <time class="dt-end" datetime={isoDate(new Date('2012-07-01'))}>
+                {fmtDate(new Date('2012-07-01'))}
+              </time>
+            </div>
+            <div class="about-subsection__content">
+              <div class="p-summary">
+                <p>Graduated with first class honours</p>
+              </div>
+              <a href="https://www.abertay.ac.uk" class="hide-print">abertay.ac.uk</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Skills -->
+      <section class="about-section">
+        <h2 class="about-section__title">Skills</h2>
+        <div class="about-section__content about-skills-content">
+          {skillsData.map((section) => (
+            section.skills.map((skill) => (
+              <div class={`card about-skill${skill.className ? ` ${skill.className}` : ''}`}>
+                <h3 class="about-skill__name">
+                  {skill.href ? (
+                    <a href={skill.href}>{skill.name}</a>
+                  ) : (
+                    skill.name
+                  )}
+                  {skill.knowledge !== undefined && (
+                    <span class="about-skill__level">
+                      <progress class="about-skill__progress" value={skill.knowledge} max="100" aria-label={`${skill.knowledge}% knowledge`}></progress>
+                    </span>
+                  )}
+                </h3>
+                {skill.subSkills && skill.subSkills.length > 0 && (
+                  <ul class="about-subskills">
+                    {skill.subSkills.map((sub) => (
+                      <li class="about-subskill">
+                        <span class="about-subskill__name">
+                          {sub.href ? (
+                            <a href={sub.href}>{sub.name}</a>
+                          ) : (
+                            sub.name
+                          )}
+                        </span>
+                        {sub.knowledge !== undefined && (
+                          <span class="about-subskill__level">
+                            <progress class="about-subskill__progress" value={sub.knowledge} max="100" aria-label={`${sub.knowledge}% knowledge`}></progress>
+                          </span>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))
+          ))}
+        </div>
+      </section>
+
+      <!-- Projects -->
+      <section class="about-section hide-print">
+        <h2 class="about-section__title">Projects</h2>
+        <div class="about-section__content">
+          <div class="about-subsection">
+            <div class="about-subsection__content">
+              <div class="websites-grid">
+                {upcomingWebsites.map((website) => (
+                  <a href={`/websites/${website.slug}`} class="website-tile" title={website.title}>
+                    <span class="screen-reader-text">{website.title}</span>
+                    <img
+                      class="website-tile__image"
+                      src={website.thumbnail}
+                      loading="lazy"
+                      aria-hidden="true"
+                      alt=""
+                    />
+                  </a>
+                ))}
+              </div>
+              {websites.length > 6 && (
+                <a href="/websites" class="button" style="margin-top: 1rem;">View All</a>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Interests -->
+      <section class="about-section">
+        <h2 class="about-section__title">Interests</h2>
+        <div class="about-section__content">
+          <div class="about-subsection about-print-card">
+            <h3 class="about-subsection__title">Travel</h3>
+            <div class="about-subsection__content">
+              <p>
+                I sold all my stuff and went traveling for a couple of years while
+                working remotely
+              </p>
+              <p>
+                I <a href="/2017/06/13/theflyingscotsvan">built</a> and lived in a
+                van while I did a road trip from Canada to{' '}
+                <a href="https://grant.codes/2018/07/31/5b60a42fb83b374d5277e370">Mexico</a>{' '}
+                and back again
+              </p>
+            </div>
+          </div>
+
+          <div class="about-subsection about-print-card">
+            <h3 class="about-subsection__title">Making & DIY</h3>
+            <div class="about-subsection__content">
+              <p>
+                I founded{' '}
+                <a href="https://dundeemakerspace.co.uk">Dundee MakerSpace</a>,
+                former member of{' '}
+                <a href="http://makespacemadrid.org/">Makespace Madrid</a>, and
+                I've visited many others on my travels
+              </p>
+              <p>
+                In particular I enjoy making{' '}
+                <a href="/2016/04/14/570f7196b3340f7375caa5de">small electronics</a>
+                , home automation, laser cutting, screen printing and random low
+                quality artwork
+              </p>
+            </div>
+          </div>
+
+          <div class="about-subsection about-print-card">
+            <h3 class="about-subsection__title">Indieweb</h3>
+            <div class="about-subsection__content">
+              <p>
+                I am a supporter of the{' '}
+                <a href="https://indieweb.org">Indieweb</a> movement and make a{' '}
+                <a href="https://postr.dev">bunch</a>{' '}
+                <a href="https://alltogethernow.io">of</a>{' '}
+                <a href="https://postrchild.com">tools</a> in that space
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <p class="print-only">
+      <small style="margin-block-start: 2rem; font-size: 0.6em; display: block;">
+        This CV is a printout from{' '}
+        <a href="https://grant.codes/about">https://grant.codes/about</a>{' '}
+        check there for more detailed information on my work, skills and projects
+      </small>
+    </p>
+  </div>
+</FullWidthLayout>
+
+<style>
+  /* About page layout */
+  .about-wrapper {
+    max-width: 42rem;
+  }
+
+  /* Profile */
+  .about-profile {
+    align-items: center;
+  }
+
+  @media (min-width: 36em) {
+    .about-profile {
+      display: grid;
+      gap: var(--about-gap);
+      grid-template-columns: var(--about-heading-width) auto;
+    }
+  }
+
+  .about-profile__photo {
+    max-width: 20rem;
+  }
+
+  .about-profile__photo img {
+    display: block;
+    height: auto;
+    width: 100%;
+    border-radius: var(--border-radius);
+  }
+
+  .about-profile__description {
+    font-size: 1.4rem;
+  }
+
+  /* Section */
+  .about-section {
+    display: block;
+    margin-top: 4rem;
+  }
+
+  .about-section__title {
+    font-size: 1.6rem;
+    margin: 0;
+    margin-block-end: 0.5rem;
+    line-height: 1.2;
+  }
+
+  @media (min-width: 36em) {
+    .about-section__title {
+      width: var(--about-heading-width);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      z-index: 1;
+    }
+  }
+
+  .about-section__content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--about-gap);
+  }
+
+  .about-section__content > * {
+    margin: 0;
+  }
+
+  /* Subsection */
+  .about-subsection {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--about-gap);
+    margin: 0;
+  }
+
+  @media (min-width: 36em) {
+    .about-subsection {
+      flex-direction: row;
+    }
+  }
+
+  .about-subsection__title {
+    font-size: 1rem;
+    flex-shrink: 0;
+    margin-block-start: 0;
+    line-height: 1.2;
+  }
+
+  @media (min-width: 36em) {
+    .about-subsection__title {
+      width: var(--about-heading-width);
+    }
+  }
+
+  .about-subsection__title > * {
+    margin: 0;
+  }
+
+  .about-subsection__title h4,
+  .about-subsection__title h5 {
+    font-size: 1em;
+    display: inline;
+  }
+
+  .about-subsection__title h4:last-of-type::after,
+  .about-subsection__title h5:last-of-type::after {
+    content: '';
+    display: block;
+  }
+
+  .about-subsection__title time {
+    font-size: 0.714rem;
+  }
+
+  /* p-name + p-location inline separator */
+  .p-name + .p-location::before {
+    content: ' @ ';
+    margin-block-end: 0;
+  }
+
+  .about-subsection__content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .about-subsection__content > p:first-child {
+    margin-block-start: 0;
+  }
+
+  .about-subsection__content > p:last-child {
+    margin-block-end: 0;
+  }
+
+  /* Online */
+  .about-online {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .about-online__card {
+    margin: 0;
+    padding: 0.5em;
+    text-align: center;
+  }
+
+  .about-online__card a {
+    display: flex;
+    text-decoration: none;
+  }
+
+  .about-online__icon {
+    display: block;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  /* Skills */
+  .about-skills-content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .about-skill {
+    flex-grow: 1;
+    font-size: 0.8rem;
+    overflow: visible;
+    width: 100%;
+  }
+
+  @media (min-width: 30em) {
+    .about-skill {
+      width: 40%;
+    }
+  }
+
+  @media (min-width: 46em) {
+    .about-skill {
+      width: 30%;
+    }
+  }
+
+  .about-skill__name {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1em;
+    margin: 0;
+    margin-bottom: 0.5rem;
+    gap: 0.5rem;
+  }
+
+  .about-skill__level {
+    flex-shrink: 0;
+  }
+
+  .about-skill__progress {
+    appearance: none;
+    display: block;
+    width: 5rem;
+    height: 0.5rem;
+    border-radius: 0.25rem;
+    background-color: var(--g-color-background-subtle);
+    border: none;
+    outline: none;
+    overflow: visible;
+  }
+
+  .about-skill__progress::-webkit-progress-bar {
+    background-color: var(--g-color-background-subtle);
+    border-radius: 0.25rem;
+  }
+
+  .about-skill__progress::-webkit-progress-value {
+    background-color: var(--g-color-content-primary);
+    border-radius: 0.25rem;
+  }
+
+  .about-skill__progress::-moz-progress-bar {
+    background-color: var(--g-color-content-primary);
+    border-radius: 0.25rem;
+  }
+
+  .about-subskills {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    padding-top: 0.5rem;
+    font-size: 0.714rem;
+  }
+
+  .about-subskill {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .about-subskill__name {
+    flex-grow: 1;
+    padding-right: 0.5em;
+  }
+
+  .about-subskill__progress {
+    appearance: none;
+    display: block;
+    width: 4rem;
+    height: 0.4rem;
+    border-radius: 0.2rem;
+    background-color: var(--g-color-background-subtle);
+    border: none;
+    outline: none;
+  }
+
+  .about-subskill__progress::-webkit-progress-bar {
+    background-color: var(--g-color-background-subtle);
+    border-radius: 0.2rem;
+  }
+
+  .about-subskill__progress::-webkit-progress-value {
+    background-color: var(--g-color-content-primary);
+    border-radius: 0.2rem;
+  }
+
+  .about-subskill__progress::-moz-progress-bar {
+    background-color: var(--g-color-content-primary);
+    border-radius: 0.2rem;
+  }
+
+  /* Print card */
+  .about-print-card {
+    /* Print-friendly cards get a subtle border/shadow in print */
+  }
+
+  /* Websites grid reused from websites page */
+  .websites-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(2, minmax(1rem, 1fr));
+    list-style: none;
+  }
+
+  .website-tile {
+    display: block;
+    position: relative;
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: var(--border-radius);
+    box-shadow: 0 0.5rem 3rem rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(1rem);
+    width: 100%;
+    max-width: 16rem;
+    transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s, filter 0.2s;
+    text-decoration: none;
+  }
+
+  .website-tile:hover,
+  .website-tile:focus {
+    transform: translateY(-0.3em) scale(1.03);
+    background-color: rgba(255, 255, 255, 1);
+    box-shadow: 0 0.5rem 3rem rgba(0, 0, 0, 0.2);
+  }
+
+  .website-tile__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+  }
+</style>

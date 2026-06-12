@@ -1,0 +1,84 @@
+---
+// Notes archive pagination — /notes/page/2, /notes/page/3, etc.
+//
+// Uses the Postr content collection with route-layer filtering.
+// Computes total pages from the in-memory collection so that
+// every page is pre-rendered at build time.
+
+import BaseLayout from '../../../layouts/BaseLayout.astro'
+import PostCard from '../../../components/PostCard.astro'
+import { getCollection } from 'astro:content'
+
+export async function getStaticPaths() {
+  const allEntries = await getCollection('posts')
+  const noteCount = allEntries.filter(
+    (e) => e.data?.cms?.postType === 'note'
+  ).length
+
+  const PER_PAGE = 25
+  const totalPages = Math.max(Math.ceil(noteCount / PER_PAGE), 1)
+
+  return Array.from({ length: totalPages - 1 }, (_, i) => ({
+    params: { page: String(i + 2) }, // page 2, 3, 4…
+  }))
+}
+
+const { page } = Astro.params
+const pageNum = parseInt(page ?? '2')
+
+const siteUrl =
+  import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
+
+// Fetch and filter notes from the canonical collection.
+// Sorting by canonical date (newest first) ensures deterministic output.
+const allEntries = await getCollection('posts')
+const notes = allEntries
+  .map((entry) => entry.data)
+  .filter((post) => post?.cms?.postType === 'note')
+  .sort((a, b) => {
+    const dateA = a?._postr?.date ?? ''
+    const dateB = b?._postr?.date ?? ''
+    return dateB.localeCompare(dateA)
+  })
+
+// In-memory pagination
+const PER_PAGE = 25
+const totalPages = Math.max(Math.ceil(notes.length / PER_PAGE), 1)
+const startIndex = (pageNum - 1) * PER_PAGE
+const pageNotes = notes.slice(startIndex, startIndex + PER_PAGE)
+
+const pageTitle = `Notes page ${pageNum}`
+const canonicalUrl = `${siteUrl}/notes/page/${pageNum}`
+const baseUrl = '/notes'
+const prevPage = pageNum > 1 ? pageNum - 1 : null
+const nextPage = pageNum < totalPages ? pageNum + 1 : null
+const prevHref = prevPage === 1 ? baseUrl : prevPage ? `${baseUrl}/page/${prevPage}` : ''
+const nextHref = nextPage ? `${baseUrl}/page/${nextPage}` : ''
+---
+
+<BaseLayout title={pageTitle} canonicalUrl={canonicalUrl}>
+  <h2 class="page-title">{pageTitle}</h2>
+
+  {pageNotes.length === 0 && (
+    <div class="card card--glass" style="text-align: center; padding: 2rem;">
+      <p>No notes found on page {pageNum}.</p>
+    </div>
+  )}
+
+  {pageNotes.length > 0 && (
+    <>
+      <div class="post-list">
+        {pageNotes.map((post) => (
+          <PostCard post={post} compact />
+        ))}
+      </div>
+
+      <grantcodes-pagination
+        previous-href={prevHref}
+        next-href={nextHref}
+        page={pageNum}
+        pages={totalPages}
+      />
+    </>
+  )}
+</BaseLayout>

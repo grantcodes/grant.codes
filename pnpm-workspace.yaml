@@ -10,3 +10,5 @@ allowBuilds:
   sharp: true
   unrs-resolver: true
 blockExoticSubdeps: false
+minimumReleaseAgeExclude:
+  - astro@6.4.5

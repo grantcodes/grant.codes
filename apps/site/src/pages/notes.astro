@@ -1,0 +1,66 @@
+---
+// Notes archive — /notes
+//
+// Uses the Postr content collection with route-layer filtering
+// instead of direct API fetching. All note-type posts from the
+// canonical `posts` collection are rendered here with in-memory
+// pagination.
+//
+// Ported from apps/web/app/(default)/[typeOrYear]/page.tsx (notes case)
+
+import BaseLayout from '../layouts/BaseLayout.astro'
+import PostCard from '../components/PostCard.astro'
+import { getCollection } from 'astro:content'
+
+const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
+
+// Fetch all entries from the canonical posts collection and filter for notes.
+// The collection is built at build time by the postrLoader.
+// Sorting by canonical date (newest first) ensures deterministic output.
+const allEntries = await getCollection('posts')
+const notes = allEntries
+  .map((entry) => entry.data)
+  .filter((post) => post?.cms?.postType === 'note')
+  .sort((a, b) => {
+    const dateA = a?._postr?.date ?? ''
+    const dateB = b?._postr?.date ?? ''
+    return dateB.localeCompare(dateA)
+  })
+
+// In-memory pagination — first page, 25 per page
+const PER_PAGE = 25
+const totalPages = Math.max(Math.ceil(notes.length / PER_PAGE), 1)
+const pageNotes = notes.slice(0, PER_PAGE)
+
+const prevHref = ''
+const nextHref = totalPages > 1 ? '/notes/page/2' : ''
+---
+
+<BaseLayout title="Notes" canonicalUrl={`${siteUrl}/notes`}>
+  <h2 class="page-title">Notes</h2>
+
+  {pageNotes.length === 0 && (
+    <div class="card card--glass" style="text-align: center; padding: 2rem;">
+      <p>No notes found.</p>
+    </div>
+  )}
+
+  {pageNotes.length > 0 && (
+    <>
+      <div class="post-list">
+        {pageNotes.map((post) => (
+          <PostCard post={post} compact />
+        ))}
+      </div>
+
+      {totalPages > 1 && (
+        <grantcodes-pagination
+          previous-href={prevHref}
+          next-href={nextHref}
+          page={1}
+          pages={totalPages}
+        />
+      )}
+    </>
+  )}
+</BaseLayout>

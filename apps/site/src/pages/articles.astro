@@ -1,0 +1,66 @@
+---
+// Articles archive — /articles
+//
+// Uses the Postr content collection with route-layer filtering
+// instead of direct API fetching. All article-type posts from the
+// canonical `posts` collection are rendered here with in-memory
+// pagination.
+//
+// Ported from apps/web/app/(default)/[typeOrYear]/page.tsx (articles case)
+
+import BaseLayout from '../layouts/BaseLayout.astro'
+import PostCard from '../components/PostCard.astro'
+import { getCollection } from 'astro:content'
+
+const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
+
+// Fetch all entries from the canonical posts collection and filter for articles.
+// The collection is built at build time by the postrLoader.
+// Sorting by canonical date (newest first) ensures deterministic output.
+const allEntries = await getCollection('posts')
+const articles = allEntries
+  .map((entry) => entry.data)
+  .filter((post) => post?.cms?.postType === 'article')
+  .sort((a, b) => {
+    const dateA = a?._postr?.date ?? ''
+    const dateB = b?._postr?.date ?? ''
+    return dateB.localeCompare(dateA)
+  })
+
+// In-memory pagination — first page, 25 per page
+const PER_PAGE = 25
+const totalPages = Math.max(Math.ceil(articles.length / PER_PAGE), 1)
+const pageArticles = articles.slice(0, PER_PAGE)
+
+const prevHref = ''
+const nextHref = totalPages > 1 ? '/articles/page/2' : ''
+---
+
+<BaseLayout title="Articles" canonicalUrl={`${siteUrl}/articles`}>
+  <h2 class="page-title">Articles</h2>
+
+  {pageArticles.length === 0 && (
+    <div class="card card--glass" style="text-align: center; padding: 2rem;">
+      <p>No articles found.</p>
+    </div>
+  )}
+
+  {pageArticles.length > 0 && (
+    <>
+      <div class="post-list">
+        {pageArticles.map((post) => (
+          <PostCard post={post} compact />
+        ))}
+      </div>
+
+      {totalPages > 1 && (
+        <grantcodes-pagination
+          previous-href={prevHref}
+          next-href={nextHref}
+          page={1}
+          pages={totalPages}
+        />
+      )}
+    </>
+  )}
+</BaseLayout>

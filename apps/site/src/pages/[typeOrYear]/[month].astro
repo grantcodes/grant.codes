@@ -1,0 +1,239 @@
+---
+// Monthly archive route — /2024/3, /2024/12, etc.
+// Ported from apps/web/app/(default)/[typeOrYear]/[month]/page.tsx
+// Uses static monthly data files + shared data layer
+//
+// Cutover-blocker: YES — monthly archives provide chronological browsing.
+// DataSummary charts (BodyGraph/recharts, Map/Leaflet) deferred as
+// a can-slip follow-up (Wave 9 decision). Current implementation shows
+// post-type counts in a clean card layout + brief content summaries.
+//
+// Can-slip: DataSummary charts (BodyGraph, Map) — not critical for launch.
+
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import PostCard from '../../components/PostCard.astro'
+import getMonthData from '../../lib/month-data'
+import getMonthDataFiles from '../../lib/month-data-files'
+import getPosts from '../../lib/posts'
+
+export async function getStaticPaths() {
+  // Read monthly data files from apps/web/data/monthly/ (symlinked)
+  // Only generate recent years (2020+) to keep build time manageable
+  const dataDir = new URL('../../../data/monthly/', import.meta.url).pathname
+  const files = getMonthDataFiles(dataDir)
+  const paths = files
+    .filter((file: string) => {
+      const [year] = file.split('/')
+      return parseInt(year) >= 2020
+    })
+    .map((file: string) => {
+      const [year, month] = file.split('/')
+      return { params: { typeOrYear: year, month } }
+    })
+
+  return paths
+}
+
+const { typeOrYear, month } = Astro.params
+
+const apiUrl = import.meta.env.NEXT_PUBLIC_API_URL ?? 'https://backend.grant.codes'
+const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
+
+// Validate that typeOrYear is a year and month is a number
+const yearInt = parseInt(typeOrYear ?? '0')
+const monthInt = parseInt(month ?? '0')
+const isValidRoute = yearInt > 2000 && monthInt >= 1 && monthInt <= 12
+
+// Load month data from static files
+const dataDir = new URL('../../../data/monthly/', import.meta.url).pathname
+const monthData = isValidRoute ? getMonthData(yearInt, monthInt, dataDir) : null
+
+// Month name
+const monthNames = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December',
+]
+const monthName = monthInt >= 1 && monthInt <= 12 ? monthNames[monthInt - 1] : month ?? ''
+const pageTitle = `Monthly Summary ${yearInt}/${monthInt}`
+
+// Calculate prev/next month links
+const leadingZero = (n: number): string => (n < 10 && n > 0 ? `0${n}` : `${n}`)
+
+const nextMonth = monthInt === 12 ? 1 : monthInt + 1
+const nextYear = monthInt === 12 ? yearInt + 1 : yearInt
+const prevMonth = monthInt === 1 ? 12 : monthInt - 1
+const prevYear = monthInt === 1 ? yearInt - 1 : yearInt
+
+const prevHref = prevYear >= 2000 ? `/${prevYear}/${leadingZero(prevMonth)}` : ''
+const nextHref = nextYear <= 2025 ? `/${nextYear}/${leadingZero(nextMonth)}` : ''
+
+// Fetch posts for this month/year from API using helper with gate
+let posts: any[] = []
+let fetchError: string | null = null
+
+if (isValidRoute) {
+  try {
+    posts = await getPosts({ query: { year: String(yearInt), month: String(monthInt) }, limit: 50 }, { apiUrl })
+  } catch (err: unknown) {
+    fetchError = err instanceof Error ? err.message : String(err)
+    console.warn(`[month archive] fetch failed for ${yearInt}/${monthInt}:`, fetchError)
+  }
+}
+
+// Post type counts from static month data
+const postTypes = monthData?.postTypes ?? null
+const typeEntries = postTypes && typeof postTypes === 'object'
+  ? Object.entries(postTypes as Record<string, number>).sort(([, a], [, b]) => b - a)
+  : []
+
+// Extract content previews for content summary
+const contentPreviews = posts.slice(0, 5).map((post) => {
+  const props = post?.properties ?? {}
+  const content = props.content?.[0] ?? null
+  let text = ''
+  if (content?.value) text = content.value
+  else if (typeof content === 'string') text = content
+  else if (content?.html) text = content.html.replace(/<[^>]*>/g, '')
+  return {
+    text: text.slice(0, 200),
+    url: props.url?.[0] ?? null,
+    published: props.published?.[0] ?? null,
+  }
+})
+
+// Calculate total posts from month data
+const totalPostsFromData = typeEntries.reduce((sum, [, count]) => sum + count, 0)
+const totalLabel = totalPostsFromData > 0 ? `${totalPostsFromData} total posts` : `${posts.length} posts`
+---
+
+<BaseLayout title={pageTitle} canonicalUrl={`${siteUrl}/${yearInt}/${leadingZero(monthInt)}`}>
+  <h2 class="page-title">{pageTitle}</h2>
+
+  {!isValidRoute && (
+    <div class="card card--glass" style="text-align: center; padding: 2rem;">
+      <p>Invalid month archive URL.</p>
+    </div>
+  )}
+
+  {isValidRoute && monthData && typeEntries.length > 0 && (
+    <grantcodes-card>
+      <span slot="header">{monthName} {yearInt}</span>
+      <p>{totalLabel}</p>
+      <div class="month-summary__types">
+        {typeEntries.map(([type, count]) => (
+          <span class="month-summary__type-badge">
+            <strong>{type}</strong>: {count}
+          </span>
+        ))}
+      </div>
+    </grantcodes-card>
+  )}
+
+  {isValidRoute && monthData && typeEntries.length === 0 && (
+    <grantcodes-card>
+      <span slot="header">{monthName} {yearInt}</span>
+      <p>No posts found in monthly data for this period.</p>
+    </grantcodes-card>
+  )}
+
+  {isValidRoute && !monthData && !fetchError && (
+    <div class="card card--glass" style="text-align: center; padding: 2rem;">
+      <p>No monthly data available for this period.</p>
+    </div>
+  )}
+
+  {fetchError && (
+    <div class="card card--glass" style="text-align: center; padding: 2rem;">
+      <p>Could not load posts. The API may be unreachable during static build.</p>
+      <p style="font-size: 0.7rem; opacity: 0.5;">Error: {fetchError}</p>
+    </div>
+  )}
+
+  <!-- Content summary from recent posts -->
+  {!fetchError && contentPreviews.length > 0 && (
+    <grantcodes-card>
+      <span slot="header">Recent Content</span>
+      <ul class="month-summary__previews">
+        {contentPreviews.map((preview) => (
+          preview.text ? (
+            <li>
+              {preview.url ? (
+                <a href={preview.url} class="month-summary__preview-link">
+                  {preview.text}{preview.text.length >= 200 ? '…' : ''}
+                </a>
+              ) : (
+                <span>{preview.text}{preview.text.length >= 200 ? '…' : ''}</span>
+              )}
+            </li>
+          ) : null
+        ))}
+      </ul>
+    </grantcodes-card>
+  )}
+
+  {!fetchError && posts.length > 0 && (
+    <div class="post-list">
+      {posts.map((post) => (
+        <PostCard post={post} compact />
+      ))}
+    </div>
+  )}
+
+  {(prevHref || nextHref) && (
+    <grantcodes-pagination
+      previous-href={prevHref}
+      next-href={nextHref}
+      page={monthInt}
+      pages={12}
+    />
+  )}
+</BaseLayout>
+
+<style>
+  .month-summary__types {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem 0.625rem;
+  }
+
+  .month-summary__type-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid currentColor;
+    opacity: 0.8;
+  }
+
+  .month-summary__previews {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .month-summary__previews li {
+    padding: 0.375rem 0;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.15);
+    font-size: 0.85rem;
+  }
+
+  .month-summary__previews li:last-child {
+    border-bottom: none;
+  }
+
+  .month-summary__preview-link {
+    text-decoration: none;
+    color: inherit;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+  }
+
+  .month-summary__preview-link:hover {
+    opacity: 1;
+    text-decoration: underline;
+  }
+
+  /* Top margin for stacked grantcodes-card */
+  grantcodes-card + grantcodes-card {
+    margin-top: 1rem;
+  }
+</style>
