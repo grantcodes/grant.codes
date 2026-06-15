@@ -1,6 +1,6 @@
 ---
 // Root layout — full metadata and IndieWeb links
-// Ported from apps/web/app/layout.tsx
+// Ported from the legacy Next.js app/layout.tsx
 
 import '@grantcodes/ui/styles/base.css'
 import '@grantcodes/ui/styles/themes/grantcodes.css'
@@ -58,9 +58,10 @@ export interface Props {
   title?: string
   description?: string
   canonicalUrl?: string
+  noindex?: boolean
 }
 
-const { title: pageTitle, description: pageDescription, canonicalUrl } = Astro.props
+const { title: pageTitle, description: pageDescription, canonicalUrl, noindex } = Astro.props
 const fullTitle = pageTitle ? `${pageTitle} – ${name}` : name
 const ogDescription = pageDescription ?? description
 const ogUrl = canonicalUrl ?? url
@@ -82,6 +83,9 @@ const ogUrl = canonicalUrl ?? url
 
     <!-- Canonical URL -->
     <link rel="canonical" href={ogUrl} />
+
+    <!-- Robots -->
+    {noindex && <meta name="robots" content="noindex" />}
 
     <!-- IndieWeb links -->
     {indiewebLinks.map((link) => (

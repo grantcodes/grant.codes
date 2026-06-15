@@ -1,6 +1,6 @@
 ---
 // Monthly archive route — /2024/3, /2024/12, etc.
-// Ported from apps/web/app/(default)/[typeOrYear]/[month]/page.tsx
+// Ported from the legacy Next.js app/(default)/[typeOrYear]/[month]/page.tsx
 // Uses static monthly data files + shared data layer
 //
 // Cutover-blocker: YES — monthly archives provide chronological browsing.
@@ -17,7 +17,7 @@ import getMonthDataFiles from '../../lib/month-data-files'
 import getPosts from '../../lib/posts'
 
 export async function getStaticPaths() {
-  // Read monthly data files from apps/web/data/monthly/ (symlinked)
+  // Read monthly data files from apps/site/data/monthly/
   // Only generate recent years (2020+) to keep build time manageable
   const dataDir = new URL('../../../data/monthly/', import.meta.url).pathname
   const files = getMonthDataFiles(dataDir)

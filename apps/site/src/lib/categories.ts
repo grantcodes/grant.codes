@@ -16,7 +16,7 @@ const simpleSlugify = (text: string): string => {
 }
 
 // NOTE: Some sort of bug in the micropub endpoint causes crashes when
-// categories are queried a bunch, so we hardcode them (same as apps/web).
+// categories are queried a bunch, so we hardcode them (same as the legacy app).
 const MANUAL_CATEGORIES = [
   '10',
   '100DaysOfCode',

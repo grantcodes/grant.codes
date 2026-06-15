@@ -1,5 +1,5 @@
 // Skills data for the about page
-// Ported from apps/web/components/About/Skills/skills-data.ts
+// Ported from the legacy Next.js components/About/Skills/skills-data.ts
 
 const skills = [
   {

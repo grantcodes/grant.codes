@@ -38,14 +38,14 @@ jobs:
           DAWARICH_API_KEY: ${{ secrets.DAWARICH_API_KEY }}
           HOME_ASSISTANT_KEY: ${{ secrets.HOME_ASSISTANT_KEY }}
           HOME_ASSISTANT_URL: ${{ secrets.HOME_ASSISTANT_URL }}
-        working-directory: apps/web
+        working-directory: apps/site
         run: node bin/generate-monthly-data --save
 
       - name: Commit new file
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add apps/web/data/monthly
+          git add apps/site/data/monthly
           git commit -m "Add new montly data file" -a
 
       - name: Push changes

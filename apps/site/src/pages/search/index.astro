@@ -6,7 +6,7 @@
 // search form and client-side result rendering. Full SSR search requires
 // hybrid/server mode and is tracked as a post-cutover improvement.
 //
-// Original behavior (apps/web):
+// Original Next.js behavior:
 // - RSC at /search/[search] calls getPosts({ query: { search: params.search } })
 // - Renders PostList with results
 // - Pagination at /search/[search]/page/[page]
@@ -25,6 +25,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro'
 const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
 const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
 const apiUrl = import.meta.env.NEXT_PUBLIC_API_URL ?? 'https://backend.grant.codes'
+
+// Preserve current query in the search input after page load
+const searchQuery = Astro.url.searchParams.get('q') || ''
 ---
 
 <BaseLayout title="Search" canonicalUrl={`${siteUrl}/search`}>
@@ -39,6 +42,7 @@ const apiUrl = import.meta.env.NEXT_PUBLIC_API_URL ?? 'https://backend.grant.cod
         type="search"
         name="q"
         placeholder={`Search ${authorName}'s posts...`}
+        value={searchQuery}
         autofocus
       />
       <button class="search__button" type="submit">
@@ -53,6 +57,13 @@ const apiUrl = import.meta.env.NEXT_PUBLIC_API_URL ?? 'https://backend.grant.cod
 
   <!-- Search results container -- populated by client JS -->
   <div id="search-results" class="post-list" aria-live="polite">
+    {
+      !searchQuery ? (
+        <div class="card card--glass" style="text-align: center; padding: 2rem;">
+          <p>Enter a search term above to find posts across the site.</p>
+        </div>
+      ) : null
+    }
     <noscript>
       <div class="card card--glass" style="text-align: center; padding: 2rem;">
         <p>JavaScript is required to perform a search.</p>

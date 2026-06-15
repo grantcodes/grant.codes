@@ -1,6 +1,6 @@
 ---
 // Photos Gallery — responsive image grid with MF2 semantics
-// Ported from apps/web/components/PostsGallery/index.tsx + get-post-photos.js
+// Ported from the legacy Next.js components/PostsGallery/index.tsx + get-post-photos.js
 //
 // Cutover-blocker: YES — photos are a significant content type on the site
 // and the gallery is the primary browse surface for photo content.
@@ -20,7 +20,7 @@ export interface Props {
 
 const { posts = [], type = 'feed', maxWidth = 20 } = Astro.props
 
-// Extract all photos from an array of posts (same logic as apps/web get-post-photos.js)
+// Extract all photos from an array of posts (same logic as the legacy app's get-post-photos.js)
 function getPostPhotos(post: any): any[] {
   const properties = post?.properties ?? {}
   const photos: any[] = []

@@ -1,23 +1,24 @@
 ---
 // New Post — Micropub composer landing page
 //
-// Status: EXPLANATORY PLACEHOLDER — Micropub composer deferred
-// Cutover-blocker: NO — the /new composer is a niche authoring tool.
+// Status: STEADY-STATE PLACEHOLDER — Micropub composer is part of the
+// postrchild browser extension and does not need an Astro-side rebuild.
+// This page is the valid target route for the extension's compose flow.
 //
-// Original behavior (apps/web):
+// Original Next.js behavior:
 // - Static page with Post component rendering a new-post template
 // - Used with the postrchild browser extension for Micropub drafting
 // - ArticleLayout, robots: noindex
 //
 // Astro approach (static mode):
-// - Static page with explanatory content about the new-post workflow
-// - The Micropub composer itself is deferred
+// - Static page providing the landing route the extension expects
+// - The composer itself lives in the postrchild extension, not in the site
 
 import ArticleLayout from '../../layouts/ArticleLayout.astro'
 const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
 ---
 
-<ArticleLayout title="New Post" canonicalUrl={`${siteUrl}/new`}>
+<ArticleLayout title="New Post" canonicalUrl={`${siteUrl}/new`} noindex={true}>
   <h2 class="page-title">New Post</h2>
 
   <div class="card card--glass" style="padding: 1.5rem;">
@@ -26,8 +27,9 @@ const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
       new posts via the <a href="https://micropub.spec.indieweb.org/">Micropub</a> API.
     </p>
 
-    <p>The Micropub composer is currently available through the original site.
-    It will be re-implemented for the Astro version as a post-cutover enhancement.</p>
+    <p>The Micropub composer lives in the postrchild browser extension.
+    This page provides the stable route that the extension targets for its
+    compose-and-publish workflow.</p>
 
     <hr style="border: none; border-top: 1px solid var(--g-color-border-default); margin: 1.5rem 0;" />
 

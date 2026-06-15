@@ -1,27 +1,12 @@
 ---
-// Slides index — deferred subtree
+// Slides index — archived/de-scoped
 //
-// Status: DEFERRED — slides require Reveal.js client-side framework
-// Cutover-blocker: NO — slides are explicitly can-slip.
+// Status: RETIRED — the Reveal.js presentations were not ported to Astro.
+// The legacy slide decks used heavy client-side JS (Reveal.js,
+// highlight, markdown, notes plugins) and are no longer served.
 //
-// Original behavior (apps/web):
-// - 8 reveal.js presentations in /slides/about/*
-// - Heavy client-side JS (Reveal.js, highlight, markdown, notes plugins)
-// - Uses next/image for local JPEG imports
-// - Separate layout with full-screen topography background
-//
-// The slides are available on the live Next.js site.
-// Rebuilding them in Astro with plain HTML/CSS is possible but low priority.
-//
-// Presentations:
-// - /slides/about/dundee-makerspace — Enabling everyone to create anything
-// - /slides/about/indieweb — What is the IndieWeb?
-// - /slides/about/jamming — Jam session: building the IndieWeb grant.codes
-// - /slides/about/micropub — Micropub: posting to your own site
-// - /slides/about/net0 — Reducing grant.codes' environmental impact
-// - /slides/about/portability — Data portability on the IndieWeb
-// - /slides/about/running-away — Running Away
-// - /slides/about/workin-9-to-5 — Workin' 9 to 5
+// This page lists past presentation titles for reference only.
+// None of these links resolve to active routes.
 
 import BaseLayout from '../../layouts/BaseLayout.astro'
 const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
@@ -32,36 +17,36 @@ const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
 
   <div class="card card--glass" style="padding: 1.5rem;">
     <p style="margin-top: 0;">
-      Slide presentations are currently available on the original site.
-      These will be re-built for the Astro version as a post-cutover enhancement.
+      Slide presentations have been retired from the current site.
+      The titles below are listed for reference only.
     </p>
   </div>
 
   <ul style="list-style: none; padding: 0; margin-top: 1.5rem;">
     <li style="margin-bottom: 0.5rem;">
-      <a href="/slides/about/dundee-makerspace" style="text-decoration: underline wavy;">Dundee MakerSpace</a>
+      <span style="font-weight: 500;">Dundee MakerSpace</span>
       <span style="font-size: 0.8rem; opacity: 0.6;"> — Enabling everyone to create anything</span>
     </li>
     <li style="margin-bottom: 0.5rem;">
-      <a href="/slides/about/indieweb">What is the IndieWeb?</a>
+      <span style="font-weight: 500;">What is the IndieWeb?</span>
     </li>
     <li style="margin-bottom: 0.5rem;">
-      <a href="/slides/about/jamming">Jam session: building the IndieWeb</a>
+      <span style="font-weight: 500;">Jam session: building the IndieWeb</span>
     </li>
     <li style="margin-bottom: 0.5rem;">
-      <a href="/slides/about/micropub">Micropub: posting to your own site</a>
+      <span style="font-weight: 500;">Micropub: posting to your own site</span>
     </li>
     <li style="margin-bottom: 0.5rem;">
-      <a href="/slides/about/net0">Reducing grant.codes' environmental impact</a>
+      <span style="font-weight: 500;">Reducing grant.codes' environmental impact</span>
     </li>
     <li style="margin-bottom: 0.5rem;">
-      <a href="/slides/about/portability">Data portability on the IndieWeb</a>
+      <span style="font-weight: 500;">Data portability on the IndieWeb</span>
     </li>
     <li style="margin-bottom: 0.5rem;">
-      <a href="/slides/about/running-away">Running Away</a>
+      <span style="font-weight: 500;">Running Away</span>
     </li>
     <li style="margin-bottom: 0.5rem;">
-      <a href="/slides/about/workin-9-to-5">Workin' 9 to 5</a>
+      <span style="font-weight: 500;">Workin' 9 to 5</span>
     </li>
   </ul>
 </BaseLayout>

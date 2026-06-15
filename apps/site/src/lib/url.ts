@@ -4,7 +4,7 @@
  * Problem: The backend returns permalink URLs as absolute (https://grant.codes/...).
  * In local dev or on Tailscale, these links point to production instead of the
  * current environment. This utility strips the site URL prefix to make internal
- * links relative, matching the behavior of apps/web/components/Link.tsx in Next.js.
+ * links relative, matching the legacy Next.js Link behavior.
  *
  * Also rewrites href attributes in post content HTML so internal links inside
  * e-content work correctly on any domain.

@@ -7,12 +7,13 @@ export interface Props {
   title?: string
   description?: string
   canonicalUrl?: string
+  noindex?: boolean
 }
 
-const { title, description, canonicalUrl } = Astro.props
+const { title, description, canonicalUrl, noindex } = Astro.props
 ---
 
-<Layout title={title} description={description} canonicalUrl={canonicalUrl}>
+<Layout title={title} description={description} canonicalUrl={canonicalUrl} noindex={noindex}>
   <Container className="single-article">
     <slot />
   </Container>

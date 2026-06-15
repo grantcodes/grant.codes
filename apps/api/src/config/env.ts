@@ -19,6 +19,7 @@ export interface EnvConfig {
 	HUB?: string | undefined;
 	COUCH_DB_PUBLIC_ADMIN?: string | undefined;
 	COUCH_DB_PRIVATE_ADMIN?: string | undefined;
+	DEPLOY_WEBHOOK_URL?: string | undefined;
 }
 
 function validateEnv(): EnvConfig {

@@ -7,18 +7,13 @@
   "scripts": {
     "dev": "pnpm -r --parallel --filter ./apps/api --filter ./apps/site dev",
     "dev:api": "pnpm --filter api dev",
-    "dev:web": "pnpm --filter web dev",
     "dev:site": "pnpm --filter ./apps/site dev",
     "build": "pnpm --filter ./apps/site build && pnpm --filter api build",
-    "build:web": "pnpm --filter web build",
     "build:api": "pnpm --filter api build",
     "build:site": "pnpm --filter ./apps/site build",
     "start": "pnpm --filter ./apps/site preview",
     "start:api": "pnpm --filter api start",
-    "start:web": "pnpm --filter web start",
-    "test": "pnpm --filter api test",
-    "test:web": "pnpm --filter web lint",
-    "test:api": "pnpm --filter api test"
+    "test": "pnpm --filter api test"
   },
   "prettier": {
     "semi": false,

@@ -1,11 +1,11 @@
 ---
 // Pay — landing page
 //
-// Status: LANDING PAGE ONLY — Stripe payment flow deferred
+// Status: LANDING PAGE ONLY — Stripe payment flow retired for now
 // Cutover-blocker: NO — payment functionality is can-slip.
 // This page preserves the route for subdomain routing (pay.grant.codes -> /pay).
 //
-// Original behavior (apps/web):
+// Original Next.js behavior:
 // - Payment form with Stripe integration (currently commented as broken)
 // - Routes: /pay, /pay/[amount], /pay/[amount]/monthly, /pay/monthly, /pay/thanks
 // - BaseLayout
@@ -13,7 +13,8 @@
 //
 // Astro approach (static mode):
 // - Static landing page explaining payment options
-// - Stripe integration and amount routes explicitly deferred
+// - Stripe integration and amount routes explicitly retired
+// - POST /api/pay retired; implement in apps/api if payments return later
 // - /pay/thanks preserved as static page
 
 import BaseLayout from '../../layouts/BaseLayout.astro'
@@ -26,8 +27,8 @@ const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
   <div class="card card--glass" style="padding: 1.5rem;">
     <p style="margin-top: 0;">Support my work and the things I create.</p>
 
-    <p>Payment functionality (Stripe integration) is currently being redeveloped.
-    Please check back later or get in touch via the <a href="/contact">contact page</a>.</p>
+    <p>Payment functionality (Stripe integration) is currently unavailable.
+    Please get in touch via the <a href="/contact">contact page</a> if you need to arrange a payment.</p>
 
     <hr style="border: none; border-top: 1px solid var(--g-color-border-default); margin: 1.5rem 0;" />
 

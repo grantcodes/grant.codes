@@ -4,7 +4,7 @@
 // Status: IMPLEMENTED — static fallback
 // Cutover-blocker: NO — payment functionality is can-slip.
 //
-// Original behavior (apps/web):
+// Original Next.js behavior:
 // - Static thank-you page, robots: noindex
 // - Shows "I'm Rich!" message with Card component
 
@@ -12,7 +12,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro'
 const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
 ---
 
-<BaseLayout title="Thank You!" canonicalUrl={`${siteUrl}/pay/thanks`}>
+<BaseLayout title="Thank You!" canonicalUrl={`${siteUrl}/pay/thanks`} noindex={true}>
   <h2 class="page-title">Thank You!</h2>
 
   <div class="card card--glass" style="padding: 1.5rem;">

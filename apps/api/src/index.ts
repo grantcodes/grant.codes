@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
 import { postr } from "./lib/postr.js";
 import { apiRouter } from "./routes/api/index.js";
+import { deployWebhookRouter } from "./routes/api/deploy-webhook.js";
 import { tokenRouter as tokenEndpoint } from "./routes/token.js";
 import { backgroundRouter as background } from "./routes/background/index.js";
 import { adaptHonoToExpress } from "./utils/hono-to-express-adapter.js";
@@ -30,6 +31,9 @@ const createApp = () => {
 
 	// Serve static media files
 	app.use("/media", express.static(mediaPath));
+
+	// Mount deploy-webhook before generic /api so it matches first
+	app.use("/api/deploy-webhook", adaptHonoToExpress(deployWebhookRouter));
 
 	// Apply custom routes using Hono-to-Express adapter
 	app.use("/api", adaptHonoToExpress(apiRouter));
