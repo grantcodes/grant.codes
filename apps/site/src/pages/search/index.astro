@@ -21,6 +21,9 @@
 // server-side search routes at /search/[search] with getPosts.
 
 import BaseLayout from '../../layouts/BaseLayout.astro'
+import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
+import { GrantCodesIcon } from '@grantcodes/ui/components/icon/index.js'
+import { Search } from '@grantcodes/ui/icons'
 
 const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
 const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
@@ -33,7 +36,7 @@ const searchQuery = Astro.url.searchParams.get('q') || ''
 <BaseLayout title="Search" canonicalUrl={`${siteUrl}/search`}>
   <h2 class="page-title">Search</h2>
 
-  <div class="card card--glass" style="padding: 1.5rem; margin-bottom: 1.5rem;">
+  <GrantCodesCard>
     <form class="search search--page" method="GET" action="/search">
       <label for="search-page-input" class="screen-reader-text">Search posts</label>
       <input
@@ -47,25 +50,22 @@ const searchQuery = Astro.url.searchParams.get('q') || ''
       />
       <button class="search__button" type="submit">
         <span class="screen-reader-text">Search</span>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"/>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
+        <grantcodes-icon style="font-size: 18px" set:html={Search}></grantcodes-icon>
       </button>
     </form>
-  </div>
+  </GrantCodesCard>
 
   <!-- Search results container -- populated by client JS -->
   <div id="search-results" class="post-list" aria-live="polite">
     {
       !searchQuery ? (
-        <div class="card card--glass" style="text-align: center; padding: 2rem;">
+        <GrantCodesCard>
           <p>Enter a search term above to find posts across the site.</p>
-        </div>
+        </GrantCodesCard>
       ) : null
     }
     <noscript>
-      <div class="card card--glass" style="text-align: center; padding: 2rem;">
+      <div style="text-align: center; padding: 2rem; background: var(--g-color-background-default); border: 1px solid var(--g-color-border-default); border-radius: 0.4rem;">
         <p>JavaScript is required to perform a search.</p>
         <p style="font-size: 0.8rem; opacity: 0.7;">
           Enable JavaScript or use your browser's find-in-page feature.
@@ -86,7 +86,7 @@ const searchQuery = Astro.url.searchParams.get('q') || ''
     if (!container) return
 
     // Loading state
-    container.innerHTML = '<div class="card card--glass" style="text-align: center; padding: 2rem;"><p>Searching...</p></div>'
+    container.innerHTML = '<grantcodes-card><p>Searching...</p></grantcodes-card>'
 
     fetch(apiUrl + '/api/search', {
       method: 'POST',
@@ -106,14 +106,14 @@ const searchQuery = Astro.url.searchParams.get('q') || ''
       })
       .then(function(posts) {
         if (!Array.isArray(posts) || posts.length === 0) {
-          container.innerHTML = '<div class="card card--glass" style="text-align: center; padding: 2rem;">' +
-            '<p>No results found for "<strong>' + escapeHtml(query) + '</strong>".</p></div>'
+          container.innerHTML = '<grantcodes-card>' +
+            '<p>No results found for "<strong>' + escapeHtml(query) + '</strong>".</p></grantcodes-card>'
           return
         }
 
-        var html = '<div style="font-size: 0.8rem; opacity: 0.6; margin-bottom: 1rem;">' +
+        var html = '<p class="text-muted" style="margin-bottom: 1rem;">' +
           posts.length + ' result' + (posts.length !== 1 ? 's' : '') +
-          ' for "<strong>' + escapeHtml(query) + '</strong>"</div>'
+          ' for "<strong>' + escapeHtml(query) + '</strong>"</p>'
 
         posts.forEach(function(post) {
           html += renderPostCard(post, siteUrl)
@@ -123,9 +123,9 @@ const searchQuery = Astro.url.searchParams.get('q') || ''
       })
       .catch(function(err) {
         console.error('[search] fetch failed:', err)
-        container.innerHTML = '<div class="card card--glass" style="text-align: center; padding: 2rem;">' +
+        container.innerHTML = '<grantcodes-card>' +
           '<p>Search failed. Please try again later.</p>' +
-          '<p style="font-size: 0.7rem; opacity: 0.5;">' + escapeHtml(String(err)) + '</p></div>'
+          '<p style="font-size: 0.7rem; opacity: 0.5;">' + escapeHtml(String(err)) + '</p></grantcodes-card>'
       })
 
     function escapeHtml(str) {
@@ -150,10 +150,12 @@ const searchQuery = Astro.url.searchParams.get('q') || ''
         url = url.slice('https://grant.codes'.length) || '/'
       }
 
-      // Content HTML
+      // Content HTML — strip scripts for safety
       var contentHtml = ''
       if (content && content.html) {
-        var html = content.html.replace(/href="https:\/\/grant\.codes\//g, 'href="/')
+        var html = content.html
+          .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+          .replace(/href="https:\/\/grant\.codes\//g, 'href="/')
         contentHtml = '<div class="e-content" style="margin-top: 0.5rem;">' + html + '</div>'
       } else if (content && typeof content === 'string') {
         contentHtml = '<div class="e-content" style="margin-top: 0.5rem;">' + escapeHtml(content) + '</div>'
@@ -192,9 +194,8 @@ const searchQuery = Astro.url.searchParams.get('q') || ''
         }
       }
 
-      // Assemble card
-      var card = '<article class="h-entry" style="margin-bottom: 1.5rem; ' +
-        'padding-bottom: 1.5rem; border-bottom: 1px solid var(--g-color-border-default);">'
+      // Assemble card with grantcodes-card
+      var card = '<article class="h-entry"><grantcodes-card>'
 
       if (name) {
         card += '<h3 class="p-name" style="margin: 0 0 0.25rem;">' +
@@ -213,7 +214,7 @@ const searchQuery = Astro.url.searchParams.get('q') || ''
       card += '<div class="p-author h-card screen-reader-text">' +
         '<span class="p-name">Grant Richmond</span></div>'
 
-      card += '</article>'
+      card += '</grantcodes-card></article>'
       return card
     }
   })()

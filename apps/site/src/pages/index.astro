@@ -10,6 +10,8 @@
 
 import BaseLayout from '../layouts/BaseLayout.astro'
 import PostCard from '../components/PostCard.astro'
+import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
+import { GrantCodesPagination } from '@grantcodes/ui/components/pagination/index.js'
 import { getCollection } from 'astro:content'
 import getPageCount from '../lib/page-count'
 
@@ -45,10 +47,10 @@ try {
 
 <BaseLayout title="Home" canonicalUrl={siteUrl}>
   {posts.length === 0 && (
-    <div class="card card--glass" style="text-align: center; padding: 2rem;">
+    <GrantCodesCard>
       <h2>{authorName}</h2>
       <p>No posts to display yet.</p>
-    </div>
+    </GrantCodesCard>
   )}
 
   {posts.length > 0 && (
@@ -60,9 +62,9 @@ try {
       </div>
 
       {totalPages > 1 && (
-        <grantcodes-pagination
-          previous-href=""
-          next-href="/page/2"
+        <GrantCodesPagination
+          previousHref=""
+          nextHref="/page/2"
           page={1}
           pages={totalPages}
         />

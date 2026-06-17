@@ -17,10 +17,10 @@ export interface Props {
 const { className = '' } = Astro.props
 ---
 
-<div class={`grid container ${className}`}>
+<div class={`grid ${className}`}>
   <Header />
   <Nav />
-  <main class="main-content">
+  <main class="main-content container">
     <slot />
   </main>
   <Footer />

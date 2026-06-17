@@ -12,6 +12,8 @@
 
 import BaseLayout from '../layouts/BaseLayout.astro'
 import PostCard from '../components/PostCard.astro'
+import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
+import { GrantCodesPagination } from '@grantcodes/ui/components/pagination/index.js'
 import { getCollection } from 'astro:content'
 import { getMetadata } from '../lib/metadata'
 import getMonthDataFiles from '../lib/month-data-files'
@@ -127,9 +129,9 @@ const nextHref = isYear
   </h2>
 
   {pagePosts.length === 0 && (
-    <div class="card card--glass" style="text-align: center; padding: 2rem;">
+    <GrantCodesCard>
       <p>No posts found for {typeOrYear}.</p>
-    </div>
+    </GrantCodesCard>
   )}
 
   {pagePosts.length > 0 && (
@@ -141,9 +143,9 @@ const nextHref = isYear
       </div>
 
       {(prevHref || nextHref) && (
-        <grantcodes-pagination
-          previous-href={prevHref}
-          next-href={nextHref}
+        <GrantCodesPagination
+          previousHref={prevHref}
+          nextHref={nextHref}
           page={isYear ? parseInt(typeOrYear ?? '0') : 1}
           pages={isYear ? 20 : totalPages}
         />

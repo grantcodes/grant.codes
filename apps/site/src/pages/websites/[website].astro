@@ -1,8 +1,13 @@
 ---
 // Website detail page
 // Ported from the legacy Next.js app/(default)/websites/[website]/page.tsx
+// Wave 11: migrated to SSR GrantCodesCard with nav links in footer slot
 
 import BaseLayout from '../../layouts/BaseLayout.astro'
+import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
+import { GrantCodesButton } from '@grantcodes/ui/components/button/index.js'
+import { GrantCodesIcon } from '@grantcodes/ui/components/icon/index.js'
+import { ArrowLeft, ExternalLink } from '@grantcodes/ui/icons'
 import websites from '../../data/websites.js'
 
 const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
@@ -24,68 +29,41 @@ const { title, screenshot, url, content = '' } = website
 ---
 
 <BaseLayout title={title} canonicalUrl={`${siteUrl}/websites/${slug}`}>
-  <div class="card">
-    <article>
+  <GrantCodesCard>
+    <header >
       {screenshot && (
-        <div class="card__breakout">
-          <img src={screenshot} alt={`${title} Screenshot`} loading="lazy" />
-        </div>
+        <img
+          src={screenshot}
+          alt={`${title} Screenshot`}
+          loading="lazy"
+        />
       )}
+      <h1 class="p-name post__title">{title}</h1>
+    </header>
 
-      <header>
-        <h1 class="p-name post__title">{title}</h1>
-      </header>
+    <main class="website-content" set:html={content} />
 
-      <main class="website-content" set:html={content} />
-
-      <footer class="card__breakout card__breakout--padded">
-        <a href="/websites" class="website-back-link">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="website-nav-icon" aria-hidden="true">
-            <path d="M19 12H5" />
-            <path d="M12 19l-7-7 7-7" />
-          </svg>
-          All Projects
-        </a>{' '}
-        {url && (
-          <a href={url} class="website-external-link" target="_blank" rel="noopener noreferrer">
-            View Project
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="website-nav-icon" aria-hidden="true">
-              <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
-              <polyline points="15 3 21 3 21 9" />
-              <line x1="10" y1="14" x2="21" y2="3" />
-            </svg>
-          </a>
-        )}
-      </footer>
-    </article>
-  </div>
+    <div class="website-nav-row">
+        <GrantCodesButton href="/websites" variant="ghost" color="neutral">
+        <grantcodes-icon set:html={ArrowLeft}></grantcodes-icon>
+        All Projects
+      </GrantCodesButton>
+      {url && (
+        <GrantCodesButton href={url} target="_blank" rel="noopener noreferrer">
+          View Project
+          <grantcodes-icon set:html={ExternalLink}></grantcodes-icon>
+        </GrantCodesButton>
+      )}
+    </div>
+  </GrantCodesCard>
 </BaseLayout>
 
 <style>
-  .website-content > p:first-child {
-    margin-top: 0;
-  }
-
-  .website-back-link,
-  .website-external-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3em;
-    text-decoration: none;
-    font-weight: bold;
-  }
-
-  .website-back-link:hover,
-  .website-external-link:hover {
-    text-decoration: underline wavy;
-  }
-
-  .website-external-link {
-    float: right;
-  }
-
-  .website-nav-icon {
-    width: 1.2em;
-    height: 1.2em;
+  .website-nav-row {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--g-spacing-sm);
   }
 </style>

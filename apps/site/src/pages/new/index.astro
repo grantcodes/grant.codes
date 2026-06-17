@@ -15,14 +15,16 @@
 // - The composer itself lives in the postrchild extension, not in the site
 
 import ArticleLayout from '../../layouts/ArticleLayout.astro'
+import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
+
 const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
 ---
 
 <ArticleLayout title="New Post" canonicalUrl={`${siteUrl}/new`} noindex={true}>
   <h2 class="page-title">New Post</h2>
 
-  <div class="card card--glass" style="padding: 1.5rem;">
-    <p style="margin-top: 0;">
+  <GrantCodesCard>
+    <p>
       This page is used with the postrchild browser extension to compose and publish
       new posts via the <a href="https://micropub.spec.indieweb.org/">Micropub</a> API.
     </p>
@@ -31,11 +33,11 @@ const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
     This page provides the stable route that the extension targets for its
     compose-and-publish workflow.</p>
 
-    <hr style="border: none; border-top: 1px solid var(--g-color-border-default); margin: 1.5rem 0;" />
+    <hr />
 
-    <p style="font-size: 0.8rem; opacity: 0.6; margin-bottom: 0;">
+    <p class="text-muted" style="margin-bottom: 0;">
       The postrchild extension uses this page to provide a template for drafting
       new articles directly on grant.codes.
     </p>
-  </div>
+  </GrantCodesCard>
 </ArticleLayout>

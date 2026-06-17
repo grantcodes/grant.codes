@@ -104,6 +104,9 @@ importers:
       lit:
         specifier: ^3.3.1
         version: 3.3.3
+      lucide-static:
+        specifier: ^0.555.0
+        version: 0.555.0
     devDependencies:
       '@astrojs/check':
         specifier: ^0.9.9
@@ -3219,6 +3222,9 @@ packages:
 
   ltgt@2.2.1:
     resolution: {integrity: sha512-AI2r85+4MquTw9ZYqabu4nMwy9Oftlfa/e/52t9IjtfG+mGBbTNdAoZ3RQKLHR6r0wQnwZnPIEh/Ya6XTWAKNA==}
+
+  lucide-static@0.555.0:
+    resolution: {integrity: sha512-FMMaYYsEYsUA6xlEzIMoKEV3oGnxIIvAN+AtLmYXvlTJptJTveJjVBQwvtA/zZLrD6KLEu89G95dQYlhivw5jQ==}
 
   luxon@1.28.1:
     resolution: {integrity: sha512-gYHAa180mKrNIUJCbwpmD0aTu9kV0dREDrwNnuyFAsO1Wt0EVYSZelPnJlbj9HplzXX/YWXHFTL45kvZ53M0pw==}
@@ -8712,6 +8718,8 @@ snapshots:
   lru-cache@11.5.1: {}
 
   ltgt@2.2.1: {}
+
+  lucide-static@0.555.0: {}
 
   luxon@1.28.1: {}
 

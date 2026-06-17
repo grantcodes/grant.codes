@@ -13,6 +13,7 @@
 // - Category feeds: links to {baseUrl}/{format}/category/{slug} inside <details><summary>
 
 import BaseLayout from '../layouts/BaseLayout.astro'
+import { GrantCodesAccordion, GrantCodesAccordionItem } from '@grantcodes/ui/components/accordion/index.js'
 import getPostTypes from '../lib/post-types'
 import getCategories from '../lib/categories'
 
@@ -65,20 +66,19 @@ function pluralize(word: string): string {
     {postTypes.length === 0 ? (
       <p>No post types available.</p>
     ) : (
-      postTypes.map((pt) => (
-        <details>
-          <summary style="text-transform: capitalize;">
-            {pluralize(pt)}
-          </summary>
-          <ul>
-            {feedTypes.map((ft) => (
-              <li>
-                <a href={`${baseUrl}/${ft.id}/type/${pt}`}>{ft.name}</a>
-              </li>
-            ))}
-          </ul>
-        </details>
-      ))
+      <GrantCodesAccordion>
+        {postTypes.map((pt) => (
+          <GrantCodesAccordionItem title={pluralize(pt).charAt(0).toUpperCase() + pluralize(pt).slice(1)}>
+            <ul>
+              {feedTypes.map((ft) => (
+                <li>
+                  <a href={`${baseUrl}/${ft.id}/type/${pt}`}>{ft.name}</a>
+                </li>
+              ))}
+            </ul>
+          </GrantCodesAccordionItem>
+        ))}
+      </GrantCodesAccordion>
     )}
   </grantcodes-card>
 
@@ -88,18 +88,19 @@ function pluralize(word: string): string {
     {categories.length === 0 ? (
       <p>No categories available.</p>
     ) : (
-      categories.map((cat) => (
-        <details>
-          <summary>{cat.name}</summary>
-          <ul>
-            {feedTypes.map((ft) => (
-              <li>
-                <a href={`${baseUrl}/${ft.id}/category/${cat.slug}`}>{ft.name}</a>
-              </li>
-            ))}
-          </ul>
-        </details>
-      ))
+      <GrantCodesAccordion>
+        {categories.map((cat) => (
+          <GrantCodesAccordionItem title={cat.name}>
+            <ul>
+              {feedTypes.map((ft) => (
+                <li>
+                  <a href={`${baseUrl}/${ft.id}/category/${cat.slug}`}>{ft.name}</a>
+                </li>
+              ))}
+            </ul>
+          </GrantCodesAccordionItem>
+        ))}
+      </GrantCodesAccordion>
     )}
   </grantcodes-card>
 </BaseLayout>

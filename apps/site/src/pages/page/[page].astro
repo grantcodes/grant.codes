@@ -8,6 +8,8 @@
 
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import PostCard from '../../components/PostCard.astro'
+import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
+import { GrantCodesPagination } from '@grantcodes/ui/components/pagination/index.js'
 import { getCollection } from 'astro:content'
 
 export async function getStaticPaths() {
@@ -52,9 +54,9 @@ const nextHref = nextPage ? `/page/${nextPage}` : ''
   <h2 class="page-title">{pageTitle}</h2>
 
   {pagePosts.length === 0 && (
-    <div class="card card--glass" style="text-align: center; padding: 2rem;">
+    <GrantCodesCard>
       <p>No posts found on page {pageNum}.</p>
-    </div>
+    </GrantCodesCard>
   )}
 
   {pagePosts.length > 0 && (
@@ -65,9 +67,9 @@ const nextHref = nextPage ? `/page/${nextPage}` : ''
         ))}
       </div>
 
-      <grantcodes-pagination
-        previous-href={prevHref}
-        next-href={nextHref}
+      <GrantCodesPagination
+        previousHref={prevHref}
+        nextHref={nextHref}
         page={pageNum}
         pages={totalPages}
       />

@@ -4,8 +4,10 @@
 // Wave 8: MF2-aware single post rendering with proper post-type support
 // Wave 10: migrated from direct API fetch to canonical posts collection
 
+import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
 import ArticleLayout from '@/layouts/ArticleLayout.astro'
 import Post from '@/components/Post.astro'
+import PostCard from '@/components/PostCard.astro'
 import { getCollection } from 'astro:content'
 import { getMetadata } from '@/lib/metadata'
 
@@ -94,17 +96,17 @@ const canonicalUrl = `${siteUrl}/${typeOrYear}/${month}/${day}/${slug}`
 <ArticleLayout title={pageTitle} description={pageDescription} canonicalUrl={canonicalUrl}>
   <!--- Single post content -->
   {!post && (
-    <div class="card card--glass" style="text-align: center; padding: 2rem;">
+    <GrantCodesCard>
       <h2>Post not found</h2>
-      <p style="font-size: 0.8rem; opacity: 0.7;">
+      <p class="text-muted">
         This post could not be found. It may have been removed or the URL is incorrect.
       </p>
       <p><a href="/">← Back to home</a></p>
-    </div>
+    </GrantCodesCard>
   )}
 
   {post && (
-    <Post post={post} />
+    <PostCard post={post} />
   )}
 
 </ArticleLayout>

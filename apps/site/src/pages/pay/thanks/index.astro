@@ -9,13 +9,15 @@
 // - Shows "I'm Rich!" message with Card component
 
 import BaseLayout from '../../../layouts/BaseLayout.astro'
+import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
+
 const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
 ---
 
 <BaseLayout title="Thank You!" canonicalUrl={`${siteUrl}/pay/thanks`} noindex={true}>
   <h2 class="page-title">Thank You!</h2>
 
-  <div class="card card--glass" style="padding: 1.5rem;">
-    <p style="margin-top: 0;">Thank you very much for paying me. It is much appreciated.</p>
-  </div>
+  <GrantCodesCard>
+    <p>Thank you very much for paying me. It is much appreciated.</p>
+  </GrantCodesCard>
 </BaseLayout>

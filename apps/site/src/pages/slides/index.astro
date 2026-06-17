@@ -9,23 +9,25 @@
 // None of these links resolve to active routes.
 
 import BaseLayout from '../../layouts/BaseLayout.astro'
+import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
+
 const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
 ---
 
 <BaseLayout title="Slides" canonicalUrl={`${siteUrl}/slides`}>
   <h2 class="page-title">Presentations</h2>
 
-  <div class="card card--glass" style="padding: 1.5rem;">
-    <p style="margin-top: 0;">
+  <GrantCodesCard>
+    <p>
       Slide presentations have been retired from the current site.
       The titles below are listed for reference only.
     </p>
-  </div>
+  </GrantCodesCard>
 
-  <ul style="list-style: none; padding: 0; margin-top: 1.5rem;">
+  <ul class="list-plain" style="margin-top: 1.5rem;">
     <li style="margin-bottom: 0.5rem;">
       <span style="font-weight: 500;">Dundee MakerSpace</span>
-      <span style="font-size: 0.8rem; opacity: 0.6;"> — Enabling everyone to create anything</span>
+      <span class="text-muted"> — Enabling everyone to create anything</span>
     </li>
     <li style="margin-bottom: 0.5rem;">
       <span style="font-weight: 500;">What is the IndieWeb?</span>

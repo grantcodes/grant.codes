@@ -18,26 +18,28 @@
 // - /pay/thanks preserved as static page
 
 import BaseLayout from '../../layouts/BaseLayout.astro'
+import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
+
 const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
 ---
 
 <BaseLayout title="Pay Me!" canonicalUrl={`${siteUrl}/pay`}>
   <h2 class="page-title">Pay Me!</h2>
 
-  <div class="card card--glass" style="padding: 1.5rem;">
-    <p style="margin-top: 0;">Support my work and the things I create.</p>
+  <GrantCodesCard>
+    <p>Support my work and the things I create.</p>
 
     <p>Payment functionality (Stripe integration) is currently unavailable.
     Please get in touch via the <a href="/contact">contact page</a> if you need to arrange a payment.</p>
 
-    <hr style="border: none; border-top: 1px solid var(--g-color-border-default); margin: 1.5rem 0;" />
+    <hr />
 
-    <p style="font-size: 0.8rem; opacity: 0.6; margin-bottom: 0;">
+    <p class="text-muted" style="margin-bottom: 0;">
       <strong>Previously available routes:</strong>
       <code>/pay/[amount]</code>,
       <code>/pay/[amount]/monthly</code>,
       <code>/pay/monthly</code>
       — these are deferred pending Stripe re-integration.
     </p>
-  </div>
+  </GrantCodesCard>
 </BaseLayout>

@@ -3,6 +3,9 @@
 // Ported from the legacy Next.js components/Container/Nav/index.js
 // Plain HTML/CSS with minimal inline JS for mobile toggle
 
+import { GrantCodesIcon } from '@grantcodes/ui/components/icon/index.js'
+import { Menu, Search } from '@grantcodes/ui/icons'
+
 const webringId = import.meta.env.NEXT_PUBLIC_INDIEWEBRING_ID ?? ''
 
 const navLinks = [
@@ -25,11 +28,7 @@ const shownLinkCount = 4
   title="menu"
   aria-label="Toggle navigation"
 >
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-    <line x1="3" y1="6" x2="21" y2="6" />
-    <line x1="3" y1="12" x2="21" y2="12" />
-    <line x1="3" y1="18" x2="21" y2="18" />
-  </svg>
+  <grantcodes-icon style="font-size: 24px" set:html={Menu}></grantcodes-icon>
   <span class="screen-reader-text">Jump to menu</span>
 </a>
 
@@ -64,10 +63,7 @@ const shownLinkCount = 4
     />
     <button class="search__button" type="submit">
       <span class="screen-reader-text">Search</span>
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="11" cy="11" r="8"/>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-      </svg>
+      <grantcodes-icon style="font-size: 14px" set:html={Search}></grantcodes-icon>
     </button>
   </form>
 

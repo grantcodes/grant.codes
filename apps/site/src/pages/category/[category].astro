@@ -8,6 +8,8 @@
 
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import PostCard from '../../components/PostCard.astro'
+import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
+import { GrantCodesPagination } from '@grantcodes/ui/components/pagination/index.js'
 import { getCollection } from 'astro:content'
 import getCategories from '../../lib/categories'
 
@@ -71,16 +73,16 @@ const nextHref = totalPages > 1 ? `/category/${categorySlug}/page/2` : ''
   <h2 class="page-title">{pageTitle}</h2>
 
   {!category && (
-    <div class="card card--glass" style="text-align: center; padding: 2rem;">
+    <GrantCodesCard>
       <p>Category not found: {categorySlug}.</p>
       <p><a href="/category">← All Categories</a></p>
-    </div>
+    </GrantCodesCard>
   )}
 
   {category && posts.length === 0 && (
-    <div class="card card--glass" style="text-align: center; padding: 2rem;">
+    <GrantCodesCard>
       <p>No posts found in category "{categoryName}".</p>
-    </div>
+    </GrantCodesCard>
   )}
 
   {category && posts.length > 0 && (
@@ -92,9 +94,9 @@ const nextHref = totalPages > 1 ? `/category/${categorySlug}/page/2` : ''
       </div>
 
       {totalPages > 1 && (
-        <grantcodes-pagination
-          previous-href={prevHref}
-          next-href={nextHref}
+        <GrantCodesPagination
+          previousHref={prevHref}
+          nextHref={nextHref}
           page={1}
           pages={totalPages}
         />

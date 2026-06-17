@@ -1,8 +1,10 @@
 ---
 // Uses page — hardware and software rundown
 // Ported from the legacy Next.js app/(default)/uses/page.tsx
+// Wave 6: migrated legacy .card blocks to SSR GrantCodesCard
 
 import BaseLayout from '../layouts/BaseLayout.astro'
+import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
 
 const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
 ---
@@ -11,8 +13,8 @@ const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
   <h1 class="page-title">Uses</h1>
   <p>A rundown of the hardware and software I use on a regular basis</p>
 
-  <div class="card">
-    <h2 class="card__title">Hardware</h2>
+  <GrantCodesCard>
+    <h2>Hardware</h2>
 
     <h3 class="h4">Computers</h3>
     <dl class="uses-dl">
@@ -57,10 +59,10 @@ const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
         unfortunately fragile and I've already replaced the screen in it.
       </dd>
     </dl>
-  </div>
+  </GrantCodesCard>
 
-  <div class="card">
-    <h2 class="card__title">Software</h2>
+  <GrantCodesCard>
+    <h2>Software</h2>
 
     <h3 class="h4">Desktop Environment</h3>
     <dl class="uses-dl">
@@ -169,7 +171,7 @@ const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
       <dt>Travel planning</dt>
       <dd><a href="https://www.tripit.com/">Tripit</a></dd>
     </dl>
-  </div>
+  </GrantCodesCard>
 </BaseLayout>
 
 <style>

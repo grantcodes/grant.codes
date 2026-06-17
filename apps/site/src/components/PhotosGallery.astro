@@ -11,6 +11,7 @@
 // - maxWidth: max width percentage for each item
 
 import { normalizeInternalUrl } from '../lib/url'
+import { GrantCodesGallery, GrantCodesGalleryImage } from '@grantcodes/ui/components/gallery/index.js'
 
 export interface Props {
   posts: any[]
@@ -71,7 +72,7 @@ const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
 
 {
   allPhotos.length > 0 && (
-    <div class="photos-gallery">
+    <GrantCodesGallery style="--gallery-columns: 5; --gallery-gap: 0;">
       {allPhotos.map((photo, i) => {
         // Resolve URL — replace localhost for dev mode
         let src = photo.thumbnail || photo.photo
@@ -82,42 +83,33 @@ const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
 
         if (type === 'feed') {
           return (
-            <a
-              class="photos-gallery__item"
-              href={photo.permalink ?? '#'}
-            >
-              <img
-                class="photos-gallery__photo"
+            <a href={photo.permalink ?? '#'}>
+              <GrantCodesGalleryImage
                 src={src}
                 alt={alt}
-                loading="lazy"
                 width={200}
                 height={200}
+                thumbnail={photo.thumbnail ?? ''}
               />
             </a>
           )
         }
         return (
-          <div
-            class="photos-gallery__item h-cite"
-            style={`max-width: ${maxWidth}%`}
-          >
+          <div class="h-cite" style={`max-width: ${maxWidth}%`}>
             <a href={photo.permalink ?? '#'} class="u-url">
-              <img
-                class="photos-gallery__photo"
+              <GrantCodesGalleryImage
                 src={src}
                 alt={alt}
-                loading="lazy"
                 width={200}
                 height={200}
-                style="width: 100%; height: auto;"
+                thumbnail={photo.thumbnail ?? ''}
               />
               <data class="u-photo" value={photo.photo ?? ''} />
             </a>
           </div>
         )
       })}
-    </div>
+    </GrantCodesGallery>
   )
 }
 
@@ -155,40 +147,11 @@ const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
 )}
 
 <style>
-  .photos-gallery {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: stretch;
-    justify-content: stretch;
-    overflow: hidden;
-  }
-
-  .photos-gallery__item {
-    display: block;
-    flex-grow: 1;
-    overflow: hidden;
-    position: relative;
-    width: 20%;
-    max-width: 20%;
-  }
-
-  .photos-gallery__item a {
-    display: block;
-  }
-
-  .photos-gallery__photo {
-    display: block;
-    aspect-ratio: 1;
-    object-fit: cover;
-    max-width: 100%;
-    height: auto;
-  }
-
+  /* Responsive column count for GrantCodesGallery — the gallery reads
+     --gallery-columns from its host element, so we change it via media query. */
   @media (max-width: 30rem) {
-    .photos-gallery__item {
-      width: 33.333%;
-      max-width: 33.333%;
+    grantcodes-gallery {
+      --gallery-columns: 3;
     }
   }
 </style>

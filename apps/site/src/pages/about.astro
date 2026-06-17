@@ -3,6 +3,9 @@
 // Ported from the legacy Next.js app/(full-width)/about/page.tsx
 
 import FullWidthLayout from '../layouts/FullWidthLayout.astro'
+import { GrantCodesButton } from '@grantcodes/ui/components/button/index.js'
+import { GrantCodesIcon } from '@grantcodes/ui/components/icon/index.js'
+import { Globe, Mail, Github, Linkedin, Instagram } from '@grantcodes/ui/icons'
 import websites from '../data/websites.js'
 import skillsDataRaw from '../data/skills-data.js'
 
@@ -95,34 +98,34 @@ const upcomingWebsites = websites.slice(0, 6)
                 <div class="about-online">
                   <div class="card about-online__card u-url hide-print">
                     <a href={siteUrl} title="Website grant.codes" rel="me">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="about-online__icon" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+                      <grantcodes-icon style="font-size: 1.5rem" set:html={Globe}></grantcodes-icon>
                       <span class="screen-reader-text">Website grant.codes</span>
                     </a>
                   </div>
                   <div class="card about-online__card u-email">
                     <a href={`mailto:${authorEmail}`} title={`Email ${authorEmail}`} rel="me">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="about-online__icon" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>
+                      <grantcodes-icon style="font-size: 1.5rem" set:html={Mail}></grantcodes-icon>
                       <span class="screen-reader-text">Email {authorEmail}</span>
                     </a>
                   </div>
                   {authorGithub && (
                     <div class="card about-online__card">
                       <a href={authorGithub} title={`Github ${authorGithub}`} rel="me">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="about-online__icon" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77 5.44 5.44 0 004 11.52c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 21.13V22"/></svg>
+                        <grantcodes-icon style="font-size: 1.5rem" set:html={Github}></grantcodes-icon>
                         <span class="screen-reader-text">Github</span>
                       </a>
                     </div>
                   )}
                   <div class="card about-online__card">
                     <a href="https://www.linkedin.com/in/grantcodes/" title="LinkedIn @grantcodes" rel="me">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="about-online__icon" aria-hidden="true"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                      <grantcodes-icon style="font-size: 1.5rem" set:html={Linkedin}></grantcodes-icon>
                       <span class="screen-reader-text">LinkedIn @grantcodes</span>
                     </a>
                   </div>
                   {authorInstagram && (
                     <div class="card about-online__card hide-print">
                       <a href={authorInstagram} title={`Instagram ${authorInstagram}`} rel="me">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="about-online__icon" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                        <grantcodes-icon style="font-size: 1.5rem" set:html={Instagram}></grantcodes-icon>
                         <span class="screen-reader-text">Instagram</span>
                       </a>
                     </div>
@@ -424,7 +427,7 @@ const upcomingWebsites = websites.slice(0, 6)
                 ))}
               </div>
               {websites.length > 6 && (
-                <a href="/websites" class="button" style="margin-top: 1rem;">View All</a>
+                <GrantCodesButton href="/websites" style="margin-top: 1rem;">View All</GrantCodesButton>
               )}
             </div>
           </div>
@@ -649,12 +652,6 @@ const upcomingWebsites = websites.slice(0, 6)
   .about-online__card a {
     display: flex;
     text-decoration: none;
-  }
-
-  .about-online__icon {
-    display: block;
-    width: 1.5rem;
-    height: 1.5rem;
   }
 
   /* Skills */

@@ -12,6 +12,8 @@
 
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import PostCard from '../../components/PostCard.astro'
+import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
+import { GrantCodesPagination } from '@grantcodes/ui/components/pagination/index.js'
 import getMonthData from '../../lib/month-data'
 import getMonthDataFiles from '../../lib/month-data-files'
 import getPosts from '../../lib/posts'
@@ -110,9 +112,9 @@ const totalLabel = totalPostsFromData > 0 ? `${totalPostsFromData} total posts` 
   <h2 class="page-title">{pageTitle}</h2>
 
   {!isValidRoute && (
-    <div class="card card--glass" style="text-align: center; padding: 2rem;">
+    <GrantCodesCard>
       <p>Invalid month archive URL.</p>
-    </div>
+    </GrantCodesCard>
   )}
 
   {isValidRoute && monthData && typeEntries.length > 0 && (
@@ -137,16 +139,16 @@ const totalLabel = totalPostsFromData > 0 ? `${totalPostsFromData} total posts` 
   )}
 
   {isValidRoute && !monthData && !fetchError && (
-    <div class="card card--glass" style="text-align: center; padding: 2rem;">
+    <GrantCodesCard>
       <p>No monthly data available for this period.</p>
-    </div>
+    </GrantCodesCard>
   )}
 
   {fetchError && (
-    <div class="card card--glass" style="text-align: center; padding: 2rem;">
+    <GrantCodesCard>
       <p>Could not load posts. The API may be unreachable during static build.</p>
-      <p style="font-size: 0.7rem; opacity: 0.5;">Error: {fetchError}</p>
-    </div>
+      <p class="text-muted">Error: {fetchError}</p>
+    </GrantCodesCard>
   )}
 
   <!-- Content summary from recent posts -->
@@ -180,9 +182,9 @@ const totalLabel = totalPostsFromData > 0 ? `${totalPostsFromData} total posts` 
   )}
 
   {(prevHref || nextHref) && (
-    <grantcodes-pagination
-      previous-href={prevHref}
-      next-href={nextHref}
+    <GrantCodesPagination
+      previousHref={prevHref}
+      nextHref={nextHref}
       page={monthInt}
       pages={12}
     />

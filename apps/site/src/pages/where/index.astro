@@ -12,6 +12,7 @@
 // - FullWidthLayout, robots: noindex
 
 import FullWidthLayout from '../../layouts/FullWidthLayout.astro'
+import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
 
 const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
 const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
@@ -26,14 +27,14 @@ const longitude = -2.9707
   <div style="max-width: 50rem;">
     <h2 class="page-title">Where am I?</h2>
 
-    <div class="card card--glass" style="padding: 1.5rem; margin-bottom: 1.5rem;">
-      <p style="margin-top: 0;" id="where-location-status">
+    <GrantCodesCard>
+      <p id="where-location-status">
         {authorName} is based in <strong>Dundee, Scotland</strong>.
       </p>
-    </div>
+    </GrantCodesCard>
 
     <!-- Map embed (OSM) — coordinates updated dynamically when live data available -->
-    <div style="width: 100%; border-radius: 0.4rem; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+    <div class="embed-wrap">
       <iframe
         id="where-map-frame"
         title="Map of Dundee, Scotland"
@@ -43,7 +44,7 @@ const longitude = -2.9707
         referrerpolicy="no-referrer"
       ></iframe>
     </div>
-    <div style="font-size: 0.7rem; opacity: 0.5; text-align: right; margin-top: 0.3rem;">
+    <div class="text-muted" style="text-align: right; margin-top: 0.3rem; opacity: 0.5;">
       <a id="where-map-link" href={`https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}`} target="_blank" rel="noopener noreferrer">
         View on OpenStreetMap
       </a>
