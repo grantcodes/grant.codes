@@ -11,6 +11,7 @@
 // - maxWidth: max width percentage for each item
 
 import { normalizeInternalUrl } from '../lib/url'
+import { getPhotoUrl } from '../lib/post-media'
 import { GrantCodesGallery, GrantCodesGalleryImage } from '@grantcodes/ui/components/gallery/index.js'
 
 export interface Props {
@@ -133,8 +134,7 @@ const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
           {published && <time class="dt-published" datetime={published}>{published}</time>}
           {url && <a class="u-url" href={url}>{url}</a>}
           {photos.map((p: any, j: number) => {
-            const val = typeof p === 'object' && p.value ? p.value : (typeof p === 'string' ? p : '')
-            return <data class="u-photo" value={val} />
+            return <data class="u-photo" value={getPhotoUrl(p)} />
           })}
           {contentHtml && <div class="e-content">{contentHtml}</div>}
           <span class="p-author h-card">

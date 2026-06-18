@@ -5,7 +5,11 @@
 
 import { GrantCodesIcon } from '@grantcodes/ui/components/icon/index.js'
 import { Heart, Bookmark, Repeat2, Reply } from '@grantcodes/ui/icons'
-import { normalizeInternalUrl, rewriteContentHtml } from '../lib/url'
+import { normalizeInternalUrl } from '../lib/url'
+import PostContent from './PostContent.astro'
+import { formatRelativeDate } from '../lib/post-date-format'
+import { getMentionUrl } from '../lib/post-mentions'
+import { getPhotoUrl } from '../lib/post-media'
 
 export interface Props {
   post: any
@@ -29,21 +33,13 @@ const category = properties.category ?? []
 // Mention properties
 // MF2 allows these to be strings (plain URL) or objects (embedded h-cite/h-entry).
 // Normalise to just the URL string for rendering.
-const getMentionUrl = (val: any): string | null => {
-  if (!val) return null
-  if (typeof val === 'string') return val
-  if (typeof val === 'object' && val.properties?.url?.[0]) return val.properties.url[0]
-  if (typeof val === 'object' && val.value) return val.value
-  return null
-}
-
 const likeOf = getMentionUrl(properties['like-of']?.[0])
 const repostOf = getMentionUrl(properties['repost-of']?.[0])
 const inReplyTo = getMentionUrl(properties['in-reply-to']?.[0])
 const bookmarkOf = getMentionUrl(properties['bookmark-of']?.[0])
 const rsvp = properties.rsvp?.[0] ?? null
 
-// Get action label
+// Get action label (card-specific logic for compact rendering)
 function getActionLabel(): string {
   if (postType === 'like' || likeOf) return 'Liked'
   if (postType === 'repost' || repostOf) return 'Reposted'
@@ -54,40 +50,8 @@ function getActionLabel(): string {
 
 const actionLabel = getActionLabel()
 
-// Format date
-let dateDisplay = ''
-if (published) {
-  const d = new Date(published)
-  const now = new Date()
-  const diffMs = now.getTime() - d.getTime()
-  const diffMins = Math.floor(diffMs / 60000)
-  const diffHours = Math.floor(diffMins / 60)
-  const diffDays = Math.floor(diffHours / 24)
-
-  if (diffMins < 1) dateDisplay = 'just now'
-  else if (diffMins < 60) dateDisplay = `${diffMins} minutes ago`
-  else if (diffHours < 24) dateDisplay = `${diffHours} hours ago`
-  else if (diffDays < 7) dateDisplay = `${diffDays} days ago`
-  else dateDisplay = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
-}
-
-// Render content HTML safely
-function renderContent(c: any): string {
-  let html = ''
-  if (c?.html) html = c.html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-  else if (c?.value) html = `<p>${c.value}</p>`
-  else if (typeof c === 'string') html = `<p>${c}</p>`
-
-  // Rewrite internal grant.codes URLs to be relative
-  return rewriteContentHtml(html)
-}
-
-// Photo helper
-function getPhotoUrl(p: any): string {
-  if (typeof p === 'object' && p.value) return p.value
-  if (typeof p === 'string') return p
-  return ''
-}
+// Format date using shared helper
+const dateDisplay = published ? formatRelativeDate(published) : ''
 
 const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
 ---
@@ -151,10 +115,10 @@ const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
 
     <!-- Content/Summary -->
     {content && (
-      <div class="post__content e-content" set:html={renderContent(content)} />
+      <PostContent content={content} />
     )}
     {!content && summary && (
-      <div class="post__content e-content" set:html={renderContent(summary)} />
+      <PostContent content={summary} />
     )}
 
     <!-- For articles in compact: read more button -->
@@ -199,3 +163,41 @@ const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
     </span>
   </grantcodes-card>
 </article>
+
+<style is:global>
+  .post__action {
+    margin: 0;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 0.714rem;
+  }
+  .post__action grantcodes-icon {
+    vertical-align: middle;
+    margin-right: 0.3em;
+  }
+
+  .post__footer {
+    opacity: 0.7;
+  }
+  .post__footer,
+  .post__footer * {
+    line-height: 1.2;
+    font-size: 0.51rem;
+  }
+  .post__footer .h-card {
+    display: inline-block;
+    text-decoration: none;
+    font-size: 0.5em;
+    margin-top: -0.25em;
+  }
+  .post__footer .h-card .p-name {
+    text-decoration: underline;
+  }
+  .post__footer .h-card .p-name:hover {
+    text-decoration: underline wavy;
+  }
+
+  .post__content > p:first-child {
+    margin-top: 0;
+  }
+</style>

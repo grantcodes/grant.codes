@@ -12,10 +12,13 @@
 
 import PostFooter from './PostFooter.astro'
 import PostCard from './PostCard.astro'
+import PostContent from './PostContent.astro'
 import { GrantCodesButton } from '@grantcodes/ui/components/button/index.js'
 import { GrantCodesIcon } from '@grantcodes/ui/components/icon/index.js'
 import { Heart, Bookmark, Repeat2, Reply } from '@grantcodes/ui/icons'
-import { normalizeInternalUrl, rewriteContentHtml } from '../lib/url'
+import { normalizeInternalUrl } from '../lib/url'
+import { getUrl } from '../lib/post-mentions'
+import { getPhotoUrl, getPhotoAlt, getMediaUrl } from '../lib/post-media'
 
 export interface Props {
   post: any
@@ -61,29 +64,6 @@ const children = post.children ?? null
 
 // References (like-of, repost-of referenced post data)
 const references = post.references ?? null
-
-// Helper functions
-function getUrl(value: any): string {
-  if (typeof value === 'string') return value
-  if (typeof value === 'object' && value?.value) return value.value
-  return ''
-}
-
-function renderContent(content: any): string {
-  let html = ''
-  if (content?.html) {
-    html = content.html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-  }
-  else if (content?.value) {
-    html = `<p>${content.value}</p>`
-  }
-  else if (typeof content === 'string') {
-    html = `<p>${content}</p>`
-  }
-
-  // Rewrite internal grant.codes URLs to be relative
-  return rewriteContentHtml(html)
-}
 
 const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
 ---
@@ -156,8 +136,8 @@ const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
   {photo.length > 0 && (
     <div class="card__breakout post__photos">
       {photo.map((p: any, i: number) => {
-        const src = typeof p === 'object' ? p.value ?? '' : p
-        const alt = typeof p === 'object' ? p.alt ?? '' : ''
+        const src = getPhotoUrl(p)
+        const alt = getPhotoAlt(p)
         return (
           <figure>
             <img src={src} alt={alt} loading="lazy" />
@@ -171,14 +151,14 @@ const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
   {/* ── Video ── */}
   {video.length > 0 && video.map((v: any) => (
     <div class="card__breakout">
-      <video class="u-video" src={getUrl(v)} controls />
+      <video class="u-video" src={getMediaUrl(v)} controls />
     </div>
   ))}
 
   {/* ── Audio ── */}
   {audio.length > 0 && audio.map((a: any) => (
     <div class="card__breakout">
-      <audio class="u-audio" src={getUrl(a)} controls></audio>
+      <audio class="u-audio" src={getMediaUrl(a)} controls></audio>
     </div>
   ))}
 
@@ -191,7 +171,7 @@ const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
 
   {/* ── Content ── */}
   {content && (
-    <div class="post__content e-content" set:html={renderContent(content)} />
+    <PostContent content={content} />
   )}
 
   {/* Compact mode: article read more link */}
@@ -253,3 +233,44 @@ const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
   </span>
 
 </article>
+
+<style is:global>
+  .card__breakout {
+    display: block;
+    overflow: hidden;
+    clear: both;
+    background-color: var(--g-color-background-subtle);
+    margin: var(--card-padding) 0 calc(-1 * var(--card-padding));
+  }
+  .card__breakout + .card__breakout {
+    margin-top: calc(-1 * var(--card-padding));
+  }
+  .card__breakout:first-child {
+    margin-top: calc(-1 * var(--card-padding));
+  }
+  .card__breakout:last-child {
+    margin-bottom: calc(-1 * var(--card-padding));
+  }
+  .card__breakout > img {
+    display: block;
+    width: 100%;
+  }
+  .card__breakout--padded {
+    padding: var(--card-padding);
+  }
+
+  .post__action {
+    margin: 0;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 0.714rem;
+  }
+  .post__action grantcodes-icon {
+    vertical-align: middle;
+    margin-right: 0.3em;
+  }
+
+  .post__content > p:first-child {
+    margin-top: 0;
+  }
+</style>

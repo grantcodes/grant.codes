@@ -2,29 +2,14 @@
 // Post photo renderer — renders photo array with u-photo MF2 class
 // Ported from the legacy Next.js components/Post/Photo/Photo.tsx
 
+import { getPhotoUrl, getPhotoAlt } from '../lib/post-media'
+
 export interface Props {
   photos: any[]
   permalink?: string
 }
 
 const { photos, permalink } = Astro.props
-
-function getPhotoUrl(value: any): string {
-  if (typeof value === 'object' && value.value) {
-    return value.value
-  }
-  if (typeof value === 'string') {
-    return value
-  }
-  return ''
-}
-
-function getPhotoAlt(value: any): string {
-  if (typeof value === 'object' && value.alt) {
-    return value.alt
-  }
-  return ''
-}
 ---
 
 {photos && photos.length > 0 && (
@@ -32,7 +17,6 @@ function getPhotoAlt(value: any): string {
     {photos.map((photo) => {
       const src = getPhotoUrl(photo)
       const alt = getPhotoAlt(photo)
-      const rawValue = typeof photo === 'object' && photo.value ? photo.value : photo
       return (
         <figure>
           {permalink ? (
@@ -42,7 +26,7 @@ function getPhotoAlt(value: any): string {
           ) : (
             <img src={src} alt={alt} loading="lazy" />
           )}
-          <data class="u-photo" value={typeof rawValue === 'string' ? rawValue : ''} />
+          <data class="u-photo" value={src} />
         </figure>
       )
     })}

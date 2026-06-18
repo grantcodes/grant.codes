@@ -56,7 +56,13 @@ const searchQuery = Astro.url.searchParams.get('q') || ''
   </GrantCodesCard>
 
   <!-- Search results container -- populated by client JS -->
-  <div id="search-results" class="post-list" aria-live="polite">
+  <div
+    id="search-results"
+    class="post-list"
+    aria-live="polite"
+    data-api-url={apiUrl}
+    data-site-url={siteUrl}
+  >
     {
       !searchQuery ? (
         <GrantCodesCard>
@@ -75,147 +81,7 @@ const searchQuery = Astro.url.searchParams.get('q') || ''
   </div>
 </BaseLayout>
 
-<script define:vars={{ apiUrl, siteUrl }} is:inline>
-  // @ts-nocheck -- client-side search DOM logic
-  (function() {
-    var urlParams = new URLSearchParams(window.location.search)
-    var query = urlParams.get('q')
-    if (!query || !query.trim()) return
-
-    var container = document.getElementById('search-results')
-    if (!container) return
-
-    // Loading state
-    container.innerHTML = '<grantcodes-card><p>Searching...</p></grantcodes-card>'
-
-    fetch(apiUrl + '/api/search', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        query: { search: query.trim() },
-        limit: 50,
-        showAll: true,
-      }),
-    })
-      .then(function(res) {
-        if (!res.ok) throw new Error('API returned ' + res.status)
-        return res.json()
-      })
-      .then(function(posts) {
-        if (!Array.isArray(posts) || posts.length === 0) {
-          container.innerHTML = '<grantcodes-card>' +
-            '<p>No results found for "<strong>' + escapeHtml(query) + '</strong>".</p></grantcodes-card>'
-          return
-        }
-
-        var html = '<p class="text-muted" style="margin-bottom: 1rem;">' +
-          posts.length + ' result' + (posts.length !== 1 ? 's' : '') +
-          ' for "<strong>' + escapeHtml(query) + '</strong>"</p>'
-
-        posts.forEach(function(post) {
-          html += renderPostCard(post, siteUrl)
-        })
-
-        container.innerHTML = html
-      })
-      .catch(function(err) {
-        console.error('[search] fetch failed:', err)
-        container.innerHTML = '<grantcodes-card>' +
-          '<p>Search failed. Please try again later.</p>' +
-          '<p style="font-size: 0.7rem; opacity: 0.5;">' + escapeHtml(String(err)) + '</p></grantcodes-card>'
-      })
-
-    function escapeHtml(str) {
-      var div = document.createElement('div')
-      div.appendChild(document.createTextNode(str))
-      return div.innerHTML
-    }
-
-    function renderPostCard(post, siteUrl) {
-      var props = post && post.properties ? post.properties : {}
-      var name = props.name ? props.name[0] : null
-      var content = props.content ? props.content[0] : null
-      var published = props.published ? props.published[0] : null
-      var url = props.url ? props.url[0] : '#'
-      var photo = props.photo ? props.photo[0] : null
-      var categories = props.category || []
-
-      // Normalize URL (strip absolute prefix)
-      if (url && url.indexOf(siteUrl) === 0) {
-        url = url.slice(siteUrl.length) || '/'
-      } else if (url && url.indexOf('https://grant.codes') === 0) {
-        url = url.slice('https://grant.codes'.length) || '/'
-      }
-
-      // Content HTML — strip scripts for safety
-      var contentHtml = ''
-      if (content && content.html) {
-        var html = content.html
-          .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-          .replace(/href="https:\/\/grant\.codes\//g, 'href="/')
-        contentHtml = '<div class="e-content" style="margin-top: 0.5rem;">' + html + '</div>'
-      } else if (content && typeof content === 'string') {
-        contentHtml = '<div class="e-content" style="margin-top: 0.5rem;">' + escapeHtml(content) + '</div>'
-      }
-
-      // Photo
-      var photoHtml = ''
-      if (photo) {
-        var photoUrl = typeof photo === 'string' ? photo : (photo.url || '')
-        photoHtml = '<img src="' + escapeHtml(photoUrl) + '" alt="" class="u-photo" ' +
-          'style="max-width: 100%; border-radius: 0.4rem; margin-top: 0.5rem;" loading="lazy" />'
-      }
-
-      // Categories
-      var categoryHtml = ''
-      if (categories.length > 0) {
-        categoryHtml = '<div style="margin-top: 0.5rem; font-size: 0.7rem; opacity: 0.5;">'
-        for (var ci = 0; ci < categories.length; ci++) {
-          categoryHtml += '<span class="p-category" style="margin-right: 0.3rem;">' + escapeHtml(categories[ci]) + '</span>'
-        }
-        categoryHtml += '</div>'
-      }
-
-      // Date
-      var dateHtml = ''
-      if (published) {
-        try {
-          var d = new Date(published)
-          dateHtml = '<time class="dt-published" datetime="' + published + '" ' +
-            'style="font-size: 0.7rem; opacity: 0.5;">' +
-            d.toLocaleDateString('en-GB', {
-              year: 'numeric', month: 'short', day: 'numeric'
-            }) + '</time>'
-        } catch(e) {
-          dateHtml = '<span style="font-size: 0.7rem; opacity: 0.5;">' + escapeHtml(published) + '</span>'
-        }
-      }
-
-      // Assemble card with grantcodes-card
-      var card = '<article class="h-entry"><grantcodes-card>'
-
-      if (name) {
-        card += '<h3 class="p-name" style="margin: 0 0 0.25rem;">' +
-          '<a href="' + escapeHtml(url) + '" class="u-url">' + escapeHtml(name) + '</a></h3>'
-      } else {
-        card += '<a href="' + escapeHtml(url) + '" class="u-url" style="display:none;">permalink</a>'
-      }
-
-      card += photoHtml + contentHtml + categoryHtml
-
-      if (dateHtml) {
-        card += '<div style="margin-top: 0.5rem;">' + dateHtml + '</div>'
-      }
-
-      // Hidden author h-card for MF2 parsers
-      card += '<div class="p-author h-card screen-reader-text">' +
-        '<span class="p-name">Grant Richmond</span></div>'
-
-      card += '</grantcodes-card></article>'
-      return card
-    }
-  })()
+<script>
+  import { performSearch } from '../../lib/search-client'
+  performSearch()
 </script>

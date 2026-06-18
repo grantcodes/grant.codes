@@ -31,33 +31,33 @@
     );
     --topography-layer-0: color-mix(
         in oklab,
-        var(--g-color-background-primary) 38%,
-        transparent
+        var(--g-color-primary-500) 10%,
+        var(--g-color-background-default)
     );
     --topography-layer-1: color-mix(
         in oklab,
-        var(--g-color-background-primary) 30%,
-        transparent
+        var(--g-color-primary-500) 20%,
+        var(--g-color-background-default)
     );
     --topography-layer-2: color-mix(
         in oklab,
-        var(--g-color-background-primary) 24%,
-        transparent
+        var(--g-color-primary-500) 40%,
+        var(--g-color-background-default)
     );
     --topography-layer-3: color-mix(
         in oklab,
-        var(--g-color-background-subtle-hover) 30%,
-        transparent
+        var(--g-color-primary-500) 60%,
+        var(--g-color-background-default)
     );
     --topography-layer-4: color-mix(
         in oklab,
-        var(--g-color-background-subtle-hover) 22%,
-        transparent
+        var(--g-color-primary-500) 80%,
+        var(--g-color-background-default)
     );
     --topography-layer-5: color-mix(
         in oklab,
-        var(--g-color-border-primary) 24%,
-        transparent
+        var(--g-color-primary-500) 100%,
+        var(--g-color-background-default)
     );
 }
 
@@ -474,99 +474,6 @@ figure img {
     .main-footer {
         display: none;
     }
-}
-
-/* ── Card (ported from _card.scss) ── */
-/*.card {
-    background-color: var(--g-color-background-default);
-    padding: var(--card-padding);
-    border-radius: var(--border-radius);
-    overflow: hidden;
-    border: 1px solid var(--g-color-border-default);
-    box-shadow: 1px 1px 0.6rem rgba(0, 0, 0, 0.1);
-    margin-bottom: 2rem;
-}*/
-
-.card__title {
-    font-size: 1.96rem;
-    margin-top: 0;
-    margin-bottom: 1rem;
-}
-
-.card__breakout {
-    display: block;
-    overflow: hidden;
-    clear: both;
-    background-color: var(--g-color-background-subtle);
-    margin: var(--card-padding) 0 calc(-1 * var(--card-padding));
-}
-.card__breakout + .card__breakout {
-    margin-top: calc(-1 * var(--card-padding));
-}
-.card__breakout:first-child {
-    margin-top: calc(-1 * var(--card-padding));
-}
-.card__breakout:last-child {
-    margin-bottom: calc(-1 * var(--card-padding));
-}
-.card__breakout > img {
-    display: block;
-    width: 100%;
-}
-.card__breakout--padded {
-    padding: var(--card-padding);
-}
-
-/* ── Post (ported from _post.scss) ── */
-/*.post__title {
-    font-size: 1.4rem;
-}
-.post--like .post__title,
-.post--bookmark .post__title {
-    font-size: 1rem;
-}
-
-.post__header {
-    margin-bottom: 0;
-}
-.post__header .post__title {
-    margin: 0;
-}*/
-
-.post__action {
-    margin: 0;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    font-size: 0.714rem;
-}
-.post__action grantcodes-icon {
-    vertical-align: middle;
-    margin-right: 0.3em;
-}
-
-.post__footer {
-    opacity: 0.7;
-}
-.post__footer,
-.post__footer * {
-    line-height: 1.2;
-    font-size: 0.51rem;
-}
-.post__footer .h-card {
-    display: inline-block;
-    text-decoration: none;
-    font-size: 0.5em;
-    margin-top: -0.25em;
-}
-.post__footer .h-card .p-name {
-    text-decoration: underline;
-}
-.post__footer .h-card .p-name:hover {
-    text-decoration: underline wavy;
-}
-
-.post__content > p:first-child {
-    margin-top: 0;
 }
 
 /* ── Post list ── */
