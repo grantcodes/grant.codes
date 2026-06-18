@@ -93,11 +93,11 @@ importers:
   apps/site:
     dependencies:
       '@grantcodes/astro':
-        specifier: ^0.2.5
-        version: 0.2.5(@types/react@19.2.13)(astro@6.4.5(@types/node@25.9.2)(rollup@4.61.1)(tsx@4.22.4)(yaml@2.9.0))(lit@3.3.3)
+        specifier: ^0.2.7
+        version: 0.2.7(@types/react@19.2.13)(astro@6.4.5(@types/node@25.9.2)(rollup@4.61.1)(tsx@4.22.4)(yaml@2.9.0))(lit@3.3.3)
       '@grantcodes/ui':
-        specifier: ^2.15.6
-        version: 2.15.6(@types/react@19.2.13)
+        specifier: ^2.15.7
+        version: 2.15.7(@types/react@19.2.13)
       astro:
         specifier: ^6.4.5
         version: 6.4.5(@types/node@25.9.2)(rollup@4.61.1)(tsx@4.22.4)(yaml@2.9.0)
@@ -549,8 +549,8 @@ packages:
   '@fontsource/vidaloka@5.2.7':
     resolution: {integrity: sha512-LPbfgNfnRuH8WkAaA8149DLTfKOwT+ap+23d2JagHkqwYpmaIHOz79MV1RR7rW64VHtURwpVHrNEl/RvLgdFhA==}
 
-  '@grantcodes/astro@0.2.5':
-    resolution: {integrity: sha512-55EKfeKZiO75o2Yji9fdQ45JFdua+9tIrAsne4ywkKe3p/zLlh96EGhRw6KBJ5ympRdaNVCNMEQCyJJ7du9Sqg==}
+  '@grantcodes/astro@0.2.7':
+    resolution: {integrity: sha512-VxyQbNo14Fm4fV13Km0UtzH+gyswOVUqYZ8Iz/mcte4Xv1UH+SsCzu/xic5ABrNQ1D5m1ec3unQwXbdWTdU67w==}
     peerDependencies:
       astro: ^6.0.0
       lit: ^3.2.0
@@ -561,8 +561,8 @@ packages:
   '@grantcodes/themer@2.0.0':
     resolution: {integrity: sha512-iNqN447gJki7AV0Prb7qjRA/HLjjAfwSLKYA93g5KnWQYbvn6y2CS6Qgyajkb/2za7KrtrbGIq+iCGVkBPc+Tw==}
 
-  '@grantcodes/ui@2.15.6':
-    resolution: {integrity: sha512-ZW8ySTPqVv67DsI66uXHMunWOjbhXN0NB3Vl2IXUIafbpbDmIRRWxLiqVyOHVgtdQcpPYyjlHL+hKhjVazxZGw==}
+  '@grantcodes/ui@2.15.7':
+    resolution: {integrity: sha512-q5QvlsZmw1nEsmXCI3lwWOJ/er0TS7BkkbBMWo0wB3DuMwEutrFc+q8N4vLkVjfbxas1sCaBTGoZWAgSFxKmhA==}
     peerDependencies:
       react: ^18.0.0 || ^19.0.0
     peerDependenciesMeta:
@@ -2135,8 +2135,8 @@ packages:
   end-stream@0.1.0:
     resolution: {integrity: sha512-Brl10T8kYnc75IepKizW6Y9liyW8ikz1B7n/xoHrJxoVSSjoqPn30sb7XVFfQERK4QfUMYRGs9dhWwtt2eu6uA==}
 
-  enhanced-resolve@5.23.0:
-    resolution: {integrity: sha512-yJN/BOOLxcOW2aQgeif9mSnaUB8KtvmMMp56oA1kx1CRfBKbhZm2pJ+NBY+3eOboHxix8lfjWpHE0Ei5U8RbSA==}
+  enhanced-resolve@5.24.0:
+    resolution: {integrity: sha512-SkE2t82KlkkxQRVMVLAGKxLfORGQfrkx5dkj+vlgXRVNEdPc4eZcR+J/Fvj8C+yKSFH5L0q3NFlyufOVQnCcYQ==}
     engines: {node: '>=10.13.0'}
 
   ent-replace@1.0.4:
@@ -5540,10 +5540,10 @@ snapshots:
 
   '@fontsource/vidaloka@5.2.7': {}
 
-  '@grantcodes/astro@0.2.5(@types/react@19.2.13)(astro@6.4.5(@types/node@25.9.2)(rollup@4.61.1)(tsx@4.22.4)(yaml@2.9.0))(lit@3.3.3)':
+  '@grantcodes/astro@0.2.7(@types/react@19.2.13)(astro@6.4.5(@types/node@25.9.2)(rollup@4.61.1)(tsx@4.22.4)(yaml@2.9.0))(lit@3.3.3)':
     dependencies:
       '@grantcodes/style-dictionary': 1.10.2
-      '@grantcodes/ui': 2.15.6(@types/react@19.2.13)
+      '@grantcodes/ui': 2.15.7(@types/react@19.2.13)
       '@lit-labs/ssr': 3.3.1
       '@lit-labs/ssr-client': 1.1.8
       '@lit-labs/ssr-dom-shim': 1.6.0
@@ -5571,7 +5571,7 @@ snapshots:
       chroma-js: 2.6.0
       color-hash: 2.0.2
 
-  '@grantcodes/ui@2.15.6(@types/react@19.2.13)':
+  '@grantcodes/ui@2.15.7(@types/react@19.2.13)':
     dependencies:
       '@grantcodes/style-dictionary': 1.10.2
       '@lit/react': 1.0.8(@types/react@19.2.13)
@@ -5703,7 +5703,7 @@ snapshots:
       '@lit/reactive-element': 2.1.2
       '@parse5/tools': 0.3.0
       '@types/node': 16.18.126
-      enhanced-resolve: 5.23.0
+      enhanced-resolve: 5.24.0
       lit: 3.3.3
       lit-element: 4.2.2
       lit-html: 3.3.3
@@ -7271,7 +7271,7 @@ snapshots:
     dependencies:
       write-stream: 0.4.3
 
-  enhanced-resolve@5.23.0:
+  enhanced-resolve@5.24.0:
     dependencies:
       graceful-fs: 4.2.11
       tapable: 2.3.3

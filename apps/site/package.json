@@ -10,8 +10,8 @@
     "check": "astro check"
   },
   "dependencies": {
-    "@grantcodes/astro": "^0.2.5",
-    "@grantcodes/ui": "^2.15.6",
+    "@grantcodes/astro": "^0.2.7",
+    "@grantcodes/ui": "^2.15.7",
     "astro": "^6.4.5",
     "lit": "^3.3.1",
     "lucide-static": "^0.555.0"

@@ -5,9 +5,7 @@
 
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
-import { GrantCodesButton } from '@grantcodes/ui/components/button/index.js'
-import { GrantCodesIcon } from '@grantcodes/ui/components/icon/index.js'
-import { ArrowLeft, ExternalLink } from '@grantcodes/ui/icons'
+import { ArrowLeft, ExternalLink } from 'lucide-static'
 import websites from '../../data/websites.js'
 
 const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
@@ -44,15 +42,15 @@ const { title, screenshot, url, content = '' } = website
     <main class="website-content" set:html={content} />
 
     <div class="website-nav-row">
-        <GrantCodesButton href="/websites" variant="ghost" color="neutral">
+      <a href="/websites" class="website-nav-link">
         <grantcodes-icon set:html={ArrowLeft}></grantcodes-icon>
         All Projects
-      </GrantCodesButton>
+      </a>
       {url && (
-        <GrantCodesButton href={url} target="_blank" rel="noopener noreferrer">
+        <a href={url} target="_blank" rel="noopener noreferrer" class="website-nav-link">
           View Project
           <grantcodes-icon set:html={ExternalLink}></grantcodes-icon>
-        </GrantCodesButton>
+        </a>
       )}
     </div>
   </GrantCodesCard>
@@ -65,5 +63,18 @@ const { title, screenshot, url, content = '' } = website
       justify-content: space-between;
       flex-wrap: wrap;
       gap: var(--g-spacing-sm);
+  }
+
+  .website-nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--g-spacing-sm, 0.25rem);
+      text-decoration: none;
+      font: inherit;
+      color: inherit;
+  }
+
+  .website-nav-link:hover {
+      text-decoration: underline;
   }
 </style>

@@ -10,8 +10,5 @@ export default defineConfig({
     server: {
       allowedHosts: ['grantcodes.munchkin-beaver.ts.net'],
     },
-    resolve: {
-      noExternal: ['@grantcodes/ui'],
-    },
   },
 })

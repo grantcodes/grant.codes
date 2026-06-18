@@ -12,3 +12,4 @@ allowBuilds:
 blockExoticSubdeps: false
 minimumReleaseAgeExclude:
   - astro@6.4.5
+  - '@grantcodes/astro@0.2.7'
