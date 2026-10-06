@@ -20,6 +20,10 @@ export interface EnvConfig {
 	COUCH_DB_PUBLIC_ADMIN?: string | undefined;
 	COUCH_DB_PRIVATE_ADMIN?: string | undefined;
 	DEPLOY_WEBHOOK_URL?: string | undefined;
+	LINKWARDEN_URL?: string | undefined;
+	LINKWARDEN_TOKEN?: string | undefined;
+	LINKWARDEN_LIKES_COLLECTION_ID?: number | undefined;
+	LINKWARDEN_DRY_RUN?: string | undefined;
 }
 
 function validateEnv(): EnvConfig {
@@ -63,6 +67,12 @@ function validateEnv(): EnvConfig {
 		HUB: process.env.HUB,
 		COUCH_DB_PUBLIC_ADMIN: process.env.COUCH_DB_PUBLIC_ADMIN,
 		COUCH_DB_PRIVATE_ADMIN: process.env.COUCH_DB_PRIVATE_ADMIN,
+		LINKWARDEN_URL: process.env.LINKWARDEN_URL,
+		LINKWARDEN_TOKEN: process.env.LINKWARDEN_TOKEN,
+		LINKWARDEN_LIKES_COLLECTION_ID: process.env.LINKWARDEN_LIKES_COLLECTION_ID
+			? Number(process.env.LINKWARDEN_LIKES_COLLECTION_ID)
+			: undefined,
+		LINKWARDEN_DRY_RUN: process.env.LINKWARDEN_DRY_RUN,
 	};
 }
 

@@ -13,7 +13,8 @@
     "build:site": "pnpm --filter ./apps/site build",
     "start": "pnpm --filter ./apps/site preview",
     "start:api": "pnpm --filter api start",
-    "test": "pnpm --filter api test"
+    "test": "pnpm --filter api test",
+    "linkwarden:dry-run": "pnpm --filter api exec tsx bin/linkwarden-dry-run.ts"
   },
   "prettier": {
     "semi": false,

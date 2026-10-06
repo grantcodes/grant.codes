@@ -9,6 +9,7 @@ import pouchdbAdapterHttp from "pouchdb-adapter-http";
 import { Hono } from "hono";
 import { adaptExpressMiddleware } from "../utils/express-middleware-adapter.js";
 import { env, isDev } from "../config/env.js";
+import { LinkwardenLikesSyndicator } from "./linkwarden/syndicator.js";
 
 // Create Postr endpoint with proper configuration
 const endpoint = core({
@@ -71,6 +72,19 @@ if (!isDev) {
 			domain: env.NEXT_PUBLIC_URL,
 		});
 	}
+}
+
+// Linkwarden likes syndication. Dry-run by default; live requires LINKWARDEN_DRY_RUN=false.
+if (env.LINKWARDEN_URL) {
+	endpoint.use(LinkwardenLikesSyndicator, {
+		id: "linkwarden",
+		name: "Linkwarden",
+		default: false,
+		baseUrl: env.LINKWARDEN_URL,
+		token: env.LINKWARDEN_TOKEN,
+		collectionId: env.LINKWARDEN_LIKES_COLLECTION_ID,
+		dryRun: env.LINKWARDEN_DRY_RUN !== "false",
+	});
 }
 
 // Add custom journal post type
