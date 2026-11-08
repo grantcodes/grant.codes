@@ -33,7 +33,7 @@ const ig = process.env.NEXT_PUBLIC_AUTHOR_INSTAGRAM;
 const gh = process.env.NEXT_PUBLIC_AUTHOR_GITHUB;
 const micropub = process.env.NEXT_PUBLIC_MICROPUB_URL;
 const hub = process.env.NEXT_PUBLIC_HUB;
-const indieauth = process.env.NEXT_PUBLIC_INDIEAUTH_ENDPOINT;
+const indiekeySiteId = "fj2eb0bxsgcsgfm0";
 const microsub = process.env.NEXT_PUBLIC_MICROSUB_ENDPOINT;
 const twHandle = process.env.NEXT_PUBLIC_TWITTER_HANDLE ?? "";
 const api = process.env.NEXT_PUBLIC_API_URL;
@@ -59,11 +59,21 @@ const links = [
 	{ key: "self", rel: "self", href: url },
 	{ key: "canonical", rel: "canonical", href: url },
 	{
+		key: "indieauth-metadata",
+		rel: "indieauth-metadata",
+		href: `https://indiekey.id/.well-known/oauth-authorization-server/s/${indiekeySiteId}`,
+	},
+	// Kept for clients without indieauth-metadata support; indieauth.com reads it to hand sign-ins to IndieKey.
+	{
 		key: "authorization_endpoint",
 		rel: "authorization_endpoint",
-		href: process.env.NEXT_PUBLIC_INDIEAUTH_ENDPOINT,
+		href: `https://indiekey.id/s/${indiekeySiteId}/auth`,
 	},
-	{ key: "token_endpoint", rel: "token_endpoint", href: api + "/token" },
+	{
+		key: "token_endpoint",
+		rel: "token_endpoint",
+		href: "https://indiekey.id/token",
+	},
 	{ key: "hub", rel: "hub", href: process.env.NEXT_PUBLIC_HUB },
 	{
 		key: "microsub",
