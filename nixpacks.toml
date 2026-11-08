@@ -1,12 +1,13 @@
 [phases.setup]
-nixPkgs=['...', 'python312', 'gccStdenv', 'cairo']
-aptPkgs=['build-essential', 'libcairo2-dev', 'libpango1.0-dev', 'libjpeg-dev', 'libgif-dev', 'librsvg2-dev']
+# Union of system deps needed by both apps (canvas, sharp, etc.)
+nixPkgs=['...', 'python312', 'gccStdenv', 'cairo', 'pkg-config']
+aptPkgs=['build-essential', 'libcairo2-dev', 'libpango1.0-dev', 'libjpeg-dev', 'libgif-dev', 'librsvg2-dev', 'libpixman-1-dev']
 
 [phases.install]
-cmds=['npm ci']
+cmds=['pnpm install --frozen-lockfile']
 
 [phases.build]
-cmds=['npm run build']
+cmds=['pnpm run build']
 
 [start]
-cmd='npm run start'
+cmd='pnpm run start'

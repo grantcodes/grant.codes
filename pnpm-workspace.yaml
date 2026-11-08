@@ -1,0 +1,12 @@
+packages:
+  - 'apps/*'
+allowBuilds:
+  '@parcel/watcher': true
+  canvas: true
+  core-js: true
+  esbuild: true
+  leveldown: true
+  rxdb: true
+  sharp: true
+  unrs-resolver: true
+blockExoticSubdeps: false
