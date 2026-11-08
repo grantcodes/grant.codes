@@ -4,7 +4,6 @@ import express from "express";
 import cors from "cors";
 import { resolve } from "node:path";
 import { apiRouter } from "../../src/routes/api/index.js";
-import { tokenRouter as tokenEndpoint } from "../../src/routes/token.js";
 import { backgroundRouter as background } from "../../src/routes/background/index.js";
 import { adaptHonoToExpress } from "../../src/utils/hono-to-express-adapter.js";
 import { sign } from "hono/jwt";
@@ -122,7 +121,6 @@ describe("Server Integration", () => {
 
 		// Apply custom routes using Hono-to-Express adapter
 		app.use("/api", adaptHonoToExpress(apiRouter));
-		app.use("/token", adaptHonoToExpress(tokenEndpoint));
 		app.use("/background", adaptHonoToExpress(background));
 
 		// Start server on random port and wait for it to be ready
@@ -210,83 +208,6 @@ describe("Server Integration", () => {
 			assert.strictEqual(response.status, 200);
 			const data = await response.json();
 			assert.ok(typeof data.pageCount === "number");
-		},
-	);
-
-	it("should handle token endpoint GET", { timeout: 5000 }, async () => {
-		const payload = {
-			me: process.env.NEXT_PUBLIC_URL,
-			client_id: "test-client",
-			scope: "test",
-			date_issued: new Date(),
-			exp: Math.floor(Date.now() / 1000) + 60 * 60, // 1 hour from now
-		};
-		const validToken = await sign(payload, process.env.TOKEN_SECRET!, 'HS256');
-
-		const response = await fetch(`${baseUrl}/token`, {
-			method: "GET",
-			headers: {
-				Authorization: `Bearer ${validToken}`,
-				Accept: "application/json",
-			},
-		});
-
-		assert.strictEqual(response.status, 200);
-		const data = await response.json();
-		assert.strictEqual(data.me, process.env.NEXT_PUBLIC_URL);
-		assert.strictEqual(data.client_id, "test-client");
-	});
-
-	it(
-		"should handle token endpoint POST with authorization code",
-		{ timeout: 5000 },
-		async () => {
-			// Mock fetch for IndieAuth
-			const originalFetch = global.fetch;
-			global.fetch = async (
-				url: string | URL | Request,
-				init?: RequestInit,
-			) => {
-				const urlStr =
-					typeof url === "string"
-						? url
-						: url instanceof URL
-							? url.toString()
-							: url.url;
-				if (
-					urlStr === "https://indieauth.com/auth" &&
-					init?.method === "POST"
-				) {
-					return new Response("me=http://localhost:3000&scope=test", {
-						status: 200,
-						headers: { "content-type": "application/x-www-form-urlencoded" },
-					});
-				}
-				return originalFetch(url as any, init as any);
-			};
-
-			try {
-				const response = await fetch(`${baseUrl}/token`, {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/x-www-form-urlencoded",
-						Accept: "application/json",
-					},
-					body: "grant_type=authorization_code&code=valid-code&client_id=test-client&redirect_uri=http://localhost:3000/callback&code_verifier=verifier",
-				});
-
-				assert.strictEqual(response.status, 200);
-				const contentType = response.headers.get("content-type") || "";
-				const data = contentType.includes("application/json")
-					? await response.json()
-					: (Object.fromEntries(
-							new URLSearchParams(await response.text()),
-						) as any);
-				assert.ok(data.access_token);
-				assert.strictEqual(data.token_type, "Bearer");
-			} finally {
-				global.fetch = originalFetch;
-			}
 		},
 	);
 
@@ -419,15 +340,4 @@ describe("Server Integration", () => {
 			assert.strictEqual(response.status, 401);
 		},
 	);
-
-	it("should reject invalid tokens", { timeout: 5000 }, async () => {
-		const response = await fetch(`${baseUrl}/token`, {
-			method: "GET",
-			headers: {
-				Authorization: "Bearer invalid-token",
-			},
-		});
-
-		assert.strictEqual(response.status, 401);
-	});
 });

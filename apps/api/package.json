@@ -43,8 +43,8 @@
 		"build": "tsc",
 		"dev": "NODE_ENV=development tsx watch --env-file=../../.env --env-file=.env.local src/index.ts",
 		"start": "node dist/index.js",
-		"test": "NODE_ENV=test NEXT_PUBLIC_API_URL=http://localhost:4000 NEXT_PUBLIC_URL=http://localhost:3000 NEXT_PUBLIC_MEDIA_BASE_URL=http://localhost:4000/media NEXT_PUBLIC_AUTHOR_NAME='Test Author' NEXT_PUBLIC_AUTHOR_PHOTO=http://localhost:4000/media/photo.jpg NEXT_PUBLIC_AUTHOR_EMAIL=test@example.com MICROPUB_TOKEN=test-micropub-token TOKEN_SECRET=test-secret MICROPUB_ENDPOINT_PASSWORD_SERVER=test-db-password tsx --test",
-		"test:watch": "NODE_ENV=test NEXT_PUBLIC_API_URL=http://localhost:4000 NEXT_PUBLIC_URL=http://localhost:3000 NEXT_PUBLIC_MEDIA_BASE_URL=http://localhost:4000/media NEXT_PUBLIC_AUTHOR_NAME='Test Author' NEXT_PUBLIC_AUTHOR_PHOTO=http://localhost:4000/media/photo.jpg NEXT_PUBLIC_AUTHOR_EMAIL=test@example.com MICROPUB_TOKEN=test-micropub-token TOKEN_SECRET=test-secret MICROPUB_ENDPOINT_PASSWORD_SERVER=test-db-password tsx --test --watch"
+		"test": "NODE_ENV=test NEXT_PUBLIC_API_URL=http://localhost:4000 NEXT_PUBLIC_URL=http://localhost:3000 NEXT_PUBLIC_MEDIA_BASE_URL=http://localhost:4000/media NEXT_PUBLIC_AUTHOR_NAME='Test Author' NEXT_PUBLIC_AUTHOR_PHOTO=http://localhost:4000/media/photo.jpg NEXT_PUBLIC_AUTHOR_EMAIL=test@example.com MICROPUB_TOKEN=test-micropub-token MICROPUB_ENDPOINT_PASSWORD_SERVER=test-db-password tsx --test",
+		"test:watch": "NODE_ENV=test NEXT_PUBLIC_API_URL=http://localhost:4000 NEXT_PUBLIC_URL=http://localhost:3000 NEXT_PUBLIC_MEDIA_BASE_URL=http://localhost:4000/media NEXT_PUBLIC_AUTHOR_NAME='Test Author' NEXT_PUBLIC_AUTHOR_PHOTO=http://localhost:4000/media/photo.jpg NEXT_PUBLIC_AUTHOR_EMAIL=test@example.com MICROPUB_TOKEN=test-micropub-token MICROPUB_ENDPOINT_PASSWORD_SERVER=test-db-password tsx --test --watch"
 	},
 	"type": "module",
 	"version": "2.0.3",

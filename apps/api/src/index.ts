@@ -4,7 +4,6 @@ import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
 import { postr } from "./lib/postr.js";
 import { apiRouter } from "./routes/api/index.js";
-import { tokenRouter as tokenEndpoint } from "./routes/token.js";
 import { backgroundRouter as background } from "./routes/background/index.js";
 import { adaptHonoToExpress } from "./utils/hono-to-express-adapter.js";
 
@@ -33,7 +32,6 @@ const createApp = () => {
 
 	// Apply custom routes using Hono-to-Express adapter
 	app.use("/api", adaptHonoToExpress(apiRouter));
-	app.use("/token", adaptHonoToExpress(tokenEndpoint));
 	app.use("/background", adaptHonoToExpress(background));
 
 	return app;

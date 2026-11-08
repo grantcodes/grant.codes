@@ -17,7 +17,8 @@ const endpoint = core({
 	dbName: path.resolve(import.meta.dirname!, "../../.data/posts"),
 	mediaDir: path.resolve(import.meta.dirname!, "../../../../media"),
 	mediaBaseUrl: env.NEXT_PUBLIC_MEDIA_BASE_URL,
-	tokenEndpoint: env.NEXT_PUBLIC_API_URL + `/token`,
+	// Needs IndieKey legacy mode on the Micropub resource server: postr checks tokens with a GET here.
+	tokenEndpoint: "https://indiekey.id/token",
 	imageSizes: {
 		1800: [1800, 0],
 		700: [700, 0],
