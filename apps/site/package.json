@@ -12,6 +12,8 @@
   "dependencies": {
     "@grantcodes/astro": "0.2.7",
     "@grantcodes/ui": "^2.16.0",
+    "@postr/astro": "0.1.0-alpha.1",
+    "@postr/core": "2.0.0-alpha.0",
     "astro": "^7.3.5",
     "lit": "^3.3.3",
     "lucide-static": "^1.48.0"
@@ -24,5 +26,8 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "typescript": "^7.0.2"
+  },
+  "engines": {
+    "node": "24.x"
   }
 }

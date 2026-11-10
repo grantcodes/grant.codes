@@ -3,15 +3,13 @@
 	"dependencies": {
 		"@grantcodes/themer": "^2.0.0",
 		"@hono/node-server": "^2.1.1",
-		"@postr/core": "^1.10.3",
-		"@postr/plugin-feeds": "1.0.0-beta.3",
-		"@postr/plugin-webmention-endpoint": "^1.0.3",
-		"@postr/syndicator-instagram": "2.1.1-beta.0",
-		"@postr/syndicator-superfeedr": "^2.0.2",
-		"@postr/syndicator-telegram": "^1.0.1",
+		"@postr/core": "2.0.0-alpha.0",
+		"@postr/plugin-feeds": "2.0.0-alpha.0",
+		"@postr/plugin-webmention-endpoint": "2.0.0-alpha.0",
+		"@postr/syndicator-instagram": "3.0.0-alpha.0",
+		"@postr/syndicator-superfeedr": "3.0.0-alpha.0",
+		"@postr/syndicator-telegram": "2.0.0-alpha.0",
 		"canvas": "^3.2.3",
-		"cors": "^2.8.6",
-		"express": "^5.2.1",
 		"hono": "^4.13.9",
 		"indieauth-helper": "^1.0.2",
 		"jsonwebtoken": "^9.0.3",
@@ -19,13 +17,10 @@
 		"node-gyp": "^13.0.2",
 		"node-schedule": "^2.1.1",
 		"pluralize": "^8.0.0",
-		"pouchdb-adapter-http": "^9.0.0",
 		"sharp": "^0.35.4"
 	},
 	"description": "Backend service for grant.codes powered by postr",
 	"devDependencies": {
-		"@types/cors": "^2.8.19",
-		"@types/express": "^5.0.6",
 		"@types/jsonwebtoken": "^9.0.10",
 		"@types/node": "^26.6.2",
 		"tsx": "^4.23.15",
@@ -49,6 +44,6 @@
 	"type": "module",
 	"version": "2.0.3",
 	"engines": {
-		"node": "22.x"
+		"node": "24.x"
 	}
 }
