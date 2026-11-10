@@ -1,44 +1,39 @@
-import express from "express";
-import cors from "cors";
+import { Hono } from "hono";
+import { cors } from "hono/cors";
+import { serve } from "@hono/node-server";
+import { serveStatic } from "@hono/node-server/serve-static";
 import { fileURLToPath } from "node:url";
-import { resolve } from "node:path";
-import { postr } from "./lib/postr.js";
+import { relative } from "node:path";
+import { postr, mediaDir } from "./lib/postr.js";
 import { apiRouter } from "./routes/api/index.js";
 import { deployWebhookRouter } from "./routes/api/deploy-webhook.js";
 import { tokenRouter as tokenEndpoint } from "./routes/token.js";
 import { backgroundRouter as background } from "./routes/background/index.js";
-import { adaptHonoToExpress } from "./utils/hono-to-express-adapter.js";
 
 const port = 4000;
-const mediaPath = resolve(import.meta.dirname!, "../../../media");
 
 const createApp = () => {
-	console.log("Initializing backend");
+	const app = new Hono();
 
-	// Create Express app
-	const app = express();
+	app.use("*", cors());
 
-	// Apply CORS middleware
-	app.use(cors());
+	// postr serves Micropub (and plugin routes) at the path of its endpoint URL.
+	app.all("/micropub", (c) => postr.fetch(c.req.raw));
+	app.all("/micropub/*", (c) => postr.fetch(c.req.raw));
 
-	// Apply Postr routes before global body parsers because Postr
-	// parses Micropub request bodies internally.
-	app.use("/micropub", postr.expressRouter);
-
-	// Parse JSON bodies for non-Postr routes
-	app.use(express.json());
-	app.use(express.urlencoded({ extended: true }));
-
-	// Serve static media files
-	app.use("/media", express.static(mediaPath));
+	app.use(
+		"/media/*",
+		serveStatic({
+			root: relative(process.cwd(), mediaDir),
+			rewriteRequestPath: (path) => path.replace(/^\/media/, ""),
+		}),
+	);
 
 	// Mount deploy-webhook before generic /api so it matches first
-	app.use("/api/deploy-webhook", adaptHonoToExpress(deployWebhookRouter));
-
-	// Apply custom routes using Hono-to-Express adapter
-	app.use("/api", adaptHonoToExpress(apiRouter));
-	app.use("/token", adaptHonoToExpress(tokenEndpoint));
-	app.use("/background", adaptHonoToExpress(background));
+	app.route("/api/deploy-webhook", deployWebhookRouter);
+	app.route("/api", apiRouter);
+	app.route("/token", tokenEndpoint);
+	app.route("/background", background);
 
 	return app;
 };
@@ -48,13 +43,10 @@ const app = createApp();
 const isEntrypoint = process.argv[1] === fileURLToPath(import.meta.url);
 
 if (isEntrypoint) {
-	// Start Express server
-	app.listen(port, () => {
+	serve({ fetch: app.fetch, port }, () => {
 		console.log(
-			`Backend up and running on http://localhost:${port}, serving media from ${mediaPath}`,
+			`Backend up and running on http://localhost:${port}, serving media from ${mediaDir}`,
 		);
-		console.log(`Postr routes served via Express`);
-		console.log(`Custom routes adapted from Hono to Express`);
 	});
 }
 

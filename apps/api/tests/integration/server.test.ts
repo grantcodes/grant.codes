@@ -1,145 +1,34 @@
 import { describe, it, before, after } from "node:test";
 import assert from "node:assert/strict";
-import express from "express";
-import cors from "cors";
-import { resolve } from "node:path";
-import { apiRouter } from "../../src/routes/api/index.js";
-import { tokenRouter as tokenEndpoint } from "../../src/routes/token.js";
-import { backgroundRouter as background } from "../../src/routes/background/index.js";
-import { adaptHonoToExpress } from "../../src/utils/hono-to-express-adapter.js";
+import { serve, type ServerType } from "@hono/node-server";
 import { sign } from "hono/jwt";
-
-// Mock the dependencies that require environment setup
-const mockPostr = {
-	getCollection: async () => ({
-		find: () => ({
-			exec: async () => [
-				{
-					toMf2: () => ({
-						type: ["h-entry"],
-						properties: { content: ["Test Post"] },
-					}),
-					get: () => false,
-				},
-			],
-			where: () => ({
-				ne: () => ({}),
-				eq: () => ({}),
-			}),
-			sort: () => ({
-				limit: () => ({
-					skip: () => ({
-						exec: async () => [
-							{
-								toMf2: () => ({
-									type: ["h-entry"],
-									properties: { content: ["Test Post"] },
-								}),
-								get: () => false,
-							},
-						],
-					}),
-				}),
-			}),
-		}),
-		sync: () => {},
-	}),
-};
-
-// Mock canvas and themer
-const mockCanvas = {
-	createCanvas: () => ({
-		getContext: () => ({
-			fillRect: () => {},
-			translate: () => {},
-			beginPath: () => {},
-			lineTo: () => {},
-			fill: () => {},
-			closePath: () => {},
-		}),
-		toBuffer: () => Buffer.from("mock-image-data"),
-	}),
-	loadImage: async () => ({
-		width: 100,
-		height: 100,
-	}),
-};
-
-const mockThemer = {
-	daily: () => ({ gradient: ["#ff0000", "#00ff00", "#0000ff"] }),
-	fromColor: () => ({ gradient: ["#ff0000", "#00ff00", "#0000ff"] }),
-};
-
-const mockNoise = {
-	Noise: class MockNoise {
-		constructor() {}
-		perlin2() {
-			return 0.5;
-		}
-	},
-};
+import { createApp } from "../../src/index.js";
+import { postr } from "../../src/lib/postr.js";
 
 describe("Server Integration", () => {
-	let server: any;
+	let server: ServerType;
 	let baseUrl: string;
 
 	before(async () => {
-		// Set up test environment variables
-		process.env.NODE_ENV = "test";
-		process.env.NEXT_PUBLIC_API_URL = "http://localhost:4000";
-		process.env.NEXT_PUBLIC_URL = "http://localhost:3000";
-		process.env.NEXT_PUBLIC_MEDIA_BASE_URL = "http://localhost:4000/media";
-		process.env.NEXT_PUBLIC_AUTHOR_NAME = "Test Author";
-		process.env.NEXT_PUBLIC_AUTHOR_PHOTO =
-			"http://localhost:4000/media/photo.jpg";
-		process.env.NEXT_PUBLIC_AUTHOR_EMAIL = "test@example.com";
-		process.env.MICROPUB_TOKEN = "test-micropub-token";
-		process.env.TOKEN_SECRET = "test-secret";
-		process.env.MICROPUB_ENDPOINT_PASSWORD_SERVER = "test-db-password";
+		const post = (properties: Record<string, string[]>) =>
+			postr.posts.create(
+				{ type: ["h-entry"], properties },
+				{ origin: "import" },
+			);
+		await post({ content: ["A public note"], published: ["2024-05-03T10:00:00Z"] });
+		await post({ "like-of": ["https://example.com/liked"], visibility: ["unlisted"] });
+		await post({ content: ["A draft note"], "post-status": ["draft"] });
 
-		// Mock modules
-		try {
-			const { mock } = await import("node:test");
-			if (mock && typeof (mock as any).module === "function") {
-				(mock as any).module("../../src/lib/postr.js", { default: mockPostr });
-				(mock as any).module("canvas", mockCanvas);
-				(mock as any).module("@grantcodes/themer", mockThemer);
-				(mock as any).module("noisejs", mockNoise);
-			}
-		} catch {
-			// If mocking API is unavailable, proceed without mocking
-		}
-
-		// Create Express test server
-		const app = express();
-
-		// Apply CORS middleware
-		app.use(cors());
-
-		// Parse JSON bodies
-		app.use(express.json());
-		app.use(express.urlencoded({ extended: true }));
-
-		// Apply custom routes using Hono-to-Express adapter
-		app.use("/api", adaptHonoToExpress(apiRouter));
-		app.use("/token", adaptHonoToExpress(tokenEndpoint));
-		app.use("/background", adaptHonoToExpress(background));
-
-		// Start server on random port and wait for it to be ready
 		server = await new Promise((resolve) => {
-			const httpServer = app.listen(0, () => {
-				const address = httpServer.address();
-				const port = typeof address === "object" && address ? address.port : 0;
-				baseUrl = `http://localhost:${port}`;
+			const httpServer = serve({ fetch: createApp().fetch, port: 0 }, (info) => {
+				baseUrl = `http://localhost:${info.port}`;
 				resolve(httpServer);
 			});
 		});
 	});
 
-	after(async () => {
-		if (server) {
-			server.close();
-		}
+	after(() => {
+		server?.close();
 	});
 
 	it("should handle CORS preflight requests", { timeout: 5000 }, async () => {
@@ -159,59 +48,78 @@ describe("Server Integration", () => {
 		assert.ok(response.headers.get("Access-Control-Allow-Headers"));
 	});
 
-	it.skip("should handle API search endpoint", { timeout: 5000 }, async () => {
+	const adminToken = () =>
+		sign(
+			{
+				me: process.env.NEXT_PUBLIC_URL!,
+				client_id: "test-client",
+				scope: "create",
+				exp: Math.floor(Date.now() / 1000) + 60 * 60,
+			},
+			process.env.TOKEN_SECRET!,
+			"HS256",
+		);
+
+	const search = async (body: unknown, token?: string) => {
 		const response = await fetch(`${baseUrl}/api/search`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
-				// Use a valid JWT for auth middleware
-			Authorization: `Bearer ${await sign(
-				{
-					me: process.env.NEXT_PUBLIC_URL!,
-					client_id: "test-client",
-					scope: "test",
-					date_issued: new Date(),
-					exp: Math.floor(Date.now() / 1000) + 60 * 60,
-				},
-				process.env.TOKEN_SECRET!,
-				'HS256',
-			)}`,
+				...(token ? { Authorization: `Bearer ${token}` } : {}),
 			},
-			body: JSON.stringify({ query: { type: "note" } }),
+			body: JSON.stringify(body),
+		});
+		assert.strictEqual(response.status, 200);
+		return (await response.json()) as Array<{
+			properties: Record<string, unknown[]>;
+			cms: { postType: string };
+		}>;
+	};
+
+	it("should search public posts in the 1.x shape", { timeout: 5000 }, async () => {
+		const posts = await search({ query: { type: "note" } });
+		assert.strictEqual(posts.length, 1);
+		assert.strictEqual(posts[0].cms.postType, "note");
+		assert.match(String(posts[0].properties.url[0]), /^http:\/\/localhost:3000\/2024\/05\/03\//);
+	});
+
+	it("should only show drafts to a valid token", { timeout: 5000 }, async () => {
+		const anonymous = await search({ query: { search: "note" }, showAll: true });
+		assert.strictEqual(anonymous.length, 1);
+		const admin = await search({ query: { search: "note" }, showAll: true }, await adminToken());
+		assert.strictEqual(admin.length, 2);
+	});
+
+	it("should include unlisted posts in type archives", { timeout: 5000 }, async () => {
+		assert.strictEqual((await search({ query: {} })).length, 1);
+		assert.strictEqual((await search({ query: { type: "likes" } })).length, 1);
+	});
+
+	it("should handle API page-count endpoint", { timeout: 5000 }, async () => {
+		const response = await fetch(`${baseUrl}/api/page-count`, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ query: { type: "note" }, limit: 1 }),
 		});
 
 		assert.strictEqual(response.status, 200);
-		const data = await response.json();
-		assert.ok(Array.isArray(data));
+		assert.deepStrictEqual(await response.json(), { pageCount: 1 });
 	});
 
-	it.skip(
-		"should handle API page-count endpoint",
-		{ timeout: 5000 },
-		async () => {
-			const response = await fetch(`${baseUrl}/api/page-count`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${await sign(
-						{
-							me: process.env.NEXT_PUBLIC_URL!,
-							client_id: "test-client",
-							scope: "test",
-							date_issued: new Date(),
-							exp: Math.floor(Date.now() / 1000) + 60 * 60,
-						},
-						process.env.TOKEN_SECRET!,
-					)}`,
-				},
-				body: JSON.stringify({ query: { type: "note" } }),
-			});
+	it("should serve Micropub q=source with the permanent token", { timeout: 5000 }, async () => {
+		const response = await fetch(`${baseUrl}/micropub?q=source&limit=5`, {
+			headers: { Authorization: `Bearer ${process.env.MICROPUB_TOKEN}` },
+		});
+		assert.strictEqual(response.status, 200);
+		const data = (await response.json()) as { items: unknown[] };
+		assert.ok(data.items.length >= 1);
+	});
 
-			assert.strictEqual(response.status, 200);
-			const data = await response.json();
-			assert.ok(typeof data.pageCount === "number");
-		},
-	);
+	it("should serve feeds", { timeout: 5000 }, async () => {
+		const response = await fetch(`${baseUrl}/micropub/plugin/feeds/rss`);
+		assert.strictEqual(response.status, 200);
+		assert.match(await response.text(), /A public note/);
+	});
 
 	it("should handle token endpoint GET", { timeout: 5000 }, async () => {
 		const payload = {

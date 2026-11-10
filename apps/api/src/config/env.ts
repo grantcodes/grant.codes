@@ -17,8 +17,6 @@ export interface EnvConfig {
 	INSTAGRAM_PASSWORD?: string | undefined;
 	INSTAGRAM_PROXY?: string | undefined;
 	HUB?: string | undefined;
-	COUCH_DB_PUBLIC_ADMIN?: string | undefined;
-	COUCH_DB_PRIVATE_ADMIN?: string | undefined;
 	DEPLOY_WEBHOOK_URL?: string | undefined;
 }
 
@@ -61,8 +59,6 @@ function validateEnv(): EnvConfig {
 		INSTAGRAM_PASSWORD: process.env.INSTAGRAM_PASSWORD,
 		INSTAGRAM_PROXY: process.env.INSTAGRAM_PROXY,
 		HUB: process.env.HUB,
-		COUCH_DB_PUBLIC_ADMIN: process.env.COUCH_DB_PUBLIC_ADMIN,
-		COUCH_DB_PRIVATE_ADMIN: process.env.COUCH_DB_PRIVATE_ADMIN,
 	};
 }
 

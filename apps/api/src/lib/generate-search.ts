@@ -1,4 +1,5 @@
 import pluralize from "pluralize";
+import type { ListOptions, Post } from "@postr/core";
 const { singular } = pluralize;
 
 export interface SearchQuery {
@@ -22,116 +23,96 @@ export interface GenerateSearchOptions {
 	isAdmin?: boolean;
 }
 
-export interface SearchCriteria {
-	[key: string]: any;
-	$or?: Array<{ [key: string]: any }>;
-}
-
 export interface SearchResult {
-	search: SearchCriteria;
+	/** Options for `postr.posts.list()`; it always returns every match. */
+	list: ListOptions;
+	/** Conditions `posts.list()` cannot express, applied to its results. */
+	filter: (post: Post) => boolean;
 	skip: number;
 	limit: number;
 }
 
+export const defaultPostTypes = [
+	"note",
+	"photo",
+	"article",
+	"repost",
+	"quotation",
+	"video",
+	"audio",
+	"collection",
+];
+
+type Visibility = "public" | "listed" | "any";
+
+// 1.x matched dates on `created` or `published`, whichever fell in the range.
+const inRange = (post: Post, start: Date, end: Date) =>
+	[post.properties.created?.[0], post.published].some((value) => {
+		if (typeof value !== "string") return false;
+		const time = new Date(value).getTime();
+		return time >= start.getTime() && time < end.getTime();
+	});
+
+/** Translates the site's 1.x search query into a postr 2 posts query. */
 const generateSearch = ({
 	query,
 	limit = 10,
 	showAll = false,
 	isAdmin = false,
 }: GenerateSearchOptions): SearchResult => {
-	let search: SearchCriteria = {};
-	let addDefaultPostType = true;
-	let skip = 0;
-
 	if (!query) {
 		throw new Error("Missing query, cannot generate search");
 	}
 
-	// From here on we know query exists; normalize to object type
-	query = { ...query } as SearchQuery;
+	query = { ...query };
+	const list: ListOptions = {};
+	const filters: Array<(post: Post) => boolean> = [];
+	let postTypes: string[] | null = defaultPostTypes;
+	let visibility: Visibility = "public";
+	let status: string | null = "published";
+	let skip = 0;
 
 	// First param can be post type string or year number
 	if (query.typeOrYear) {
-		if (
-			typeof query.typeOrYear === "number" ||
-			!isNaN(parseInt(query.typeOrYear.toString()))
-		) {
+		if (!isNaN(parseInt(query.typeOrYear.toString()))) {
 			query.year = parseInt(query.typeOrYear.toString());
-			// When filtering by date, we do not restrict post type by default
-			addDefaultPostType = false;
 		} else {
-			// If it's not a year, treat it as a type and clear the default
 			query.type = query.typeOrYear.toString();
-			// When a specific type is provided via first param,
-			// don't include the default postType filter
-			addDefaultPostType = false;
 		}
+		postTypes = null;
 		delete query.typeOrYear;
 	}
 
-	// Only show visible, published items, unless show all is set
-	if (!showAll) {
-		search["properties.visibility.0"] = "visible";
-		search["properties.post-status.0"] = "published";
+	if (showAll) {
+		// Anonymous requests never see drafts or private posts.
+		visibility = isAdmin ? "any" : "listed";
+		status = isAdmin ? null : "published";
 	}
 
-	// Set posts per page.
-	limit = query.type && query.type === "photos" ? 50 : limit;
+	limit = query.type === "photos" ? 50 : limit;
 
-	// Use pagination
 	if (query.page) {
 		skip = (parseInt(query.page.toString()) - 1) * limit;
 	}
 
-	// Set post type by default (unless disabled by earlier logic)
-	if (addDefaultPostType) {
-		search["cms.postType"] = {
-			$in: [
-				"note",
-				"photo",
-				"article",
-				"repost",
-				"quotation",
-				"video",
-				"audio",
-				"collection",
-			],
-		};
-	}
 	if (query.type) {
-		if (query.type === "all") {
-			delete search["cms.postType"];
-		} else {
-			search["cms.postType"] = singular(query.type);
-		}
-		// TODO: Unsure if I should show unlisted posts in the post type archives or not
-		search["properties.visibility.0"] = { $ne: "private" };
+		postTypes = query.type === "all" ? null : [singular(query.type)];
+		if (visibility === "public") visibility = "listed";
 	}
 
-	// Search category
 	if (query.category) {
-		search["properties.category"] = {
-			$in: [query.category],
-		};
-		if (!query.type) {
-			delete search["cms.postType"];
-		}
+		list.category = query.category;
+		if (!query.type) postTypes = null;
 	}
 
-	// If a slug or year, month & day is set then we are looking for a single item.
+	// A slug or full date looks up a single post.
 	if (query.slug || (query.day && query.month && query.year)) {
-		search["properties.visibility.0"] = {
-			$ne: "private",
-		};
-		delete search["cms.postType"];
-		if (showAll) {
-			delete search["properties.post-status.0"];
-		}
+		if (visibility === "public") visibility = "listed";
+		postTypes = null;
+		if (showAll && isAdmin) status = null;
 	}
 
-	// Query post status
 	if (query.postStatus) {
-		search["properties.post-status.0"] = query.postStatus;
 		if (
 			(query.postStatus === "deleted" || query.postStatus === "draft") &&
 			!isAdmin
@@ -140,82 +121,66 @@ const generateSearch = ({
 				`You need to be an admin to see ${query.postStatus} posts`,
 			);
 		}
+		status = query.postStatus;
 	}
 
-	// Query slug
 	if (query.slug) {
 		const slug = Array.isArray(query.slug) ? query.slug[0] : query.slug;
-		search["properties.mp-slug.0"] = slug;
+		filters.push((post) => post.slug === slug);
 	}
 
-	// Query by date
 	if (query.year && query.month && query.day) {
-		const startDate = new Date(`${query.year}-${query.month}-${query.day}`);
+		const start = new Date(`${query.year}-${query.month}-${query.day}`);
 		// Need to do this so that time zones dont mess stuff up
-		startDate.setDate(startDate.getDate() - 1);
-		const endDate = new Date(startDate.getTime() + 2 * 24 * 60 * 60 * 1000);
-		// When querying by specific date, do not restrict post type
-		delete search["cms.postType"];
-		search.$or = [
-			{
-				"properties.created.0": {
-					$gte: startDate.toISOString(),
-					$lt: endDate.toISOString(),
-				},
-			},
-			{
-				"properties.published.0": {
-					$gte: startDate.toISOString(),
-					$lt: endDate.toISOString(),
-				},
-			},
-		];
+		start.setDate(start.getDate() - 1);
+		const end = new Date(start.getTime() + 2 * 24 * 60 * 60 * 1000);
+		postTypes = null;
+		filters.push((post) => inRange(post, start, end));
 	} else if (query.year && query.month) {
-		// Get all in a specific month
-		const startDate = new Date(`${query.year}-${query.month}-01`);
-		const endDate = new Date(`${query.year}-${query.month}-01`);
-		endDate.setMonth(startDate.getMonth() + 1);
-		// When querying by month, do not restrict post type
-		delete search["cms.postType"];
-		search.$or = [
-			{
-				"properties.created.0": {
-					$gte: startDate.toISOString(),
-					$lt: endDate.toISOString(),
-				},
-			},
-			{
-				"properties.published.0": {
-					$gte: startDate.toISOString(),
-					$lt: endDate.toISOString(),
-				},
-			},
-		];
+		const start = new Date(`${query.year}-${query.month}-01`);
+		const end = new Date(`${query.year}-${query.month}-01`);
+		end.setMonth(start.getMonth() + 1);
+		postTypes = null;
+		filters.push((post) => inRange(post, start, end));
 	}
 
-	// Search with text
 	if (query.search) {
-		delete search["cms.postType"];
-		const searchRegex = new RegExp(
-			query.search.toLowerCase().trim().replace("+", " "),
-			"i",
-		);
-		search.$or = [
-			{ "properties.name.0": { $regex: searchRegex } },
-			{ "properties.summary.0": { $regex: searchRegex } },
-			{ "properties.content.0.value": { $regex: searchRegex } },
-		];
+		postTypes = null;
+		list.search = query.search.trim().replace("+", " ");
 	}
 
-	if (query.likeOfDomains) {
-		if (Array.isArray(query.likeOfDomains)) {
-			search.$or = query.likeOfDomains.map((domain) => ({
-				"properties.like-of.0": { $regex: new RegExp(domain, "i") },
-			}));
+	if (Array.isArray(query.likeOfDomains)) {
+		const domains = query.likeOfDomains.map((domain) => new RegExp(domain, "i"));
+		filters.push((post) => {
+			const likeOf = post.properties["like-of"]?.[0];
+			return typeof likeOf === "string" && domains.some((d) => d.test(likeOf));
+		});
+	}
+
+	if (postTypes?.length === 1) {
+		list.postType = postTypes[0];
+	} else if (postTypes) {
+		const types = postTypes;
+		filters.push((post) => types.includes(post.postType));
+	}
+
+	if (visibility !== "public" || status !== "published") {
+		list.includeHidden = true;
+		if (visibility === "listed") {
+			filters.push((post) => post.visibility !== "private");
+		}
+		if (status) {
+			const wanted = status;
+			filters.push((post) => post.status === wanted);
 		}
 	}
 
-	return { search, skip, limit };
+	return {
+		list,
+		filter: (post) => filters.every((filter) => filter(post)),
+		skip,
+		limit,
+	};
 };
 
 export { generateSearch };

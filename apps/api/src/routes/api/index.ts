@@ -1,13 +1,16 @@
 import { Hono } from "hono";
-import authMiddleware from "@postr/core/lib/middlewear/auth.js";
+import { isAdminRequest } from "../../lib/token.js";
 import { searchHandler } from "./search.js";
 import { pageCountHandler } from "./page-count.js";
 import { lastLocationHandler } from "./last-location.js";
-import { adaptExpressMiddleware } from "../../utils/express-middleware-adapter.js";
 
-const apiRouter = new Hono();
+const apiRouter = new Hono<{ Variables: { isAdmin: boolean } }>();
 
-apiRouter.use("*", adaptExpressMiddleware(authMiddleware));
+// Public reads; a valid token also unlocks hidden posts.
+apiRouter.use("*", async (c, next) => {
+	c.set("isAdmin", await isAdminRequest(c.req.header("Authorization")));
+	await next();
+});
 
 apiRouter.post("/search", searchHandler);
 apiRouter.post("/page-count", pageCountHandler);

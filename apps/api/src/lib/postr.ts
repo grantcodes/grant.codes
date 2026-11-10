@@ -1,152 +1,88 @@
-import path from "path";
-import core from "@postr/core";
-import webmention from "@postr/plugin-webmention-endpoint";
-import feeds from "@postr/plugin-feeds";
-import TelegramSyndicator from "@postr/syndicator-telegram";
-import InstagramSyndicator from "@postr/syndicator-instagram";
-import SuperfeedrSyndicator from "@postr/syndicator-superfeedr";
-import pouchdbAdapterHttp from "pouchdb-adapter-http";
-import { Hono } from "hono";
-import { adaptExpressMiddleware } from "../utils/express-middleware-adapter.js";
-import { env, isDev } from "../config/env.js";
+import path from "node:path";
+import { createPostr, type PostrPlugin } from "@postr/core";
+import { feeds } from "@postr/plugin-feeds";
+import { webmentionEndpoint } from "@postr/plugin-webmention-endpoint";
+import { telegram } from "@postr/syndicator-telegram";
+import { instagram } from "@postr/syndicator-instagram";
+import { superfeedr } from "@postr/syndicator-superfeedr";
+import { env, isDev, isTest } from "../config/env.js";
+import { verifyToken } from "./token.js";
 
-// Create Postr endpoint with proper configuration
-const endpoint = core({
-	siteBaseUrl: env.NEXT_PUBLIC_URL,
-	endpointBaseUrl: env.NEXT_PUBLIC_API_URL + "/micropub",
-	dbName: path.resolve(import.meta.dirname!, "../../.data/posts"),
-	mediaDir: path.resolve(import.meta.dirname!, "../../../../media"),
-	mediaBaseUrl: env.NEXT_PUBLIC_MEDIA_BASE_URL,
-	tokenEndpoint: env.NEXT_PUBLIC_API_URL + `/token`,
-	imageSizes: {
-		1800: [1800, 0],
-		700: [700, 0],
-		"200x200": [200, 200],
-	},
-	formatContent: true,
-	getRefs: true,
-	downloadExternalMedia: true,
-	createdDateInPermalinks: true,
-	dangerousDevMode: isDev,
-	dangerousPermanentToken: env.MICROPUB_TOKEN,
-	dbPassword: env.MICROPUB_ENDPOINT_PASSWORD_SERVER,
-	sendWebmentions: !isDev,
-});
+export const database =
+	process.env.POSTR_DATABASE ??
+	path.resolve(import.meta.dirname, "../../.data/postr.db");
 
-// Use plugins
-endpoint.use(webmention);
-endpoint.use(feeds, {
-	hCard: {
-		type: ["h-card"],
-		properties: {
-			url: [env.NEXT_PUBLIC_URL],
-			name: [env.NEXT_PUBLIC_AUTHOR_NAME],
-			photo: [env.NEXT_PUBLIC_AUTHOR_PHOTO],
-			email: [env.NEXT_PUBLIC_AUTHOR_EMAIL],
+export const mediaDir = path.resolve(import.meta.dirname, "../../../../media");
+
+const grantCodes: PostrPlugin = {
+	id: "grant-codes",
+	postTypes: [
+		{
+			type: "journal",
+			name: "Journal",
+			discovery: (mf2) =>
+				Boolean(mf2.properties.category?.includes("journal")),
 		},
-	},
-});
+	],
+};
 
-// Use syndicator plugins
-if (!isDev) {
+const plugins: PostrPlugin[] = [
+	grantCodes,
+	webmentionEndpoint(),
+	feeds({
+		author: {
+			url: env.NEXT_PUBLIC_URL,
+			name: env.NEXT_PUBLIC_AUTHOR_NAME,
+			photo: env.NEXT_PUBLIC_AUTHOR_PHOTO,
+			email: env.NEXT_PUBLIC_AUTHOR_EMAIL,
+		},
+	}),
+];
+
+if (!isDev && !isTest) {
 	if (env.TELEGRAM_CHANNEL && env.TELEGRAM_TOKEN) {
-		endpoint.use(TelegramSyndicator, {
-			channel: env.TELEGRAM_CHANNEL,
-			token: env.TELEGRAM_TOKEN,
-		});
+		plugins.push(
+			telegram({ channel: env.TELEGRAM_CHANNEL, token: env.TELEGRAM_TOKEN }),
+		);
 	}
 
 	if (env.INSTAGRAM_USERNAME && env.INSTAGRAM_PASSWORD) {
-		endpoint.use(InstagramSyndicator, {
-			blurBackground: true,
-			username: env.INSTAGRAM_USERNAME,
-			password: env.INSTAGRAM_PASSWORD,
-			proxy: env.INSTAGRAM_PROXY,
-		});
+		plugins.push(
+			instagram({
+				blurBackground: true,
+				username: env.INSTAGRAM_USERNAME,
+				password: env.INSTAGRAM_PASSWORD,
+				...(env.INSTAGRAM_PROXY ? { proxy: env.INSTAGRAM_PROXY } : {}),
+			}),
+		);
 	}
 
 	if (env.HUB) {
-		endpoint.use(SuperfeedrSyndicator, {
-			hub: env.HUB,
-			domain: env.NEXT_PUBLIC_URL,
-		});
+		plugins.push(superfeedr({ hub: env.HUB, topic: env.NEXT_PUBLIC_URL }));
 	}
 }
 
-// Add custom journal post type
-endpoint.addPostType({
-	id: "journal",
-	name: "Journal",
-	discovery: (mf2: any) =>
-		mf2.properties.category && mf2.properties.category.includes("journal"),
+// TODO(production): postr 1.x live-replicated posts to two CouchDB databases
+// (COUCH_DB_PUBLIC_ADMIN / COUCH_DB_PRIVATE_ADMIN) as a backup. postr 2 has no
+// replication; back up `database` (a single SQLite file) instead.
+export const postr = createPostr({
+	siteUrl: env.NEXT_PUBLIC_URL,
+	endpointUrl: `${env.NEXT_PUBLIC_API_URL}/micropub`,
+	database,
+	media: {
+		dir: mediaDir,
+		url: env.NEXT_PUBLIC_MEDIA_BASE_URL,
+		imageSizes: {
+			"1800": [1800],
+			"700": [700],
+			"200x200": [200, 200],
+		},
+	},
+	auth: {
+		verify: verifyToken,
+		dangerousToken: env.MICROPUB_TOKEN,
+		dangerousAllowAll: isDev,
+	},
+	plugins,
+	sendWebmentions: !isDev && !isTest,
 });
-
-// Syndicate and replicate to a couchdb database when on live site
-if (env.COUCH_DB_PUBLIC_ADMIN && env.COUCH_DB_PRIVATE_ADMIN) {
-	console.log("Starting replication");
-	endpoint.use(pouchdbAdapterHttp);
-
-	endpoint
-		.getCollection()
-		.then((collection: any) => {
-			// RxDB registers multiple "destroyed" listeners on the underlying PouchDB instance
-			// (database + collection + middleware + sync). With two sync jobs running, this exceeds
-			// Node's default MaxListeners of 10. Set a higher limit to suppress the warning.
-			if (collection.pouch) {
-				collection.pouch.setMaxListeners(20);
-			}
-
-			const publicSyncOptions = {
-				remote: env.COUCH_DB_PUBLIC_ADMIN!,
-				direction: {
-					pull: true,
-					push: !isDev,
-				},
-				options: {
-					live: true,
-					retry: true,
-				},
-				query: collection.find().where("properties.visibility.0").ne("private"), // Don't sync private posts to this database
-			};
-
-			const privateSyncOptions = {
-				remote: env.COUCH_DB_PRIVATE_ADMIN!,
-				direction: {
-					pull: true,
-					push: !isDev,
-				},
-				options: {
-					live: true,
-					retry: true,
-				},
-				query: collection.find().where("properties.visibility.0").eq("private"), // Only sync private posts to this database
-			};
-
-			// Sync public
-			collection.sync(publicSyncOptions);
-
-			// Sync private
-			if (!isDev) {
-				collection.sync(privateSyncOptions);
-			}
-		})
-		.catch((err: any) => console.error("Error setting up replication", err));
-}
-
-// Create a Hono router that wraps the Express-based Postr endpoint
-const postrRouter = new Hono();
-
-// The Postr endpoint is an Express application, so we need to adapt it
-// to work with Hono by treating it as Express middleware
-postrRouter.use("*", adaptExpressMiddleware(endpoint.router));
-
-// Export both the endpoint and the Hono router for compatibility
-export const postr = {
-	...endpoint,
-	router: postrRouter,
-	expressRouter: endpoint.router, // Keep the original Express router
-	// Keep the original endpoint methods
-	getCollection: endpoint.getCollection,
-	use: endpoint.use,
-	addPostType: endpoint.addPostType,
-};
