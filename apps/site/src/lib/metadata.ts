@@ -24,16 +24,13 @@ export async function getMetadata({
 
   // If a post object is provided, extract title/description from it
   if (post) {
-    const properties = post.properties ?? {}
-    if (properties.name?.[0]) {
-      metadata.title = properties.name[0]
+    if (post.name) {
+      metadata.title = post.name
     }
-    if (properties.summary?.[0]) {
-      metadata.description = typeof properties.summary[0] === 'string'
-        ? properties.summary[0]
-        : properties.summary[0].value ?? ''
-    } else if (properties.content?.[0]?.value) {
-      metadata.description = properties.content[0].value.slice(0, 200)
+    if (post.summary) {
+      metadata.description = post.summary
+    } else if (post.content?.text) {
+      metadata.description = post.content.text.slice(0, 200)
     }
     return metadata
   }

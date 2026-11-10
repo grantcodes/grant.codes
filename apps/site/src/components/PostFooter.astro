@@ -15,7 +15,7 @@ const { post, compact = true } = Astro.props
 if (!post || !post.properties) return
 
 const properties = post.properties
-const postType = post?.cms?.postType ?? null
+const postType = post?.postType ?? null
 
 // Determine action text based on post type
 let actionText = 'Posted'
@@ -42,9 +42,9 @@ if (postType) {
   actionText = 'Bookmarked'
 }
 
-const url = normalizeInternalUrl(properties.url?.[0])
+const url = normalizeInternalUrl(post.url ?? properties.url?.[0])
 const published = properties.published?.[0] ?? null
-const category = properties.category ?? []
+const category = post.categories ?? []
 const syndication = properties.syndication ?? []
 
 // Count mentions (likes, reposts, comments, etc.)

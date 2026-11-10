@@ -28,11 +28,9 @@ export async function getStaticPaths() {
   for (const cat of subset) {
     const catName = cat.name
     const count = allPosts.filter((post) => {
-      const cats = post?.properties?.category ?? []
-      return cats.some((c: any) => {
-        const name = typeof c === 'object' ? c.value ?? c : c
-        return String(name).toLowerCase() === catName.toLowerCase()
-      })
+      return post.categories.some(
+        (name) => name.toLowerCase() === catName.toLowerCase()
+      )
     }).length
 
     const totalPages = Math.max(Math.ceil(count / PER_PAGE), 1)
@@ -65,18 +63,14 @@ if (category) {
   const allPosts = allEntries.map((entry) => entry.data)
 
   const filtered = allPosts.filter((post) => {
-    const cats = post?.properties?.category ?? []
-    return cats.some((c: any) => {
-      const catName = typeof c === 'object' ? c.value ?? c : c
-      return String(catName).toLowerCase() === categoryName.toLowerCase()
-    })
+    return post.categories.some(
+      (name) => name.toLowerCase() === categoryName.toLowerCase()
+    )
   })
 
   // Sort by canonical date descending
   filtered.sort((a, b) => {
-    const dateA = a?._postr?.date ?? ''
-    const dateB = b?._postr?.date ?? ''
-    return dateB.localeCompare(dateA)
+    return b.published.getTime() - a.published.getTime()
   })
 
   // In-memory pagination

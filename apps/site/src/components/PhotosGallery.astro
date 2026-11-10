@@ -11,7 +11,7 @@
 // - maxWidth: max width percentage for each item
 
 import { normalizeInternalUrl } from '../lib/url'
-import { getPhotoUrl } from '../lib/post-media'
+import { getPhotoUrl, getThumbnailUrl } from '../lib/post-media'
 import { GrantCodesGallery } from '@grantcodes/ui/components/gallery/index.js'
 
 export interface Props {
@@ -22,43 +22,14 @@ export interface Props {
 
 const { posts = [], type = 'feed', maxWidth = 20 } = Astro.props
 
-// Extract all photos from an array of posts (same logic as the legacy app's get-post-photos.js)
-function getPostPhotos(post: any): any[] {
-  const properties = post?.properties ?? {}
-  const photos: any[] = []
-
-  if (!properties.photo || !Array.isArray(properties.photo)) {
-    return photos
-  }
-
-  const permalink = normalizeInternalUrl(properties.url?.[0])
-  const name = properties.name?.[0] ?? null
-
-  for (const photo of properties.photo) {
-    if (!photo) continue
-
-    const photoData: Record<string, any> = {}
-    if (name) photoData.name = name
-    if (permalink) photoData.permalink = permalink
-
-    if (typeof photo === 'string') {
-      photoData.photo = photo
-      // Try to get thumbnail from cms data
-      if (post?.cms?.imageSizes?.[photo]?.['200x200']?.url) {
-        photoData.thumbnail = post.cms.imageSizes[photo]['200x200'].url
-      }
-      photos.push(photoData)
-    } else if (typeof photo === 'object' && photo.value) {
-      photoData.photo = photo.value
-      photoData.alt = photo.alt ?? ''
-      if (post?.cms?.imageSizes?.[photo.value]?.['200x200']?.url) {
-        photoData.thumbnail = post.cms.imageSizes[photo.value]['200x200'].url
-      }
-      photos.push(photoData)
-    }
-  }
-
-  return photos
+function getPostPhotos(post: any) {
+  const permalink = normalizeInternalUrl(post.url)
+  return (post.photos ?? []).map((photo: { url: string; alt?: string }) => ({
+    permalink,
+    photo: photo.url,
+    alt: photo.alt ?? '',
+    thumbnail: getThumbnailUrl(photo.url),
+  }))
 }
 
 // Collect all photos across all posts

@@ -14,7 +14,7 @@ import { getCollection } from 'astro:content'
 export async function getStaticPaths() {
   const allEntries = await getCollection('posts')
   const noteCount = allEntries.filter(
-    (e) => e.data?.cms?.postType === 'note'
+    (e) => e.data?.postType === 'note'
   ).length
 
   const PER_PAGE = 25
@@ -36,11 +36,9 @@ const siteUrl =
 const allEntries = await getCollection('posts')
 const notes = allEntries
   .map((entry) => entry.data)
-  .filter((post) => post?.cms?.postType === 'note')
+  .filter((post) => post?.postType === 'note')
   .sort((a, b) => {
-    const dateA = a?._postr?.date ?? ''
-    const dateB = b?._postr?.date ?? ''
-    return dateB.localeCompare(dateA)
+    return b.published.getTime() - a.published.getTime()
   })
 
 // In-memory pagination

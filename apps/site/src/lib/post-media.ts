@@ -19,6 +19,17 @@ export function getPhotoUrl(value: any): string {
   return url.replace('{{mediaBaseUrl}}', 'https://backend.grant.codes/media')
 }
 
+const MEDIA_URL = 'https://backend.grant.codes/media/'
+
+/**
+ * The 200x200 crop of a locally stored photo, or the photo itself.
+ * postr 1.x and 2 both write resized copies next to an upload as `name-<size>.ext`.
+ */
+export function getThumbnailUrl(url: string): string {
+  if (!url.startsWith(MEDIA_URL)) return url
+  return url.replace(/(\.[^./]+)$/, '-200x200$1')
+}
+
 /**
  * Extract an alt-text from an MF2 photo value.
  *

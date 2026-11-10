@@ -1,34 +1,25 @@
+import { resolve } from 'node:path'
 import { defineCollection } from 'astro:content'
-import { postrLoader } from './integrations/postr'
+import { postrLoader } from '@postr/astro'
 
 /**
- * Content collection for Postr-backed posts.
- *
- * Uses the shared `postrLoader` which wraps `getPosts()` and
- * `normalizeMf2()` from `src/lib/`. During static build, the loader
- * fetches and normalises all public posts. If the API is unreachable,
- * the collection is empty and a warning is logged — the build does not fail.
- *
- * The loader fetches all public content (all post types) with a generous
- * limit. Route-layer filtering (`getCollection('posts', filterFn)`) is the
- * intended pattern for selecting subsets.
- *
- * Query the collection from any `.astro` page:
- * ```astro
- * ---
- * import { getCollection } from 'astro:content'
- * const posts = await getCollection('posts')
- * ---
- * ```
- *
- * @note If the full-corpus build proves too heavy, consider reducing the
- *       limit or adding API-side pagination in the loader.
+ * Every published public and unlisted post, read from the api's postr database.
+ * Set POSTR_DATABASE to build from another copy.
  */
 export const collections = {
   posts: defineCollection({
     loader: postrLoader({
-      limit: 10000,
-      typeOrYear: 'all',
+      database: resolve(process.env.POSTR_DATABASE ?? '../api/.data/postr.db'),
+      siteUrl: 'https://grant.codes',
+      // Same discovery as the api; the database source uses the stored type.
+      postTypes: [
+        {
+          type: 'journal',
+          name: 'Journal',
+          discovery: (mf2) => Boolean(mf2.properties.category?.includes('journal')),
+        },
+      ],
+      visibility: ['public', 'unlisted'],
     }),
   }),
 }

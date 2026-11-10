@@ -12,67 +12,17 @@ import { getCollection } from 'astro:content'
 import { getMetadata } from '@/lib/metadata'
 
 export async function getStaticPaths() {
-  // Generate a route for every post in the canonical collection. Static
-  // output has no request-time fallback, so limiting this list would turn
-  // older published permalinks into 404s.
-  // Path parts are extracted from the absolute permalink URL
-  // (properties.url[0]) so the generated path always matches the
-  // link that PostCard and other components render. This avoids
-  // 404s caused by mismatches between _postr-derived dates and
-  // the actual permalink structure.
-  //
-  // Note: parsePermalinkPath is defined as an inner function because
-  // Astro compiles getStaticPaths into a separate chunk where
-  // module-scope functions are not accessible at runtime.
-
-  /**
-   * Parse year/month/day/slug from an absolute post permalink URL.
-   *
-   * Accepts URLs like:
-   *   https://grant.codes/2024/05/03/climatebase-week-2
-   *   https://grant.codes/2020/05/29/10-26-12
-   *
-   * Returns null when the URL is missing, unparseable, or has fewer
-   * than 4 path segments (year/month/day/slug).
-   */
-  function parsePermalinkPath(urlStr: string): {
-    typeOrYear: string
-    month: string
-    day: string
-    slug: string
-  } | null {
-    try {
-      const url = new URL(urlStr)
-      const parts = url.pathname.replace(/\/$/, '').split('/').filter(Boolean)
-      if (parts.length >= 4) {
-        return {
-          typeOrYear: parts[0],
-          month: parts[1],
-          day: parts[2],
-          slug: parts.slice(3).join('/'),
-        }
-      }
-    } catch {
-      // URL parse failure — skip this entry
-    }
-    return null
-  }
-
+  // Every post gets a route at its stored permalink path (/yyyy/mm/dd/slug).
+  // Static output has no request-time fallback, so skipping posts would 404.
   const allEntries = await getCollection('posts')
 
-  return allEntries
-    .map((entry) => {
-      const post = entry.data
-      const url = post?.properties?.url?.[0]
-      if (!url) return null
-      const parsed = parsePermalinkPath(String(url))
-      if (!parsed) return null
-      // Pass the entry to the page rather than loading and scanning the full
-      // collection again for every generated route. With a historical corpus,
-      // that repeated lookup makes the static build O(posts²).
-      return { params: parsed, props: { post } }
-    })
-    .filter(Boolean)
+  return allEntries.flatMap((entry) => {
+    const post = entry.data
+    const [typeOrYear, month, day, ...slug] = post.path.split('/').filter(Boolean)
+    if (!day || slug.length === 0) return []
+    // Pass the entry to the page rather than scanning the collection per route.
+    return [{ params: { typeOrYear, month, day, slug: slug.join('/') }, props: { post } }]
+  })
 }
 
 const { typeOrYear, month, day, slug } = Astro.params
@@ -85,7 +35,7 @@ const meta = post ? await getMetadata({ params: { typeOrYear, month, day, slug }
 const pageTitle = meta?.title ?? `${typeOrYear}/${month}/${day}/${slug}`
 const pageDescription = meta?.description ?? ''
 const canonicalUrl = `${siteUrl}/${typeOrYear}/${month}/${day}/${slug}`
-const PostLayout = post?.cms?.postType === 'article' ? ArticleLayout : BaseLayout
+const PostLayout = post?.postType === 'article' ? ArticleLayout : BaseLayout
 ---
 
 <PostLayout title={pageTitle} description={pageDescription} canonicalUrl={canonicalUrl}>

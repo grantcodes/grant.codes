@@ -41,18 +41,14 @@ if (category) {
 
   // Filter posts whose category array includes the matching category name
   const filtered = allPosts.filter((post) => {
-    const cats = post?.properties?.category ?? []
-    return cats.some((c: any) => {
-      const catName = typeof c === 'object' ? c.value ?? c : c
-      return String(catName).toLowerCase() === categoryName.toLowerCase()
-    })
+    return post.categories.some(
+      (name) => name.toLowerCase() === categoryName.toLowerCase()
+    )
   })
 
   // Sort by canonical date descending
   filtered.sort((a, b) => {
-    const dateA = a?._postr?.date ?? ''
-    const dateB = b?._postr?.date ?? ''
-    return dateB.localeCompare(dateA)
+    return b.published.getTime() - a.published.getTime()
   })
 
   // In-memory pagination — first page, 25 per page

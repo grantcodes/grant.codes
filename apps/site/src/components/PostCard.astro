@@ -4,11 +4,11 @@
 // Wave 8: enhanced with proper action labels, hidden author h-card, better mention rendering
 
 import { Heart, Bookmark, Repeat2, Reply } from 'lucide-static'
-import { normalizeInternalUrl } from '../lib/url'
+import { getSiteUrl, normalizeInternalUrl } from '../lib/url'
 import PostContent from './PostContent.astro'
 import PhotosGallery from './PhotosGallery.astro'
 import { formatRelativeDate } from '../lib/post-date-format'
-import { getMentionUrl } from '../lib/post-mentions'
+import { getMentionUrl, getResponseValue } from '../lib/post-mentions'
 import { getPhotoUrl } from '../lib/post-media'
 
 export interface Props {
@@ -20,22 +20,23 @@ const { post, compact = true } = Astro.props
 
 if (!post) return
 
-const postType = post?.cms?.postType ?? null
+const postType = post?.postType ?? null
 const properties = post?.properties ?? {}
-const name = properties.name?.[0] ?? null
+const name = post.name ?? null
 const content = properties.content?.[0] ?? null
 const summary = properties.summary?.[0] ?? null
 const published = properties.published?.[0] ?? null
-const url = normalizeInternalUrl(properties.url?.[0])
+const url = normalizeInternalUrl(post.url ?? properties.url?.[0])
 const photo = properties.photo?.[0] ?? null
-const category = properties.category ?? []
+const category = post.categories ?? []
 
 // Mention properties
 // MF2 allows these to be strings (plain URL) or objects (embedded h-cite/h-entry).
 // Normalise to just the URL string for rendering.
-const likeOf = getMentionUrl(properties['like-of']?.[0])
-const repostOf = getMentionUrl(properties['repost-of']?.[0])
-const inReplyTo = getMentionUrl(properties['in-reply-to']?.[0])
+const siteUrl = getSiteUrl()
+const likeOf = getMentionUrl(getResponseValue(properties['like-of'], siteUrl))
+const repostOf = getMentionUrl(getResponseValue(properties['repost-of'], siteUrl))
+const inReplyTo = getMentionUrl(getResponseValue(properties['in-reply-to'], siteUrl))
 const bookmarkOf = getMentionUrl(properties['bookmark-of']?.[0])
 const rsvp = properties.rsvp?.[0] ?? null
 

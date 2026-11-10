@@ -16,7 +16,7 @@ import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
 import { GrantCodesPagination } from '@grantcodes/ui/components/pagination/index.js'
 import getMonthData from '../../lib/month-data'
 import getMonthDataFiles from '../../lib/month-data-files'
-import getPosts from '../../lib/posts'
+import { getCollection } from 'astro:content'
 
 export async function getStaticPaths() {
   // Read monthly data files from apps/site/data/monthly/
@@ -38,7 +38,6 @@ export async function getStaticPaths() {
 
 const { typeOrYear, month } = Astro.params
 
-const apiUrl = import.meta.env.NEXT_PUBLIC_API_URL ?? 'https://backend.grant.codes'
 const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
 
 // Validate that typeOrYear is a year and month is a number
@@ -69,18 +68,19 @@ const prevYear = monthInt === 1 ? yearInt - 1 : yearInt
 const prevHref = prevYear >= 2000 ? `/${prevYear}/${leadingZero(prevMonth)}` : ''
 const nextHref = nextYear <= 2025 ? `/${nextYear}/${leadingZero(nextMonth)}` : ''
 
-// Fetch posts for this month/year from API using helper with gate
-let posts: any[] = []
-let fetchError: string | null = null
-
-if (isValidRoute) {
-  try {
-    posts = await getPosts({ query: { year: String(yearInt), month: String(monthInt) }, limit: 50 }, { apiUrl })
-  } catch (err: unknown) {
-    fetchError = err instanceof Error ? err.message : String(err)
-    console.warn(`[month archive] fetch failed for ${yearInt}/${monthInt}:`, fetchError)
-  }
-}
+// The 50 newest public posts published in this (local) month
+const posts = isValidRoute
+  ? (await getCollection('posts'))
+      .map((entry) => entry.data)
+      .filter(
+        (post) =>
+          post.visibility === 'public' &&
+          post.published.getFullYear() === yearInt &&
+          post.published.getMonth() + 1 === monthInt
+      )
+      .sort((a, b) => b.published.getTime() - a.published.getTime())
+      .slice(0, 50)
+  : []
 
 // Post type counts from static month data
 const postTypes = monthData?.postTypes ?? null
@@ -89,19 +89,10 @@ const typeEntries = postTypes && typeof postTypes === 'object'
   : []
 
 // Extract content previews for content summary
-const contentPreviews = posts.slice(0, 5).map((post) => {
-  const props = post?.properties ?? {}
-  const content = props.content?.[0] ?? null
-  let text = ''
-  if (content?.value) text = content.value
-  else if (typeof content === 'string') text = content
-  else if (content?.html) text = content.html.replace(/<[^>]*>/g, '')
-  return {
-    text: text.slice(0, 200),
-    url: props.url?.[0] ?? null,
-    published: props.published?.[0] ?? null,
-  }
-})
+const contentPreviews = posts.slice(0, 5).map((post) => ({
+  text: (post.content?.text ?? '').slice(0, 200),
+  url: post.url,
+}))
 
 // Calculate total posts from month data
 const totalPostsFromData = typeEntries.reduce((sum, [, count]) => sum + count, 0)
@@ -138,21 +129,14 @@ const totalLabel = totalPostsFromData > 0 ? `${totalPostsFromData} total posts` 
     </grantcodes-card>
   )}
 
-  {isValidRoute && !monthData && !fetchError && (
+  {isValidRoute && !monthData && (
     <GrantCodesCard>
       <p>No monthly data available for this period.</p>
     </GrantCodesCard>
   )}
 
-  {fetchError && (
-    <GrantCodesCard>
-      <p>Could not load posts. The API may be unreachable during static build.</p>
-      <p class="text-muted">Error: {fetchError}</p>
-    </GrantCodesCard>
-  )}
-
   <!-- Content summary from recent posts -->
-  {!fetchError && contentPreviews.length > 0 && (
+  {contentPreviews.length > 0 && (
     <grantcodes-card>
       <span slot="header">Recent Content</span>
       <ul class="month-summary__previews">
@@ -173,7 +157,7 @@ const totalLabel = totalPostsFromData > 0 ? `${totalPostsFromData} total posts` 
     </grantcodes-card>
   )}
 
-  {!fetchError && posts.length > 0 && (
+  {posts.length > 0 && (
     <div class="post-list">
       {posts.map((post) => (
         <PostCard post={post} compact />

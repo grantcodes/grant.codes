@@ -15,8 +15,9 @@ import PostCard from './PostCard.astro'
 import PostContent from './PostContent.astro'
 import { GrantCodesButton } from '@grantcodes/ui/components/button/index.js'
 import { Heart, Bookmark, Repeat2, Reply } from 'lucide-static'
-import { normalizeInternalUrl } from '../lib/url'
-import { getUrl } from '../lib/post-mentions'
+import { toPostView } from '@postr/core'
+import { getSiteUrl, normalizeInternalUrl } from '../lib/url'
+import { getResponseValue, getUrl } from '../lib/post-mentions'
 import { getPhotoUrl, getPhotoAlt, getMediaUrl } from '../lib/post-media'
 
 export interface Props {
@@ -32,20 +33,21 @@ const hasPost = !!(post && post.properties)
 if (!hasPost) return
 
 const properties = post.properties
-const postType = post?.cms?.postType ?? null
+const postType = post?.postType ?? null
 
-const name = properties.name?.[0] ?? null
+const name = post.name ?? null
 const content = properties.content?.[0] ?? null
 const summary = properties.summary?.[0] ?? null
-const url = normalizeInternalUrl(properties.url?.[0])
+const url = normalizeInternalUrl(post.url)
 const featured = properties.featured?.[0] ?? null
 
 // Mention properties
-const likeOf = properties['like-of']?.[0] ?? null
-const repostOf = properties['repost-of']?.[0] ?? null
-const inReplyTo = properties['in-reply-to']?.[0] ?? null
+const siteUrl = getSiteUrl()
+const likeOf = getResponseValue(properties['like-of'], siteUrl)
+const repostOf = getResponseValue(properties['repost-of'], siteUrl)
+const inReplyTo = getResponseValue(properties['in-reply-to'], siteUrl)
 const bookmarkOf = properties['bookmark-of']?.[0] ?? null
-const quotationOf = properties['quotation-of']?.[0] ?? null
+const quotationOf = getResponseValue(properties['quotation-of'], siteUrl)
 const rsvp = properties.rsvp?.[0] ?? null
 
 // Media
@@ -61,8 +63,11 @@ const location = properties.location?.[0] ?? null
 // Post children (gallery of referenced posts)
 const children = post.children ?? null
 
-// References (like-of, repost-of referenced post data)
-const references = post.references ?? null
+// References (like-of, repost-of referenced post data), projected like entries
+const references = Object.values(post.references ?? {}).map((ref: any) => ({
+  ...toPostView(ref),
+  properties: ref.properties,
+}))
 
 const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
 ---
@@ -215,9 +220,9 @@ const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
 
   {/* ── References (like-of/repost-of referenced post data) ── */}
   {/* Only show references for post types where they provide meaningful context */}
-  {references && Object.keys(references).length > 0 && (likeOf || repostOf || inReplyTo || bookmarkOf) && (
+  {references.length > 0 && (likeOf || repostOf || inReplyTo || bookmarkOf) && (
     <div class="card__breakout post__references">
-      {Object.values(references).map((refPost: any) => (
+      {references.map((refPost) => (
         <PostCard post={refPost} compact />
       ))}
     </div>

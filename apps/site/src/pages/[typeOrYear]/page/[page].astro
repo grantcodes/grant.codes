@@ -87,7 +87,7 @@ export async function getStaticPaths() {
   // Generate page paths for each type
   for (const slug of types) {
     const postType = slugMap[slug]
-    const count = allPosts.filter((p) => p?.cms?.postType === postType).length
+    const count = allPosts.filter((p) => p?.postType === postType).length
     const totalPages = Math.max(Math.ceil(count / PER_PAGE), 1)
     for (let i = 2; i <= totalPages; i++) {
       paths.push({ params: { typeOrYear: slug, page: String(i) } })
@@ -97,7 +97,7 @@ export async function getStaticPaths() {
   // Generate page paths for each year
   for (const yr of years) {
     const count = allPosts.filter((p) => {
-      const postrYr = p?._postr?.year
+      const postrYr = p?.published.getFullYear()
       return postrYr !== undefined && String(postrYr) === yr
     }).length
     const totalPages = Math.max(Math.ceil(count / PER_PAGE), 1)
@@ -126,19 +126,17 @@ const allPosts = allEntries.map((entry) => entry.data)
 let filtered: any[]
 if (isYear) {
   filtered = allPosts.filter((post) => {
-    const yr = post?._postr?.year
+    const yr = post?.published.getFullYear()
     return yr !== undefined && String(yr) === typeOrYear
   })
 } else {
   const postType = TYPE_SLUG_MAP[typeOrYear ?? ''] ?? typeOrYear
-  filtered = allPosts.filter((post) => post?.cms?.postType === postType)
+  filtered = allPosts.filter((post) => post?.postType === postType)
 }
 
 // Sort by canonical date descending
 filtered.sort((a, b) => {
-  const dateA = a?._postr?.date ?? ''
-  const dateB = b?._postr?.date ?? ''
-  return dateB.localeCompare(dateA)
+  return b.published.getTime() - a.published.getTime()
 })
 
 // In-memory pagination

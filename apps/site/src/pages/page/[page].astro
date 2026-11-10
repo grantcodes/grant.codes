@@ -35,7 +35,7 @@ export async function getStaticPaths() {
     'collection',
   ])
   const allEntries = await getCollection('posts')
-  const feedEntries = allEntries.filter((entry) => homeFeedTypes.has(entry.data?.cms?.postType))
+  const feedEntries = allEntries.filter((entry) => homeFeedTypes.has(entry.data?.postType))
   const totalPages = Math.max(Math.ceil(feedEntries.length / 10), 1)
 
   // Pre-generate all pages (page 1 is /, start from page 2)
@@ -53,11 +53,9 @@ const pageNum = parseInt(page ?? '2')
 const allEntries = await getCollection('posts')
 const posts = allEntries
   .map((entry) => entry.data)
-  .filter((post) => homeFeedTypes.has(post?.cms?.postType))
+  .filter((post) => homeFeedTypes.has(post?.postType))
   .sort((a, b) => {
-    const dateA = a?._postr?.date ?? ''
-    const dateB = b?._postr?.date ?? ''
-    return dateB.localeCompare(dateA)
+    return b.published.getTime() - a.published.getTime()
   })
 
 // In-memory pagination — 10 per page (matching original homepage)

@@ -48,3 +48,12 @@ export function getMentionUrl(val: any): string | null {
   if (typeof val === 'object' && val.value) return val.value
   return null
 }
+
+/**
+ * First value of a response property (`in-reply-to`, `like-of`, ...). brid.gy can store
+ * several URLs; like the legacy normalizeMf2, prefer the one on this site.
+ */
+export function getResponseValue(values: unknown[] | undefined, siteUrl: string): any {
+  if (!values?.length) return null
+  return values.find((value) => typeof value === 'string' && value.startsWith(siteUrl)) ?? values[0]
+}

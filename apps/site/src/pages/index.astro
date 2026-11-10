@@ -4,8 +4,6 @@
 // Ported from the legacy Next.js app/(default)/page.tsx
 // Wave 9 (003): migrated from direct getPosts() to Postr content collection
 //   - Posts are fetched via the content layer (astro:content getCollection)
-//   - The Postr loader handles API reachability, normalizes MF2, and
-//     returns entries that work directly with PostCard
 //   - Pagination is derived from the filtered content collection
 
 import BaseLayout from '../layouts/BaseLayout.astro'
@@ -27,20 +25,13 @@ const homeFeedTypes = new Set([
   'collection',
 ])
 
-// Fetch posts via Postr content loader.
-// The loader gracefully returns an empty array when the API is unreachable
-// (logs a warning, does not fail the build).
-// The collection contains all public posts, sorted by canonical date
-// (newest first) by the loader. Slice to the most recent 10 for the
-// homepage timeline.
+// The 10 newest home feed posts for the timeline.
 const collectionEntries = await getCollection('posts')
 const feedEntries = collectionEntries
   .map((entry) => entry.data)
-  .filter((post) => homeFeedTypes.has(post?.cms?.postType))
+  .filter((post) => homeFeedTypes.has(post?.postType))
   .sort((a, b) => {
-    const dateA = a?._postr?.date ?? ''
-    const dateB = b?._postr?.date ?? ''
-    return dateB.localeCompare(dateA)
+    return b.published.getTime() - a.published.getTime()
   })
 const posts = feedEntries.slice(0, 10)
 

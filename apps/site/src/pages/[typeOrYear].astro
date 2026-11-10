@@ -19,7 +19,6 @@ import { getMetadata } from '../lib/metadata'
 import getMonthDataFiles from '../lib/month-data-files'
 
 // Map URL slug (plural form) to canonical cms.postType value (singular form).
-// Derived from normalize-search-query.ts TYPE_ALIASES.
 const TYPE_SLUG_MAP: Record<string, string> = {
   likes: 'like',
   replies: 'reply',
@@ -78,26 +77,22 @@ const isYear = /^\d{4}$/.test(typeOrYear ?? '')
 const allEntries = await getCollection('posts')
 const allPosts = allEntries.map((entry) => entry.data)
 
-// Filter by type or year from the collection.
-// Uses the canonical `_postr` date metadata (baked in at load time)
-// instead of digging into MF2 properties directly.
+// Filter by type or (local) published year from the collection.
 let filtered: any[]
 if (isYear) {
   filtered = allPosts.filter((post) => {
-    const yr = post?._postr?.year
+    const yr = post?.published.getFullYear()
     return yr !== undefined && String(yr) === typeOrYear
   })
 } else {
   const postType = TYPE_SLUG_MAP[typeOrYear ?? ''] ?? typeOrYear
-  filtered = allPosts.filter((post) => post?.cms?.postType === postType)
+  filtered = allPosts.filter((post) => post?.postType === postType)
 }
 
 // Sort by canonical date descending (most recent first)
 // ISO 8601 strings sort lexicographically in UTC, so localeCompare works.
 filtered.sort((a, b) => {
-  const dateA = a?._postr?.date ?? ''
-  const dateB = b?._postr?.date ?? ''
-  return dateB.localeCompare(dateA)
+  return b.published.getTime() - a.published.getTime()
 })
 
 // In-memory pagination

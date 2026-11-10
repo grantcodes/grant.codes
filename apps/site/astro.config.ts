@@ -1,9 +1,8 @@
 import { defineConfig } from 'astro/config'
 import grantcodes from '@grantcodes/astro'
-import postrIntegration from './src/integrations/postr'
 
 export default defineConfig({
-  integrations: [grantcodes(), postrIntegration()],
+  integrations: [grantcodes()],
   site: 'https://grant.codes',
   output: 'static',
   server: {

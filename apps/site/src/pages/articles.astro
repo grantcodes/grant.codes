@@ -22,11 +22,9 @@ const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
 const allEntries = await getCollection('posts')
 const articles = allEntries
   .map((entry) => entry.data)
-  .filter((post) => post?.cms?.postType === 'article')
+  .filter((post) => post?.postType === 'article')
   .sort((a, b) => {
-    const dateA = a?._postr?.date ?? ''
-    const dateB = b?._postr?.date ?? ''
-    return dateB.localeCompare(dateA)
+    return b.published.getTime() - a.published.getTime()
   })
 
 // In-memory pagination — first page, 25 per page
