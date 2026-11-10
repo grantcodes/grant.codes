@@ -84,9 +84,8 @@ const generateSearch = ({
 	}
 
 	if (showAll) {
-		// Anonymous requests never see drafts or private posts.
-		visibility = isAdmin ? "any" : "listed";
-		status = isAdmin ? null : "published";
+		visibility = "any";
+		status = null;
 	}
 
 	limit = query.type === "photos" ? 50 : limit;
@@ -162,6 +161,12 @@ const generateSearch = ({
 	} else if (postTypes) {
 		const types = postTypes;
 		filters.push((post) => types.includes(post.postType));
+	}
+
+	// Anonymous requests only ever see published public posts.
+	if (!isAdmin) {
+		visibility = "public";
+		status = "published";
 	}
 
 	if (visibility !== "public" || status !== "published") {

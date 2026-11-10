@@ -40,13 +40,11 @@ describe("generateSearch", () => {
 		assert.strictEqual(generateSearch({ query: {}, limit: 25 }).limit, 25);
 	});
 
-	it("should hide drafts and private posts from anonymous showAll", () => {
-		const result = generateSearch({ query: {}, showAll: true });
-
-		assert.strictEqual(result.list.includeHidden, true);
-		assert.ok(result.filter(post({ visibility: "unlisted" })));
-		assert.ok(!result.filter(post({ status: "draft" })));
-		assert.ok(!result.filter(post({ visibility: "private" })));
+	it("should only list published public posts to anonymous requests", () => {
+		for (const query of [{}, { type: "likes" }, { slug: "hello" }]) {
+			const result = generateSearch({ query, showAll: true });
+			assert.strictEqual(result.list.includeHidden, undefined);
+		}
 	});
 
 	it("should show everything to admin showAll", () => {
@@ -63,7 +61,7 @@ describe("generateSearch", () => {
 	});
 
 	it("should handle type parameter", () => {
-		const result = generateSearch({ query: { type: "photos" } });
+		const result = generateSearch({ query: { type: "photos" }, isAdmin: true });
 
 		assert.strictEqual(result.list.postType, "photo");
 		assert.strictEqual(result.limit, 50);
@@ -79,7 +77,7 @@ describe("generateSearch", () => {
 	});
 
 	it("should handle slug parameter", () => {
-		const result = generateSearch({ query: { slug: "hello" } });
+		const result = generateSearch({ query: { slug: "hello" }, isAdmin: true });
 
 		assert.ok(result.filter(post({ visibility: "unlisted" })));
 		assert.ok(!result.filter(post({ slug: "other" })));

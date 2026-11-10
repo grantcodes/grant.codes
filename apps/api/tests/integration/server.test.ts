@@ -90,9 +90,12 @@ describe("Server Integration", () => {
 		assert.strictEqual(admin.length, 2);
 	});
 
-	it("should include unlisted posts in type archives", { timeout: 5000 }, async () => {
-		assert.strictEqual((await search({ query: {} })).length, 1);
-		assert.strictEqual((await search({ query: { type: "likes" } })).length, 1);
+	it("should only show unlisted posts to a valid token", { timeout: 5000 }, async () => {
+		assert.strictEqual((await search({ query: { type: "likes" } })).length, 0);
+		assert.strictEqual(
+			(await search({ query: { type: "likes" } }, await adminToken())).length,
+			1,
+		);
 	});
 
 	it("should handle API page-count endpoint", { timeout: 5000 }, async () => {

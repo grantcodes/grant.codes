@@ -21,6 +21,12 @@ function getSearchQuery(body: SearchBody): SearchQuery {
 	return rest;
 }
 
+// 1.x sorted by indexDate: `created` when a post has it, else `published`.
+const postTime = (post: Post) => {
+	const created = post.properties.created?.[0];
+	return new Date(typeof created === "string" ? created : post.published).getTime();
+};
+
 /** Every post matching a 1.x `/api/search` request body, newest first. */
 export async function searchPosts(body: SearchBody, isAdmin: boolean) {
 	const { list, filter, skip, limit } = generateSearch({
@@ -31,7 +37,9 @@ export async function searchPosts(body: SearchBody, isAdmin: boolean) {
 	});
 	const posts = (
 		await postr.posts.list({ ...list, limit: Number.MAX_SAFE_INTEGER })
-	).filter(filter);
+	)
+		.filter(filter)
+		.sort((a, b) => postTime(b) - postTime(a));
 	return { posts, skip, limit };
 }
 
