@@ -14,9 +14,9 @@
  * - Otherwise returns an empty string.
  */
 export function getPhotoUrl(value: any): string {
-  if (typeof value === 'object' && value?.value) return value.value
-  if (typeof value === 'string') return value
-  return ''
+  const url = typeof value === 'object' && value?.value ? value.value : value
+  if (typeof url !== 'string') return ''
+  return url.replace('{{mediaBaseUrl}}', 'https://backend.grant.codes/media')
 }
 
 /**

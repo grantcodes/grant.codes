@@ -6,13 +6,15 @@
 
 import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
 import ArticleLayout from '@/layouts/ArticleLayout.astro'
+import BaseLayout from '@/layouts/BaseLayout.astro'
 import Post from '@/components/Post.astro'
-import PostCard from '@/components/PostCard.astro'
 import { getCollection } from 'astro:content'
 import { getMetadata } from '@/lib/metadata'
 
 export async function getStaticPaths() {
-  // Generate a route for every post in the canonical collection.
+  // Generate a route for every post in the canonical collection. Static
+  // output has no request-time fallback, so limiting this list would turn
+  // older published permalinks into 404s.
   // Path parts are extracted from the absolute permalink URL
   // (properties.url[0]) so the generated path always matches the
   // link that PostCard and other components render. This avoids
@@ -65,35 +67,28 @@ export async function getStaticPaths() {
       if (!url) return null
       const parsed = parsePermalinkPath(String(url))
       if (!parsed) return null
-      return { params: parsed }
+      // Pass the entry to the page rather than loading and scanning the full
+      // collection again for every generated route. With a historical corpus,
+      // that repeated lookup makes the static build O(posts²).
+      return { params: parsed, props: { post } }
     })
     .filter(Boolean)
 }
 
 const { typeOrYear, month, day, slug } = Astro.params
+const { post } = Astro.props
 
 const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
-
-// Build the expected canonical URL for this route and look it up
-// by matching the entry's absolute permalink (properties.url[0]).
-// This is more reliable than matching _postr dates + slug because
-// it avoids created vs published date mismatches.
-const expectedUrl = `${siteUrl}/${typeOrYear}/${month}/${day}/${slug}`
-const allEntries = await getCollection('posts')
-const allPosts = allEntries.map((entry) => entry.data)
-const post = allPosts.find((p) => {
-  const entryUrl = String(p?.properties?.url?.[0] ?? '')
-  return entryUrl === expectedUrl
-}) ?? null
 
 // Generate metadata from post
 const meta = post ? await getMetadata({ params: { typeOrYear, month, day, slug }, post }) : await getMetadata({ params: { typeOrYear, month, day, slug } })
 const pageTitle = meta?.title ?? `${typeOrYear}/${month}/${day}/${slug}`
 const pageDescription = meta?.description ?? ''
 const canonicalUrl = `${siteUrl}/${typeOrYear}/${month}/${day}/${slug}`
+const PostLayout = post?.cms?.postType === 'article' ? ArticleLayout : BaseLayout
 ---
 
-<ArticleLayout title={pageTitle} description={pageDescription} canonicalUrl={canonicalUrl}>
+<PostLayout title={pageTitle} description={pageDescription} canonicalUrl={canonicalUrl}>
   <!--- Single post content -->
   {!post && (
     <GrantCodesCard>
@@ -106,7 +101,7 @@ const canonicalUrl = `${siteUrl}/${typeOrYear}/${month}/${day}/${slug}`
   )}
 
   {post && (
-    <PostCard post={post} />
+    <Post post={post} />
   )}
 
-</ArticleLayout>
+</PostLayout>

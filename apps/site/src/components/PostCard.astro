@@ -6,6 +6,7 @@
 import { Heart, Bookmark, Repeat2, Reply } from 'lucide-static'
 import { normalizeInternalUrl } from '../lib/url'
 import PostContent from './PostContent.astro'
+import PhotosGallery from './PhotosGallery.astro'
 import { formatRelativeDate } from '../lib/post-date-format'
 import { getMentionUrl } from '../lib/post-mentions'
 import { getPhotoUrl } from '../lib/post-media'
@@ -48,6 +49,9 @@ function getActionLabel(): string {
 }
 
 const actionLabel = getActionLabel()
+const isCompactArticle = compact && postType === 'article' && Boolean(url)
+const previewContent = isCompactArticle ? summary : content ?? summary
+const children = Array.isArray(post.children) ? post.children : []
 
 // Format date using shared helper
 const dateDisplay = published ? formatRelativeDate(published) : ''
@@ -60,7 +64,7 @@ const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
 
     <!-- Post title -->
     {name && (
-      <header slot="header" class="post__header">
+      <header class="post__header">
         <h1 class="post__title p-name">{name}</h1>
       </header>
     )}
@@ -112,16 +116,15 @@ const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
       </div>
     )}
 
-    <!-- Content/Summary -->
-    {content && (
-      <PostContent content={content} />
-    )}
-    {!content && summary && (
-      <PostContent content={summary} />
+    {postType === 'collection' && children.length > 0 && (
+      <PhotosGallery posts={children} type="collection" maxWidth={100} />
     )}
 
+    <!-- Compact article cards show only their summary. -->
+    {previewContent && <PostContent content={previewContent} />}
+
     <!-- For articles in compact: read more button -->
-    {compact && postType === 'article' && content && url && (
+    {isCompactArticle && content && (
       <div style="text-align: center; padding: 1rem;">
         <a href={url} style="display:inline-flex;align-items:center;gap:var(--g-spacing-sm,0.25rem);padding:var(--g-spacing-sm,0.5rem) var(--g-spacing-md,1rem);border:var(--g-border-width-md,2px) solid var(--g-color-border-default);border-radius:var(--g-border-radius-md,0.375rem);background:var(--g-color-background-default);color:var(--g-color-content-default);text-decoration:none;font:var(--g-typography-body-sm-font,inherit);">Read full post</a>
       </div>

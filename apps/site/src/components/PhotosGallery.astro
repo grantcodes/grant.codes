@@ -12,7 +12,7 @@
 
 import { normalizeInternalUrl } from '../lib/url'
 import { getPhotoUrl } from '../lib/post-media'
-import { GrantCodesGallery, GrantCodesGalleryImage } from '@grantcodes/ui/components/gallery/index.js'
+import { GrantCodesGallery } from '@grantcodes/ui/components/gallery/index.js'
 
 export interface Props {
   posts: any[]
@@ -76,7 +76,7 @@ const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
     <GrantCodesGallery style="--gallery-columns: 5; --gallery-gap: 0;">
       {allPhotos.map((photo, i) => {
         // Resolve URL — replace localhost for dev mode
-        let src = photo.thumbnail || photo.photo
+        let src = getPhotoUrl(photo.thumbnail || photo.photo)
         if (devMode) {
           src = src.replace(localUrl, remoteUrl)
         }
@@ -85,26 +85,14 @@ const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
         if (type === 'feed') {
           return (
             <a href={photo.permalink ?? '#'}>
-              <GrantCodesGalleryImage
-                src={src}
-                alt={alt}
-                width={200}
-                height={200}
-                thumbnail={photo.thumbnail ?? ''}
-              />
+              <img src={src} alt={alt} class="u-photo" loading="lazy" />
             </a>
           )
         }
         return (
           <div class="h-cite" style={`max-width: ${maxWidth}%`}>
             <a href={photo.permalink ?? '#'} class="u-url">
-              <GrantCodesGalleryImage
-                src={src}
-                alt={alt}
-                width={200}
-                height={200}
-                thumbnail={photo.thumbnail ?? ''}
-              />
+              <img src={src} alt={alt} class="u-photo" loading="lazy" />
               <data class="u-photo" value={photo.photo ?? ''} />
             </a>
           </div>

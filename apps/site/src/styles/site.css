@@ -126,6 +126,10 @@ figure img {
     gap: 0.5rem;
 }
 
+grantcodes-icon {
+    display: inline-flex;
+}
+
 .card-stack {
     display: flex;
     flex-direction: column;
@@ -173,7 +177,7 @@ figure img {
         grid-template-areas:
             'main header'
             'main nav'
-            'main footer';
+            'footer footer';
     }
     .grid.right-aligned {
         justify-content: space-between;
@@ -203,6 +207,12 @@ figure img {
     flex-direction: column;
     gap: var(--g-spacing-lg);
     max-width: 100%;
+    padding-inline: 1rem;
+    padding-top: var(--g-spacing-lg);
+}
+
+.main-content > grantcodes-card {
+    flex-grow: 0;
 }
 
 .background-layer {
@@ -346,9 +356,6 @@ figure img {
     .main-nav-toggle {
         display: none;
     }
-    .grid.single-article .main-nav-toggle {
-        display: block;
-    }
 }
 
 .main-nav__ul {
@@ -395,7 +402,7 @@ figure img {
     font-weight: 900;
 }
 .main-nav__link--hidden {
-    display: none !important;
+    display: none;
 }
 .main-nav__link--more {
     display: none;
@@ -427,6 +434,7 @@ figure img {
     border-radius: var(--border-radius);
     border: 2px solid var(--g-color-border-default);
     font-size: 1rem;
+    overflow: hidden;
     transition: border-color 0.2s;
 }
 @media (min-width: 70rem) {
@@ -438,13 +446,14 @@ figure img {
     border-color: var(--g-color-content-default);
 }
 .search .search__input:not([type='checkbox']):not([type='radio']) {
+    flex: 1 1 auto;
     margin: 0;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     box-shadow: none;
     border-color: transparent;
     font-size: inherit;
-    min-width: 5em;
+    min-width: 0;
     background: color-mix(
         in oklab,
         var(--g-color-background-subtle) 78%,
@@ -452,10 +461,25 @@ figure img {
     );
 }
 .search__button {
+    align-items: center;
+    background: color-mix(
+        in oklab,
+        var(--g-color-background-subtle) 78%,
+        transparent
+    );
+    border: 0;
+    border-left: 1px solid var(--g-color-border-default);
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     box-shadow: none;
+    color: inherit;
+    cursor: pointer;
+    display: inline-flex;
+    flex: 0 0 auto;
     font-size: inherit;
+    justify-content: center;
+    margin: 0;
+    padding: 0 0.75em;
 }
 /* Page-level search (wider, standalone) */
 .search--page {

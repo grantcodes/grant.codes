@@ -3,7 +3,7 @@
 // Uses SSR GrantCodesFooter for layout and styling.
 
 import { GrantCodesFooter, GrantCodesFooterColumn } from '@grantcodes/ui/components/footer/index.js'
-import { Mail, Instagram, Github } from 'lucide-static'
+import { Camera, GitFork, Mail } from 'lucide-static'
 
 const authorEmail = import.meta.env.NEXT_PUBLIC_AUTHOR_EMAIL ?? ''
 const instagram = import.meta.env.NEXT_PUBLIC_AUTHOR_INSTAGRAM ?? ''
@@ -25,12 +25,12 @@ const authorFeatured = import.meta.env.NEXT_PUBLIC_AUTHOR_FEATURED ?? ''
         </a>
         {instagram && (
           <a href={instagram} rel="me" aria-label="Instagram">
-            <grantcodes-icon style="font-size: 24px" set:html={Instagram}></grantcodes-icon>
+            <grantcodes-icon style="font-size: 24px" set:html={Camera}></grantcodes-icon>
           </a>
         )}
         {github && (
           <a href={github} rel="me" aria-label="GitHub">
-            <grantcodes-icon style="font-size: 24px" set:html={Github}></grantcodes-icon>
+            <grantcodes-icon style="font-size: 24px" set:html={GitFork}></grantcodes-icon>
           </a>
         )}
       </div>

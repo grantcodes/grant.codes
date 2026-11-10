@@ -12,9 +12,31 @@ import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
 import { GrantCodesPagination } from '@grantcodes/ui/components/pagination/index.js'
 import { getCollection } from 'astro:content'
 
+const homeFeedTypes = new Set([
+  'note',
+  'photo',
+  'article',
+  'repost',
+  'quotation',
+  'video',
+  'audio',
+  'collection',
+])
+
 export async function getStaticPaths() {
+  const homeFeedTypes = new Set([
+    'note',
+    'photo',
+    'article',
+    'repost',
+    'quotation',
+    'video',
+    'audio',
+    'collection',
+  ])
   const allEntries = await getCollection('posts')
-  const totalPages = Math.max(Math.ceil(allEntries.length / 10), 1)
+  const feedEntries = allEntries.filter((entry) => homeFeedTypes.has(entry.data?.cms?.postType))
+  const totalPages = Math.max(Math.ceil(feedEntries.length / 10), 1)
 
   // Pre-generate all pages (page 1 is /, start from page 2)
   return Array.from({ length: totalPages - 1 }, (_, i) => ({
@@ -31,6 +53,7 @@ const pageNum = parseInt(page ?? '2')
 const allEntries = await getCollection('posts')
 const posts = allEntries
   .map((entry) => entry.data)
+  .filter((post) => homeFeedTypes.has(post?.cms?.postType))
   .sort((a, b) => {
     const dateA = a?._postr?.date ?? ''
     const dateB = b?._postr?.date ?? ''

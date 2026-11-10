@@ -2,7 +2,10 @@
   "name": "grant.codes",
   "version": "0.2.0",
   "private": true,
-  "packageManager": "pnpm@11.3.0",
+  "packageManager": "pnpm@11.15.0",
+  "engines": {
+    "node": "22.x"
+  },
   "type": "module",
   "scripts": {
     "dev": "pnpm -r --parallel --filter ./apps/api --filter ./apps/site dev",
