@@ -7,6 +7,7 @@ import { instagram } from "@postr/syndicator-instagram";
 import { superfeedr } from "@postr/syndicator-superfeedr";
 import { env, isDev, isTest } from "../config/env.js";
 import { verifyToken } from "./token.js";
+import { defaultPostTypes } from "./generate-search.js";
 
 export const database =
 	process.env.POSTR_DATABASE ??
@@ -36,6 +37,7 @@ const plugins: PostrPlugin[] = [
 			photo: env.NEXT_PUBLIC_AUTHOR_PHOTO,
 			email: env.NEXT_PUBLIC_AUTHOR_EMAIL,
 		},
+		postTypes: defaultPostTypes,
 	}),
 ];
 
