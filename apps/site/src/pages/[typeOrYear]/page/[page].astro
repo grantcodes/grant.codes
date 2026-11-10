@@ -9,6 +9,7 @@
 // NOTE: 'notes', 'articles', and 'photos' have dedicated paginated routes
 // and are deliberately excluded from this catch-all pagination route.
 
+import { postDate } from '../../../lib/post-date'
 import BaseLayout from '../../../layouts/BaseLayout.astro'
 import PostCard from '../../../components/PostCard.astro'
 import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
@@ -97,7 +98,7 @@ export async function getStaticPaths() {
   // Generate page paths for each year
   for (const yr of years) {
     const count = allPosts.filter((p) => {
-      const postrYr = p?.published.getFullYear()
+      const postrYr = postDate(p).getFullYear()
       return postrYr !== undefined && String(postrYr) === yr
     }).length
     const totalPages = Math.max(Math.ceil(count / PER_PAGE), 1)
@@ -126,7 +127,7 @@ const allPosts = allEntries.map((entry) => entry.data)
 let filtered: any[]
 if (isYear) {
   filtered = allPosts.filter((post) => {
-    const yr = post?.published.getFullYear()
+    const yr = postDate(post).getFullYear()
     return yr !== undefined && String(yr) === typeOrYear
   })
 } else {
@@ -136,7 +137,7 @@ if (isYear) {
 
 // Sort by canonical date descending
 filtered.sort((a, b) => {
-  return b.published.getTime() - a.published.getTime()
+  return postDate(b).getTime() - postDate(a).getTime()
 })
 
 // In-memory pagination

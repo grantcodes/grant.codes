@@ -12,6 +12,7 @@
 // - Renders PostList with type='photos' → Gallery layout → PostsGallery with maxWidth={20}
 // - Pagination: <Pagination noNext={posts.length < 50} />
 
+import { postDate } from '../lib/post-date'
 import FullWidthLayout from '../layouts/FullWidthLayout.astro'
 import PhotosGallery from '../components/PhotosGallery.astro'
 import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
@@ -27,7 +28,7 @@ const allPhotos = allEntries
   .map((entry) => entry.data)
   .filter((post) => post?.postType === 'photo')
   .sort((a, b) => {
-    return b.published.getTime() - a.published.getTime()
+    return postDate(b).getTime() - postDate(a).getTime()
   })
 
 // In-memory pagination — first page, 50 per page

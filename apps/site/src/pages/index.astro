@@ -6,6 +6,7 @@
 //   - Posts are fetched via the content layer (astro:content getCollection)
 //   - Pagination is derived from the filtered content collection
 
+import { postDate } from '../lib/post-date'
 import BaseLayout from '../layouts/BaseLayout.astro'
 import PostCard from '../components/PostCard.astro'
 import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
@@ -31,7 +32,7 @@ const feedEntries = collectionEntries
   .map((entry) => entry.data)
   .filter((post) => homeFeedTypes.has(post?.postType))
   .sort((a, b) => {
-    return b.published.getTime() - a.published.getTime()
+    return postDate(b).getTime() - postDate(a).getTime()
   })
 const posts = feedEntries.slice(0, 10)
 

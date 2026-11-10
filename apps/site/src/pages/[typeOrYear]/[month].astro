@@ -10,6 +10,7 @@
 //
 // Can-slip: DataSummary charts (BodyGraph, Map) — not critical for launch.
 
+import { postDate } from '../../lib/post-date'
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import PostCard from '../../components/PostCard.astro'
 import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
@@ -75,10 +76,10 @@ const posts = isValidRoute
       .filter(
         (post) =>
           post.visibility === 'public' &&
-          post.published.getFullYear() === yearInt &&
-          post.published.getMonth() + 1 === monthInt
+          postDate(post).getFullYear() === yearInt &&
+          postDate(post).getMonth() + 1 === monthInt
       )
-      .sort((a, b) => b.published.getTime() - a.published.getTime())
+      .sort((a, b) => postDate(b).getTime() - postDate(a).getTime())
       .slice(0, 50)
   : []
 

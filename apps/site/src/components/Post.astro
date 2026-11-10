@@ -18,6 +18,7 @@ import { Heart, Bookmark, Repeat2, Reply } from 'lucide-static'
 import { toPostView } from '@postr/core'
 import { getSiteUrl, normalizeInternalUrl } from '../lib/url'
 import { getResponseValue, getUrl } from '../lib/post-mentions'
+import { getChildren } from '../lib/post-children'
 import { getPhotoUrl, getPhotoAlt, getMediaUrl } from '../lib/post-media'
 
 export interface Props {
@@ -61,7 +62,7 @@ const end = properties.end?.[0] ?? null
 const location = properties.location?.[0] ?? null
 
 // Post children (gallery of referenced posts)
-const children = post.children ?? null
+const children = await getChildren(post)
 
 // References (like-of, repost-of referenced post data), projected like entries
 const references = Object.values(post.references ?? {}).map((ref: any) => ({
@@ -210,7 +211,7 @@ const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
   )}
 
   {/* ── Post children (gallery of referenced posts) ── */}
-  {children && Array.isArray(children) && children.length > 0 && (
+  {children.length > 0 && (
     <div class="card__breakout post__children">
       {children.map((child: any) => (
         <PostCard post={child} compact />

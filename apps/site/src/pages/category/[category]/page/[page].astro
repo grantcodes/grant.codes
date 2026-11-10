@@ -6,6 +6,7 @@
 // instead of direct API fetching. Computes total pages from the
 // in-memory collection so that every page is pre-rendered at build time.
 
+import { postDate } from '../../../../lib/post-date'
 import BaseLayout from '../../../../layouts/BaseLayout.astro'
 import PostCard from '../../../../components/PostCard.astro'
 import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
@@ -70,7 +71,7 @@ if (category) {
 
   // Sort by canonical date descending
   filtered.sort((a, b) => {
-    return b.published.getTime() - a.published.getTime()
+    return postDate(b).getTime() - postDate(a).getTime()
   })
 
   // In-memory pagination

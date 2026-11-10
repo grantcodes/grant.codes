@@ -6,6 +6,7 @@
 // Computes total pages from the canonical collection so that every page
 // is pre-rendered at build time.
 
+import { postDate } from '../../lib/post-date'
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import PostCard from '../../components/PostCard.astro'
 import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
@@ -55,7 +56,7 @@ const posts = allEntries
   .map((entry) => entry.data)
   .filter((post) => homeFeedTypes.has(post?.postType))
   .sort((a, b) => {
-    return b.published.getTime() - a.published.getTime()
+    return postDate(b).getTime() - postDate(a).getTime()
   })
 
 // In-memory pagination — 10 per page (matching original homepage)

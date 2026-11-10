@@ -9,6 +9,7 @@ import PostContent from './PostContent.astro'
 import PhotosGallery from './PhotosGallery.astro'
 import { formatRelativeDate } from '../lib/post-date-format'
 import { getMentionUrl, getResponseValue } from '../lib/post-mentions'
+import { getChildren } from '../lib/post-children'
 import { getPhotoUrl } from '../lib/post-media'
 
 export interface Props {
@@ -52,7 +53,7 @@ function getActionLabel(): string {
 const actionLabel = getActionLabel()
 const isCompactArticle = compact && postType === 'article' && Boolean(url)
 const previewContent = isCompactArticle ? summary : content ?? summary
-const children = Array.isArray(post.children) ? post.children : []
+const children = await getChildren(post)
 
 // Format date using shared helper
 const dateDisplay = published ? formatRelativeDate(published) : ''

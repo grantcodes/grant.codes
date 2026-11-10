@@ -10,6 +10,7 @@
 // NOTE: 'notes', 'articles', and 'photos' have dedicated routes and are
 // deliberately excluded from this catch-all archive route.
 
+import { postDate } from '../lib/post-date'
 import BaseLayout from '../layouts/BaseLayout.astro'
 import PostCard from '../components/PostCard.astro'
 import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
@@ -81,7 +82,7 @@ const allPosts = allEntries.map((entry) => entry.data)
 let filtered: any[]
 if (isYear) {
   filtered = allPosts.filter((post) => {
-    const yr = post?.published.getFullYear()
+    const yr = postDate(post).getFullYear()
     return yr !== undefined && String(yr) === typeOrYear
   })
 } else {
@@ -92,7 +93,7 @@ if (isYear) {
 // Sort by canonical date descending (most recent first)
 // ISO 8601 strings sort lexicographically in UTC, so localeCompare works.
 filtered.sort((a, b) => {
-  return b.published.getTime() - a.published.getTime()
+  return postDate(b).getTime() - postDate(a).getTime()
 })
 
 // In-memory pagination
