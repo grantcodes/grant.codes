@@ -59,7 +59,13 @@ export function renderPostCard(post: SearchPost, siteUrl: string): string {
 
   // Content HTML — reuse shared helper for script stripping + URL rewriting
   let contentHtml = ''
-  if (content) {
+  const summary = props.summary?.[0] || null
+  if (name && (summary || content)) {
+    // Titled posts (articles) get a short excerpt rather than their full body.
+    const text = summary || content.value || ''
+    const excerpt = text.length > 240 ? text.slice(0, 240).replace(/\s+\S*$/, '') + '…' : text
+    contentHtml = '<p class="p-summary" style="margin-top: 0.5rem;">' + escapeHtml(excerpt) + '</p>'
+  } else if (content) {
     let innerHtml = ''
     if (content.html) {
       // Already HTML — delegate to shared helper for script stripping & URL rewriting
@@ -105,16 +111,17 @@ export function renderPostCard(post: SearchPost, siteUrl: string): string {
     categoryHtml += '</div>'
   }
 
-  // Date
+  // Date, linked to the post
   let dateHtml = ''
   if (published) {
     dateHtml =
-      '<time class="dt-published" datetime="' +
+      '<a href="' +
+      escapeHtml(url) +
+      '" class="u-url" style="font-size: 0.7rem;"><time class="dt-published" datetime="' +
       published +
-      '" ' +
-      'style="font-size: 0.7rem; opacity: 0.5;">' +
+      '">' +
       formatSearchDate(published) +
-      '</time>'
+      '</time></a>'
   }
 
   // Assemble card with grantcodes-card
@@ -129,11 +136,6 @@ export function renderPostCard(post: SearchPost, siteUrl: string): string {
       '" class="u-url">' +
       escapeHtml(name) +
       '</a></h3>'
-  } else {
-    card +=
-      '<a href="' +
-      escapeHtml(url) +
-      '" class="u-url" style="display:none;">permalink</a>'
   }
 
   card += photoHtml + contentHtml + categoryHtml

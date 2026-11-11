@@ -12,13 +12,14 @@
 // - Type feeds: links to {baseUrl}/{format}/type/{type} inside <details><summary>
 // - Category feeds: links to {baseUrl}/{format}/category/{slug} inside <details><summary>
 
+import { site } from '../lib/site'
 import BaseLayout from '../layouts/BaseLayout.astro'
 import { GrantCodesAccordion, GrantCodesAccordionItem } from '@grantcodes/ui/components/accordion/index.js'
 import getPostTypes from '../lib/post-types'
 import getCategories from '../lib/categories'
 
-const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
-const micropubUrl = import.meta.env.NEXT_PUBLIC_MICROPUB_URL ?? 'http://localhost:4000/micropub'
+const siteUrl = site.url
+const micropubUrl = site.micropubUrl
 const baseUrl = `${micropubUrl}/plugin/feeds`
 
 const feedTypes = [

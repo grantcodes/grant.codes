@@ -183,7 +183,7 @@ grantcodes-icon {
         justify-content: space-between;
     }
     .grid.right-aligned--wide-content {
-        grid-template-columns: 1fr var(--side-width);
+        grid-template-columns: minmax(0, 1fr) var(--side-width);
     }
 }
 .grid.single-article {
@@ -401,20 +401,8 @@ grantcodes-icon {
     font-size: 1.4rem;
     font-weight: 900;
 }
-.main-nav__link--hidden {
-    display: none;
-}
-.main-nav__link--more {
-    display: none;
-}
-@media (min-width: 70rem) {
-    .main-nav__link--more {
-        display: block;
-    }
-    .main-nav.is-target .main-nav__link--more,
-    .main-nav:target .main-nav__link--more {
-        display: none;
-    }
+.main-nav__link[aria-current='page'] {
+    text-decoration: underline wavy;
 }
 
 .main-nav__link--webring {

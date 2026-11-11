@@ -4,6 +4,7 @@
 // Wave 8: MF2-aware single post rendering with proper post-type support
 // Wave 10: migrated from direct API fetch to canonical posts collection
 
+import { site } from '../../../../lib/site'
 import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
 import ArticleLayout from '@/layouts/ArticleLayout.astro'
 import BaseLayout from '@/layouts/BaseLayout.astro'
@@ -28,7 +29,7 @@ export async function getStaticPaths() {
 const { typeOrYear, month, day, slug } = Astro.params
 const { post } = Astro.props
 
-const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
+const siteUrl = site.url
 
 // Generate metadata from post
 const meta = post ? await getMetadata({ params: { typeOrYear, month, day, slug }, post }) : await getMetadata({ params: { typeOrYear, month, day, slug } })

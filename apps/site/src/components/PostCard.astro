@@ -3,6 +3,7 @@
 // Ported from the legacy Next.js components/Post/index.tsx + PostList/Timeline.js
 // Wave 8: enhanced with proper action labels, hidden author h-card, better mention rendering
 
+import { site } from '../lib/site'
 import { Heart, Bookmark, Repeat2, Reply } from 'lucide-static'
 import { getSiteUrl, normalizeInternalUrl } from '../lib/url'
 import PostContent from './PostContent.astro'
@@ -58,7 +59,7 @@ const children = await getChildren(post)
 // Format date using shared helper
 const dateDisplay = published ? formatRelativeDate(published) : ''
 
-const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
+const authorName = site.author.name
 ---
 
 <article class={`post post--${postType ?? 'unknown'} h-entry`}>
@@ -119,7 +120,7 @@ const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
     )}
 
     {postType === 'collection' && children.length > 0 && (
-      <PhotosGallery posts={children} type="collection" maxWidth={100} />
+      <PhotosGallery posts={children} type="collection" />
     )}
 
     <!-- Compact article cards show only their summary. -->

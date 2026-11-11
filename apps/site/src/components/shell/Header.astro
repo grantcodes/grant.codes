@@ -1,7 +1,8 @@
 ---
 // Site header — site name link
 // Ported from the legacy Next.js components/Container/Header/index.js
-const siteName = import.meta.env.NEXT_PUBLIC_SITE_NAME ?? 'grant.codes'
+import { site } from '../../lib/site'
+const siteName = site.name
 ---
 
 <header class="main-header">

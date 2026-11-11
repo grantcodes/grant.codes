@@ -5,6 +5,7 @@
 // Computes total pages from the in-memory collection so that
 // every page is pre-rendered at build time.
 
+import { site } from '../../../lib/site'
 import { postDate } from '../../../lib/post-date'
 import BaseLayout from '../../../layouts/BaseLayout.astro'
 import PostCard from '../../../components/PostCard.astro'
@@ -30,7 +31,7 @@ const { page } = Astro.params
 const pageNum = parseInt(page ?? '2')
 
 const siteUrl =
-  import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
+  site.url
 
 // Fetch and filter notes from the canonical collection.
 // Sorting by canonical date (newest first) ensures deterministic output.

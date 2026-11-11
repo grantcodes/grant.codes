@@ -1,116 +1,103 @@
 ---
-// Photos Gallery — responsive image grid with MF2 semantics
-// Ported from the legacy Next.js components/PostsGallery/index.tsx + get-post-photos.js
-//
-// Cutover-blocker: YES — photos are a significant content type on the site
-// and the gallery is the primary browse surface for photo content.
-//
-// Usage: <PhotosGallery posts={posts} type="feed" maxWidth={20} />
-// - type "feed": renders linked images + hidden full MF2 entries for crawlability
-// - type "collection": renders images with h-cite markup
-// - maxWidth: max width percentage for each item
+// Square photo grid.
+// - type "feed": each photo links to its post; hidden h-entries keep the feed parseable.
+// - type "collection": photos of a collection's children open in the lightbox.
 
+import { site } from '../lib/site'
 import { normalizeInternalUrl } from '../lib/url'
-import { getPhotoUrl, getThumbnailUrl } from '../lib/post-media'
+import { getThumbnailUrl } from '../lib/post-media'
 import { GrantCodesGallery } from '@grantcodes/ui/components/gallery/index.js'
 
 export interface Props {
   posts: any[]
   type?: 'feed' | 'collection'
-  maxWidth?: number
 }
 
-const { posts = [], type = 'feed', maxWidth = 20 } = Astro.props
+const { posts = [], type = 'feed' } = Astro.props
 
-function getPostPhotos(post: any) {
-  const permalink = normalizeInternalUrl(post.url)
-  return (post.photos ?? []).map((photo: { url: string; alt?: string }) => ({
-    permalink,
-    photo: photo.url,
-    alt: photo.alt ?? '',
+const photos = posts.flatMap((post) =>
+  (post.photos ?? []).map((photo: { url: string; alt?: string }) => ({
+    permalink: normalizeInternalUrl(post.url),
+    url: photo.url,
+    alt: photo.alt || post.name || '',
     thumbnail: getThumbnailUrl(photo.url),
   }))
-}
-
-// Collect all photos across all posts
-const allPhotos = posts.flatMap((post) => getPostPhotos(post))
-
-// Dev mode URL replacement for local builds
-const devMode = import.meta.env.DEV
-const localUrl = 'http://localhost:3000'
-const remoteUrl = 'https://grant.codes'
-const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
+)
+// A missing thumbnail falls back to the full photo; a missing photo hides its tile.
+const onThumbnailError =
+  "if (this.src !== this.dataset.full) { this.src = this.dataset.full } else { this.onerror = null; this.closest('a').hidden = true }"
 ---
 
-{
-  allPhotos.length > 0 && (
-    <GrantCodesGallery style="--gallery-columns: 5; --gallery-gap: 0;">
-      {allPhotos.map((photo, i) => {
-        // Resolve URL — replace localhost for dev mode
-        let src = getPhotoUrl(photo.thumbnail || photo.photo)
-        if (devMode) {
-          src = src.replace(localUrl, remoteUrl)
-        }
-        const alt = photo.alt ?? ''
+{photos.length > 0 && (
+  <GrantCodesGallery class="photos-gallery">
+    {photos.map((photo) =>
+      type === 'feed' ? (
+        <a href={photo.permalink} class="photos-gallery__item">
+          <img src={photo.thumbnail} data-full={photo.url} onerror={onThumbnailError} alt={photo.alt} loading="lazy" />
+        </a>
+      ) : (
+        <a
+          href={photo.url}
+          class="photos-gallery__item h-cite"
+          data-zoom
+          data-permalink={photo.permalink}
+        >
+          <img src={photo.thumbnail} data-full={photo.url} onerror={onThumbnailError} alt={photo.alt} class="u-photo" loading="lazy" />
+          <data class="u-url" value={photo.permalink} />
+        </a>
+      )
+    )}
+  </GrantCodesGallery>
+)}
 
-        if (type === 'feed') {
-          return (
-            <a href={photo.permalink ?? '#'}>
-              <img src={src} alt={alt} class="u-photo" loading="lazy" />
-            </a>
-          )
-        }
-        return (
-          <div class="h-cite" style={`max-width: ${maxWidth}%`}>
-            <a href={photo.permalink ?? '#'} class="u-url">
-              <img src={src} alt={alt} class="u-photo" loading="lazy" />
-              <data class="u-photo" value={photo.photo ?? ''} />
-            </a>
-          </div>
-        )
-      })}
-    </GrantCodesGallery>
-  )
-}
-
-<!-- Hidden MF2 entries for crawlability -->
 {type === 'feed' && posts.length > 0 && (
   <div class="screen-reader-text">
-    {posts.map((post, i) => {
-      const properties = post?.properties ?? {}
-      const url = normalizeInternalUrl(properties.url?.[0])
-      const content = properties.content?.[0] ?? null
-      const published = properties.published?.[0] ?? null
-      const photos = properties.photo ?? []
-
-      let contentHtml = ''
-      if (content?.html) contentHtml = content.html
-      else if (content?.value) contentHtml = content.value
-      else if (typeof content === 'string') contentHtml = content
-
-      return (
-        <article class="h-entry">
-          {published && <time class="dt-published" datetime={published}>{published}</time>}
-          {url && <a class="u-url" href={url}>{url}</a>}
-          {photos.map((p: any, j: number) => {
-            return <data class="u-photo" value={getPhotoUrl(p)} />
-          })}
-          {contentHtml && <div class="e-content">{contentHtml}</div>}
-          <span class="p-author h-card">
-            <span class="p-name">{authorName}</span>
-          </span>
-        </article>
-      )
-    })}
+    {posts.map((post) => (
+      <article class="h-entry">
+        <a class="u-url" href={normalizeInternalUrl(post.url)}>{post.url}</a>
+        <time class="dt-published" datetime={post.published.toISOString()}>{post.published.toISOString()}</time>
+        {post.photos.map((photo: { url: string }) => <data class="u-photo" value={photo.url} />)}
+        {post.content && <div class="e-content" set:html={post.content.html} />}
+        <span class="p-author h-card"><span class="p-name">{site.author.name}</span></span>
+      </article>
+    ))}
   </div>
 )}
 
-<style>
-  /* Responsive column count for GrantCodesGallery — the gallery reads
-     --gallery-columns from its host element, so we change it via media query. */
+<style is:global>
+  .photos-gallery {
+    display: block;
+    --gallery-columns: 5;
+    --gallery-gap: 0.25rem;
+  }
   @media (max-width: 30rem) {
-    grantcodes-gallery {
+    .photos-gallery {
       --gallery-columns: 3;
+    }
+  }
+  .photos-gallery__item {
+    display: block;
+    min-inline-size: 0;
+    overflow: hidden;
+    border-radius: 0.25rem;
+  }
+  .photos-gallery__item[hidden] {
+    display: none;
+  }
+  .photos-gallery__item img {
+    display: block;
+    inline-size: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  .photos-gallery__item:hover img,
+  .photos-gallery__item:focus-visible img {
+    transform: scale(1.05);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .photos-gallery__item img {
+      transition: none;
     }
   }
 </style>

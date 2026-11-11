@@ -1,0 +1,119 @@
+---
+// Year or month summary: stats, travel map, photos and writing, instead of every post.
+import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
+import ArchiveStats from './ArchiveStats.astro'
+import TrackMap from './TrackMap.astro'
+import PhotosGallery from './PhotosGallery.astro'
+import PostCard from './PostCard.astro'
+import { countByType, type ArchivePost, type Track } from '../lib/archive'
+
+export interface Props {
+  title: string
+  posts: ArchivePost[]
+  tracks: Track[]
+  /** Distance travelled, from the full (unthinned) tracks. */
+  km: number
+  previous?: { href: string; label: string }
+  next?: { href: string; label: string }
+  /** Year summaries list their months. */
+  months?: Array<{ href: string; label: string; count: number }>
+}
+
+const { title, posts, tracks, km, previous, next, months = [] } = Astro.props
+const photos = posts.filter((post) => post.photos.length > 0 && post.postType !== 'collection').slice(0, 30)
+const writing = posts
+  .filter((post) => ['article', 'note', 'journal'].includes(post.postType))
+  .slice(0, 10)
+const busiest = Math.max(1, ...months.map((month) => month.count))
+---
+
+<header class="archive-summary__header">
+  {previous ? <a href={previous.href} rel="prev" class="archive-summary__step">← {previous.label}</a> : <span></span>}
+  <h1 class="page-title archive-summary__title">{title}</h1>
+  {next ? <a href={next.href} rel="next" class="archive-summary__step">{next.label} →</a> : <span></span>}
+</header>
+
+{posts.length === 0 && tracks.length === 0 && (
+  <GrantCodesCard><p>Nothing happened here. Quiet times. 🦗</p></GrantCodesCard>
+)}
+
+{posts.length > 0 && (
+  <ArchiveStats
+    counts={countByType(posts)}
+    extra={km > 0 ? [{ emoji: '🧭', value: km.toLocaleString('en-GB'), label: 'km travelled' }] : []}
+  />
+)}
+
+{months.length > 0 && (
+  <ol class="archive-summary__months" role="list">
+    {months.map((month) => (
+      <li>
+        <a href={month.href} class="archive-summary__month" style={`--busy: ${month.count / busiest}`}>
+          <span>{month.label}</span>
+          <strong>{month.count}</strong>
+        </a>
+      </li>
+    ))}
+  </ol>
+)}
+
+<TrackMap tracks={tracks} label={`Map of where I went in ${title}`} />
+
+{photos.length > 0 && (
+  <section class="archive-summary__section">
+    <h2>📷 Photos</h2>
+    <PhotosGallery posts={photos} type="feed" />
+  </section>
+)}
+
+{writing.length > 0 && (
+  <section class="archive-summary__section">
+    <h2>✍️ Writing</h2>
+    <div class="post-list">
+      {writing.map((post) => <PostCard post={post} compact />)}
+    </div>
+  </section>
+)}
+
+<style>
+  .archive-summary__header {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 1rem;
+  }
+  .archive-summary__title {
+    margin: 0;
+    text-align: center;
+  }
+  .archive-summary__step:last-child {
+    justify-self: end;
+  }
+  .archive-summary__section h2 {
+    margin-block: 0 0.75rem;
+  }
+  .archive-summary__months {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr));
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .archive-summary__month {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--g-border-radius-md);
+    background: color-mix(
+      in oklab,
+      var(--g-color-background-primary) calc(var(--busy) * 70%),
+      var(--g-color-background-default)
+    );
+    color: inherit;
+    text-decoration: none;
+  }
+  .archive-summary__month:hover {
+    outline: 2px solid var(--g-color-border-primary);
+  }
+</style>

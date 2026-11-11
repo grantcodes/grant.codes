@@ -10,13 +10,15 @@
  * e-content work correctly on any domain.
  */
 
+import { site } from './site'
+
 const PRODUCTION_URL = 'https://grant.codes'
 
 /**
  * Get the current site URL from environment, falling back to production.
  */
 export function getSiteUrl(): string {
-  return import.meta.env.NEXT_PUBLIC_URL ?? PRODUCTION_URL
+  return site.url
 }
 
 /**

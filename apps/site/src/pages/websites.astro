@@ -3,10 +3,11 @@
 // Ported from the legacy Next.js app/(default)/websites/page.tsx
 // Uses websites data from apps/site/src/data/websites.js
 
+import { site } from '../lib/site'
 import BaseLayout from '../layouts/BaseLayout.astro'
 import websites from '../data/websites.js'
 
-const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
+const siteUrl = site.url
 ---
 
 <BaseLayout title="Projects" canonicalUrl={`${siteUrl}/websites`}>

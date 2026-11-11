@@ -2,11 +2,12 @@
 // Category index — lists all categories
 // Ported from the legacy Next.js app/(default)/category/page.tsx
 
+import { site } from '../lib/site'
 import BaseLayout from '../layouts/BaseLayout.astro'
 import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
 import getCategories from '../lib/categories'
 
-const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
+const siteUrl = site.url
 const categories = await getCategories()
 ---
 

@@ -6,6 +6,7 @@
 // Computes total pages from the in-memory collection so that
 // every page is pre-rendered at build time.
 
+import { site } from '../../../lib/site'
 import { postDate } from '../../../lib/post-date'
 import FullWidthLayout from '../../../layouts/FullWidthLayout.astro'
 import PhotosGallery from '../../../components/PhotosGallery.astro'
@@ -30,7 +31,7 @@ export async function getStaticPaths() {
 
 const { page } = Astro.params
 
-const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
+const siteUrl = site.url
 const pageNum = parseInt(page ?? '2')
 
 // Fetch and filter photos from the canonical collection.
@@ -67,7 +68,7 @@ const nextHref = nextPage ? `/photos/page/${nextPage}` : ''
 
   {posts.length > 0 && (
     <>
-      <PhotosGallery posts={posts} type="feed" maxWidth={20} />
+      <PhotosGallery posts={posts} type="feed" />
 
       <GrantCodesPagination
         previousHref={prevHref}

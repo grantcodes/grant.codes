@@ -3,12 +3,13 @@
 // Ported from the legacy Next.js app/(default)/websites/[website]/page.tsx
 // Wave 11: migrated to SSR GrantCodesCard with nav links in footer slot
 
+import { site } from '../../lib/site'
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
 import { ArrowLeft, ExternalLink } from 'lucide-static'
 import websites from '../../data/websites.js'
 
-const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
+const siteUrl = site.url
 
 export async function getStaticPaths() {
   return websites.map((website) => ({

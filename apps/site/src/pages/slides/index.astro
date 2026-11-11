@@ -8,10 +8,11 @@
 // This page lists past presentation titles for reference only.
 // None of these links resolve to active routes.
 
+import { site } from '../../lib/site'
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
 
-const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
+const siteUrl = site.url
 ---
 
 <BaseLayout title="Slides" canonicalUrl={`${siteUrl}/slides`}>

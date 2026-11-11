@@ -2,6 +2,7 @@
 // Post footer — action text, permalink, author, categories, syndication, mention counts
 // Ported from the legacy Next.js components/Post/Footer.js
 
+import { site } from '../lib/site'
 import { normalizeInternalUrl } from '../lib/url'
 import { formatRelativeDate } from '../lib/post-date-format'
 
@@ -56,7 +57,7 @@ const mentionCounts: Array<{ key: string; label: string }> = [
 ]
 
 const separator = ' ● '
-const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
+const authorName = site.author.name
 ---
 
 <footer class="card__breakout post__footer">

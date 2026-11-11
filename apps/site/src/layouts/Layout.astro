@@ -2,24 +2,25 @@
 // Root layout — full metadata and IndieWeb links
 // Ported from the legacy Next.js app/layout.tsx
 
+import { site } from '../lib/site'
 import '@grantcodes/ui/styles/base.css'
 import '@grantcodes/ui/styles/themes/grantcodes.css'
 import '../lib/register-ui-elements'
 import '../styles/site.css'
+import Lightbox from '../components/Lightbox.astro'
 
 // ── Environment ──
-const url = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
-const name = import.meta.env.NEXT_PUBLIC_SITE_NAME ?? ''
-const description = import.meta.env.NEXT_PUBLIC_META_DESCRIPTION ?? ''
-const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? ''
-const authorEmail = import.meta.env.NEXT_PUBLIC_AUTHOR_EMAIL ?? ''
-const twHandle = import.meta.env.NEXT_PUBLIC_TWITTER_HANDLE ?? ''
-const api = import.meta.env.NEXT_PUBLIC_API_URL ?? 'https://backend.grant.codes'
-const micropub = import.meta.env.NEXT_PUBLIC_MICROPUB_URL ?? `${api}/micropub`
-const hub = import.meta.env.NEXT_PUBLIC_HUB ?? ''
-const indieauth = import.meta.env.NEXT_PUBLIC_INDIEAUTH_ENDPOINT ?? 'https://indieauth.com/auth'
-const microsub = import.meta.env.NEXT_PUBLIC_MICROSUB_ENDPOINT ?? ''
-const metaImageRaw = import.meta.env.NEXT_PUBLIC_META_IMAGE ?? ''
+const url = site.url
+const name = site.name
+const description = site.description
+const authorName = site.author.name
+const authorEmail = site.author.email
+const twHandle = site.twitterHandle
+const micropub = site.micropubUrl
+const hub = site.hub
+const indieauth = site.indieauthEndpoint
+const microsub = site.microsubEndpoint
+const metaImageRaw = site.metaImage
 
 function parseJsonEnv<T>(value: string | undefined, fallback: T): T {
   if (!value) return fallback
@@ -41,8 +42,9 @@ const themeColor = '#111111'
 const indiewebLinks = [
   { rel: 'self', href: url },
   { rel: 'canonical', href: url },
+  { rel: 'indieauth-metadata', href: site.indieauthMetadata },
   { rel: 'authorization_endpoint', href: indieauth },
-  { rel: 'token_endpoint', href: `${api}/token` },
+  { rel: 'token_endpoint', href: site.tokenEndpoint },
   { rel: 'hub', href: hub },
   { rel: 'microsub', href: microsub },
   { rel: 'micropub', href: micropub },
@@ -146,5 +148,6 @@ const ogUrl = canonicalUrl ?? url
   </head>
   <body>
     <slot />
+    <Lightbox />
   </body>
 </html>

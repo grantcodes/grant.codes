@@ -2,18 +2,19 @@
 // Site footer — social links + hidden h-card
 // Uses SSR GrantCodesFooter for layout and styling.
 
+import { site } from '../../lib/site'
 import { GrantCodesFooter, GrantCodesFooterColumn } from '@grantcodes/ui/components/footer/index.js'
 import { Camera, GitFork, Mail } from 'lucide-static'
 
-const authorEmail = import.meta.env.NEXT_PUBLIC_AUTHOR_EMAIL ?? ''
-const instagram = import.meta.env.NEXT_PUBLIC_AUTHOR_INSTAGRAM ?? ''
-const github = import.meta.env.NEXT_PUBLIC_AUTHOR_GITHUB ?? ''
-const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? ''
-const url = import.meta.env.NEXT_PUBLIC_URL ?? ''
-const siteName = import.meta.env.NEXT_PUBLIC_SITE_NAME ?? ''
-const description = import.meta.env.NEXT_PUBLIC_META_DESCRIPTION ?? ''
-const authorPhoto = import.meta.env.NEXT_PUBLIC_AUTHOR_PHOTO ?? ''
-const authorFeatured = import.meta.env.NEXT_PUBLIC_AUTHOR_FEATURED ?? ''
+const authorEmail = site.author.email
+const instagram = site.author.instagram
+const github = site.author.github
+const authorName = site.author.name
+const url = site.url
+const siteName = site.name
+const description = site.description
+const authorPhoto = site.author.photo
+const authorFeatured = site.author.featured
 ---
 
 <div class="main-footer">

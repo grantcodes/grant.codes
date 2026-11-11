@@ -3,22 +3,25 @@
 // Ported from the legacy Next.js components/Container/Nav/index.js
 // Plain HTML/CSS with minimal inline JS for mobile toggle
 
+import { site } from '../../lib/site'
 import { Menu, Search } from 'lucide-static'
 
-const webringId = import.meta.env.NEXT_PUBLIC_INDIEWEBRING_ID ?? ''
+const webringId = site.webringId
 
 const navLinks = [
   { text: 'About', to: '/about' },
   { text: 'Contact', to: '/contact' },
   { text: 'Projects', to: '/websites' },
   { text: 'Updates', to: '/' },
-  { text: 'Likes', to: '/likes' },
+  { text: 'Articles', to: '/articles' },
+  { text: 'Notes', to: '/notes' },
   { text: 'Photos', to: '/photos' },
   { text: 'Galleries', to: '/collections' },
+  { text: 'Likes', to: '/likes' },
   { text: 'Replies', to: '/replies' },
 ]
 
-const shownLinkCount = 4
+const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/'
 ---
 
 <a
@@ -33,16 +36,12 @@ const shownLinkCount = 4
 
 <nav id="nav" class="main-nav">
   <ul class="main-nav__ul">
-    {navLinks.map((link, i) => (
+    {navLinks.map((link) => (
       <li class="main-nav__li">
-        {i === shownLinkCount && (
-          <a href="#nav" class="main-nav__link main-nav__link--more" id="nav-more-toggle">
-            More...
-          </a>
-        )}
         <a
           href={link.to}
-          class={i >= shownLinkCount ? 'main-nav__link main-nav__link--hidden' : 'main-nav__link'}
+          class="main-nav__link"
+          aria-current={currentPath === link.to ? 'page' : undefined}
         >
           {link.text}
         </a>
@@ -86,23 +85,12 @@ const shownLinkCount = 4
 </nav>
 
 <script>
-  // Mobile nav toggle & more/less
+  // Mobile nav toggle
   const toggle = document.querySelector('.main-nav-toggle')
   const nav = document.querySelector('.main-nav')
-  const moreToggle = document.getElementById('nav-more-toggle')
 
   toggle?.addEventListener('click', (e) => {
     e.preventDefault()
     nav?.classList.toggle('is-target')
-  })
-
-  moreToggle?.addEventListener('click', (e) => {
-    e.preventDefault()
-    const hidden = nav?.querySelectorAll('.main-nav__link--hidden') as NodeListOf<HTMLElement> | undefined
-    const isHidden = hidden?.[0]?.style?.display !== 'block'
-    hidden?.forEach((el) => {
-      el.style.display = isHidden ? 'block' : ''
-    })
-    if (moreToggle) moreToggle.textContent = isHidden ? 'Less...' : 'More...'
   })
 </script>

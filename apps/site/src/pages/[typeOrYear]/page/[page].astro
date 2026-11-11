@@ -1,5 +1,5 @@
 ---
-// Type/year archive pagination — /likes/page/2, /2024/page/2, etc.
+// Type archive pagination — /likes/page/2, etc. (years are single summary pages)
 // Ported from the legacy Next.js app/(default)/[typeOrYear]/page/[page]/page.tsx
 //
 // Uses the Postr content collection with route-layer filtering
@@ -9,6 +9,7 @@
 // NOTE: 'notes', 'articles', and 'photos' have dedicated paginated routes
 // and are deliberately excluded from this catch-all pagination route.
 
+import { site } from '../../../lib/site'
 import { postDate } from '../../../lib/post-date'
 import BaseLayout from '../../../layouts/BaseLayout.astro'
 import PostCard from '../../../components/PostCard.astro'
@@ -16,7 +17,6 @@ import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
 import { GrantCodesPagination } from '@grantcodes/ui/components/pagination/index.js'
 import { getCollection } from 'astro:content'
 import { getMetadata } from '../../../lib/metadata'
-import getMonthDataFiles from '../../../lib/month-data-files'
 
 // Map URL slug (plural form) to canonical cms.postType value (singular form).
 // Defined at module level for the main body scope. A copy is also kept
@@ -40,7 +40,6 @@ const TYPE_SLUG_MAP: Record<string, string> = {
 }
 
 export async function getStaticPaths() {
-  // Pre-generate pagination for all type archives and year archives
   // NOTE: 'notes', 'articles', and 'photos' have dedicated paginated routes
   const types = [
     'likes', 'replies', 'bookmarks', 'reposts', 'checkins',
@@ -68,16 +67,6 @@ export async function getStaticPaths() {
     watches: 'watch',
   }
 
-  // Read available years from monthly data files
-  const dataDir = new URL('../../../../data/monthly/', import.meta.url).pathname
-  const monthFiles = getMonthDataFiles(dataDir)
-  const yearsSet = new Set<string>()
-  for (const file of monthFiles) {
-    const [year] = file.split('/')
-    if (year) yearsSet.add(year)
-  }
-  const years = Array.from(yearsSet).sort()
-
   // Load the full collection once to compute page counts
   const allEntries = await getCollection('posts')
   const allPosts = allEntries.map((entry) => entry.data)
@@ -95,25 +84,12 @@ export async function getStaticPaths() {
     }
   }
 
-  // Generate page paths for each year
-  for (const yr of years) {
-    const count = allPosts.filter((p) => {
-      const postrYr = postDate(p).getFullYear()
-      return postrYr !== undefined && String(postrYr) === yr
-    }).length
-    const totalPages = Math.max(Math.ceil(count / PER_PAGE), 1)
-    for (let i = 2; i <= totalPages; i++) {
-      paths.push({ params: { typeOrYear: yr, page: String(i) } })
-    }
-  }
-
   return paths
 }
 
 const { typeOrYear, page } = Astro.params
 const pageNum = parseInt(page ?? '2')
-const siteUrl = import.meta.env.NEXT_PUBLIC_URL ?? 'https://grant.codes'
-const isYear = /^\d{4}$/.test(typeOrYear ?? '')
+const siteUrl = site.url
 
 // Get metadata for page title
 const meta = await getMetadata({ params: { typeOrYear, page } })
@@ -123,17 +99,8 @@ const pageTitle = meta?.title ?? `${typeOrYear} page ${page}`
 const allEntries = await getCollection('posts')
 const allPosts = allEntries.map((entry) => entry.data)
 
-// Filter by type or year using canonical date metadata
-let filtered: any[]
-if (isYear) {
-  filtered = allPosts.filter((post) => {
-    const yr = postDate(post).getFullYear()
-    return yr !== undefined && String(yr) === typeOrYear
-  })
-} else {
-  const postType = TYPE_SLUG_MAP[typeOrYear ?? ''] ?? typeOrYear
-  filtered = allPosts.filter((post) => post?.postType === postType)
-}
+const postType = TYPE_SLUG_MAP[typeOrYear ?? ''] ?? typeOrYear
+const filtered = allPosts.filter((post) => post?.postType === postType)
 
 // Sort by canonical date descending
 filtered.sort((a, b) => {

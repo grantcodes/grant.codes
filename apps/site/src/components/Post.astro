@@ -10,9 +10,11 @@
 //   u-like-of, u-repost-of, u-in-reply-to, u-bookmark-of, u-featured,
 //   u-video, u-audio, dt-start, dt-end, p-location, p-rsvp, u-syndication
 
+import { site } from '../lib/site'
 import PostFooter from './PostFooter.astro'
 import PostCard from './PostCard.astro'
 import PostContent from './PostContent.astro'
+import PhotosGallery from './PhotosGallery.astro'
 import { GrantCodesButton } from '@grantcodes/ui/components/button/index.js'
 import { Heart, Bookmark, Repeat2, Reply } from 'lucide-static'
 import { toPostView } from '@postr/core'
@@ -70,7 +72,7 @@ const references = Object.values(post.references ?? {}).map((ref: any) => ({
   properties: ref.properties,
 }))
 
-const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
+const authorName = site.author.name
 ---
 
 <article
@@ -140,12 +142,14 @@ const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
   {/* ── Photos ── */}
   {photo.length > 0 && (
     <div class="card__breakout post__photos">
-      {photo.map((p: any, i: number) => {
+      {photo.map((p: any) => {
         const src = getPhotoUrl(p)
         const alt = getPhotoAlt(p)
         return (
           <figure>
-            <img src={src} alt={alt} loading="lazy" />
+            <a href={src} data-zoom>
+              <img src={src} alt={alt} loading="lazy" />
+            </a>
             <data class="u-photo" value={src} />
           </figure>
         )
@@ -212,10 +216,8 @@ const authorName = import.meta.env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond'
 
   {/* ── Post children (gallery of referenced posts) ── */}
   {children.length > 0 && (
-    <div class="card__breakout post__children">
-      {children.map((child: any) => (
-        <PostCard post={child} compact />
-      ))}
+    <div class="post__children">
+      <PhotosGallery posts={children} type="collection" />
     </div>
   )}
 
