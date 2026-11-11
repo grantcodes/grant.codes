@@ -108,12 +108,11 @@ const onThumbnailError =
 
   /* Filmstrip: fixed height, each photo at its own width. */
   .photos-gallery--collection {
-    --filmstrip-height: 16rem;
+    --filmstrip-height: clamp(9rem, 45vw, 14rem);
   }
-  @media (max-width: 30rem) {
-    .photos-gallery--collection {
-      --filmstrip-height: 12rem;
-    }
+  /* Run edge to edge inside a card, past its body padding. */
+  grantcodes-card .photos-gallery--collection {
+    margin-inline: calc(-1 * var(--g-spacing-md));
   }
   .photos-gallery--collection .photos-gallery__item img {
     inline-size: auto;
