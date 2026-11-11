@@ -22,12 +22,12 @@ export function getPhotoUrl(value: any): string {
 const MEDIA_URL = 'https://backend.grant.codes/media/'
 
 /**
- * The 200x200 crop of a locally stored photo, or the photo itself.
+ * A resized copy of a locally stored photo ('200x200' crop, or '700' / '1800' wide), or the photo itself.
  * postr 1.x and 2 both write resized copies next to an upload as `name-<size>.ext`.
  */
-export function getThumbnailUrl(url: string): string {
+export function getThumbnailUrl(url: string, size: '200x200' | '700' | '1800' = '200x200'): string {
   if (!url.startsWith(MEDIA_URL)) return url
-  return url.replace(/(\.[^./]+)$/, '-200x200$1')
+  return url.replace(/(\.[^./]+)$/, `-${size}$1`)
 }
 
 /**

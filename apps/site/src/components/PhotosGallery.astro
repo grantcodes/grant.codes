@@ -1,7 +1,8 @@
 ---
-// Square photo grid.
-// - type "feed": each photo links to its post; hidden h-entries keep the feed parseable.
-// - type "collection": photos of a collection's children open in the lightbox.
+// Photo gallery.
+// - type "feed": square grid; each photo links to its post; hidden h-entries keep the feed parseable.
+// - type "collection": a scrolling filmstrip of a collection's photos at their own aspect ratio,
+//   each opening in the lightbox.
 
 import { site } from '../lib/site'
 import { normalizeInternalUrl } from '../lib/url'
@@ -20,7 +21,7 @@ const photos = posts.flatMap((post) =>
     permalink: normalizeInternalUrl(post.url),
     url: photo.url,
     alt: photo.alt || post.name || '',
-    thumbnail: getThumbnailUrl(photo.url),
+    thumbnail: getThumbnailUrl(photo.url, type === 'feed' ? '200x200' : '700'),
   }))
 )
 // A missing thumbnail falls back to the full photo; a missing photo hides its tile.
@@ -29,7 +30,11 @@ const onThumbnailError =
 ---
 
 {photos.length > 0 && (
-  <GrantCodesGallery class="photos-gallery">
+  // Spread works around grantcodes/ui#231 (global `variant` typing).
+  <GrantCodesGallery
+    class={`photos-gallery photos-gallery--${type}`}
+    {...(type === 'collection' ? { variant: 'filmstrip' } : {}) as object}
+  >
     {photos.map((photo) =>
       type === 'feed' ? (
         <a href={photo.permalink} class="photos-gallery__item">
@@ -99,5 +104,20 @@ const onThumbnailError =
     .photos-gallery__item img {
       transition: none;
     }
+  }
+
+  /* Filmstrip: fixed height, each photo at its own width. */
+  .photos-gallery--collection {
+    --filmstrip-height: 16rem;
+  }
+  @media (max-width: 30rem) {
+    .photos-gallery--collection {
+      --filmstrip-height: 12rem;
+    }
+  }
+  .photos-gallery--collection .photos-gallery__item img {
+    inline-size: auto;
+    block-size: 100%;
+    aspect-ratio: auto;
   }
 </style>
