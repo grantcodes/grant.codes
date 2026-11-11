@@ -12,7 +12,6 @@ import {
   monthNames,
   trackDistanceKm,
 } from '../lib/archive'
-import { postDate } from '../lib/post-date'
 
 const posts = await getArchivePosts()
 const publicPosts = posts.filter((post) => post.visibility === 'public')
@@ -28,7 +27,6 @@ const latestTrack = (await getArchiveMonths())
   .find(({ track }) => track.length > 1)
 const latestKm = latestTrack ? trackDistanceKm(getMonthTrack(latestTrack.year, latestTrack.month, Infinity)) : 0
 
-const years = [...new Set(posts.map((post) => postDate(post).getFullYear()))].sort((a, b) => b - a)
 const formatDate = (date: Date) =>
   date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
 ---
@@ -108,15 +106,6 @@ const formatDate = (date: Date) =>
       <a href="/updates">All updates</a>
     </section>
   )}
-
-  <hr />
-
-  <section class="home-section">
-    <h2>Years</h2>
-    <p class="years">
-      {years.map((year) => <a href={`/${year}`}>{year}</a>)}
-    </p>
-  </section>
 </BaseLayout>
 
 <style>
@@ -246,14 +235,5 @@ const formatDate = (date: Date) =>
   }
   .notes .e-content :global(p) {
     margin: 0 0 0.25rem;
-  }
-
-  .years {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1rem;
-    margin: 0;
-    font-size: 1.25rem;
-    font-weight: 800;
   }
 </style>
