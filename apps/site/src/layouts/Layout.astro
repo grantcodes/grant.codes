@@ -8,6 +8,7 @@ import '@grantcodes/ui/styles/themes/grantcodes.css'
 import '../lib/register-ui-elements'
 import '../styles/site.css'
 import Lightbox from '../components/Lightbox.astro'
+import { dailyThemeVars, dayKey } from '../lib/daily-theme'
 
 // ── Environment ──
 const url = site.url
@@ -36,7 +37,9 @@ const image = parseJsonEnv<{ url?: string; src?: string; width?: number; height?
 })
 const ogImage = image.src || image.url || '/img/og-default.jpg'
 
-const themeColor = '#111111'
+// Build-day palette; the script below swaps in today's when the page is older than a day.
+const dayVars = dailyThemeVars()
+const themeColor = dayVars['--day-main']
 
 // ── IndieWeb <link> tags ──
 const indiewebLinks = [
@@ -71,7 +74,7 @@ const ogUrl = canonicalUrl ?? url
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-day={dayKey()} style={dayVars}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -149,5 +152,16 @@ const ogUrl = canonicalUrl ?? url
   <body>
     <slot />
     <Lightbox />
+    <script>
+      import { dayKey } from '../lib/daily-theme'
+
+      const root = document.documentElement
+      if (root.dataset.day !== dayKey()) {
+        import('../lib/daily-theme').then(({ dailyThemeVars }) => {
+          for (const [name, value] of Object.entries(dailyThemeVars())) root.style.setProperty(name, value)
+          root.dataset.day = dayKey()
+        })
+      }
+    </script>
   </body>
 </html>

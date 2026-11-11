@@ -5,6 +5,10 @@ export default defineConfig({
   integrations: [grantcodes()],
   site: 'https://grant.codes',
   output: 'static',
+  // The timeline moved from / to /updates when the home page became an intro.
+  redirects: {
+    '/page/[page]': '/updates/page/[page]',
+  },
   server: {
     host: '127.0.0.1',
   },

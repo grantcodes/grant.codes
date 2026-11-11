@@ -1,77 +1,259 @@
 ---
-// Homepage — fetches recent posts via Postr content loader and renders as a timeline
-//
-// Ported from the legacy Next.js app/(default)/page.tsx
-// Wave 9 (003): migrated from direct getPosts() to Postr content collection
-//   - Posts are fetched via the content layer (astro:content getCollection)
-//   - Pagination is derived from the filtered content collection
-
+// Home: who I am, where I've been, and a few highlights from the archive.
 import { site } from '../lib/site'
-import { postDate } from '../lib/post-date'
 import BaseLayout from '../layouts/BaseLayout.astro'
-import PostCard from '../components/PostCard.astro'
-import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
-import { GrantCodesPagination } from '@grantcodes/ui/components/pagination/index.js'
-import { getCollection } from 'astro:content'
+import PhotosGallery from '../components/PhotosGallery.astro'
+import TrackLine from '../components/TrackLine.astro'
+import { normalizeInternalUrl } from '../lib/url'
+import {
+  getArchiveMonths,
+  getArchivePosts,
+  getMonthTrack,
+  monthNames,
+  trackDistanceKm,
+} from '../lib/archive'
+import { postDate } from '../lib/post-date'
 
-const siteUrl = site.url
-const authorName = site.author.name
-const homeFeedTypes = new Set([
-  'note',
-  'photo',
-  'article',
-  'repost',
-  'quotation',
-  'video',
-  'audio',
-  'collection',
-])
+const posts = await getArchivePosts()
+const publicPosts = posts.filter((post) => post.visibility === 'public')
+const articles = publicPosts.filter((post) => post.postType === 'article').slice(0, 3)
+const notes = publicPosts.filter((post) => post.postType === 'note').slice(0, 3)
+// Some old uploads are missing from the media store; extra photos fill the gaps their tiles leave.
+const photos = publicPosts.filter((post) => post.postType === 'photo').slice(0, 16)
 
-// The 10 newest home feed posts for the timeline.
-const collectionEntries = await getCollection('posts')
-const feedEntries = collectionEntries
-  .map((entry) => entry.data)
-  .filter((post) => homeFeedTypes.has(post?.postType))
-  .sort((a, b) => {
-    return postDate(b).getTime() - postDate(a).getTime()
-  })
-const posts = feedEntries.slice(0, 10)
+// The most recent month with a location track.
+const latestTrack = (await getArchiveMonths())
+  .reverse()
+  .map(([year, month]) => ({ year, month, track: getMonthTrack(year, month, 600) }))
+  .find(({ track }) => track.length > 1)
+const latestKm = latestTrack ? trackDistanceKm(getMonthTrack(latestTrack.year, latestTrack.month, Infinity)) : 0
 
-const totalPages = Math.ceil(feedEntries.length / 10)
+const years = [...new Set(posts.map((post) => postDate(post).getFullYear()))].sort((a, b) => b - a)
+const formatDate = (date: Date) =>
+  date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
 ---
 
-<BaseLayout title="Home" canonicalUrl={siteUrl}>
-  {posts.length === 0 && (
-    <GrantCodesCard>
-      <h2>{authorName}</h2>
-      <p>No posts to display yet.</p>
-    </GrantCodesCard>
+<BaseLayout title="Hi! I'm Grant 👋" canonicalUrl={site.url}>
+  <section class="intro h-card">
+    <a href="/about" class="intro__photo">
+      <img class="u-photo" src="/img/me.jpg" alt={site.author.name} width="400" height="400" />
+    </a>
+    <div class="intro__text">
+      <h1 class="intro__title">Hi! I'm <span class="p-name">Grant</span> 👋</h1>
+      <p class="p-note">
+        I'm a frontend engineer from Scotland, living in Barcelona. I like making fun, accessible,
+        sustainable websites.
+      </p>
+      <p class="intro__links">
+        <a href="/about">More about me</a>
+        <a href="/contact">Say hello</a>
+        <a href="/where">Where am I?</a>
+      </p>
+      <a class="u-url screen-reader-text" href={site.url} rel="me">{site.name}</a>
+    </div>
+  </section>
+
+  {latestTrack && (
+    <a class="travels" href={`/${latestTrack.year}/${latestTrack.month}`}>
+      <TrackLine
+        track={latestTrack.track}
+        label={`My route in ${monthNames[latestTrack.month - 1]} ${latestTrack.year}`}
+      />
+      <span class="travels__caption">
+        Where I wandered in {monthNames[latestTrack.month - 1]} {latestTrack.year}
+        {latestKm > 0 && <> · {latestKm.toLocaleString('en-GB')} km</>}
+      </span>
+    </a>
   )}
 
-  {posts.length > 0 && (
-    <>
-      <div class="post-list">
-        {posts.map((post) => (
-          <PostCard post={post} compact />
+  <hr />
+
+  {articles.length > 0 && (
+    <section class="home-section">
+      <h2>Writing</h2>
+      <ul class="writing" role="list">
+        {articles.map((post) => (
+          <li class="h-entry">
+            <a class="u-url p-name" href={normalizeInternalUrl(post.url)}>{post.name}</a>
+            <time class="dt-published" datetime={post.published.toISOString()}>{formatDate(post.published)}</time>
+            {post.summary && <p class="p-summary">{post.summary}</p>}
+          </li>
         ))}
-      </div>
-
-      {totalPages > 1 && (
-        <div class="home-pagination">
-          <GrantCodesPagination
-            previousHref=""
-            nextHref="/page/2"
-            page={1}
-            pages={totalPages}
-          />
-        </div>
-      )}
-    </>
+      </ul>
+      <a href="/articles">All articles</a>
+    </section>
   )}
+
+  {photos.length > 0 && (
+    <section class="home-section">
+      <h2>Photos</h2>
+      <PhotosGallery posts={photos} type="feed" />
+      <a href="/photos">All photos</a>
+    </section>
+  )}
+
+  {notes.length > 0 && (
+    <section class="home-section">
+      <h2>Notes</h2>
+      <ul class="notes" role="list">
+        {notes.map((post) => (
+          <li class="h-entry">
+            {post.content && <div class="e-content" set:html={post.content.html} />}
+            <a class="u-url" href={normalizeInternalUrl(post.url)}>
+              <time class="dt-published" datetime={post.published.toISOString()}>{formatDate(post.published)}</time>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <a href="/updates">All updates</a>
+    </section>
+  )}
+
+  <hr />
+
+  <section class="home-section">
+    <h2>Years</h2>
+    <p class="years">
+      {years.map((year) => <a href={`/${year}`}>{year}</a>)}
+    </p>
+  </section>
 </BaseLayout>
 
 <style>
-  .home-pagination {
-    padding-inline: 1rem;
+  .intro {
+    display: grid;
+    gap: 2rem;
+    align-items: center;
+    padding-block-start: 1rem;
+  }
+  @media (min-width: 40rem) {
+    .intro {
+      grid-template-columns: 12rem 1fr;
+    }
+  }
+
+  /* The memorable thing: a contour blob photo with rings in the day's colours. */
+  .intro__photo {
+    --blob: 58% 42% 51% 49% / 46% 56% 44% 54%;
+    display: block;
+    justify-self: center;
+    inline-size: 10rem;
+    aspect-ratio: 1;
+    margin: 2.5rem;
+    border-radius: var(--blob);
+    box-shadow:
+      0 0 0 0.6rem var(--g-color-background-default),
+      0 0 0 0.9rem var(--topography-layer-4),
+      0 0 0 1.5rem var(--g-color-background-default),
+      0 0 0 1.75rem var(--topography-layer-2),
+      0 0 0 2.35rem var(--g-color-background-default),
+      0 0 0 2.5rem var(--topography-layer-1);
+    overflow: hidden;
+  }
+  .intro__photo img {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .intro__photo {
+      animation: blob-breathe 12s ease-in-out infinite alternate;
+    }
+    @keyframes blob-breathe {
+      to {
+        border-radius: 44% 56% 41% 59% / 55% 43% 57% 45%;
+      }
+    }
+  }
+
+  .intro__title {
+    margin: 0 0 0.5rem;
+    font-size: clamp(2.5rem, 7vw, 4rem);
+    line-height: 1;
+  }
+  .intro__text .p-note {
+    margin: 0;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    text-wrap: pretty;
+  }
+  .intro__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    margin: 1rem 0 0;
+    font-weight: 800;
+  }
+
+  .travels {
+    display: grid;
+    gap: 0.5rem;
+    color: inherit;
+    text-decoration: none;
+  }
+  .travels__caption {
+    justify-self: end;
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+  .travels:hover .travels__caption {
+    color: var(--day-accent);
+    text-decoration: underline wavy;
+  }
+
+  .home-section {
+    display: grid;
+    gap: 1rem;
+  }
+  .home-section h2 {
+    margin: 0;
+    font-size: 2rem;
+  }
+  .home-section :global(.photos-gallery) {
+    --gallery-columns: 4;
+  }
+  .home-section > a:last-child {
+    justify-self: start;
+    font-weight: 800;
+  }
+
+  .writing,
+  .notes {
+    display: grid;
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .writing .p-name {
+    font-size: 1.5rem;
+    font-weight: 900;
+    line-height: 1.2;
+  }
+  .writing time,
+  .notes time {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--g-color-content-subtle);
+  }
+  .writing .p-summary {
+    margin: 0.25rem 0 0;
+  }
+  .notes li {
+    padding-inline-start: 1rem;
+    border-inline-start: 3px solid var(--topography-layer-2);
+  }
+  .notes .e-content :global(p) {
+    margin: 0 0 0.25rem;
+  }
+
+  .years {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 800;
   }
 </style>

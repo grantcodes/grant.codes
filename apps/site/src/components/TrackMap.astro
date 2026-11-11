@@ -19,6 +19,12 @@ const points = tracks.filter((track) => track.length > 0)
   import 'leaflet/dist/leaflet.css'
 
   async function drawMaps(maps: NodeListOf<HTMLElement>) {
+  // Resolve the day's accent (a light-dark() expression) to a colour Leaflet can use.
+  const probe = document.createElement('span')
+  probe.style.color = 'var(--day-accent)'
+  document.body.append(probe)
+  const accent = getComputedStyle(probe).color
+  probe.remove()
     const L = await import('leaflet')
     for (const element of maps) {
       const tracks = JSON.parse(element.dataset.tracks ?? '[]') as Array<Array<[number, number]>>
@@ -27,9 +33,7 @@ const points = tracks.filter((track) => track.length > 0)
         maxZoom: 18,
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(map)
-      const color =
-        getComputedStyle(document.documentElement).getPropertyValue('--g-color-primary-600').trim() ||
-        '#6366f1'
+      const color = accent
       const lines = tracks.map((track) =>
         L.polyline(track, { color, weight: 4, opacity: 0.85, lineJoin: 'round' }).addTo(map)
       )

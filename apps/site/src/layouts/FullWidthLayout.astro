@@ -1,5 +1,5 @@
 ---
-// Full-width page layout — shell with right-aligned wide container
+// Wide page layout — galleries, maps and summaries
 import Layout from './Layout.astro'
 import Container from '../components/shell/Container.astro'
 
@@ -14,7 +14,7 @@ const { title, description, canonicalUrl, noindex } = Astro.props
 ---
 
 <Layout title={title} description={description} canonicalUrl={canonicalUrl} noindex={noindex}>
-  <Container className="right-aligned right-aligned--wide-content">
+  <Container size="wide">
     <slot />
   </Container>
 </Layout>

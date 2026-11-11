@@ -52,7 +52,9 @@ const PostLayout = post?.postType === 'article' ? ArticleLayout : BaseLayout
   )}
 
   {post && (
-    <Post post={post} />
+    <GrantCodesCard>
+      <Post post={post} />
+    </GrantCodesCard>
   )}
 
 </PostLayout>

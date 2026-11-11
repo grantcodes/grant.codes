@@ -1,0 +1,11 @@
+---
+import UpdatesTimeline from '../../../components/UpdatesTimeline.astro'
+import { getUpdates, UPDATES_PER_PAGE } from '../../../lib/updates'
+
+export async function getStaticPaths() {
+  const pages = Math.ceil((await getUpdates()).length / UPDATES_PER_PAGE)
+  return Array.from({ length: Math.max(pages - 1, 0) }, (_, i) => ({ params: { page: String(i + 2) } }))
+}
+---
+
+<UpdatesTimeline page={Number(Astro.params.page)} />

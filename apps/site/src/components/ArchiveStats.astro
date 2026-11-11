@@ -59,8 +59,8 @@ const total = counts.reduce((sum, [, count]) => sum + count, 0)
     text-align: center;
   }
   .archive-stats__item--total {
-    background: var(--g-color-primary-600);
-    color: var(--g-color-content-knockout);
+    background: var(--day-main);
+    color: var(--day-on-main, var(--g-color-content-knockout));
   }
   .archive-stats__emoji {
     font-size: 1.5rem;

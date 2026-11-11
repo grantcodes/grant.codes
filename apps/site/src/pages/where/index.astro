@@ -1,12 +1,12 @@
 ---
 // Where am I? Live location from the api's Dawarich proxy (GET /api/last-location),
-// falling back to home (Dundee) when it is unavailable.
+// falling back to home (Barcelona) when it is unavailable.
 
 import { site } from '../../lib/site'
 import FullWidthLayout from '../../layouts/FullWidthLayout.astro'
 import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
 
-const home = { lat: 56.462, lng: -2.9707, label: 'Dundee, Scotland' }
+const home = { lat: 41.3874, lng: 2.1686, label: 'Barcelona, Spain' }
 ---
 
 <FullWidthLayout title="Where am I?" canonicalUrl={`${site.url}/where`} noindex={true}>
@@ -55,9 +55,7 @@ const home = { lat: 56.462, lng: -2.9707, label: 'Dundee, Scotland' }
       radius: 10,
       color: 'white',
       weight: 3,
-      fillColor:
-        getComputedStyle(document.documentElement).getPropertyValue('--g-color-primary-600').trim() ||
-        '#6366f1',
+      fillColor: getComputedStyle(element).getPropertyValue('color'),
       fillOpacity: 1,
     }).addTo(map)
 
@@ -91,6 +89,7 @@ const home = { lat: 56.462, lng: -2.9707, label: 'Dundee, Scotland' }
 
 <style>
   .where-map {
+    color: var(--day-accent);
     block-size: min(70dvh, 36rem);
     inline-size: 100%;
     border-radius: var(--g-border-radius-md);

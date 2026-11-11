@@ -7,12 +7,22 @@
 :root {
     --card-padding: 1rem;
     --border-radius: 0.4rem;
-    --content-width: 30rem;
-    --side-width: 13rem;
-    --mid-break: 70rem;
-    --header-height: 4rem;
-    --width-normal: 30rem;
-    --width-wide: 50rem;
+    --content-width: 42rem;
+    --width-wide: 64rem;
+    --width-article: 46rem;
+
+    /* Daily palette (set on <html> from @grantcodes/themer); fall back to the brand purple. */
+    --day-main: var(--g-color-primary-500);
+    --day-compl: var(--g-color-secondary-500);
+    /* Readable accent: the day's colour, darkened in light mode and lightened in dark mode. */
+    --day-accent: var(--g-color-content-primary);
+    --day-accent: light-dark(
+        oklch(from var(--day-main) min(l, 0.45) max(c, 0.12) h),
+        oklch(from var(--day-main) max(l, 0.78) c h)
+    );
+    --g-color-content-primary: var(--day-accent);
+    --g-color-content-primary-hover: var(--day-accent);
+    --g-color-border-primary: var(--day-accent);
 
     --about-heading-width: 12rem;
     --about-gap: 2rem;
@@ -29,36 +39,13 @@
         var(--g-color-background-subtle) 78%,
         transparent
     );
-    --topography-layer-0: color-mix(
-        in oklab,
-        var(--g-color-primary-500) 10%,
-        var(--g-color-background-default)
-    );
-    --topography-layer-1: color-mix(
-        in oklab,
-        var(--g-color-primary-500) 20%,
-        var(--g-color-background-default)
-    );
-    --topography-layer-2: color-mix(
-        in oklab,
-        var(--g-color-primary-500) 40%,
-        var(--g-color-background-default)
-    );
-    --topography-layer-3: color-mix(
-        in oklab,
-        var(--g-color-primary-500) 60%,
-        var(--g-color-background-default)
-    );
-    --topography-layer-4: color-mix(
-        in oklab,
-        var(--g-color-primary-500) 80%,
-        var(--g-color-background-default)
-    );
-    --topography-layer-5: color-mix(
-        in oklab,
-        var(--g-color-primary-500) 100%,
-        var(--g-color-background-default)
-    );
+    /* Contour rings run from a faint wash of the day's colour to its complement. */
+    --topography-layer-0: color-mix(in oklab, var(--day-main) 12%, var(--g-color-background-default));
+    --topography-layer-1: color-mix(in oklab, var(--day-main) 28%, var(--g-color-background-default));
+    --topography-layer-2: color-mix(in oklab, var(--day-main) 50%, var(--g-color-background-default));
+    --topography-layer-3: color-mix(in oklab, var(--day-main) 75%, var(--g-color-background-default));
+    --topography-layer-4: var(--day-main);
+    --topography-layer-5: var(--day-compl);
 }
 
 html {
@@ -154,260 +141,160 @@ grantcodes-icon {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* ── Layout Grid (ported from _layout.scss) ── */
-.grid {
-    display: grid;
-    width: 100%;
-    min-height: 100vh;
-    grid-column-gap: 1rem;
-    grid-row-gap: 1rem;
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto 1fr auto;
-    grid-template-areas:
-        'header'
-        'main'
-        'footer';
-}
-@media (min-width: 70rem) {
-    .grid {
-        grid-column-gap: 2rem;
-        grid-row-gap: 2rem;
-        grid-template-columns: 30rem minmax(auto, 20rem);
-        grid-template-rows: var(--header-height) 1fr auto;
-        grid-template-areas:
-            'main header'
-            'main nav'
-            'footer footer';
-    }
-    .grid.right-aligned {
-        justify-content: space-between;
-    }
-    .grid.right-aligned--wide-content {
-        grid-template-columns: minmax(0, 1fr) var(--side-width);
-    }
-}
-.grid.single-article {
-    padding-left: 0;
-    padding-right: 0;
-    padding-top: 0;
-}
-@media (min-width: 70rem) {
-    .grid.single-article {
-        grid-template-columns: auto;
-        grid-template-rows: auto auto;
-        grid-template-areas:
-            'main'
-            'footer';
-    }
+/* ── Shell: top bar, topography band, one content column ── */
+.shell {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-block-size: 100dvh;
+    isolation: isolate;
 }
 
 .main-content {
-    grid-area: main;
     display: flex;
     flex-direction: column;
-    gap: var(--g-spacing-lg);
-    max-width: 100%;
+    gap: var(--g-spacing-lg, 1.5rem);
+    inline-size: 100%;
+    max-inline-size: var(--content-width);
+    margin-inline: auto;
     padding-inline: 1rem;
-    padding-top: var(--g-spacing-lg);
+    padding-block: 2rem 4rem;
+    flex: 1;
 }
-
+.main-content--wide {
+    max-inline-size: var(--width-wide);
+}
+.main-content--article {
+    max-inline-size: var(--width-article);
+}
 .main-content > grantcodes-card {
     flex-grow: 0;
 }
 
-.background-layer {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    overflow: hidden;
-    pointer-events: none;
-    z-index: -5;
+/* ── Header ── */
+.site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    inline-size: 100%;
+    max-inline-size: var(--width-wide);
+    margin-inline: auto;
+    padding: 1.25rem 1rem;
 }
-
-/* ── Header (ported from _header.scss) ── */
-.main-header {
-    grid-area: header;
-    justify-self: center;
-    margin-top: 4rem;
-    margin-bottom: 3rem;
-}
-@media (min-width: 70rem) {
-    .main-header {
-        position: sticky;
-        z-index: 1;
-        justify-self: start;
-        align-self: start;
-        margin: 0;
-        padding-top: 0.3em;
-        height: var(--header-height);
-        top: 1rem;
-    }
-    .grid.right-aligned .main-header {
-        justify-self: end;
-    }
-    .grid.single-article .main-header {
-        display: none;
-    }
-}
-@media print {
-    .main-header {
-        position: static !important;
-        text-align: center;
-    }
-}
-
-.main-header__title {
-    display: inline-block;
-    margin: 0;
-    text-decoration: overline wavy;
+.site-header__name {
+    font-size: 1.6rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
     color: var(--g-color-content-default);
-    letter-spacing: 0.1em;
-    text-shadow: 1px 1px 0.6rem rgba(0, 0, 0, 0.1);
-    font-size: 1.96rem;
+    text-decoration: overline wavy var(--day-accent);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
 }
-
-.main-header__title__link {
-    text-decoration: none !important;
-    color: inherit;
-}
-
-/* ── Navigation (ported from _nav.scss) ── */
-.main-nav {
+.site-header__nav {
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    grid-area: nav;
-    position: fixed;
-    left: 100%;
-    top: 0;
-    bottom: 0;
-    overflow: auto;
-    padding: 1rem;
-    padding-left: 2rem;
-    padding-right: 2rem;
-    width: 18rem;
-    max-width: 100%;
-    z-index: 9;
-    font-size: 2em;
-    backdrop-filter: blur(0.6rem);
-    background-color: var(--surface-glass);
-    box-shadow: 1px 1px 0.6rem rgba(0, 0, 0, 0.1);
-    transition: transform 0.4s;
-    transform: translateX(0%);
+    align-items: center;
+    gap: 1.25rem;
 }
-.main-nav.is-target,
-.main-nav:target {
-    transform: translateX(-100%) !important;
-}
-@media (min-width: 70rem) {
-    .grid:not(.single-article) .main-nav {
-        font-size: 1rem;
-        padding: 0;
-        position: sticky;
-        align-self: flex-start;
-        right: auto;
-        background: none;
-        backdrop-filter: none;
-        box-shadow: none;
-        transform: none;
-        z-index: 1;
-        width: auto;
-        top: calc(var(--header-height) + 2rem + 2rem);
-        bottom: auto;
-        left: auto;
-        max-height: calc(
-            100vh - var(--header-height) - var(--header-height) - 4rem
-        );
-    }
-    .grid:not(.single-article) .main-nav.is-target,
-    .grid:not(.single-article) .main-nav:target {
-        transform: none !important;
-    }
-    .grid.right-aligned .main-nav {
-        justify-self: end;
-        align-items: flex-end;
-    }
-    .grid.single-article .main-nav {
-        position: fixed;
-    }
-}
-
-.main-nav-toggle {
-    text-decoration: none;
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 2.5rem;
-    height: 2.5rem;
-    text-align: center;
-    line-height: 1rem;
-    z-index: 10;
-    box-shadow: 1px 1px 0.6rem rgba(0, 0, 0, 0.1);
-    opacity: 0.9;
-    cursor: pointer;
-    display: block;
-    border-bottom-left-radius: var(--border-radius);
-    backdrop-filter: blur(0.6rem);
-    background-color: var(--surface-glass);
-}
-@media (min-width: 70rem) {
-    .main-nav-toggle {
-        display: none;
-    }
-}
-
-.main-nav__ul {
-    display: flex;
-    flex-direction: column;
+.site-header__links {
+    display: none;
+    gap: 1.25rem;
     margin: 0;
     padding: 0;
     list-style: none;
 }
-@media (min-width: 70rem) {
-    .grid:not(.single-article) .main-nav__ul {
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-items: flex-start;
-        justify-content: space-between;
-    }
-    .grid.right-aligned .main-nav__ul {
-        flex-direction: column;
-        align-items: flex-end;
-        justify-content: center;
-        flex-wrap: nowrap;
+@media (min-width: 46rem) {
+    .site-header__links {
+        display: flex;
     }
 }
-
-.main-nav__li {
-    display: block;
-    flex-grow: 0;
+.site-header__links a,
+.site-menu__links a {
+    font-weight: 800;
+    color: var(--g-color-content-default);
+    text-decoration: none;
 }
-@media (min-width: 70rem) {
-    .main-nav__li {
-        margin-bottom: 0.2em;
-        min-width: 48%;
-    }
-    .grid.right-aligned .main-nav__li {
-        text-align: right;
-        min-width: auto;
-    }
-}
-
-.main-nav__link {
-    display: inline-block;
-    text-shadow: 1px 1px 0.6rem rgba(0, 0, 0, 0.1);
-    font-size: 1.4rem;
-    font-weight: 900;
-}
-.main-nav__link[aria-current='page'] {
+.site-header__links a:hover,
+.site-menu__links a:hover,
+.site-header__links a[aria-current='page'],
+.site-menu a[aria-current='page'] {
+    color: var(--day-accent);
     text-decoration: underline wavy;
+    text-underline-offset: 0.25em;
 }
-
-.main-nav__link--webring {
+.site-header__menu-button {
+    anchor-name: --site-menu-button;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    padding: 0.4em 0.8em;
+    border: 2px solid currentColor;
+    border-radius: 999px;
+    background: var(--surface-glass);
+    backdrop-filter: blur(0.5rem);
+    color: var(--g-color-content-default);
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+}
+.site-header__menu-button:hover {
+    color: var(--day-accent);
+}
+.site-menu {
+    position: fixed;
+    inset: auto;
+    inset-block-start: 4.5rem;
+    inset-block-start: anchor(--site-menu-button bottom);
+    inset-inline-end: 1rem;
+    inline-size: min(22rem, calc(100dvw - 2rem));
+    max-block-size: calc(100dvh - 6rem);
+    margin: 0.5rem 0 0;
+    padding: 1rem;
+    overflow: auto;
+    border: 2px solid var(--g-color-border-default);
+    border-radius: var(--g-border-radius-lg, 1rem);
+    background: var(--g-color-background-strong);
+    color: var(--g-color-content-default);
+    box-shadow: 0 1rem 3rem rgb(0 0 0 / 0.2);
+}
+.site-menu.site-menu--open {
     display: block;
-    white-space: nowrap;
+}
+.site-menu__links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem 1rem;
+    margin: 1rem 0;
+    padding: 0;
+    list-style: none;
+}
+.site-menu__webring {
+    margin: 0;
+    text-align: center;
+}
+.site-menu__webring a {
+    text-decoration: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+    .site-menu {
+        transition:
+            opacity 0.2s,
+            translate 0.2s,
+            display 0.2s,
+            overlay 0.2s;
+        transition-behavior: allow-discrete;
+    }
+    @starting-style {
+        .site-menu:popover-open {
+            opacity: 0;
+            translate: 0 -0.5rem;
+        }
+    }
+}
+@media print {
+    .site-header__nav {
+        display: none;
+    }
 }
 
 /* ── Search (ported from _search.scss) ── */
@@ -504,47 +391,61 @@ grantcodes-icon {
     margin-top: 1rem;
 }
 
-/* ── Topography (ported from _topography.scss) ── */
+/* ── Topography band: the day's palette as contour rings behind the top of every page ── */
 @keyframes topography-ring-enter {
-    0% {
-        transform: translate(100%, -50%) rotate(0deg);
-    }
-    100% {
-        transform: translate(0%, 0%) rotate(0deg);
+    from {
+        transform: scale(0.6);
+        opacity: 0;
     }
 }
-
+.shell__topography {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-end: 0;
+    z-index: -1;
+    inline-size: min(56rem, 100%);
+    block-size: 46rem;
+    overflow: hidden;
+    pointer-events: none;
+    mask-image: radial-gradient(ellipse 100% 100% at top right, black 35%, transparent 72%);
+}
 .topography-bg {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: top right;
-    float: right;
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-end: 0;
+    inline-size: 46rem;
+    max-inline-size: 150%;
+    opacity: 0.85;
+    block-size: auto;
 }
-@media (min-width: 70rem) {
-    .topography-bg {
-        max-width: 30rem;
+@media (prefers-reduced-motion: no-preference) {
+    .topography-bg path {
+        animation: topography-ring-enter 1.2s both cubic-bezier(0.2, 0.7, 0.2, 1);
+        transform-origin: top right;
     }
+    .topography-bg path:nth-child(2) { animation-delay: 0.08s; }
+    .topography-bg path:nth-child(3) { animation-delay: 0.16s; }
+    .topography-bg path:nth-child(4) { animation-delay: 0.24s; }
+    .topography-bg path:nth-child(5) { animation-delay: 0.32s; }
+    .topography-bg path:nth-child(6) { animation-delay: 0.4s; }
 }
 
-.topography-bg path {
-    animation: topography-ring-enter 0.7s both;
-    transform-origin: top right;
+/* ── Post typography: one scale for titles and headings inside content ── */
+.post__title {
+    margin: 0;
+    font-size: clamp(1.75rem, 4.5vw, 2.75rem);
+    line-height: 1.1;
+    text-wrap: balance;
 }
-.topography-bg path:nth-child(2) {
-    animation-duration: 1.4s;
+grantcodes-card .post__title {
+    font-size: clamp(1.4rem, 3.5vw, 2rem);
 }
-.topography-bg path:nth-child(3) {
-    animation-duration: 2.1s;
+.post__content :is(h1, h2) {
+    font-size: 1.6rem;
+    line-height: 1.2;
 }
-.topography-bg path:nth-child(4) {
-    animation-duration: 2.8s;
-}
-.topography-bg path:nth-child(5) {
-    animation-duration: 3.5s;
-}
-.topography-bg path:nth-child(6) {
-    animation-duration: 4.2s;
+.post__content :is(h3, h4, h5, h6) {
+    font-size: 1.25rem;
 }
 
 .page-title {

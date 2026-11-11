@@ -1,12 +1,81 @@
 ---
-// Site header — site name link
-// Ported from the legacy Next.js components/Container/Header/index.js
+// Top bar: site name, primary links, and a menu popover with every archive, search and the webring.
 import { site } from '../../lib/site'
-const siteName = site.name
+import { Menu, Search } from 'lucide-static'
+
+const primaryLinks = [
+  { text: 'Writing', to: '/articles' },
+  { text: 'Photos', to: '/photos' },
+  { text: 'Updates', to: '/updates' },
+  { text: 'About', to: '/about' },
+]
+
+const menuLinks = [
+  { text: 'Home', to: '/' },
+  { text: 'About', to: '/about' },
+  { text: 'Contact', to: '/contact' },
+  { text: 'Where am I?', to: '/where' },
+  { text: 'Projects', to: '/websites' },
+  { text: 'Updates', to: '/updates' },
+  { text: 'Articles', to: '/articles' },
+  { text: 'Notes', to: '/notes' },
+  { text: 'Photos', to: '/photos' },
+  { text: 'Galleries', to: '/collections' },
+  { text: 'Likes', to: '/likes' },
+  { text: 'Replies', to: '/replies' },
+  { text: 'Watches', to: '/watches' },
+  { text: 'Check-ins', to: '/checkins' },
+]
+
+const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/'
+const current = (to: string) => (currentPath === to ? 'page' : undefined)
 ---
 
-<header class="main-header">
-  <h1 class="main-header__title">
-    <a href="/" class="main-header__title__link">{siteName}</a>
-  </h1>
+<header class="site-header">
+  <a href="/" class="site-header__name" aria-current={current('/')}>{site.name}</a>
+
+  <nav class="site-header__nav" aria-label="Primary">
+    <ul class="site-header__links" role="list">
+      {primaryLinks.map((link) => (
+        <li><a href={link.to} aria-current={current(link.to)}>{link.text}</a></li>
+      ))}
+    </ul>
+
+    <button class="site-header__menu-button" type="button" popovertarget="site-menu" aria-controls="site-menu">
+      <grantcodes-icon aria-hidden="true" set:html={Menu}></grantcodes-icon>
+      <span>Menu</span>
+    </button>
+
+    <div id="site-menu" class="site-menu" popover="auto">
+      <form class="search" method="GET" action="/search" role="search">
+        <label for="menu-search" class="screen-reader-text">Search posts</label>
+        <input id="menu-search" class="search__input" type="search" name="q" placeholder="Search posts" />
+        <button class="search__button" type="submit">
+          <span class="screen-reader-text">Search</span>
+          <grantcodes-icon aria-hidden="true" set:html={Search}></grantcodes-icon>
+        </button>
+      </form>
+
+      <ul class="site-menu__links" role="list">
+        {menuLinks.map((link) => (
+          <li><a href={link.to} aria-current={current(link.to)}>{link.text}</a></li>
+        ))}
+      </ul>
+
+      <p class="site-menu__webring">
+        <a href={`https://xn--sr8hvo.ws/${site.webringId}/previous`} aria-label="Previous IndieWeb site">👈</a>
+        <span title="An IndieWeb webring" role="img" aria-label="An IndieWeb webring">🕸💍</span>
+        <a href={`https://xn--sr8hvo.ws/${site.webringId}/next`} aria-label="Next IndieWeb site">👉</a>
+      </p>
+    </div>
+  </nav>
 </header>
+
+<script>
+  // Popover support is Baseline 2025; load the polyfill only where it is missing.
+  if (!Object.hasOwn(HTMLElement.prototype, 'popover')) {
+    document.querySelector('.site-header__menu-button')?.addEventListener('click', () => {
+      document.getElementById('site-menu')?.classList.toggle('site-menu--open')
+    })
+  }
+</script>

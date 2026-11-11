@@ -14,7 +14,7 @@ const { title, description, canonicalUrl, noindex } = Astro.props
 ---
 
 <Layout title={title} description={description} canonicalUrl={canonicalUrl} noindex={noindex}>
-  <Container className="single-article">
+  <Container size="article">
     <slot />
   </Container>
 </Layout>

@@ -71,3 +71,18 @@ declare module '@grantcodes/ui/components/pagination/index.js' {
     pages: number
   }
 }
+
+declare module '@grantcodes/themer' {
+  export interface Theme {
+    main: string
+    mainAlt: string
+    complementary: string
+    gradient: string[]
+    contrast: string
+    border: string
+    glass: string
+    isDark: boolean
+  }
+  export function daily(): Theme
+  export function random(): Theme
+}

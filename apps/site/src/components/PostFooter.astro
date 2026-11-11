@@ -60,7 +60,7 @@ const separator = ' ● '
 const authorName = site.author.name
 ---
 
-<footer class="card__breakout post__footer">
+<footer class="post__footer">
   {actionText}{' '}
   {url && (
     <a href={url} class="u-url">
@@ -132,18 +132,16 @@ const authorName = site.author.name
 
 <style is:global>
   .post__footer {
-    opacity: 0.7;
-  }
-  .post__footer,
-  .post__footer * {
-    line-height: 1.2;
-    font-size: 0.51rem;
+    margin-block-start: 1rem;
+    padding-block-start: 0.75rem;
+    border-block-start: 1px solid var(--g-color-border-subtle);
+    color: var(--g-color-content-subtle);
+    font-size: 0.8rem;
+    line-height: 1.5;
   }
   .post__footer .h-card {
     display: inline-block;
     text-decoration: none;
-    font-size: 0.5em;
-    margin-top: -0.25em;
   }
   .post__footer .h-card .p-name {
     text-decoration: underline;

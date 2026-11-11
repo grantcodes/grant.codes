@@ -22,3 +22,6 @@ export const postTypeInfo: Record<string, { label: string; href: string; emoji: 
 
 export const typeLabel = (type: string) =>
   postTypeInfo[type] ?? { label: type, href: '', emoji: '•' }
+
+/** Types shown in the updates timeline and feeds, as 1.x's home page did. */
+export const defaultFeedTypes = ['note', 'photo', 'article', 'repost', 'quotation', 'video', 'audio', 'collection']
