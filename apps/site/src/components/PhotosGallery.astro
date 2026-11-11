@@ -2,7 +2,7 @@
 // Photo gallery.
 // - type "feed": square grid; each photo links to its post; hidden h-entries keep the feed parseable.
 // - type "collection": a scrolling filmstrip of a collection's photos at their own aspect ratio,
-//   each opening in the lightbox.
+//   each opening its post in a modal (PostModal).
 
 import { site } from '../lib/site'
 import { normalizeInternalUrl } from '../lib/url'
@@ -42,10 +42,9 @@ const onThumbnailError =
         </a>
       ) : (
         <a
-          href={photo.url}
+          href={photo.permalink}
           class="photos-gallery__item h-cite"
-          data-zoom
-          data-permalink={photo.permalink}
+          data-post-modal
         >
           <img src={photo.thumbnail} data-full={photo.url} onerror={onThumbnailError} alt={photo.alt} class="u-photo" loading="lazy" />
           <data class="u-url" value={photo.permalink} />

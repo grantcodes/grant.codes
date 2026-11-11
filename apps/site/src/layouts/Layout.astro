@@ -8,6 +8,7 @@ import '@grantcodes/ui/styles/themes/grantcodes.css'
 import '../lib/register-ui-elements'
 import '../styles/site.css'
 import Lightbox from '../components/Lightbox.astro'
+import PostModal from '../components/PostModal.astro'
 import { dailyThemeVars, dayKey } from '../lib/daily-theme'
 
 // ── Environment ──
@@ -152,6 +153,7 @@ const ogUrl = canonicalUrl ?? url
   <body>
     <slot />
     <Lightbox />
+    <PostModal />
     <script>
       import { dayKey } from '../lib/daily-theme'
 

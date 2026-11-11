@@ -1,0 +1,123 @@
+---
+// Opens `a[data-post-modal]` links (a post's permalink) in a dialog over the current page,
+// like a Next.js intercepted route: the URL changes, Back closes it, and a reload, direct
+// visit or browser without JS gets the normal post page.
+import { X } from 'lucide-static'
+---
+
+<dialog class="post-modal" closedby="any" aria-label="Post">
+  <div class="post-modal__body"></div>
+  <form method="dialog">
+    <button class="post-modal__close" aria-label="Close">
+      <grantcodes-icon set:html={X}></grantcodes-icon>
+    </button>
+  </form>
+</dialog>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('dialog.post-modal')
+  const body = dialog?.querySelector<HTMLElement>('.post-modal__body')
+  // Needed to keep the server-rendered (declarative) shadow DOM of the fetched custom elements.
+  const canParse = 'parseHTMLUnsafe' in Document
+
+  if (dialog && body && canParse) {
+    const pageTitle = document.title
+    let controller: AbortController | undefined
+
+    // Adds the fetched page's styles that this page doesn't have yet.
+    const adoptStyles = (doc: Document) => {
+      const have = new Set(
+        [...document.head.querySelectorAll('link[rel="stylesheet"], style')].map(
+          (el) => el.getAttribute('href') ?? el.getAttribute('data-vite-dev-id') ?? el.textContent
+        )
+      )
+      for (const el of doc.head.querySelectorAll('link[rel="stylesheet"], style')) {
+        const key = el.getAttribute('href') ?? el.getAttribute('data-vite-dev-id') ?? el.textContent
+        if (!have.has(key)) document.head.append(el.cloneNode(true))
+      }
+    }
+
+    const open = async (url: string) => {
+      controller?.abort()
+      controller = new AbortController()
+      try {
+        const res = await fetch(url, { signal: controller.signal })
+        if (!res.ok) throw new Error(String(res.status))
+        const doc = (Document as any).parseHTMLUnsafe(await res.text()) as Document
+        const post = doc.querySelector('main grantcodes-card')
+        if (!post) throw new Error('no post')
+        adoptStyles(doc)
+        body.replaceChildren(document.adoptNode(post))
+        document.title = doc.title
+        if (!dialog.open) dialog.showModal()
+        body.scrollTop = 0
+      } catch (err) {
+        if ((err as Error).name !== 'AbortError') location.href = url
+      }
+    }
+
+    document.addEventListener('click', (event) => {
+      if (!(event.target instanceof Element)) return
+      const link = event.target.closest<HTMLAnchorElement>('a[data-post-modal]')
+      if (!link || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
+      event.preventDefault()
+      history.pushState({ postModal: link.href }, '', link.href)
+      open(link.href)
+    })
+
+    // Closing (Escape, ×, backdrop) returns to the page's own URL.
+    dialog.addEventListener('close', () => {
+      controller?.abort()
+      document.title = pageTitle
+      body.replaceChildren()
+      if (history.state?.postModal) history.back()
+    })
+
+    window.addEventListener('popstate', (event) => {
+      if (event.state?.postModal) open(event.state.postModal)
+      else if (dialog.open) dialog.close()
+    })
+
+    // Light dismiss for browsers without `closedby` (Safari).
+    if (!('closedBy' in HTMLDialogElement.prototype)) {
+      dialog.addEventListener('click', (event) => {
+        if (event.target === dialog) dialog.close()
+      })
+    }
+  }
+</script>
+
+<style is:global>
+  .post-modal {
+    inline-size: min(var(--width-article), calc(100vw - 2rem));
+    max-block-size: calc(100dvh - 4rem);
+    padding: 0;
+    border: none;
+    background: transparent;
+    overflow: visible;
+  }
+  .post-modal:modal {
+    overscroll-behavior: contain;
+  }
+  .post-modal::backdrop {
+    background-color: rgb(0 0 0 / 0.9);
+    overflow: hidden;
+    overscroll-behavior: contain;
+  }
+  .post-modal__body {
+    max-block-size: calc(100dvh - 4rem);
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+  .post-modal__close {
+    position: fixed;
+    inset-block-start: 1rem;
+    inset-inline-end: 1rem;
+    padding: 0.25rem;
+    border: none;
+    background: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+</style>

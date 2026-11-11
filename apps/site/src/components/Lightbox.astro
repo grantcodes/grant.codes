@@ -4,12 +4,7 @@ import { X } from 'lucide-static'
 ---
 
 <dialog class="lightbox" closedby="any" aria-label="Image viewer">
-  <figure class="lightbox__figure">
-    <img class="lightbox__image" alt="" />
-    <figcaption class="lightbox__caption">
-      <a class="lightbox__permalink" hidden>View post</a>
-    </figcaption>
-  </figure>
+  <img class="lightbox__image" alt="" />
   <form method="dialog">
     <button class="lightbox__close" aria-label="Close">
       <grantcodes-icon set:html={X}></grantcodes-icon>
@@ -20,9 +15,8 @@ import { X } from 'lucide-static'
 <script>
   const dialog = document.querySelector<HTMLDialogElement>('dialog.lightbox')
   const image = dialog?.querySelector<HTMLImageElement>('.lightbox__image')
-  const permalink = dialog?.querySelector<HTMLAnchorElement>('.lightbox__permalink')
 
-  if (dialog && image && permalink) {
+  if (dialog && image) {
     document.addEventListener('click', (event) => {
       if (!(event.target instanceof Element)) return
       const link = event.target.closest<HTMLAnchorElement>('a[data-zoom]')
@@ -30,8 +24,6 @@ import { X } from 'lucide-static'
       event.preventDefault()
       image.src = link.href
       image.alt = link.querySelector('img')?.alt ?? ''
-      permalink.hidden = !link.dataset.permalink
-      if (link.dataset.permalink) permalink.href = link.dataset.permalink
       dialog.showModal()
     })
 
@@ -63,24 +55,11 @@ import { X } from 'lucide-static'
     overflow: hidden;
     overscroll-behavior: contain;
   }
-  .lightbox__figure {
-    margin: 0;
-  }
   .lightbox__image {
     display: block;
     max-inline-size: 95vw;
     max-block-size: 85dvh;
     object-fit: contain;
-  }
-  /* Override the site-wide overlaid figcaption (absolute, gradient). */
-  .lightbox__caption {
-    position: static;
-    padding: 0.5rem 0 0;
-    background: none;
-    text-align: center;
-  }
-  .lightbox__permalink {
-    color: white;
   }
   .lightbox__close {
     position: fixed;
