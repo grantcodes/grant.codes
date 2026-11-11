@@ -24,7 +24,6 @@ export const site = {
   indieauthMetadata:
     'https://indiekey.id/.well-known/oauth-authorization-server/s/fj2eb0bxsgcsgfm0',
   tokenEndpoint: env.NEXT_PUBLIC_TOKEN_ENDPOINT ?? 'https://indiekey.id/token',
-  webringId: env.NEXT_PUBLIC_INDIEWEBRING_ID ?? '🏊👩‍👩‍👦‍👦',
   twitterHandle: env.NEXT_PUBLIC_TWITTER_HANDLE ?? 'grantcodes',
   author: {
     name: env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond',

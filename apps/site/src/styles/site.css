@@ -234,12 +234,6 @@ grantcodes-icon {
     padding: 0;
     list-style: none;
 }
-.webring {
-    margin: 1rem 0 0;
-}
-.webring a {
-    text-decoration: none;
-}
 @media print {
     .site-header__nav {
         display: none;
