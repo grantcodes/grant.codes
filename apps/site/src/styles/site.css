@@ -61,6 +61,11 @@ html {
         auto;
 }
 
+/* Long URLs (in post content, mentions, syndication) wrap instead of overflowing their card. */
+a {
+    overflow-wrap: anywhere;
+}
+
 ::-webkit-scrollbar {
     width: 0.5rem;
 }
