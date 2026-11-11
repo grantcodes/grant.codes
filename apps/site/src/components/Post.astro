@@ -186,7 +186,7 @@ const authorName = site.author.name
   {/* Compact mode: article read more link */}
   {compact && postType === 'article' && content && url && (
     <div class="card__breakout--padded" style="text-align: center; padding: 1rem;">
-      <GrantCodesButton href={url} aria-hidden="true">Read full post</GrantCodesButton>
+      <GrantCodesButton href={url} aria-hidden="true" {...{ variant: 'outline' } as object}>Read full post</GrantCodesButton>
     </div>
   )}
 

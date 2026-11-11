@@ -23,6 +23,8 @@
     --g-color-content-primary: var(--day-accent);
     --g-color-content-primary-hover: var(--day-accent);
     --g-color-border-primary: var(--day-accent);
+    --g-button-color-background: var(--day-accent);
+    --g-focus-ring-color-default: var(--day-accent);
 
     --about-heading-width: 12rem;
     --about-gap: 2rem;
@@ -346,19 +348,13 @@ grantcodes-icon {
     inset-block-start: 0;
     inset-inline-end: 0;
     z-index: -1;
-    inline-size: min(56rem, 100%);
-    block-size: 46rem;
+    inline-size: min(46rem, 100%);
     overflow: hidden;
     pointer-events: none;
-    mask-image: radial-gradient(ellipse 100% 100% at top right, black 35%, transparent 72%);
 }
 .topography-bg {
-    position: absolute;
-    inset-block-start: 0;
-    inset-inline-end: 0;
-    inline-size: 46rem;
-    max-inline-size: 150%;
-    opacity: 0.85;
+    display: block;
+    inline-size: 100%;
     block-size: auto;
 }
 @media (prefers-reduced-motion: no-preference) {
@@ -371,6 +367,12 @@ grantcodes-icon {
     .topography-bg path:nth-child(4) { animation-delay: 0.24s; }
     .topography-bg path:nth-child(5) { animation-delay: 0.32s; }
     .topography-bg path:nth-child(6) { animation-delay: 0.4s; }
+}
+
+.post__read-more {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
 }
 
 /* ── Post typography: one scale for titles and headings inside content ── */

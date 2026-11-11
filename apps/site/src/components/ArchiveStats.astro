@@ -4,7 +4,7 @@ import { typeLabel } from '../lib/post-type-info'
 
 export interface Props {
   counts: Array<[type: string, count: number]>
-  extra?: Array<{ emoji: string; value: string; label: string }>
+  extra?: Array<{ value: string; label: string }>
 }
 
 const { counts, extra = [] } = Astro.props
@@ -18,7 +18,6 @@ const total = counts.reduce((sum, [, count]) => sum + count, 0)
   </li>
   {extra.map((stat) => (
     <li class="archive-stats__item">
-      <span class="archive-stats__emoji" aria-hidden="true">{stat.emoji}</span>
       <span class="archive-stats__value">{stat.value}</span>
       <span class="archive-stats__label">{stat.label}</span>
     </li>
@@ -27,7 +26,6 @@ const total = counts.reduce((sum, [, count]) => sum + count, 0)
     const info = typeLabel(type)
     return (
       <li class="archive-stats__item">
-        <span class="archive-stats__emoji" aria-hidden="true">{info.emoji}</span>
         <span class="archive-stats__value">{count}</span>
         {info.href ? (
           <a class="archive-stats__label" href={info.href}>{info.label.toLowerCase()}</a>
@@ -61,9 +59,6 @@ const total = counts.reduce((sum, [, count]) => sum + count, 0)
   .archive-stats__item--total {
     background: var(--day-main);
     color: var(--day-on-main, var(--g-color-content-knockout));
-  }
-  .archive-stats__emoji {
-    font-size: 1.5rem;
   }
   .archive-stats__value {
     font-size: 1.75rem;

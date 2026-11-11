@@ -34,13 +34,13 @@ const busiest = Math.max(1, ...months.map((month) => month.count))
 </header>
 
 {posts.length === 0 && tracks.length === 0 && (
-  <GrantCodesCard><p>Nothing happened here. Quiet times. 🦗</p></GrantCodesCard>
+  <GrantCodesCard><p>No posts or location data for this period.</p></GrantCodesCard>
 )}
 
 {posts.length > 0 && (
   <ArchiveStats
     counts={countByType(posts)}
-    extra={km > 0 ? [{ emoji: '🧭', value: km.toLocaleString('en-GB'), label: 'km travelled' }] : []}
+    extra={km > 0 ? [{ value: km.toLocaleString('en-GB'), label: 'km travelled' }] : []}
   />
 )}
 
@@ -61,14 +61,14 @@ const busiest = Math.max(1, ...months.map((month) => month.count))
 
 {photos.length > 0 && (
   <section class="archive-summary__section">
-    <h2>📷 Photos</h2>
+    <h2>Photos</h2>
     <PhotosGallery posts={photos} type="feed" />
   </section>
 )}
 
 {writing.length > 0 && (
   <section class="archive-summary__section">
-    <h2>✍️ Writing</h2>
+    <h2>Writing</h2>
     <div class="post-list">
       {writing.map((post) => <PostCard post={post} compact />)}
     </div>

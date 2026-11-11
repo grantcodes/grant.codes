@@ -7,6 +7,7 @@ import { site } from '../lib/site'
 import { Heart, Bookmark, Repeat2, Reply } from 'lucide-static'
 import { getSiteUrl, normalizeInternalUrl } from '../lib/url'
 import PostContent from './PostContent.astro'
+import { GrantCodesButton } from '@grantcodes/ui/components/button/index.js'
 import PhotosGallery from './PhotosGallery.astro'
 import { formatRelativeDate } from '../lib/post-date-format'
 import { getMentionUrl, getResponseValue } from '../lib/post-mentions'
@@ -128,8 +129,9 @@ const authorName = site.author.name
 
     <!-- For articles in compact: read more button -->
     {isCompactArticle && content && (
-      <div style="text-align: center; padding: 1rem;">
-        <a href={url} style="display:inline-flex;align-items:center;gap:var(--g-spacing-sm,0.25rem);padding:var(--g-spacing-sm,0.5rem) var(--g-spacing-md,1rem);border:var(--g-border-width-md,2px) solid var(--g-color-border-default);border-radius:var(--g-border-radius-md,0.375rem);background:var(--g-color-background-default);color:var(--g-color-content-default);text-decoration:none;font:var(--g-typography-body-sm-font,inherit);">Read full post</a>
+      <div class="post__read-more">
+        {/* Spread works around grantcodes/ui#231 (global `variant` typing). */}
+        <GrantCodesButton href={url} {...{ variant: 'outline' } as object}>Read full post</GrantCodesButton>
       </div>
     )}
 

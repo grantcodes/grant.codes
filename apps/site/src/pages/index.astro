@@ -28,7 +28,7 @@ const latestTrack = (await getArchiveMonths())
 const latestKm = latestTrack ? trackDistanceKm(getMonthTrack(latestTrack.year, latestTrack.month, Infinity)) : 0
 ---
 
-<BaseLayout title="Hi! I'm Grant 👋" canonicalUrl={site.url}>
+<BaseLayout title="Hi! I'm Grant" canonicalUrl={site.url}>
   <section class="intro h-card">
     <a href="/about" class="intro__photo">
       <img class="u-photo" src="/img/me.jpg" alt={site.author.name} width="400" height="400" />
@@ -39,7 +39,7 @@ const latestKm = latestTrack ? trackDistanceKm(getMonthTrack(latestTrack.year, l
       </clipPath>
     </svg>
     <div class="intro__text">
-      <h1 class="intro__title">Hi! I'm <span class="p-name">Grant</span> 👋</h1>
+      <h1 class="intro__title">Hi! I'm <span class="p-name">Grant</span></h1>
       <p class="p-note">
         I'm a frontend engineer from Scotland, living in Barcelona. I like making fun, accessible,
         sustainable websites.
