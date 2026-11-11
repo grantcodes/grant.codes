@@ -45,7 +45,7 @@ const current = (to: string) => (currentPath === to ? 'page' : undefined)
 
     <GrantCodesPopover client:load placement="bottom-end" class="site-menu">
       {/* Spread works around grantcodes/ui#231 (global `variant` typing). */}
-      <GrantCodesButton slot="trigger" {...{ variant: 'outline' } as object}>
+      <GrantCodesButton slot="trigger" color="neutral" {...{ variant: 'outline' } as object}>
         <grantcodes-icon slot="start" aria-hidden="true" set:html={Menu}></grantcodes-icon>
         Menu
       </GrantCodesButton>
