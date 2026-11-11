@@ -4,7 +4,7 @@ import { site } from '../lib/site'
 import BaseLayout from '../layouts/BaseLayout.astro'
 import PhotosGallery from '../components/PhotosGallery.astro'
 import TrackLine from '../components/TrackLine.astro'
-import { normalizeInternalUrl } from '../lib/url'
+import PostCard from '../components/PostCard.astro'
 import {
   getArchiveMonths,
   getArchivePosts,
@@ -26,9 +26,6 @@ const latestTrack = (await getArchiveMonths())
   .map(([year, month]) => ({ year, month, track: getMonthTrack(year, month, 600) }))
   .find(({ track }) => track.length > 1)
 const latestKm = latestTrack ? trackDistanceKm(getMonthTrack(latestTrack.year, latestTrack.month, Infinity)) : 0
-
-const formatDate = (date: Date) =>
-  date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
 ---
 
 <BaseLayout title="Hi! I'm Grant 👋" canonicalUrl={site.url}>
@@ -74,15 +71,9 @@ const formatDate = (date: Date) =>
   {articles.length > 0 && (
     <section class="home-section">
       <h2>Writing</h2>
-      <ul class="writing" role="list">
-        {articles.map((post) => (
-          <li class="h-entry">
-            <a class="u-url p-name" href={normalizeInternalUrl(post.url)}>{post.name}</a>
-            <time class="dt-published" datetime={post.published.toISOString()}>{formatDate(post.published)}</time>
-            {post.summary && <p class="p-summary">{post.summary}</p>}
-          </li>
-        ))}
-      </ul>
+      <div class="post-list">
+        {articles.map((post) => <PostCard post={post} compact />)}
+      </div>
       <a href="/articles">All articles</a>
     </section>
   )}
@@ -98,16 +89,9 @@ const formatDate = (date: Date) =>
   {notes.length > 0 && (
     <section class="home-section">
       <h2>Notes</h2>
-      <ul class="notes" role="list">
-        {notes.map((post) => (
-          <li class="h-entry">
-            {post.content && <div class="e-content" set:html={post.content.html} />}
-            <a class="u-url" href={normalizeInternalUrl(post.url)}>
-              <time class="dt-published" datetime={post.published.toISOString()}>{formatDate(post.published)}</time>
-            </a>
-          </li>
-        ))}
-      </ul>
+      <div class="post-list">
+        {notes.map((post) => <PostCard post={post} compact />)}
+      </div>
       <a href="/updates">All updates</a>
     </section>
   )}
@@ -208,35 +192,5 @@ const formatDate = (date: Date) =>
   .home-section > a:last-child {
     justify-self: start;
     font-weight: 800;
-  }
-
-  .writing,
-  .notes {
-    display: grid;
-    gap: 1.5rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  .writing .p-name {
-    font-size: 1.5rem;
-    font-weight: 900;
-    line-height: 1.2;
-  }
-  .writing time,
-  .notes time {
-    display: block;
-    font-size: 0.85rem;
-    color: var(--g-color-content-subtle);
-  }
-  .writing .p-summary {
-    margin: 0.25rem 0 0;
-  }
-  .notes li {
-    padding-inline-start: 1rem;
-    border-inline-start: 3px solid var(--topography-layer-2);
-  }
-  .notes .e-content :global(p) {
-    margin: 0 0 0.25rem;
   }
 </style>

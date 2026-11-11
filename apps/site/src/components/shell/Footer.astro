@@ -35,6 +35,11 @@ const authorFeatured = site.author.featured
           </a>
         )}
       </div>
+      <p class="webring">
+        <a href={`https://xn--sr8hvo.ws/${site.webringId}/previous`} aria-label="Previous IndieWeb site">👈</a>
+        <span title="An IndieWeb webring" role="img" aria-label="An IndieWeb webring">🕸💍</span>
+        <a href={`https://xn--sr8hvo.ws/${site.webringId}/next`} aria-label="Next IndieWeb site">👉</a>
+      </p>
     </GrantCodesFooterColumn>
     <!-- Hidden h-card for IndieWeb identity, placed in the bottom slot -->
     <div slot="bottom" class="h-card screen-reader-text">

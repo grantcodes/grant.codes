@@ -1,6 +1,8 @@
 ---
-// Top bar: site name, primary links, and a menu popover with every archive, search and the webring.
+// Top bar: site name, primary links, and a menu popover with every archive and search.
 import { site } from '../../lib/site'
+import { GrantCodesButton } from '@grantcodes/ui/components/button/index.js'
+import { GrantCodesPopover } from '@grantcodes/ui/components/popover/index.js'
 import { Menu, Search } from 'lucide-static'
 
 const primaryLinks = [
@@ -41,12 +43,13 @@ const current = (to: string) => (currentPath === to ? 'page' : undefined)
       ))}
     </ul>
 
-    <button class="site-header__menu-button" type="button" popovertarget="site-menu" aria-controls="site-menu">
-      <grantcodes-icon aria-hidden="true" set:html={Menu}></grantcodes-icon>
-      <span>Menu</span>
-    </button>
+    <GrantCodesPopover client:load placement="bottom-end" class="site-menu">
+      {/* Spread: @grantcodes/astro 1.3 types a global `variant` as the badge's, rejecting 'outline'. */}
+      <GrantCodesButton slot="trigger" color="inherit" {...{ variant: 'outline' } as object}>
+        <grantcodes-icon slot="start" aria-hidden="true" set:html={Menu}></grantcodes-icon>
+        Menu
+      </GrantCodesButton>
 
-    <div id="site-menu" class="site-menu" popover="auto">
       <form class="search" method="GET" action="/search" role="search">
         <label for="menu-search" class="screen-reader-text">Search posts</label>
         <input id="menu-search" class="search__input" type="search" name="q" placeholder="Search posts" />
@@ -61,21 +64,7 @@ const current = (to: string) => (currentPath === to ? 'page' : undefined)
           <li><a href={link.to} aria-current={current(link.to)}>{link.text}</a></li>
         ))}
       </ul>
-
-      <p class="site-menu__webring">
-        <a href={`https://xn--sr8hvo.ws/${site.webringId}/previous`} aria-label="Previous IndieWeb site">👈</a>
-        <span title="An IndieWeb webring" role="img" aria-label="An IndieWeb webring">🕸💍</span>
-        <a href={`https://xn--sr8hvo.ws/${site.webringId}/next`} aria-label="Next IndieWeb site">👉</a>
-      </p>
-    </div>
+    </GrantCodesPopover>
   </nav>
 </header>
 
-<script>
-  // Popover support is Baseline 2025; load the polyfill only where it is missing.
-  if (!Object.hasOwn(HTMLElement.prototype, 'popover')) {
-    document.querySelector('.site-header__menu-button')?.addEventListener('click', () => {
-      document.getElementById('site-menu')?.classList.toggle('site-menu--open')
-    })
-  }
-</script>
