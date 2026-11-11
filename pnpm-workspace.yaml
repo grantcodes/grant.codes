@@ -5,15 +5,10 @@ allowBuilds:
   canvas: true
   core-js: true
   esbuild: true
-  leveldown: set this to true or false
-  rxdb: set this to true or false
   sharp: true
   unrs-resolver: true
 blockExoticSubdeps: false
 minimumReleaseAgeExclude:
-  - astro@6.4.5
-  - '@grantcodes/astro@0.2.7'
-  - '@grantcodes/ui@2.16.0'
   - '@postr/astro@0.1.0-alpha.3'
   - '@postr/core@2.0.0-alpha.2'
   - '@postr/plugin-feeds@2.0.0-alpha.2'
@@ -21,5 +16,3 @@ minimumReleaseAgeExclude:
   - '@postr/syndicator-instagram@3.0.0-alpha.2'
   - '@postr/syndicator-superfeedr@3.0.0-alpha.2'
   - '@postr/syndicator-telegram@2.0.0-alpha.2'
-patchedDependencies:
-  '@grantcodes/astro@0.2.7': patches/@grantcodes__astro@0.2.7.patch

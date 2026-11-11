@@ -2,7 +2,7 @@
 	"author": "grant.codes",
 	"dependencies": {
 		"@grantcodes/themer": "^2.0.0",
-		"@hono/node-server": "^2.1.1",
+		"@hono/node-server": "^2.1.6",
 		"@postr/core": "2.0.0-alpha.2",
 		"@postr/plugin-feeds": "2.0.0-alpha.2",
 		"@postr/plugin-webmention-endpoint": "2.0.0-alpha.2",
@@ -10,19 +10,13 @@
 		"@postr/syndicator-superfeedr": "3.0.0-alpha.2",
 		"@postr/syndicator-telegram": "2.0.0-alpha.2",
 		"canvas": "^3.2.3",
-		"hono": "^4.13.9",
-		"indieauth-helper": "^1.0.2",
-		"jsonwebtoken": "^9.0.3",
-		"node-addon-api": "^8.9.2",
-		"node-gyp": "^13.0.2",
-		"node-schedule": "^2.1.1",
+		"hono": "^4.13.17",
 		"pluralize": "^8.0.0",
-		"sharp": "^0.35.4"
+		"sharp": "^0.35.5"
 	},
 	"description": "Backend service for grant.codes powered by postr",
 	"devDependencies": {
-		"@types/jsonwebtoken": "^9.0.10",
-		"@types/node": "^26.6.2",
+		"@types/node": "^26.6.6",
 		"tsx": "^4.23.15",
 		"typescript": "^7.0.2"
 	},
