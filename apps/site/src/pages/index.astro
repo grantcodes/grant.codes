@@ -36,6 +36,11 @@ const formatDate = (date: Date) =>
     <a href="/about" class="intro__photo">
       <img class="u-photo" src="/img/me.jpg" alt={site.author.name} width="400" height="400" />
     </a>
+    <svg width="0" height="0" aria-hidden="true" style="position: absolute">
+      <clipPath id="photo-blob" clipPathUnits="objectBoundingBox" transform="scale(0.01)">
+        <path d="M 78.956816,94.835588 C 65.625376,103.13287 42.050856,100.43882 27.470196,93.746774 12.889014,87.054987 -0.62446252,67.284526 0.02231499,50.841644 0.6688317,34.398246 8.3427947,12.782914 22.898418,6.2004991 37.454563,-0.38191765 56.971076,-2.9578225 71.920501,4.6840516 86.869927,12.325617 96.700947,35.435522 99.522777,51.125185 102.3446,66.814332 92.288777,86.538361 78.957336,94.83564 Z" />
+      </clipPath>
+    </svg>
     <div class="intro__text">
       <h1 class="intro__title">Hi! I'm <span class="p-name">Grant</span> 👋</h1>
       <p class="p-note">
@@ -121,23 +126,12 @@ const formatDate = (date: Date) =>
     }
   }
 
-  /* The memorable thing: a contour blob photo with rings in the day's colours. */
   .intro__photo {
-    --blob: 58% 42% 51% 49% / 46% 56% 44% 54%;
     display: block;
     justify-self: center;
-    inline-size: 10rem;
+    inline-size: 12rem;
     aspect-ratio: 1;
-    margin: 2.5rem;
-    border-radius: var(--blob);
-    box-shadow:
-      0 0 0 0.6rem var(--g-color-background-default),
-      0 0 0 0.9rem var(--topography-layer-4),
-      0 0 0 1.5rem var(--g-color-background-default),
-      0 0 0 1.75rem var(--topography-layer-2),
-      0 0 0 2.35rem var(--g-color-background-default),
-      0 0 0 2.5rem var(--topography-layer-1);
-    overflow: hidden;
+    clip-path: url(#photo-blob);
   }
   .intro__photo img {
     display: block;
@@ -145,17 +139,6 @@ const formatDate = (date: Date) =>
     block-size: 100%;
     object-fit: cover;
   }
-  @media (prefers-reduced-motion: no-preference) {
-    .intro__photo {
-      animation: blob-breathe 12s ease-in-out infinite alternate;
-    }
-    @keyframes blob-breathe {
-      to {
-        border-radius: 44% 56% 41% 59% / 55% 43% 57% 45%;
-      }
-    }
-  }
-
   .intro__title {
     margin: 0 0 0.5rem;
     font-size: clamp(2.5rem, 7vw, 4rem);
