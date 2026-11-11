@@ -12,12 +12,12 @@
 
 import { site } from '../lib/site'
 import PostFooter from './PostFooter.astro'
-import PostCard from './PostCard.astro'
 import PostContent from './PostContent.astro'
 import PhotosGallery from './PhotosGallery.astro'
 import { GrantCodesButton } from '@grantcodes/ui/components/button/index.js'
 import { Heart, Bookmark, Repeat2, Reply } from 'lucide-static'
-import { toPostView } from '@postr/core'
+import ResponseTarget from './ResponseTarget.astro'
+import { hasResponseTarget } from '../lib/reference'
 import { getSiteUrl, normalizeInternalUrl } from '../lib/url'
 import { getResponseValue, getUrl } from '../lib/post-mentions'
 import { getChildren } from '../lib/post-children'
@@ -66,11 +66,13 @@ const location = properties.location?.[0] ?? null
 // Post children (gallery of referenced posts)
 const children = await getChildren(post)
 
-// References (like-of, repost-of referenced post data), projected like entries
-const references = Object.values(post.references ?? {}).map((ref: any) => ({
-  ...toPostView(ref),
-  properties: ref.properties,
-}))
+// The page this post responds to: embedded or previewed under its label instead of a bare link.
+const respondsTo = [likeOf, repostOf, bookmarkOf, inReplyTo].map(getUrl).find(Boolean)
+const responseEntry = respondsTo ? post.references?.[respondsTo] : undefined
+const rich = respondsTo ? hasResponseTarget(respondsTo, responseEntry) : false
+// Show the bare link for a mention unless it's the one previewed below its label.
+const linkFor = (value: unknown) => !(rich && getUrl(value) === respondsTo)
+const relation = { [getUrl(likeOf)]: 'u-like-of', [getUrl(repostOf)]: 'u-repost-of', [getUrl(bookmarkOf)]: 'u-bookmark-of', [getUrl(inReplyTo)]: 'u-in-reply-to' }[respondsTo ?? '']
 
 const authorName = site.author.name
 ---
@@ -97,47 +99,45 @@ const authorName = site.author.name
   {/* ── Mention actions (like, repost, reply, bookmark, quotation) ── */}
 
   {likeOf && (
-    <p class="card__breakout post__action">
-      <grantcodes-icon style="font-size: 16px" set:html={Heart}></grantcodes-icon>
-      Liked{' '}
-      <a class="u-like-of" href={getUrl(likeOf)}>{getUrl(likeOf).replace(/^https?:\/\//, '')}</a>
+    <p class="post__action">
+      <grantcodes-icon set:html={Heart}></grantcodes-icon>
+      Liked
+      {linkFor(likeOf) && <a class="u-like-of" href={getUrl(likeOf)}>{getUrl(likeOf).replace(/^https?:\/\//, '')}</a>}
     </p>
   )}
 
   {bookmarkOf && (
-    <p class="card__breakout post__action">
-      <grantcodes-icon style="font-size: 16px" set:html={Bookmark}></grantcodes-icon>
-      Bookmarked{' '}
-      <a class="u-bookmark-of" href={getUrl(bookmarkOf)}>{getUrl(bookmarkOf).replace(/^https?:\/\//, '')}</a>
+    <p class="post__action">
+      <grantcodes-icon set:html={Bookmark}></grantcodes-icon>
+      Bookmarked
+      {linkFor(bookmarkOf) && <a class="u-bookmark-of" href={getUrl(bookmarkOf)}>{getUrl(bookmarkOf).replace(/^https?:\/\//, '')}</a>}
     </p>
   )}
 
   {repostOf && (
-    <p class="card__breakout post__action">
-      <grantcodes-icon style="font-size: 16px" set:html={Repeat2}></grantcodes-icon>
-      Reposted{' '}
-      <a class="u-repost-of" href={getUrl(repostOf)}>{getUrl(repostOf).replace(/^https?:\/\//, '')}</a>
+    <p class="post__action">
+      <grantcodes-icon set:html={Repeat2}></grantcodes-icon>
+      Reposted
+      {linkFor(repostOf) && <a class="u-repost-of" href={getUrl(repostOf)}>{getUrl(repostOf).replace(/^https?:\/\//, '')}</a>}
     </p>
   )}
 
   {quotationOf && (
-    <p class="card__breakout post__action">
-      Quoted{' '}
+    <p class="post__action">
+      Quoted
       <a class="u-quotation-of" href={getUrl(quotationOf)}>{getUrl(quotationOf).replace(/^https?:\/\//, '')}</a>
     </p>
   )}
 
   {inReplyTo && (
-    <p class="card__breakout post__action">
-      <grantcodes-icon style="font-size: 16px" set:html={Reply}></grantcodes-icon>
-      {rsvp ? (
-        <>
-          RSVPed <span class="p-rsvp">{rsvp}</span> to{' '}
-        </>
-      ) : 'Replied to '}
-      <a class="u-in-reply-to" href={getUrl(inReplyTo)}>{getUrl(inReplyTo).replace(/^https?:\/\//, '')}</a>
+    <p class="post__action">
+      <grantcodes-icon set:html={Reply}></grantcodes-icon>
+      {rsvp ? <>RSVPed <span class="p-rsvp">{rsvp}</span> to</> : 'Replied to'}
+      {linkFor(inReplyTo) && <a class="u-in-reply-to" href={getUrl(inReplyTo)}>{getUrl(inReplyTo).replace(/^https?:\/\//, '')}</a>}
     </p>
   )}
+
+  {rich && respondsTo && <ResponseTarget url={respondsTo} entry={responseEntry} relation={relation} />}
 
   {/* ── Photos ── */}
   {photo.length > 0 && (
@@ -221,15 +221,6 @@ const authorName = site.author.name
     </div>
   )}
 
-  {/* ── References (like-of/repost-of referenced post data) ── */}
-  {/* Only show references for post types where they provide meaningful context */}
-  {references.length > 0 && (likeOf || repostOf || inReplyTo || bookmarkOf) && (
-    <div class="card__breakout post__references">
-      {references.map((refPost) => (
-        <PostCard post={refPost} compact />
-      ))}
-    </div>
-  )}
 
   {/* ── Footer ── */}
   <PostFooter post={post} compact={compact} />
@@ -276,6 +267,11 @@ const authorName = site.author.name
   .post__action grantcodes-icon {
     vertical-align: middle;
     margin-right: 0.3em;
+  }
+  /* Single post: a bold label, like the cards'. */
+  .post > .post__action {
+    font-size: 0.85rem;
+    font-weight: 700;
   }
 
   .post__content > p:first-child {

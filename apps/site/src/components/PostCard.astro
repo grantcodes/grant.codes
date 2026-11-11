@@ -7,6 +7,8 @@ import { site } from '../lib/site'
 import { Heart, Bookmark, Repeat2, Reply } from 'lucide-static'
 import { getSiteUrl, normalizeInternalUrl } from '../lib/url'
 import PostContent from './PostContent.astro'
+import ResponseTarget from './ResponseTarget.astro'
+import { hasResponseTarget } from '../lib/reference'
 import { GrantCodesButton } from '@grantcodes/ui/components/button/index.js'
 import PhotosGallery from './PhotosGallery.astro'
 import { formatRelativeDate } from '../lib/post-date-format'
@@ -57,6 +59,13 @@ const isCompactArticle = compact && postType === 'article' && Boolean(url)
 const previewContent = isCompactArticle ? summary : content ?? summary
 const children = await getChildren(post)
 
+// The page this post responds to: shown as a preview instead of its bare URL line when we have one.
+const respondsTo = likeOf ?? repostOf ?? bookmarkOf ?? inReplyTo
+const responseEntry = respondsTo ? post.references?.[respondsTo] : undefined
+const rich = respondsTo ? hasResponseTarget(respondsTo, responseEntry) : false
+const relation = { [likeOf ?? '']: 'u-like-of', [repostOf ?? '']: 'u-repost-of', [bookmarkOf ?? '']: 'u-bookmark-of', [inReplyTo ?? '']: 'u-in-reply-to' }[respondsTo ?? '']
+const showLine = (url: string | null): url is string => Boolean(url) && !(rich && url === respondsTo)
+
 // Format date using shared helper
 const dateDisplay = published ? formatRelativeDate(published) : ''
 
@@ -81,31 +90,33 @@ const authorName = site.author.name
     )}
 
     <!-- Mention actions -->
-    {likeOf && (
+    {showLine(likeOf) && (
       <p class="post__action">
         <grantcodes-icon style="font-size: 12px" set:html={Heart}></grantcodes-icon>
         <a class="u-like-of" href={likeOf}>{likeOf.replace(/^https?:\/\//, '').slice(0, 60)}</a>
       </p>
     )}
-    {repostOf && (
+    {showLine(repostOf) && (
       <p class="post__action">
         <grantcodes-icon style="font-size: 12px" set:html={Repeat2}></grantcodes-icon>
         <a class="u-repost-of" href={repostOf}>{repostOf.replace(/^https?:\/\//, '').slice(0, 60)}</a>
       </p>
     )}
-    {inReplyTo && (
+    {showLine(inReplyTo) && (
       <p class="post__action">
         <grantcodes-icon style="font-size: 12px" set:html={Reply}></grantcodes-icon>
         {rsvp ? <>RSVPed <span class="p-rsvp">{rsvp}</span> to </> : 'Replied to '}
         <a class="u-in-reply-to" href={inReplyTo}>{inReplyTo.replace(/^https?:\/\//, '').slice(0, 60)}</a>
       </p>
     )}
-    {bookmarkOf && (
+    {showLine(bookmarkOf) && (
       <p class="post__action">
         <grantcodes-icon style="font-size: 12px" set:html={Bookmark}></grantcodes-icon>
         <a class="u-bookmark-of" href={bookmarkOf}>{bookmarkOf.replace(/^https?:\/\//, '').slice(0, 60)}</a>
       </p>
     )}
+
+    {rich && respondsTo && <ResponseTarget url={respondsTo} entry={responseEntry} relation={relation} />}
 
     <!-- Photo -->
     {photo && (
