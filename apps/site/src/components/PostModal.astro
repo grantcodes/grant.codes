@@ -37,9 +37,20 @@ import { X } from 'lucide-static'
       }
     }
 
+    // Resolves once an image has loaded (or after `ms`), so the dialog opens at its final size.
+    // A failed load isn't final: the img's onerror may swap in a fallback src.
+    const loaded = (img: HTMLImageElement, ms: number) =>
+      img.complete && img.naturalWidth
+        ? Promise.resolve()
+        : new Promise<void>((resolve) => {
+            img.addEventListener('load', () => resolve(), { once: true })
+            setTimeout(resolve, ms)
+          })
+
     const open = async (url: string) => {
       controller?.abort()
       controller = new AbortController()
+      document.documentElement.style.cursor = 'progress'
       try {
         const res = await fetch(url, { signal: controller.signal })
         if (!res.ok) throw new Error(String(res.status))
@@ -47,12 +58,18 @@ import { X } from 'lucide-static'
         const post = doc.querySelector('main grantcodes-card')
         if (!post) throw new Error('no post')
         adoptStyles(doc)
+        const images = [...post.querySelectorAll('img')]
+        for (const img of images) img.loading = 'eager'
         body.replaceChildren(document.adoptNode(post))
+        await Promise.all(images.map((img) => loaded(img, 2000)))
+        if (controller.signal.aborted) return
         document.title = doc.title
         if (!dialog.open) dialog.showModal()
         body.scrollTop = 0
       } catch (err) {
         if ((err as Error).name !== 'AbortError') location.href = url
+      } finally {
+        document.documentElement.style.cursor = ''
       }
     }
 

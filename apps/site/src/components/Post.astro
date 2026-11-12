@@ -21,7 +21,7 @@ import { hasResponseTarget } from '../lib/reference'
 import { getSiteUrl, normalizeInternalUrl } from '../lib/url'
 import { getResponseValue, getUrl } from '../lib/post-mentions'
 import { getChildren } from '../lib/post-children'
-import { getPhotoUrl, getPhotoAlt, getMediaUrl } from '../lib/post-media'
+import { getPhotoUrl, getPhotoAlt, getMediaUrl, getThumbnailUrl } from '../lib/post-media'
 
 export interface Props {
   post: any
@@ -75,6 +75,10 @@ const linkFor = (value: unknown) => !(rich && getUrl(value) === respondsTo)
 const relation = { [getUrl(likeOf)]: 'u-like-of', [getUrl(repostOf)]: 'u-repost-of', [getUrl(bookmarkOf)]: 'u-bookmark-of', [getUrl(inReplyTo)]: 'u-in-reply-to' }[respondsTo ?? '']
 
 const authorName = site.author.name
+
+// A missing 1800px copy falls back to the original; a missing original hides the photo.
+const onPhotoError =
+  "if (this.src !== this.dataset.full) { this.src = this.dataset.full } else { this.onerror = null; this.closest('figure').hidden = true }"
 ---
 
 <article
@@ -148,7 +152,14 @@ const authorName = site.author.name
         return (
           <figure>
             <a href={src} data-zoom>
-              <img src={src} alt={alt} loading="lazy" />
+              {/* The 1800px copy (much lighter than the original), else the original. */}
+              <img
+                src={getThumbnailUrl(src, '1800')}
+                data-full={src}
+                onerror={onPhotoError}
+                alt={alt}
+                loading="lazy"
+              />
             </a>
             <data class="u-photo" value={src} />
           </figure>

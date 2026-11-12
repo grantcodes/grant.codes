@@ -17,13 +17,17 @@ import { X } from 'lucide-static'
   const image = dialog?.querySelector<HTMLImageElement>('.lightbox__image')
 
   if (dialog && image) {
-    document.addEventListener('click', (event) => {
+    document.addEventListener('click', async (event) => {
       if (!(event.target instanceof Element)) return
       const link = event.target.closest<HTMLAnchorElement>('a[data-zoom]')
       if (!link || event.metaKey || event.ctrlKey || event.shiftKey) return
       event.preventDefault()
       image.src = link.href
       image.alt = link.querySelector('img')?.alt ?? ''
+      // Open once the image is decoded (or after 2s), so the dialog doesn't grow as it loads.
+      document.documentElement.style.cursor = 'progress'
+      await Promise.race([image.decode().catch(() => {}), new Promise((r) => setTimeout(r, 2000))])
+      document.documentElement.style.cursor = ''
       dialog.showModal()
     })
 
