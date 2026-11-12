@@ -91,7 +91,7 @@ const authorName = site.author.name
 
   {/* Name/title (not featured header) */}
   {!featured && name && (
-    <header class="post__header card__breakout--padded">
+    <header class="post__header">
       <h1 class="post__title p-name">{name}</h1>
     </header>
   )}
@@ -231,50 +231,3 @@ const authorName = site.author.name
   </span>
 
 </article>
-
-<style is:global>
-  .card__breakout {
-    display: block;
-    overflow: hidden;
-    clear: both;
-    background-color: var(--g-color-background-subtle);
-    margin: var(--card-padding) 0 calc(-1 * var(--card-padding));
-  }
-  .card__breakout + .card__breakout {
-    margin-top: calc(-1 * var(--card-padding));
-  }
-  .card__breakout:first-child {
-    margin-top: calc(-1 * var(--card-padding));
-  }
-  .card__breakout:last-child {
-    margin-bottom: calc(-1 * var(--card-padding));
-  }
-  .card__breakout > img {
-    display: block;
-    width: 100%;
-  }
-  .card__breakout--padded {
-    padding: var(--card-padding);
-  }
-
-  .post__action {
-    margin: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    font-size: 0.714rem;
-  }
-  .post__action grantcodes-icon {
-    vertical-align: middle;
-    margin-right: 0.3em;
-  }
-  /* Single post: a bold label, like the cards'. */
-  .post > .post__action {
-    font-size: 0.85rem;
-    font-weight: 700;
-  }
-
-  .post__content > p:first-child {
-    margin-top: 0;
-  }
-</style>

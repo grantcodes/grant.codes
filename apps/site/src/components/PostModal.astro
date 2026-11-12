@@ -69,7 +69,8 @@ import { X } from 'lucide-static'
     dialog.addEventListener('close', () => {
       controller?.abort()
       document.title = pageTitle
-      body.replaceChildren()
+      // Clear after the exit transition (and stop any embedded video).
+      setTimeout(() => dialog.open || body.replaceChildren(), 300)
       if (history.state?.postModal) history.back()
     })
 
@@ -90,7 +91,7 @@ import { X } from 'lucide-static'
 <style is:global>
   .post-modal {
     inline-size: min(var(--width-article), calc(100vw - 2rem));
-    max-block-size: calc(100dvh - 4rem);
+    max-block-size: calc(100dvh - 6rem);
     padding: 0;
     border: none;
     background: transparent;
@@ -100,19 +101,19 @@ import { X } from 'lucide-static'
     overscroll-behavior: contain;
   }
   .post-modal::backdrop {
-    background-color: rgb(0 0 0 / 0.9);
     overflow: hidden;
     overscroll-behavior: contain;
   }
   .post-modal__body {
-    max-block-size: calc(100dvh - 4rem);
+    max-block-size: calc(100dvh - 6rem);
     overflow: auto;
     overscroll-behavior: contain;
   }
+  /* Above the dialog's corner: the dialog's scale animation makes it the containing block. */
   .post-modal__close {
-    position: fixed;
-    inset-block-start: 1rem;
-    inset-inline-end: 1rem;
+    position: absolute;
+    inset-block-end: 100%;
+    inset-inline-end: 0;
     padding: 0.25rem;
     border: none;
     background: none;

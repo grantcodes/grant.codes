@@ -5,7 +5,6 @@
 
 /* ── Variables (ported from ../util/_variables.scss) ── */
 :root {
-    --card-padding: 1rem;
     --border-radius: 0.4rem;
     --content-width: 42rem;
     --width-wide: 64rem;
@@ -170,6 +169,9 @@ grantcodes-icon {
 }
 .main-content--wide {
     max-inline-size: var(--width-wide);
+}
+.main-content--full {
+    max-inline-size: none;
 }
 .main-content--article {
     max-inline-size: var(--width-article);
@@ -378,6 +380,122 @@ grantcodes-icon {
     display: flex;
     justify-content: center;
     padding: 1rem;
+}
+
+/* ── Dialogs (lightbox, post modal): fade and grow in, fade out ── */
+:is(.lightbox, .post-modal) {
+    opacity: 0;
+    transition-property: opacity, scale, display, overlay;
+    transition-duration: 0.25s;
+    transition-timing-function: ease-out;
+    transition-behavior: allow-discrete;
+}
+:is(.lightbox, .post-modal)[open] {
+    opacity: 1;
+    @starting-style {
+        opacity: 0;
+    }
+}
+:is(.lightbox, .post-modal)::backdrop {
+    background-color: rgb(0 0 0 / 0);
+    transition-property: background-color, display, overlay;
+    transition-duration: 0.25s;
+    transition-timing-function: ease-out;
+    transition-behavior: allow-discrete;
+}
+:is(.lightbox, .post-modal)[open]::backdrop {
+    background-color: rgb(0 0 0 / 0.9);
+    @starting-style {
+        background-color: rgb(0 0 0 / 0);
+    }
+}
+@media (prefers-reduced-motion: no-preference) {
+    :is(.lightbox, .post-modal) {
+        scale: 0.96;
+    }
+    :is(.lightbox, .post-modal)[open] {
+        scale: 1;
+        @starting-style {
+            scale: 0.96;
+        }
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    :is(.lightbox, .post-modal),
+    :is(.lightbox, .post-modal)::backdrop {
+        transition-duration: 0.1s;
+    }
+}
+
+/* ── Posts (shared by Post, PostCard and PostFooter) ── */
+/* A breakout runs to the card's edges, past its body padding (--g-spacing-md). */
+.card__breakout {
+    display: block;
+    overflow: hidden;
+    clear: both;
+    margin: var(--g-spacing-md) calc(-1 * var(--g-spacing-md));
+    background-color: var(--g-color-background-subtle);
+}
+.card__breakout + .card__breakout {
+    margin-block-start: 0;
+}
+.card__breakout:first-child {
+    margin-block-start: calc(-1 * var(--g-spacing-md));
+}
+.card__breakout:last-child {
+    margin-block-end: calc(-1 * var(--g-spacing-md));
+}
+.card__breakout img,
+.card__breakout video {
+    display: block;
+    inline-size: 100%;
+}
+.card__breakout figure {
+    margin: 0;
+}
+.card__breakout--padded {
+    margin-block: var(--g-spacing-md);
+}
+
+.post__action {
+    margin: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+.post__action grantcodes-icon {
+    vertical-align: middle;
+    margin-inline-end: 0.3em;
+}
+.post__content > p:first-child {
+    margin-block-start: 0;
+}
+
+/* One size for the whole footer line: date, author, categories, syndication, counts. */
+.post__footer {
+    padding-block-start: 0.75rem;
+    border-block-start: 1px solid var(--g-color-border-subtle);
+    color: var(--g-color-content-subtle);
+    font-size: 0.8rem;
+    line-height: 1.5;
+}
+.post__footer * {
+    font-size: inherit;
+}
+/* Cards space their children with a gap; a single post's article doesn't. */
+.post > .post__footer {
+    margin-block-start: var(--g-spacing-md);
+}
+/* A Liked/Replied label sits close to the preview or link it labels. */
+.post__response {
+    display: grid;
+    gap: 0.5rem;
+    min-inline-size: 0;
+}
+.post__footer .h-card .p-name:hover {
+    text-decoration: underline wavy;
 }
 
 /* ── Post typography: one scale for titles and headings inside content ── */

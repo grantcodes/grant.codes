@@ -1,50 +1,92 @@
 ---
-// Site footer — social links + hidden h-card
-// Uses SSR GrantCodesFooter for layout and styling.
-
+// Site footer: who I am, links into the archives and the rest of the site, and the h-card.
 import { site } from '../../lib/site'
 import { GrantCodesFooter, GrantCodesFooterColumn } from '@grantcodes/ui/components/footer/index.js'
 import { Camera, GitFork, Mail } from 'lucide-static'
 
-const authorEmail = site.author.email
-const instagram = site.author.instagram
-const github = site.author.github
-const authorName = site.author.name
-const url = site.url
-const siteName = site.name
-const description = site.description
-const authorPhoto = site.author.photo
-const authorFeatured = site.author.featured
+const { author } = site
+
+const explore = [
+  { text: 'Projects', to: '/websites' },
+  { text: 'Photos', to: '/photos' },
+  { text: 'Galleries', to: '/collections' },
+  { text: 'Articles', to: '/articles' },
+  { text: 'Notes', to: '/notes' },
+  { text: 'Updates', to: '/updates' },
+]
+
+const thisSite = [
+  { text: 'About me', to: '/about' },
+  { text: 'Contact', to: '/contact' },
+  { text: 'Where am I?', to: '/where' },
+  { text: 'Search', to: '/search' },
+  { text: 'Feeds', to: '/feeds' },
+]
 ---
 
 <div class="main-footer">
-  <GrantCodesFooter columns={1}>
+  <GrantCodesFooter columns={3}>
     <GrantCodesFooterColumn>
+      <p class="site-footer__name">{site.name}</p>
+      <p>{author.name} makes fun, accessible, sustainable websites. A Scot living in Barcelona.</p>
       <div class="social-links">
-        <a href={`mailto:${authorEmail}`} rel="me" aria-label="Email">
+        <a href={`mailto:${author.email}`} rel="me" aria-label="Email">
           <grantcodes-icon style="font-size: 24px" set:html={Mail}></grantcodes-icon>
         </a>
-        {instagram && (
-          <a href={instagram} rel="me" aria-label="Instagram">
-            <grantcodes-icon style="font-size: 24px" set:html={Camera}></grantcodes-icon>
-          </a>
-        )}
-        {github && (
-          <a href={github} rel="me" aria-label="GitHub">
-            <grantcodes-icon style="font-size: 24px" set:html={GitFork}></grantcodes-icon>
-          </a>
-        )}
+        <a href={author.instagram} rel="me" aria-label="Instagram">
+          <grantcodes-icon style="font-size: 24px" set:html={Camera}></grantcodes-icon>
+        </a>
+        <a href={author.github} rel="me" aria-label="GitHub">
+          <grantcodes-icon style="font-size: 24px" set:html={GitFork}></grantcodes-icon>
+        </a>
       </div>
     </GrantCodesFooterColumn>
-    <!-- Hidden h-card for IndieWeb identity, placed in the bottom slot -->
-    <div slot="bottom" class="h-card screen-reader-text">
-      <span class="p-name">{authorName}</span>
-      <br />
-      <a href={url} class="u-url" rel="me">{siteName}</a>
-      <a class="p-email" href={`mailto:${authorEmail}`}>{authorEmail}</a>
-      {description && <data class="p-note" value={description} />}
-      <data class="u-photo" value={authorPhoto} />
-      {authorFeatured && <data class="u-featured" value={authorFeatured} />}
+
+    <GrantCodesFooterColumn>
+      <p class="site-footer__heading">Explore</p>
+      <ul class="site-footer__links" role="list">
+        {explore.map((link) => <li><a href={link.to}>{link.text}</a></li>)}
+      </ul>
+    </GrantCodesFooterColumn>
+
+    <GrantCodesFooterColumn>
+      <p class="site-footer__heading">This site</p>
+      <ul class="site-footer__links" role="list">
+        {thisSite.map((link) => <li><a href={link.to}>{link.text}</a></li>)}
+      </ul>
+    </GrantCodesFooterColumn>
+
+    <div slot="bottom" class="h-card">
+      <p>
+        © <span class="p-name">{author.name}</span>, 2012–{new Date().getFullYear()}. Published with
+        <a href="https://github.com/grantcodes/postr">postr</a>.
+      </p>
+      <a href={site.url} class="u-url screen-reader-text" rel="me">{site.name}</a>
+      <data class="p-email" value={`mailto:${author.email}`} />
+      <data class="p-note" value={site.description} />
+      <data class="u-photo" value={author.photo} />
+      {author.featured && <data class="u-featured" value={author.featured} />}
     </div>
   </GrantCodesFooter>
 </div>
+
+<style>
+  .site-footer__name {
+    font-size: 1.25rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+  }
+  .site-footer__heading {
+    font-weight: 800;
+  }
+  .site-footer__links {
+    display: grid;
+    gap: 0.35rem;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .main-footer p {
+    margin-block: 0 0.5rem;
+  }
+</style>

@@ -82,14 +82,15 @@ const authorName = site.author.name
       </header>
     )}
 
-    <!-- Action label (Liked, Reposted, etc.) -->
+    <!-- Action label (Liked, Reposted, ...), then what it points at -->
+    {(actionLabel && !name) || respondsTo ? (
+    <div class="post__response">
     {actionLabel && !name && (
-      <p class="post__action" style="font-weight: bold;">
+      <p class="post__action">
         {actionLabel}
       </p>
     )}
 
-    <!-- Mention actions -->
     {showLine(likeOf) && (
       <p class="post__action">
         <grantcodes-icon style="font-size: 12px" set:html={Heart}></grantcodes-icon>
@@ -117,6 +118,8 @@ const authorName = site.author.name
     )}
 
     {rich && respondsTo && <ResponseTarget url={respondsTo} entry={responseEntry} relation={relation} />}
+    </div>
+    ) : null}
 
     <!-- Photo -->
     {photo && (
@@ -181,42 +184,3 @@ const authorName = site.author.name
     </span>
   </grantcodes-card>
 </article>
-
-<style is:global>
-  .post__action {
-    margin: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    font-size: 0.714rem;
-  }
-  .post__action grantcodes-icon {
-    vertical-align: middle;
-    margin-right: 0.3em;
-  }
-
-  .post__footer {
-    opacity: 0.7;
-  }
-  .post__footer,
-  .post__footer * {
-    line-height: 1.2;
-    font-size: 0.51rem;
-  }
-  .post__footer .h-card {
-    display: inline-block;
-    text-decoration: none;
-    font-size: 0.5em;
-    margin-top: -0.25em;
-  }
-  .post__footer .h-card .p-name {
-    text-decoration: underline;
-  }
-  .post__footer .h-card .p-name:hover {
-    text-decoration: underline wavy;
-  }
-
-  .post__content > p:first-child {
-    margin-top: 0;
-  }
-</style>

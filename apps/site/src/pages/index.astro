@@ -1,31 +1,19 @@
 ---
-// Home: who I am, where I've been, and a few highlights from the archive.
+// Home: who I am, what I've built, and a few highlights from the archive.
 import { site } from '../lib/site'
 import BaseLayout from '../layouts/BaseLayout.astro'
 import PhotosGallery from '../components/PhotosGallery.astro'
-import TrackLine from '../components/TrackLine.astro'
 import PostCard from '../components/PostCard.astro'
-import {
-  getArchiveMonths,
-  getArchivePosts,
-  getMonthTrack,
-  monthNames,
-  trackDistanceKm,
-} from '../lib/archive'
+import ProjectCard from '../components/ProjectCard.astro'
+import { getArchivePosts } from '../lib/archive'
+import websites from '../data/websites.js'
 
 const posts = await getArchivePosts()
 const publicPosts = posts.filter((post) => post.visibility === 'public')
-const articles = publicPosts.filter((post) => post.postType === 'article').slice(0, 3)
+const projects = websites.slice(0, 4)
 const notes = publicPosts.filter((post) => post.postType === 'note').slice(0, 3)
 // Some old uploads are missing from the media store; extra photos fill the gaps their tiles leave.
 const photos = publicPosts.filter((post) => post.postType === 'photo').slice(0, 16)
-
-// The most recent month with a location track.
-const latestTrack = (await getArchiveMonths())
-  .reverse()
-  .map(([year, month]) => ({ year, month, track: getMonthTrack(year, month, 600) }))
-  .find(({ track }) => track.length > 1)
-const latestKm = latestTrack ? trackDistanceKm(getMonthTrack(latestTrack.year, latestTrack.month, Infinity)) : 0
 ---
 
 <BaseLayout title="Hi! I'm Grant" canonicalUrl={site.url}>
@@ -53,30 +41,15 @@ const latestKm = latestTrack ? trackDistanceKm(getMonthTrack(latestTrack.year, l
     </div>
   </section>
 
-  {latestTrack && (
-    <a class="travels" href={`/${latestTrack.year}/${latestTrack.month}`}>
-      <TrackLine
-        track={latestTrack.track}
-        label={`My route in ${monthNames[latestTrack.month - 1]} ${latestTrack.year}`}
-      />
-      <span class="travels__caption">
-        Where I wandered in {monthNames[latestTrack.month - 1]} {latestTrack.year}
-        {latestKm > 0 && <> · {latestKm.toLocaleString('en-GB')} km</>}
-      </span>
-    </a>
-  )}
-
   <hr />
 
-  {articles.length > 0 && (
-    <section class="home-section">
-      <h2>Writing</h2>
-      <div class="post-list">
-        {articles.map((post) => <PostCard post={post} compact />)}
-      </div>
-      <a href="/articles">All articles</a>
-    </section>
-  )}
+  <section class="home-section">
+    <h2>Projects</h2>
+    <div class="projects">
+      {projects.map((project) => <ProjectCard project={project} />)}
+    </div>
+    <a href="/websites">All projects</a>
+  </section>
 
   {photos.length > 0 && (
     <section class="home-section">
@@ -162,20 +135,10 @@ const latestKm = latestTrack ? trackDistanceKm(getMonthTrack(latestTrack.year, l
     font-weight: 800;
   }
 
-  .travels {
+  .projects {
     display: grid;
-    gap: 0.5rem;
-    color: inherit;
-    text-decoration: none;
-  }
-  .travels__caption {
-    justify-self: end;
-    font-size: 0.9rem;
-    font-weight: 700;
-  }
-  .travels:hover .travels__caption {
-    color: var(--day-accent);
-    text-decoration: underline wavy;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: 1rem;
   }
 
   .home-section {

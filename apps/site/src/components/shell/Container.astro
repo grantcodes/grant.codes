@@ -1,12 +1,12 @@
 ---
 // Site shell: top bar, topography band, one content column, footer.
-// `size`: 'normal' reading column, 'wide' for galleries/maps/summaries, 'article' for long reads.
+// `size`: 'normal' reading column, 'wide' for maps/summaries, 'article' for long reads, 'full' edge to edge.
 import Header from './Header.astro'
 import Footer from './Footer.astro'
 import Topography from './Topography.astro'
 
 export interface Props {
-  size?: 'normal' | 'wide' | 'article'
+  size?: 'normal' | 'wide' | 'article' | 'full'
 }
 
 const { size = 'normal' } = Astro.props

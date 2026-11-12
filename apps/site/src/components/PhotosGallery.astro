@@ -1,8 +1,7 @@
 ---
-// Photo gallery.
-// - type "feed": square grid; each photo links to its post; hidden h-entries keep the feed parseable.
-// - type "collection": a scrolling filmstrip of a collection's photos at their own aspect ratio,
-//   each opening its post in a modal (PostModal).
+// Photo gallery; every photo links to its post, which opens in a modal (PostModal).
+// - type "feed": square grid; hidden h-entries keep the feed parseable.
+// - type "collection": a scrolling filmstrip of a collection's photos at their own aspect ratio.
 
 import { site } from '../lib/site'
 import { normalizeInternalUrl } from '../lib/url'
@@ -37,7 +36,7 @@ const onThumbnailError =
   >
     {photos.map((photo) =>
       type === 'feed' ? (
-        <a href={photo.permalink} class="photos-gallery__item">
+        <a href={photo.permalink} class="photos-gallery__item" data-post-modal>
           <img src={photo.thumbnail} data-full={photo.url} onerror={onThumbnailError} alt={photo.alt} loading="lazy" />
         </a>
       ) : (
@@ -53,6 +52,60 @@ const onThumbnailError =
     )}
   </GrantCodesGallery>
 )}
+
+<script>
+  // Drag filmstrips with the mouse (touch and trackpads already scroll them natively).
+  for (const gallery of document.querySelectorAll<HTMLElement>('.photos-gallery--collection')) {
+    const strip = () => gallery.shadowRoot?.querySelector<HTMLElement>('.gallery__slot')
+    let start: { x: number; scroll: number } | undefined
+    let dragged = false
+
+    gallery.addEventListener('pointerdown', (event) => {
+      const el = strip()
+      if (event.pointerType !== 'mouse' || event.button !== 0 || !el) return
+      start = { x: event.clientX, scroll: el.scrollLeft }
+      dragged = false
+    })
+    gallery.addEventListener('pointermove', (event) => {
+      const el = strip()
+      if (!start || !el) return
+      const dx = event.clientX - start.x
+      if (!dragged && Math.abs(dx) < 5) return
+      if (!dragged) {
+        dragged = true
+        gallery.setPointerCapture(event.pointerId)
+        gallery.classList.add('is-dragging')
+        // Snapping and smooth scrolling fight a dragged scroll position.
+        el.style.scrollSnapType = 'none'
+        el.style.scrollBehavior = 'auto'
+      }
+      el.scrollLeft = start.scroll - dx
+    })
+    const end = () => {
+      const el = strip()
+      start = undefined
+      gallery.classList.remove('is-dragging')
+      if (el) {
+        el.style.scrollSnapType = ''
+        el.style.scrollBehavior = ''
+      }
+    }
+    gallery.addEventListener('pointerup', end)
+    gallery.addEventListener('pointercancel', end)
+    // A drag isn't a click: don't open the photo it ended on.
+    gallery.addEventListener(
+      'click',
+      (event) => {
+        if (!dragged) return
+        event.preventDefault()
+        event.stopPropagation()
+        dragged = false
+      },
+      true
+    )
+    gallery.addEventListener('dragstart', (event) => event.preventDefault())
+  }
+</script>
 
 {type === 'feed' && posts.length > 0 && (
   <div class="screen-reader-text">
@@ -77,6 +130,17 @@ const onThumbnailError =
   @media (max-width: 30rem) {
     .photos-gallery {
       --gallery-columns: 3;
+    }
+  }
+  /* /photos: one big edge-to-edge wall; more columns as the screen widens. */
+  @media (min-width: 64rem) {
+    .photos-page .photos-gallery {
+      --gallery-columns: 7;
+    }
+  }
+  @media (min-width: 100rem) {
+    .photos-page .photos-gallery {
+      --gallery-columns: 10;
     }
   }
   .photos-gallery__item {
@@ -112,6 +176,16 @@ const onThumbnailError =
   /* Run edge to edge inside a card, past its body padding. */
   grantcodes-card .photos-gallery--collection {
     margin-inline: calc(-1 * var(--g-spacing-md));
+  }
+  @media (pointer: fine) {
+    .photos-gallery--collection,
+    .photos-gallery--collection .photos-gallery__item {
+      cursor: grab;
+    }
+    .photos-gallery--collection.is-dragging,
+    .photos-gallery--collection.is-dragging .photos-gallery__item {
+      cursor: grabbing;
+    }
   }
   .photos-gallery--collection .photos-gallery__item img {
     inline-size: auto;

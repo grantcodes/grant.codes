@@ -27,7 +27,10 @@ import { X } from 'lucide-static'
       dialog.showModal()
     })
 
-    dialog.addEventListener('close', () => image.removeAttribute('src'))
+    // Clear after the exit transition so the image doesn't vanish mid-fade.
+    dialog.addEventListener('close', () =>
+      setTimeout(() => dialog.open || image.removeAttribute('src'), 300)
+    )
 
     // Light dismiss for browsers without `closedby` (Safari).
     if (!('closedBy' in HTMLDialogElement.prototype)) {
@@ -51,7 +54,6 @@ import { X } from 'lucide-static'
     overscroll-behavior: contain;
   }
   .lightbox::backdrop {
-    background-color: rgb(0 0 0 / 0.9);
     overflow: hidden;
     overscroll-behavior: contain;
   }
@@ -61,10 +63,11 @@ import { X } from 'lucide-static'
     max-block-size: 85dvh;
     object-fit: contain;
   }
+  /* Above the dialog's corner: the dialog's scale animation makes it the containing block. */
   .lightbox__close {
-    position: fixed;
-    inset-block-start: 1rem;
-    inset-inline-end: 1rem;
+    position: absolute;
+    inset-block-end: 100%;
+    inset-inline-end: 0;
     padding: 0.25rem;
     border: none;
     background: none;

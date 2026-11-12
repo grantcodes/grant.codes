@@ -32,8 +32,8 @@ const allPhotos = allEntries
     return postDate(b).getTime() - postDate(a).getTime()
   })
 
-// In-memory pagination — first page, 50 per page
-const PER_PAGE = 50
+// In-memory pagination — first page, 120 per page
+const PER_PAGE = 120
 const totalPages = Math.max(Math.ceil(allPhotos.length / PER_PAGE), 1)
 const posts = allPhotos.slice(0, PER_PAGE)
 
@@ -41,7 +41,7 @@ const posts = allPhotos.slice(0, PER_PAGE)
 const nextHref = totalPages > 1 ? '/photos/page/2' : ''
 ---
 
-<FullWidthLayout title="Photos" canonicalUrl={`${siteUrl}/photos`}>
+<FullWidthLayout title="Photos" canonicalUrl={`${siteUrl}/photos`} full>
   <h2 class="page-title">Photos</h2>
 
   {posts.length === 0 && (
@@ -52,7 +52,7 @@ const nextHref = totalPages > 1 ? '/photos/page/2' : ''
 
   {posts.length > 0 && (
     <>
-      <PhotosGallery posts={posts} type="feed" />
+      <div class="photos-page"><PhotosGallery posts={posts} type="feed" /></div>
 
       {nextHref && (
         <GrantCodesPagination

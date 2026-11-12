@@ -20,7 +20,7 @@ export async function getStaticPaths() {
     (e) => e.data?.postType === 'photo'
   ).length
 
-  const PER_PAGE = 50
+  const PER_PAGE = 120
   const totalPages = Math.max(Math.ceil(photoCount / PER_PAGE), 1)
 
   // Pre-generate all pages (page 1 is /photos, start from page 2)
@@ -45,7 +45,7 @@ const allPhotos = allEntries
   })
 
 // In-memory pagination
-const PER_PAGE = 50
+const PER_PAGE = 120
 const totalPages = Math.max(Math.ceil(allPhotos.length / PER_PAGE), 1)
 const startIndex = (pageNum - 1) * PER_PAGE
 const posts = allPhotos.slice(startIndex, startIndex + PER_PAGE)
@@ -57,7 +57,7 @@ const prevHref = prevPage ? (prevPage === 1 ? '/photos' : `/photos/page/${prevPa
 const nextHref = nextPage ? `/photos/page/${nextPage}` : ''
 ---
 
-<FullWidthLayout title={`Photos page ${page}`} canonicalUrl={`${siteUrl}/photos/page/${page}`}>
+<FullWidthLayout title={`Photos page ${page}`} canonicalUrl={`${siteUrl}/photos/page/${page}`} full>
   <h2 class="page-title">Photos page {page}</h2>
 
   {posts.length === 0 && (
@@ -68,7 +68,7 @@ const nextHref = nextPage ? `/photos/page/${nextPage}` : ''
 
   {posts.length > 0 && (
     <>
-      <PhotosGallery posts={posts} type="feed" />
+      <div class="photos-page"><PhotosGallery posts={posts} type="feed" /></div>
 
       <GrantCodesPagination
         previousHref={prevHref}
