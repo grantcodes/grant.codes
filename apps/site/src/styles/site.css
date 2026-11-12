@@ -478,7 +478,7 @@ grantcodes-icon {
     padding-block-start: 0.75rem;
     border-block-start: 1px solid var(--g-color-border-subtle);
     color: var(--g-color-content-subtle);
-    font-size: 0.8rem;
+    font-size: var(--g-typography-font-size-2xs);
     line-height: 1.5;
 }
 .post__footer * {
