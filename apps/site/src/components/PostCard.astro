@@ -14,7 +14,7 @@ import PhotosGallery from './PhotosGallery.astro'
 import { formatRelativeDate } from '../lib/post-date-format'
 import { getMentionUrl, getResponseValue } from '../lib/post-mentions'
 import { getChildren } from '../lib/post-children'
-import { getPhotoUrl } from '../lib/post-media'
+import { onImageError, photoImage, type Photo } from '../lib/photo'
 
 export interface Props {
   post: any
@@ -32,7 +32,10 @@ const content = properties.content?.[0] ?? null
 const summary = properties.summary?.[0] ?? null
 const published = properties.published?.[0] ?? null
 const url = normalizeInternalUrl(post.url ?? properties.url?.[0])
-const photo = properties.photo?.[0] ?? null
+const photo: Photo | undefined = post.photos?.[0]
+// Cards are at most ~42rem wide: the 700px copy, or a srcset when postr knows the copies.
+const photoImg = photo ? photoImage(photo, '700', '(min-width: 44rem) 42rem, 100vw') : undefined
+const onPhotoError = onImageError('.post__card-photo')
 const category = post.categories ?? []
 
 // Mention properties
@@ -122,16 +125,21 @@ const authorName = site.author.name
     ) : null}
 
     <!-- Photo -->
-    {photo && (
-      <div>
-        {url ? (
-          <a href={url}>
-            <img src={getPhotoUrl(photo)} alt="" class="u-photo" loading="lazy" />
-          </a>
-        ) : (
-          <img src={getPhotoUrl(photo)} alt="" class="u-photo" loading="lazy" />
-        )}
-      </div>
+    {photo && photoImg && (
+      <a href={url ?? photo.url} class="post__card-photo">
+        <img
+          src={photoImg.src}
+          srcset={photoImg.srcset}
+          sizes={photoImg.sizes}
+          data-fallback={photoImg.fallback}
+          width={photoImg.width}
+          height={photoImg.height}
+          onerror={onPhotoError}
+          alt={photo.alt ?? ''}
+          class="u-photo"
+          loading="lazy"
+        />
+      </a>
     )}
 
     {postType === 'collection' && children.length > 0 && (

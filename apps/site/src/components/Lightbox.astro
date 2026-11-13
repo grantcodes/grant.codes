@@ -24,10 +24,21 @@ import { X } from 'lucide-static'
       event.preventDefault()
       image.src = link.href
       image.alt = link.querySelector('img')?.alt ?? ''
-      // Open once the image is decoded (or after 2s), so the dialog doesn't grow as it loads.
-      document.documentElement.style.cursor = 'progress'
-      await Promise.race([image.decode().catch(() => {}), new Promise((r) => setTimeout(r, 2000))])
-      document.documentElement.style.cursor = ''
+      const { width, height } = link.dataset
+      if (width && height) {
+        // Known dimensions: size it to fit the screen now, so the dialog can open straight away.
+        const w = Number(width)
+        const h = Number(height)
+        image.style.aspectRatio = `${w} / ${h}`
+        image.style.inlineSize = `${Math.min(w, innerWidth * 0.95, (innerHeight * 0.85 * w) / h)}px`
+      } else {
+        // Otherwise open once it's decoded (or after 2s), so the dialog doesn't grow as it loads.
+        image.style.aspectRatio = ''
+        image.style.inlineSize = ''
+        document.documentElement.style.cursor = 'progress'
+        await Promise.race([image.decode().catch(() => {}), new Promise((r) => setTimeout(r, 2000))])
+        document.documentElement.style.cursor = ''
+      }
       dialog.showModal()
     })
 

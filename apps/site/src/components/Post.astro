@@ -21,7 +21,8 @@ import { hasResponseTarget } from '../lib/reference'
 import { getSiteUrl, normalizeInternalUrl } from '../lib/url'
 import { getResponseValue, getUrl } from '../lib/post-mentions'
 import { getChildren } from '../lib/post-children'
-import { getPhotoUrl, getPhotoAlt, getMediaUrl, getThumbnailUrl } from '../lib/post-media'
+import { getMediaUrl } from '../lib/post-media'
+import { onImageError, photoImage, type Photo } from '../lib/photo'
 
 export interface Props {
   post: any
@@ -54,7 +55,7 @@ const quotationOf = getResponseValue(properties['quotation-of'], siteUrl)
 const rsvp = properties.rsvp?.[0] ?? null
 
 // Media
-const photo = properties.photo ?? []
+const photos: Photo[] = post.photos ?? []
 const video = properties.video ?? []
 const audio = properties.audio ?? []
 
@@ -76,9 +77,9 @@ const relation = { [getUrl(likeOf)]: 'u-like-of', [getUrl(repostOf)]: 'u-repost-
 
 const authorName = site.author.name
 
-// A missing 1800px copy falls back to the original; a missing original hides the photo.
-const onPhotoError =
-  "if (this.src !== this.dataset.full) { this.src = this.dataset.full } else { this.onerror = null; this.closest('figure').hidden = true }"
+const onPhotoError = onImageError('figure')
+// Post photos fill the article column (46rem) or the screen.
+const photoSizes = '(min-width: 48rem) 46rem, 100vw'
 ---
 
 <article
@@ -144,24 +145,27 @@ const onPhotoError =
   {rich && respondsTo && <ResponseTarget url={respondsTo} entry={responseEntry} relation={relation} />}
 
   {/* ── Photos ── */}
-  {photo.length > 0 && (
+  {photos.length > 0 && (
     <div class="card__breakout post__photos">
-      {photo.map((p: any) => {
-        const src = getPhotoUrl(p)
-        const alt = getPhotoAlt(p)
+      {photos.map((photo) => {
+        // Recorded dimensions and copies when postr has them, else the guessed 1800px copy.
+        const image = photoImage(photo, '1800', photoSizes)
         return (
           <figure>
-            <a href={src} data-zoom>
-              {/* The 1800px copy (much lighter than the original), else the original. */}
+            <a href={photo.url} data-zoom data-width={photo.width} data-height={photo.height}>
               <img
-                src={getThumbnailUrl(src, '1800')}
-                data-full={src}
+                src={image.src}
+                srcset={image.srcset}
+                sizes={image.sizes}
+                data-fallback={image.fallback}
+                width={image.width}
+                height={image.height}
                 onerror={onPhotoError}
-                alt={alt}
+                alt={photo.alt ?? ''}
                 loading="lazy"
               />
             </a>
-            <data class="u-photo" value={src} />
+            <data class="u-photo" value={photo.url} />
           </figure>
         )
       })}

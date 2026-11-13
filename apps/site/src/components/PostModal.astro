@@ -61,7 +61,8 @@ import { X } from 'lucide-static'
         const images = [...post.querySelectorAll('img')]
         for (const img of images) img.loading = 'eager'
         body.replaceChildren(document.adoptNode(post))
-        await Promise.all(images.map((img) => loaded(img, 2000)))
+        // Images with width/height already reserve their space; only wait for the others.
+        await Promise.all(images.filter((img) => !img.getAttribute('width')).map((img) => loaded(img, 2000)))
         if (controller.signal.aborted) return
         document.title = doc.title
         if (!dialog.open) dialog.showModal()

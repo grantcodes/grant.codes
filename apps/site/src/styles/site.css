@@ -472,6 +472,13 @@ grantcodes-icon {
 .post__content > p:first-child {
     margin-block-start: 0;
 }
+/* width/height attributes reserve the aspect ratio; the image still fits its box. */
+.post__card-photo img,
+.post__photos img {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+}
 
 /* One size for the whole footer line: date, author, categories, syndication, counts. */
 .post__footer {

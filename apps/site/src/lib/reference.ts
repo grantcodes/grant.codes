@@ -1,4 +1,5 @@
 import { toPostView, type Mf2Item } from '@postr/core'
+import { getOEmbedFrame } from './oembed'
 
 // Strip stray control characters some fetched pages carried.
 const clean = (text?: string) => text?.replace(/[\u0000-\u001f]+/g, ' ').trim() || undefined
@@ -38,4 +39,8 @@ export function getYouTubeId(url: string): string | undefined {
 
 /** Whether ResponseTarget will show an embed or preview for this URL (so the bare link can be hidden). */
 export const hasResponseTarget = (url: string, entry?: Mf2Item) =>
-  Boolean(getYouTubeId(url) || getReference(url, entry))
+  Boolean(getEmbedFrame(url, entry) || getYouTubeId(url) || getReference(url, entry))
+
+/** The allowlisted oEmbed player postr discovered for a referenced page, if any. */
+export const getEmbedFrame = (url: string, entry?: Mf2Item) =>
+  getOEmbedFrame(url, entry?.properties.oembed?.[0])
