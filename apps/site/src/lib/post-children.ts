@@ -1,15 +1,15 @@
 import { getEntry } from 'astro:content'
+import { site } from './site'
 
-/**
- * Entries of a collection post's children, which postr stores as permalinks.
- * Empty until `@postr/astro` exposes `data.children`.
- */
+const sitePrefix = `${site.url}/`
+
+/** Entries of a collection post's children, which postr stores as absolute URLs. */
 export async function getChildren(post: { children?: unknown }) {
   if (!Array.isArray(post.children)) return []
   const entries = await Promise.all(
     post.children.map((url) =>
-      typeof url === 'string'
-        ? getEntry('posts', url.replace(/^https?:\/\/[^/]+\//, ''))
+      typeof url === 'string' && url.startsWith(sitePrefix)
+        ? getEntry('posts', url.slice(sitePrefix.length))
         : undefined
     )
   )
