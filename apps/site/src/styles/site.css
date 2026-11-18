@@ -382,51 +382,6 @@ grantcodes-icon {
     padding: 1rem;
 }
 
-/* ── Dialogs (lightbox, post modal): fade and grow in, fade out ── */
-:is(.lightbox, .post-modal) {
-    opacity: 0;
-    transition-property: opacity, scale, display, overlay;
-    transition-duration: 0.25s;
-    transition-timing-function: ease-out;
-    transition-behavior: allow-discrete;
-}
-:is(.lightbox, .post-modal)[open] {
-    opacity: 1;
-    @starting-style {
-        opacity: 0;
-    }
-}
-:is(.lightbox, .post-modal)::backdrop {
-    background-color: rgb(0 0 0 / 0);
-    transition-property: background-color, display, overlay;
-    transition-duration: 0.25s;
-    transition-timing-function: ease-out;
-    transition-behavior: allow-discrete;
-}
-:is(.lightbox, .post-modal)[open]::backdrop {
-    background-color: rgb(0 0 0 / 0.9);
-    @starting-style {
-        background-color: rgb(0 0 0 / 0);
-    }
-}
-@media (prefers-reduced-motion: no-preference) {
-    :is(.lightbox, .post-modal) {
-        scale: 0.96;
-    }
-    :is(.lightbox, .post-modal)[open] {
-        scale: 1;
-        @starting-style {
-            scale: 0.96;
-        }
-    }
-}
-@media (prefers-reduced-motion: reduce) {
-    :is(.lightbox, .post-modal),
-    :is(.lightbox, .post-modal)::backdrop {
-        transition-duration: 0.1s;
-    }
-}
-
 /* ── Posts (shared by Post, PostCard and PostFooter) ── */
 /* A breakout runs to the card's edges, past its body padding (--g-spacing-md). */
 .card__breakout {

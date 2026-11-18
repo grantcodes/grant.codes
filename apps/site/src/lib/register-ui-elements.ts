@@ -6,6 +6,7 @@ import { GrantCodesGallery, GrantCodesGalleryImage } from '@grantcodes/ui/compon
 import { GrantCodesIcon } from '@grantcodes/ui/components/icon/index.js'
 import { GrantCodesPagination } from '@grantcodes/ui/components/pagination/index.js'
 import { GrantCodesPopover } from '@grantcodes/ui/components/popover/index.js'
+import { GrantCodesDialog } from '@grantcodes/ui/components/dialog/index.js'
 
 const tagName = Symbol.for('tagName')
 
@@ -24,3 +25,4 @@ setTagName(GrantCodesGalleryImage, 'grantcodes-gallery-image')
 setTagName(GrantCodesIcon, 'grantcodes-icon')
 setTagName(GrantCodesPagination, 'grantcodes-pagination')
 setTagName(GrantCodesPopover, 'grantcodes-popover')
+setTagName(GrantCodesDialog, 'grantcodes-dialog')

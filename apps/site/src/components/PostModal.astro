@@ -1,26 +1,25 @@
 ---
-// Opens `a[data-post-modal]` links (a post's permalink) in a dialog over the current page,
-// like a Next.js intercepted route: the URL changes, Back closes it, and a reload, direct
+// Opens `a[data-post-modal]` links (a post's permalink) in a grantcodes-dialog over the current
+// page, like a Next.js intercepted route: the URL changes, Back closes it, and a reload, direct
 // visit or browser without JS gets the normal post page.
-import { X } from 'lucide-static'
+import { GrantCodesDialog } from '@grantcodes/ui/components/dialog/index.js'
 ---
 
-<dialog class="post-modal" closedby="any" aria-label="Post">
+{/* Client-only: grantcodes-dialog reads its light DOM in render(), which fails during SSR. */}
+<GrantCodesDialog client:only="@grantcodes/astro" class="post-modal" aria-label="Post">
+  <h2 slot="header" class="post-modal__title"></h2>
   <div class="post-modal__body"></div>
-  <form method="dialog">
-    <button class="post-modal__close" aria-label="Close">
-      <grantcodes-icon set:html={X}></grantcodes-icon>
-    </button>
-  </form>
-</dialog>
+</GrantCodesDialog>
 
 <script>
-  const dialog = document.querySelector<HTMLDialogElement>('dialog.post-modal')
-  const body = dialog?.querySelector<HTMLElement>('.post-modal__body')
+  type Dialog = HTMLElement & { open: boolean }
+  // The dialog is client-only, so it may not exist yet when this runs; look it up on use.
+  const modal = () => document.querySelector<Dialog>('grantcodes-dialog.post-modal')
+  const part = (selector: string) => modal()?.querySelector<HTMLElement>(selector)
   // Needed to keep the server-rendered (declarative) shadow DOM of the fetched custom elements.
   const canParse = 'parseHTMLUnsafe' in Document
 
-  if (dialog && body && canParse) {
+  if (canParse) {
     const pageTitle = document.title
     let controller: AbortController | undefined
 
@@ -48,6 +47,10 @@ import { X } from 'lucide-static'
           })
 
     const open = async (url: string) => {
+      const dialog = modal()
+      const title = part('.post-modal__title')
+      const body = part('.post-modal__body')
+      if (!dialog || !title || !body) return void (location.href = url)
       controller?.abort()
       controller = new AbortController()
       document.documentElement.style.cursor = 'progress'
@@ -55,9 +58,15 @@ import { X } from 'lucide-static'
         const res = await fetch(url, { signal: controller.signal })
         if (!res.ok) throw new Error(String(res.status))
         const doc = (Document as any).parseHTMLUnsafe(await res.text()) as Document
-        const post = doc.querySelector('main grantcodes-card')
+        const post = doc.querySelector('main article.post')
         if (!post) throw new Error('no post')
         adoptStyles(doc)
+        // The post's name becomes the dialog header; unnamed posts show their date instead.
+        // (A featured-image header stays in the body: it carries the image.)
+        const name = post.querySelector('.post__header:not(.post__header--featured)')
+        title.textContent =
+          name?.textContent?.trim() || post.querySelector('.dt-published')?.textContent?.trim() || 'Post'
+        name?.remove()
         const images = [...post.querySelectorAll('img')]
         for (const img of images) img.loading = 'eager'
         body.replaceChildren(document.adoptNode(post))
@@ -65,8 +74,8 @@ import { X } from 'lucide-static'
         await Promise.all(images.filter((img) => !img.getAttribute('width')).map((img) => loaded(img, 2000)))
         if (controller.signal.aborted) return
         document.title = doc.title
-        if (!dialog.open) dialog.showModal()
-        body.scrollTop = 0
+        await customElements.whenDefined('grantcodes-dialog')
+        dialog.open = true
       } catch (err) {
         if ((err as Error).name !== 'AbortError') location.href = url
       } finally {
@@ -84,59 +93,33 @@ import { X } from 'lucide-static'
     })
 
     // Closing (Escape, ×, backdrop) returns to the page's own URL.
-    dialog.addEventListener('close', () => {
+    document.addEventListener('toggle', (event) => {
+      const dialog = modal()
+      if (event.target !== dialog || !(event instanceof CustomEvent) || event.detail.open) return
       controller?.abort()
       document.title = pageTitle
       // Clear after the exit transition (and stop any embedded video).
-      setTimeout(() => dialog.open || body.replaceChildren(), 300)
+      setTimeout(() => dialog?.open || part('.post-modal__body')?.replaceChildren(), 300)
       if (history.state?.postModal) history.back()
     })
 
     window.addEventListener('popstate', (event) => {
+      const dialog = modal()
       if (event.state?.postModal) open(event.state.postModal)
-      else if (dialog.open) dialog.close()
+      else if (dialog?.open) dialog.open = false
     })
-
-    // Light dismiss for browsers without `closedby` (Safari).
-    if (!('closedBy' in HTMLDialogElement.prototype)) {
-      dialog.addEventListener('click', (event) => {
-        if (event.target === dialog) dialog.close()
-      })
-    }
   }
 </script>
 
 <style is:global>
   .post-modal {
-    inline-size: min(var(--width-article), calc(100vw - 2rem));
-    max-block-size: calc(100dvh - 6rem);
-    padding: 0;
-    border: none;
-    background: transparent;
-    overflow: visible;
+    --g-dialog-inline-size: var(--width-article);
   }
-  .post-modal:modal {
-    overscroll-behavior: contain;
-  }
-  .post-modal::backdrop {
-    overflow: hidden;
-    overscroll-behavior: contain;
-  }
-  .post-modal__body {
-    max-block-size: calc(100dvh - 6rem);
-    overflow: auto;
-    overscroll-behavior: contain;
-  }
-  /* Above the dialog's corner: the dialog's scale animation makes it the containing block. */
-  .post-modal__close {
-    position: absolute;
-    inset-block-end: 100%;
-    inset-inline-end: 0;
-    padding: 0.25rem;
-    border: none;
-    background: none;
-    color: white;
-    font-size: 1.5rem;
-    cursor: pointer;
+  .post-modal__title {
+    margin: 0;
+    /* Clear the dialog's dismiss button in the top-right corner. */
+    padding-inline-end: 2.5rem;
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    line-height: 1.2;
   }
 </style>
