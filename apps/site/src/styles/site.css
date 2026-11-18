@@ -40,13 +40,13 @@
         var(--g-color-background-subtle) 78%,
         transparent
     );
-    /* Contour rings run from a faint wash of the day's colour to its complement. */
-    --topography-layer-0: color-mix(in oklab, var(--day-main) 12%, var(--g-color-background-default));
-    --topography-layer-1: color-mix(in oklab, var(--day-main) 28%, var(--g-color-background-default));
-    --topography-layer-2: color-mix(in oklab, var(--day-main) 50%, var(--g-color-background-default));
-    --topography-layer-3: color-mix(in oklab, var(--day-main) 75%, var(--g-color-background-default));
-    --topography-layer-4: var(--day-main);
-    --topography-layer-5: var(--day-compl);
+    /* Contour rings: one shade of the day's colour, from a faint wash to full strength at the centre. */
+    --topography-layer-0: color-mix(in oklab, var(--day-main) 10%, var(--g-color-background-default));
+    --topography-layer-1: color-mix(in oklab, var(--day-main) 25%, var(--g-color-background-default));
+    --topography-layer-2: color-mix(in oklab, var(--day-main) 42%, var(--g-color-background-default));
+    --topography-layer-3: color-mix(in oklab, var(--day-main) 60%, var(--g-color-background-default));
+    --topography-layer-4: color-mix(in oklab, var(--day-main) 80%, var(--g-color-background-default));
+    --topography-layer-5: var(--day-main);
 }
 
 html {
