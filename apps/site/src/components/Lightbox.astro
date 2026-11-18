@@ -4,7 +4,7 @@
 import { GrantCodesDialog } from '@grantcodes/ui/components/dialog/index.js'
 ---
 
-{/* Client-only: grantcodes-dialog reads its light DOM in render(), which fails during SSR. */}
+{/* Client-only: server-rendered, grantcodes-dialog 4.1.2 hydrates without its header and dismiss button. */}
 <GrantCodesDialog client:only="@grantcodes/astro" fullscreen class="lightbox" aria-label="Image viewer">
   <img class="lightbox__image" alt="" />
 </GrantCodesDialog>

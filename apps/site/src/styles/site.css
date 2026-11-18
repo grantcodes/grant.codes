@@ -190,8 +190,11 @@ grantcodes-icon {
     max-inline-size: var(--width-wide);
     margin-inline: auto;
     padding: 1.25rem 1rem;
+    color: var(--g-color-content-default);
 }
 .site-header__name {
+    flex-shrink: 0;
+    white-space: nowrap;
     font-size: 1.6rem;
     font-weight: 900;
     letter-spacing: 0.08em;
@@ -199,6 +202,12 @@ grantcodes-icon {
     text-decoration: overline wavy var(--day-accent);
     text-decoration-thickness: 2px;
     text-underline-offset: 0.2em;
+}
+/* The full-size name leaves no room for the menu button on the narrowest phones. */
+@media (max-width: 22rem) {
+    .site-header__name {
+        font-size: 1.2rem;
+    }
 }
 .site-header__nav {
     display: flex;
@@ -211,8 +220,10 @@ grantcodes-icon {
     margin: 0;
     padding: 0;
     list-style: none;
+    white-space: nowrap;
 }
-@media (min-width: 46rem) {
+/* Only once the name, all four links and the menu button fit on one line (rem here is 16px). */
+@media (min-width: 64rem) {
     .site-header__links {
         display: flex;
     }

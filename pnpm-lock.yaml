@@ -60,14 +60,14 @@ importers:
   apps/site:
     dependencies:
       '@grantcodes/astro':
-        specifier: ^1.3.0
-        version: 1.3.0(@types/node@26.6.6)(@types/react@19.2.13)(astro@7.4.8(@types/node@26.6.6)(esbuild@0.28.2)(tsx@4.23.15)(yaml@2.9.1))(lit@3.3.3)(react@19.3.1)
+        specifier: ^1.3.2
+        version: 1.3.2(@types/node@26.6.6)(@types/react@19.2.13)(astro@7.4.8(@types/node@26.6.6)(esbuild@0.28.2)(tsx@4.23.15)(yaml@2.9.1))(lit@3.3.3)(react@19.3.1)
       '@grantcodes/themer':
         specifier: ^2.0.0
         version: 2.0.0
       '@grantcodes/ui':
-        specifier: ^4.1.0
-        version: 4.1.0(@types/react@19.2.13)(react@19.3.1)
+        specifier: ^4.1.2
+        version: 4.1.2(@types/react@19.2.13)(react@19.3.1)
       '@postr/astro':
         specifier: 0.1.0-alpha.5
         version: 0.1.0-alpha.5(@postr/core@2.0.0-alpha.4(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6)))(astro@7.4.8(@types/node@26.6.6)(esbuild@0.28.2)(tsx@4.23.15)(yaml@2.9.1))
@@ -85,7 +85,7 @@ importers:
         version: 3.3.3
       lucide-static:
         specifier: ^1.71.0
-        version: 1.71.0
+        version: 1.74.0
     devDependencies:
       '@astrojs/check':
         specifier: ^0.9.12
@@ -507,8 +507,8 @@ packages:
   '@fontsource/vidaloka@5.3.0':
     resolution: {integrity: sha512-426th33LSsBGNp8DtdgzzLGDg63wz4elLTwyiq7wsJQz0s/xvGNvMpwS3gTk1Wkevjgkewv7f96w3LLde/NZzQ==}
 
-  '@grantcodes/astro@1.3.0':
-    resolution: {integrity: sha512-QxwciMCGPNvV0AuJYgWYEho5VL8WCZUsBp8cZEitrYPtN5fCCA4Swjg77WyG3B51lCi5UNAqNTAzDHg/Qk4EMQ==}
+  '@grantcodes/astro@1.3.2':
+    resolution: {integrity: sha512-IYJ7fA4kPDh3wZ+MR0iBsxB60yTZl2vJ5L4oD1QBmR9hNhcFz1T3ks8qCg8hOIXbnaxWTb9cGL+1i2tkDyj4kA==}
     peerDependencies:
       astro: ^7.0.0
       lit: ^3.2.0
@@ -519,8 +519,8 @@ packages:
   '@grantcodes/themer@2.0.0':
     resolution: {integrity: sha512-iNqN447gJki7AV0Prb7qjRA/HLjjAfwSLKYA93g5KnWQYbvn6y2CS6Qgyajkb/2za7KrtrbGIq+iCGVkBPc+Tw==}
 
-  '@grantcodes/ui@4.1.0':
-    resolution: {integrity: sha512-1qHoD91NwlcpV9oKRxl8HDnBKIEl7Wdc6EwQEyNffyXbWqUZcQIghFQdJ/AUAwEFS70ucelPelLVSn/1fEHZwA==}
+  '@grantcodes/ui@4.1.2':
+    resolution: {integrity: sha512-Z8XBWRGxiehf2doztfkjJP/q9bVo76A1X7lvaCzsgG65S/Dqk3DqhKrDKaF6/Fk1saJZb9ncc0ez5iFmn85gSA==}
     peerDependencies:
       react: ^18.0.0 || ^19.0.0
     peerDependenciesMeta:
@@ -2164,8 +2164,8 @@ packages:
     resolution: {integrity: sha512-U4N8FgzmWxc8k1VH8Kr6lQg18U7Fjvby6wXHVRX/ZZ7IwWbRMgrRbP0Wrb5q5NVinryp4SQampHKdvtecItxUg==}
     engines: {node: 20 || >=22}
 
-  lucide-react@1.71.0:
-    resolution: {integrity: sha512-8YtvF+bqT/EMqAXU7kWvYdRu+TV9j4kS1eIS7IbN1j1Z1DgupbrTL0nDIygdqgBDTD7AJPP607VdVgzDTar4zA==}
+  lucide-react@1.74.0:
+    resolution: {integrity: sha512-A1doIs/1fj1WnPbtIT7WRiM6Kvw5NUg+BtkoOh3Shpr4obwSDVt6WxCEcNH56EWprzuCoKle1OF0RqIkojwL1A==}
     peerDependencies:
       '@types/react': '*'
       react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -2173,8 +2173,8 @@ packages:
       '@types/react':
         optional: true
 
-  lucide-static@1.71.0:
-    resolution: {integrity: sha512-yUXCvkMCNlqZI72Oco8+FjFwTcPI0Xz5qPZuqYXKP/8BU928hKT0Q4/m+R0e1I44kqEfCz1pd2J7iQ8jTZQEuA==}
+  lucide-static@1.74.0:
+    resolution: {integrity: sha512-+USG34tDoFrWhZGLaF+KrjWPtB1yhGY1h/jRzxasEUP5v3SoE34DIBIiaCoHC4fqkJHegCoumEOF4YgV0jjZMA==}
 
   luxon@1.28.1:
     resolution: {integrity: sha512-gYHAa180mKrNIUJCbwpmD0aTu9kV0dREDrwNnuyFAsO1Wt0EVYSZelPnJlbj9HplzXX/YWXHFTL45kvZ53M0pw==}
@@ -2189,8 +2189,8 @@ packages:
     resolution: {integrity: sha512-hdN1wVrZbb29eBGiGjJbeP8JbKjq1urkHJ/LIP/NY48MZ1QVXUsQBV1G1zvYFHn1XE06cwjBsOI2K3Ulnj1YXQ==}
     engines: {node: '>=8'}
 
-  marked@18.1.3:
-    resolution: {integrity: sha512-9ChMH8EVVgjgID49nsL6IWxWk5c6GtAsq/xw7U1ggkjkU5AGuv68oLTVlFRtvcUYZtpbNyjyvGo3YDu0fGapiw==}
+  marked@18.2.1:
+    resolution: {integrity: sha512-ii4bxCTCqqwpT86XZWgJNs+ZnAIZksmLGYMViWA7PDIXYIeNo1x6cDdX3JOip9NM/cI6p8z57FxliACboTruMA==}
     engines: {node: '>= 20'}
     hasBin: true
 
@@ -2540,10 +2540,6 @@ packages:
   snakecase-keys@3.2.1:
     resolution: {integrity: sha512-CjU5pyRfwOtaOITYv5C8DzpZ8XA/ieRsDpr93HI2r6e3YInC6moZpSQbmUtg8cTk58tq2x3jcG2gv+p1IZGmMA==}
     engines: {node: '>=8'}
-
-  source-map-js@1.2.1:
-    resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
-    engines: {node: '>=0.10.0'}
 
   source-map-js@1.2.2:
     resolution: {integrity: sha512-KGj/8Y43x35aZVDtt+J4mK1hoLGHULMYfSkODJNQjNDC3oW1PqPoxMwo0pLUsWM/UEGzON/NxeHywEfNXNP3Vw==}
@@ -3382,10 +3378,10 @@ snapshots:
 
   '@fontsource/vidaloka@5.3.0': {}
 
-  '@grantcodes/astro@1.3.0(@types/node@26.6.6)(@types/react@19.2.13)(astro@7.4.8(@types/node@26.6.6)(esbuild@0.28.2)(tsx@4.23.15)(yaml@2.9.1))(lit@3.3.3)(react@19.3.1)':
+  '@grantcodes/astro@1.3.2(@types/node@26.6.6)(@types/react@19.2.13)(astro@7.4.8(@types/node@26.6.6)(esbuild@0.28.2)(tsx@4.23.15)(yaml@2.9.1))(lit@3.3.3)(react@19.3.1)':
     dependencies:
       '@grantcodes/style-dictionary': 2.0.0
-      '@grantcodes/ui': 4.1.0(@types/react@19.2.13)(react@19.3.1)
+      '@grantcodes/ui': 4.1.2(@types/react@19.2.13)(react@19.3.1)
       '@lit-labs/ssr': 4.1.0(@types/node@26.6.6)
       '@lit-labs/ssr-client': 1.1.8
       '@lit-labs/ssr-dom-shim': 1.6.0
@@ -3393,7 +3389,7 @@ snapshots:
       astro: 7.4.8(@types/node@26.6.6)(esbuild@0.28.2)(tsx@4.23.15)(yaml@2.9.1)
       colorjs.io: 0.7.1
       lit: 3.3.3
-      marked: 18.1.3
+      marked: 18.2.1
       parse5: 8.1.1
       satori: 0.63.2
     transitivePeerDependencies:
@@ -3414,13 +3410,13 @@ snapshots:
       chroma-js: 2.6.0
       color-hash: 2.0.2
 
-  '@grantcodes/ui@4.1.0(@types/react@19.2.13)(react@19.3.1)':
+  '@grantcodes/ui@4.1.2(@types/react@19.2.13)(react@19.3.1)':
     dependencies:
       '@grantcodes/style-dictionary': 2.0.0
       '@lit/react': 1.0.8(@types/react@19.2.13)
       lit: 3.3.3
-      lucide-react: 1.71.0(@types/react@19.2.13)(react@19.3.1)
-      lucide-static: 1.71.0
+      lucide-react: 1.74.0(@types/react@19.2.13)(react@19.3.1)
+      lucide-static: 1.74.0
       shiki: 4.6.0
     optionalDependencies:
       react: 19.3.1
@@ -3615,7 +3611,7 @@ snapshots:
       file-type: 22.3.0
       hono: 4.13.17
       linkedom: 0.18.15(canvas@3.2.3)
-      marked: 18.1.3
+      marked: 18.2.1
       microformats-parser: 2.0.6
       zod: 4.6.7
     optionalDependencies:
@@ -4302,12 +4298,12 @@ snapshots:
   css-tree@2.2.1:
     dependencies:
       mdn-data: 2.0.28
-      source-map-js: 1.2.1
+      source-map-js: 1.2.2
 
   css-tree@3.2.1:
     dependencies:
       mdn-data: 2.27.1
-      source-map-js: 1.2.1
+      source-map-js: 1.2.2
 
   css-what@7.0.0: {}
 
@@ -4845,13 +4841,13 @@ snapshots:
 
   lru-cache@11.5.3: {}
 
-  lucide-react@1.71.0(@types/react@19.2.13)(react@19.3.1):
+  lucide-react@1.74.0(@types/react@19.2.13)(react@19.3.1):
     dependencies:
       react: 19.3.1
     optionalDependencies:
       '@types/react': 19.2.13
 
-  lucide-static@1.71.0: {}
+  lucide-static@1.74.0: {}
 
   luxon@1.28.1: {}
 
@@ -4863,11 +4859,11 @@ snapshots:
     dependencies:
       '@babel/parser': 7.29.9
       '@babel/types': 7.29.8
-      source-map-js: 1.2.1
+      source-map-js: 1.2.2
 
   map-obj@4.3.0: {}
 
-  marked@18.1.3: {}
+  marked@18.2.1: {}
 
   math-intrinsics@1.1.0: {}
 
@@ -5277,8 +5273,6 @@ snapshots:
     dependencies:
       map-obj: 4.3.0
       to-snake-case: 1.0.0
-
-  source-map-js@1.2.1: {}
 
   source-map-js@1.2.2: {}
 

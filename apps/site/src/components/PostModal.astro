@@ -5,7 +5,7 @@
 import { GrantCodesDialog } from '@grantcodes/ui/components/dialog/index.js'
 ---
 
-{/* Client-only: grantcodes-dialog reads its light DOM in render(), which fails during SSR. */}
+{/* Client-only: server-rendered, grantcodes-dialog 4.1.2 hydrates without its header and dismiss button. */}
 <GrantCodesDialog client:only="@grantcodes/astro" class="post-modal" aria-label="Post">
   <h2 slot="header" class="post-modal__title"></h2>
   <div class="post-modal__body"></div>
