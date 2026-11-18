@@ -14,7 +14,7 @@
     "build": "pnpm --filter ./apps/site build && pnpm --filter api build",
     "build:api": "pnpm --filter api build",
     "build:site": "pnpm --filter ./apps/site build",
-    "start": "pnpm run build:site && pnpm run start:api",
+    "start": "if [ -f \"${POSTR_DATABASE:-apps/api/.data/postr.db}\" ]; then pnpm run build:site; else echo \"No postr database yet: skipping the site build. Import one with apps/api/scripts/import-legacy.mjs, then restart.\"; fi && pnpm run start:api",
     "start:api": "pnpm --filter api start",
     "test": "pnpm --filter api test"
   },
