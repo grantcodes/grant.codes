@@ -1,14 +1,15 @@
 import { Hono } from "hono";
-import { isAdminRequest } from "../../lib/token.js";
+import { env } from "../../config/env.js";
 import { searchHandler } from "./search.js";
 import { pageCountHandler } from "./page-count.js";
 import { lastLocationHandler } from "./last-location.js";
 
 const apiRouter = new Hono<{ Variables: { isAdmin: boolean } }>();
 
-// Public reads; a valid token also unlocks hidden posts.
+// Public reads; the permanent MICROPUB_TOKEN also unlocks hidden posts.
 apiRouter.use("*", async (c, next) => {
-	c.set("isAdmin", await isAdminRequest(c.req.header("Authorization")));
+	const token = c.req.header("Authorization")?.replace(/^Bearer\s+/i, "").trim();
+	c.set("isAdmin", Boolean(token) && token === env.MICROPUB_TOKEN);
 	await next();
 });
 

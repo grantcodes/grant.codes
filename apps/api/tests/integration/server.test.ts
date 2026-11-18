@@ -1,7 +1,6 @@
 import { describe, it, before, after } from "node:test";
 import assert from "node:assert/strict";
 import { serve, type ServerType } from "@hono/node-server";
-import { sign } from "hono/jwt";
 import { createApp } from "../../src/index.js";
 import { postr } from "../../src/lib/postr.js";
 
@@ -48,17 +47,7 @@ describe("Server Integration", () => {
 		assert.ok(response.headers.get("Access-Control-Allow-Headers"));
 	});
 
-	const adminToken = () =>
-		sign(
-			{
-				me: process.env.NEXT_PUBLIC_URL!,
-				client_id: "test-client",
-				scope: "create",
-				exp: Math.floor(Date.now() / 1000) + 60 * 60,
-			},
-			process.env.TOKEN_SECRET!,
-			"HS256",
-		);
+	const adminToken = () => process.env.MICROPUB_TOKEN!;
 
 	const search = async (body: unknown, token?: string) => {
 		const response = await fetch(`${baseUrl}/api/search`, {
@@ -83,17 +72,17 @@ describe("Server Integration", () => {
 		assert.match(String(posts[0].properties.url[0]), /^http:\/\/localhost:3000\/2024\/05\/03\//);
 	});
 
-	it("should only show drafts to a valid token", { timeout: 5000 }, async () => {
+	it("should only show drafts to the permanent token", { timeout: 5000 }, async () => {
 		const anonymous = await search({ query: { search: "note" }, showAll: true });
 		assert.strictEqual(anonymous.length, 1);
-		const admin = await search({ query: { search: "note" }, showAll: true }, await adminToken());
+		const admin = await search({ query: { search: "note" }, showAll: true }, adminToken());
 		assert.strictEqual(admin.length, 2);
 	});
 
-	it("should only show unlisted posts to a valid token", { timeout: 5000 }, async () => {
+	it("should only show unlisted posts to the permanent token", { timeout: 5000 }, async () => {
 		assert.strictEqual((await search({ query: { type: "likes" } })).length, 0);
 		assert.strictEqual(
-			(await search({ query: { type: "likes" } }, await adminToken())).length,
+			(await search({ query: { type: "likes" } }, adminToken())).length,
 			1,
 		);
 	});
@@ -123,83 +112,6 @@ describe("Server Integration", () => {
 		assert.strictEqual(response.status, 200);
 		assert.match(await response.text(), /A public note/);
 	});
-
-	it("should handle token endpoint GET", { timeout: 5000 }, async () => {
-		const payload = {
-			me: process.env.NEXT_PUBLIC_URL,
-			client_id: "test-client",
-			scope: "test",
-			date_issued: new Date(),
-			exp: Math.floor(Date.now() / 1000) + 60 * 60, // 1 hour from now
-		};
-		const validToken = await sign(payload, process.env.TOKEN_SECRET!, 'HS256');
-
-		const response = await fetch(`${baseUrl}/token`, {
-			method: "GET",
-			headers: {
-				Authorization: `Bearer ${validToken}`,
-				Accept: "application/json",
-			},
-		});
-
-		assert.strictEqual(response.status, 200);
-		const data = await response.json();
-		assert.strictEqual(data.me, process.env.NEXT_PUBLIC_URL);
-		assert.strictEqual(data.client_id, "test-client");
-	});
-
-	it(
-		"should handle token endpoint POST with authorization code",
-		{ timeout: 5000 },
-		async () => {
-			// Mock fetch for IndieAuth
-			const originalFetch = global.fetch;
-			global.fetch = async (
-				url: string | URL | Request,
-				init?: RequestInit,
-			) => {
-				const urlStr =
-					typeof url === "string"
-						? url
-						: url instanceof URL
-							? url.toString()
-							: url.url;
-				if (
-					urlStr === "https://indieauth.com/auth" &&
-					init?.method === "POST"
-				) {
-					return new Response("me=http://localhost:3000&scope=test", {
-						status: 200,
-						headers: { "content-type": "application/x-www-form-urlencoded" },
-					});
-				}
-				return originalFetch(url as any, init as any);
-			};
-
-			try {
-				const response = await fetch(`${baseUrl}/token`, {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/x-www-form-urlencoded",
-						Accept: "application/json",
-					},
-					body: "grant_type=authorization_code&code=valid-code&client_id=test-client&redirect_uri=http://localhost:3000/callback&code_verifier=verifier",
-				});
-
-				assert.strictEqual(response.status, 200);
-				const contentType = response.headers.get("content-type") || "";
-				const data = contentType.includes("application/json")
-					? await response.json()
-					: (Object.fromEntries(
-							new URLSearchParams(await response.text()),
-						) as any);
-				assert.ok(data.access_token);
-				assert.strictEqual(data.token_type, "Bearer");
-			} finally {
-				global.fetch = originalFetch;
-			}
-		},
-	);
 
 	it("should handle background SVG generation", { timeout: 5000 }, async () => {
 		const response = await fetch(
@@ -330,15 +242,4 @@ describe("Server Integration", () => {
 			assert.strictEqual(response.status, 401);
 		},
 	);
-
-	it("should reject invalid tokens", { timeout: 5000 }, async () => {
-		const response = await fetch(`${baseUrl}/token`, {
-			method: "GET",
-			headers: {
-				Authorization: "Bearer invalid-token",
-			},
-		});
-
-		assert.strictEqual(response.status, 401);
-	});
 });

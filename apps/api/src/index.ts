@@ -7,7 +7,6 @@ import { relative } from "node:path";
 import { postr, mediaDir } from "./lib/postr.js";
 import { apiRouter } from "./routes/api/index.js";
 import { deployWebhookRouter } from "./routes/api/deploy-webhook.js";
-import { tokenRouter as tokenEndpoint } from "./routes/token.js";
 import { backgroundRouter as background } from "./routes/background/index.js";
 
 const port = 4000;
@@ -32,7 +31,6 @@ const createApp = () => {
 	// Mount deploy-webhook before generic /api so it matches first
 	app.route("/api/deploy-webhook", deployWebhookRouter);
 	app.route("/api", apiRouter);
-	app.route("/token", tokenEndpoint);
 	app.route("/background", background);
 
 	return app;

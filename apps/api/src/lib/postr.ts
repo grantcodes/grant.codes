@@ -6,7 +6,6 @@ import { telegram } from "@postr/syndicator-telegram";
 import { instagram } from "@postr/syndicator-instagram";
 import { superfeedr } from "@postr/syndicator-superfeedr";
 import { env, isDev, isTest } from "../config/env.js";
-import { verifyToken } from "./token.js";
 import { defaultPostTypes } from "./generate-search.js";
 
 export const database =
@@ -81,7 +80,8 @@ export const postr = createPostr({
 		},
 	},
 	auth: {
-		verify: verifyToken,
+		// Requires IndieKey legacy mode (opaque tokens verified via GET /token).
+		tokenEndpoint: "https://indiekey.id/token",
 		dangerousToken: env.MICROPUB_TOKEN,
 		dangerousAllowAll: isDev,
 	},

@@ -9,7 +9,6 @@ process.env.NEXT_PUBLIC_AUTHOR_NAME = "Test Author";
 process.env.NEXT_PUBLIC_AUTHOR_PHOTO = "http://localhost:4000/media/photo.jpg";
 process.env.NEXT_PUBLIC_AUTHOR_EMAIL = "test@example.com";
 process.env.MICROPUB_TOKEN = "test-token";
-process.env.TOKEN_SECRET = "test-secret";
 process.env.MICROPUB_ENDPOINT_PASSWORD_SERVER = "test-password";
 
 // Global test utilities

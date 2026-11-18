@@ -19,11 +19,11 @@ export const site = {
   micropubUrl,
   hub: env.NEXT_PUBLIC_HUB ?? 'https://grantcodes.superfeedr.com/',
   microsubEndpoint: env.NEXT_PUBLIC_MICROSUB_ENDPOINT ?? 'https://aperture.p3k.io/microsub/2',
-  indieauthEndpoint:
-    env.NEXT_PUBLIC_INDIEAUTH_ENDPOINT ?? 'https://indiekey.id/s/fj2eb0bxsgcsgfm0/auth',
+  // IndieKey, not env: the api verifies Micropub tokens against indiekey.id only.
+  indieauthEndpoint: 'https://indiekey.id/s/fj2eb0bxsgcsgfm0/auth',
   indieauthMetadata:
     'https://indiekey.id/.well-known/oauth-authorization-server/s/fj2eb0bxsgcsgfm0',
-  tokenEndpoint: env.NEXT_PUBLIC_TOKEN_ENDPOINT ?? 'https://indiekey.id/token',
+  tokenEndpoint: 'https://indiekey.id/token',
   twitterHandle: env.NEXT_PUBLIC_TWITTER_HANDLE ?? 'grantcodes',
   author: {
     name: env.NEXT_PUBLIC_AUTHOR_NAME ?? 'Grant Richmond',
