@@ -14,7 +14,7 @@
     "build": "pnpm --filter ./apps/site build && pnpm --filter api build",
     "build:api": "pnpm --filter api build",
     "build:site": "pnpm --filter ./apps/site build",
-    "start": "pnpm --filter ./apps/site preview",
+    "start": "pnpm run build:site && pnpm run start:api",
     "start:api": "pnpm --filter api start",
     "test": "pnpm --filter api test"
   },

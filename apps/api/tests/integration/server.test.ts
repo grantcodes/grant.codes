@@ -107,6 +107,18 @@ describe("Server Integration", () => {
 		assert.ok(data.items.length >= 1);
 	});
 
+	it("should redirect .well-known to Bridgy Fed", { timeout: 5000 }, async () => {
+		const response = await fetch(
+			`${baseUrl}/.well-known/webfinger?resource=acct:grant@grant.codes`,
+			{ redirect: "manual" },
+		);
+		assert.strictEqual(response.status, 307);
+		assert.strictEqual(
+			response.headers.get("location"),
+			"https://fed.brid.gy/.well-known/webfinger?resource=acct:grant@grant.codes",
+		);
+	});
+
 	it("should serve feeds", { timeout: 5000 }, async () => {
 		const response = await fetch(`${baseUrl}/micropub/plugin/feeds/rss`);
 		assert.strictEqual(response.status, 200);

@@ -6,23 +6,10 @@ aptPkgs=['build-essential', 'libcairo2-dev', 'libpango1.0-dev', 'libjpeg-dev', '
 [phases.install]
 cmds=['pnpm install --frozen-lockfile']
 
+# The site reads the api's SQLite database, which is only mounted at runtime,
+# so the image builds the api and `pnpm start` builds the site before serving both.
 [phases.build]
-cmds=['pnpm run build']
+cmds=['pnpm run build:api']
 
 [start]
-cmd='pnpm run start'
-
-# ── Deployment Routing Configuration (must be configured at web server / CDN layer) ──
-# Astro static output does not handle subdomain rewrites, redirects, or custom headers.
-# The following rules must be configured in the production reverse proxy / CDN:
-#
-# | Rule | Type | Config |
-# |---|---|---|
-# | where.is.grant.codes / → grant.codes/where/ | Host-based rewrite | Rewrite before files |
-# | who.is.grant.codes / → grant.codes/about/ | Host-based rewrite | Rewrite before files |
-# | pay.grant.codes / → grant.codes/pay/ | Host-based rewrite | Rewrite before files |
-# | /.well-known/(.*) → https://fed.brid.gy/.well-known/$1 | Redirect (307) | Temporary redirect |
-# | /fonts/(.*) → Access-Control-Allow-Origin: * | CORS header | Add response header |
-#
-# Confirm the production reverse proxy / CDN has equivalent config for all 5 rules
-# before any changes at the app layer.
+cmd='pnpm start'

@@ -3,13 +3,23 @@ import { cors } from "hono/cors";
 import { serve } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
 import { fileURLToPath } from "node:url";
-import { relative } from "node:path";
+import path, { relative } from "node:path";
 import { postr, mediaDir } from "./lib/postr.js";
 import { apiRouter } from "./routes/api/index.js";
 import { deployWebhookRouter } from "./routes/api/deploy-webhook.js";
 import { backgroundRouter as background } from "./routes/background/index.js";
 
 const port = 4000;
+
+// The Astro site, built by the root `pnpm start` before this server starts.
+const siteDir = path.resolve(import.meta.dirname, "../../site/dist");
+
+// Ported from the Next site's next.config.js.
+const subdomainPages: Record<string, string> = {
+	"where.is.grant.codes": "/where/",
+	"who.is.grant.codes": "/about/",
+	"pay.grant.codes": "/pay/",
+};
 
 const createApp = () => {
 	const app = new Hono();
@@ -32,6 +42,18 @@ const createApp = () => {
 	app.route("/api/deploy-webhook", deployWebhookRouter);
 	app.route("/api", apiRouter);
 	app.route("/background", background);
+
+	app.get("/.well-known/*", (c) => {
+		const { pathname, search } = new URL(c.req.url);
+		return c.redirect(`https://fed.brid.gy${pathname}${search}`, 307);
+	});
+	app.get("/", (c, next) => {
+		const page = subdomainPages[new URL(c.req.url).hostname];
+		return page
+			? app.fetch(new Request(new URL(page, c.req.url), { headers: c.req.raw.headers }))
+			: next();
+	});
+	app.use("*", serveStatic({ root: relative(process.cwd(), siteDir) }));
 
 	return app;
 };

@@ -35,17 +35,15 @@ Page component
   → components/Post  (render by post type)
 ```
 
-**Subdomain routing** (where.is, who.is, pay.grant.codes), **`.well-known` redirect**, and **font CORS headers** — these are owned by the deployment reverse proxy / CDN layer, not by any app in this repo. The exact rules required at the deployment layer are:
+**Deployment:** one container, configured by the root `nixpacks.toml`. The image builds only the API. `pnpm start` builds the site against the API's SQLite database, which is mounted at runtime, then starts the API, which serves `apps/site/dist` as static files after its own routes. The API also implements the rules the Next site had in `next.config.js` (`apps/api/src/index.ts`):
 
-| Rule | Type | Config |
-|---|---|---|
-| `where.is.grant.codes /` → `grant.codes/where/` | Subdomain rewrite | Host-based rewrite before files |
-| `who.is.grant.codes /` → `grant.codes/about/` | Subdomain rewrite | Host-based rewrite before files |
-| `pay.grant.codes /` → `grant.codes/pay/` | Subdomain rewrite | Host-based rewrite before files |
-| `/.well-known/(.*)` → `https://fed.brid.gy/.well-known/$1` | Redirect (307) | Temporary redirect |
-| `/fonts/(.*)` → `Access-Control-Allow-Origin: *` | CORS header | Add response header on font requests |
-
-Confirm the production reverse proxy / CDN has equivalent config before making any changes at the app layer.
+| Rule | Type |
+|---|---|
+| `where.is.grant.codes /` → `/where/` | Host-based rewrite |
+| `who.is.grant.codes /` → `/about/` | Host-based rewrite |
+| `pay.grant.codes /` → `/pay/` | Host-based rewrite |
+| `/.well-known/(.*)` → `https://fed.brid.gy/.well-known/$1` | Redirect (307) |
+| `Access-Control-Allow-Origin: *`, including `/fonts/` | CORS header (global `cors()`) |
 
 **API route status:**
 
@@ -82,7 +80,6 @@ grant.codes/                         # pnpm workspace root
 │   │   ├── static/                  #   Static assets served by the API
 │   │   ├── dist/                    #   Compiled JS output
 │   │   ├── .env.example             #   Backend-only env template
-│   │   ├── nixpacks.toml            #   Deploy config (Nixpacks)
 │   │   ├── tsconfig.json            #   strict TS config
 │   │   └── package.json             #   `@grant.codes/api`
 │   ├── site/                        # Astro 5 frontend (port 3000) — primary
@@ -213,7 +210,7 @@ npm run dev:api   # Start API server (port 4000)
 npm run dev:site  # Start Astro dev server (port 3000)
 npm run build     # Build both apps (site then api)
 npm run build:api # Build only the backend
-npm start         # Start production Astro server
+npm start         # Build the site, then serve it and the API (production)
 npm run start:api # Start production API server
 npm test          # Run API tests
 ```
@@ -244,7 +241,7 @@ Key variables:
 - **`apps/api`** was imported as a one-time snapshot from the previously standalone `backend.grant.codes` repo. No git history was preserved.
 - **`moment`** is the date library in use. Do not introduce `dayjs`, `date-fns`, or `luxon`.
 - **pnpm workspace** is the monorepo manager. The root does not have a `package-lock.json`; only `pnpm-lock.yaml` is tracked. Use `pnpm install` or `npm install` (which pnpm intercepts) — never `npm ci`.
-- **Native modules** (`canvas`, `sharp`) are allowed to build via `pnpm-workspace.yaml` `allowBuilds`. The root and per-app `nixpacks.toml` files supply required system packages (`cairo`, `pango`, `python312`, etc.). If a new native dep is added, it must be listed in both `pnpm-workspace.yaml` `allowBuilds` and the relevant `nixpacks.toml` `aptPkgs`/`nixPkgs`.
+- **Native modules** (`canvas`, `sharp`) are allowed to build via `pnpm-workspace.yaml` `allowBuilds`. The root `nixpacks.toml` supplies required system packages (`cairo`, `pango`, `python312`, etc.). If a new native dep is added, it must be listed in both `pnpm-workspace.yaml` `allowBuilds` and the root `nixpacks.toml` `aptPkgs`/`nixPkgs`.
 - **`strict: false`** in `apps/site/tsconfig.json` is intentional — do not enable it. The backend (`apps/api/tsconfig.json`) uses `strict: true` — keep it that way.
 - **`background-generator/`** is a standalone Vite app with its own `package.json`. Run it independently; it is not part of the Astro or API build.
 - The `.well-known/` path is redirected to `fed.brid.gy` for ActivityPub federation — do not add local handlers under that path.
