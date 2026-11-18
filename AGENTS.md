@@ -35,7 +35,7 @@ Page component
   → components/Post  (render by post type)
 ```
 
-**Deployment:** one container, configured by the root `nixpacks.toml`. The image builds only the API. `pnpm start` builds the site against the API's SQLite database, which is mounted at runtime, then starts the API, which serves `apps/site/dist` as static files after its own routes. The API also implements the rules the Next site had in `next.config.js` (`apps/api/src/index.ts`):
+**Deployment:** one container, built by Railpack from the root `railpack.json`. The image builds only the API. `pnpm start` builds the site against the API's SQLite database, which is mounted at runtime, then starts the API, which serves `apps/site/dist` as static files after its own routes. The API also implements the rules the Next site had in `next.config.js` (`apps/api/src/index.ts`):
 
 | Rule | Type |
 |---|---|
@@ -95,7 +95,7 @@ grant.codes/                         # pnpm workspace root
 ├── .github/workflows/
 │   └── montly-data.yml              # Monthly data generation workflow
 ├── pnpm-workspace.yaml              # Workspace package config + native-module allowlist
-├── nixpacks.toml                    # Root deploy config (orchestrates entire monorepo build)
+├── railpack.json                    # Deploy config (Railpack on Coolify)
 ├── AGENTS.md                        # This file
 └── package.json                     # Root workspace orchestration scripts
 ```
@@ -241,7 +241,7 @@ Key variables:
 - **`apps/api`** was imported as a one-time snapshot from the previously standalone `backend.grant.codes` repo. No git history was preserved.
 - **`moment`** is the date library in use. Do not introduce `dayjs`, `date-fns`, or `luxon`.
 - **pnpm workspace** is the monorepo manager. The root does not have a `package-lock.json`; only `pnpm-lock.yaml` is tracked. Use `pnpm install` or `npm install` (which pnpm intercepts) — never `npm ci`.
-- **Native modules** (`canvas`, `sharp`) are allowed to build via `pnpm-workspace.yaml` `allowBuilds`. The root `nixpacks.toml` supplies required system packages (`cairo`, `pango`, `python312`, etc.). If a new native dep is added, it must be listed in both `pnpm-workspace.yaml` `allowBuilds` and the root `nixpacks.toml` `aptPkgs`/`nixPkgs`.
+- **Native modules** (`canvas`, `sharp`) are allowed to build via `pnpm-workspace.yaml` `allowBuilds`. Both install prebuilt binaries with their libraries bundled, so the image needs no apt packages. If a new native dep is added, list it in `pnpm-workspace.yaml` `allowBuilds`; if it compiles from source, add its packages to `railpack.json` (`buildAptPackages`, and `deploy.aptPackages` for runtime libraries).
 - **`strict: false`** in `apps/site/tsconfig.json` is intentional — do not enable it. The backend (`apps/api/tsconfig.json`) uses `strict: true` — keep it that way.
 - **`background-generator/`** is a standalone Vite app with its own `package.json`. Run it independently; it is not part of the Astro or API build.
 - The `.well-known/` path is redirected to `fed.brid.gy` for ActivityPub federation — do not add local handlers under that path.
