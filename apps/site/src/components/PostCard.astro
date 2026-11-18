@@ -10,6 +10,7 @@ import PostContent from './PostContent.astro'
 import ResponseTarget from './ResponseTarget.astro'
 import { hasResponseTarget } from '../lib/reference'
 import { GrantCodesButton } from '@grantcodes/ui/components/button/index.js'
+import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
 import PhotosGallery from './PhotosGallery.astro'
 import { formatRelativeDate } from '../lib/post-date-format'
 import { getMentionUrl, getResponseValue } from '../lib/post-mentions'
@@ -76,7 +77,7 @@ const authorName = site.author.name
 ---
 
 <article class={`post post--${postType ?? 'unknown'} h-entry`}>
-  <grantcodes-card>
+  <GrantCodesCard>
 
     <!-- Post title -->
     {name && (
@@ -190,5 +191,5 @@ const authorName = site.author.name
     <span class="p-author h-card screen-reader-text">
       <span class="p-name">{authorName}</span>
     </span>
-  </grantcodes-card>
+  </GrantCodesCard>
 </article>
