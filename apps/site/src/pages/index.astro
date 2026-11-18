@@ -4,7 +4,7 @@ import { site } from '../lib/site'
 import BaseLayout from '../layouts/BaseLayout.astro'
 import PhotosGallery from '../components/PhotosGallery.astro'
 import PostCard from '../components/PostCard.astro'
-import ProjectCard from '../components/ProjectCard.astro'
+import ProjectList from '../components/ProjectList.astro'
 import { getArchivePosts } from '../lib/archive'
 import websites from '../data/websites.js'
 
@@ -45,9 +45,7 @@ const photos = publicPosts.filter((post) => post.postType === 'photo').slice(0, 
 
   <section class="home-section">
     <h2>Projects</h2>
-    <div class="projects">
-      {projects.map((project) => <ProjectCard project={project} />)}
-    </div>
+    <ProjectList projects={projects} />
     <a href="/websites">All projects</a>
   </section>
 
@@ -133,12 +131,6 @@ const photos = publicPosts.filter((post) => post.postType === 'photo').slice(0, 
     gap: 0.5rem 1.25rem;
     margin: 1rem 0 0;
     font-weight: 800;
-  }
-
-  .projects {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
-    gap: 1rem;
   }
 
   .home-section {

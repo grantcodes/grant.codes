@@ -1,0 +1,22 @@
+---
+// A responsive grid of ProjectCards, shared by the home page and /websites.
+import ProjectCard from './ProjectCard.astro'
+
+export interface Props {
+  projects: Array<{ slug: string; title: string; description: string; thumbnail: string }>
+}
+
+const { projects } = Astro.props
+---
+
+<div class="project-list">
+  {projects.map((project) => <ProjectCard project={project} />)}
+</div>
+
+<style>
+  .project-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: 1rem;
+  }
+</style>
