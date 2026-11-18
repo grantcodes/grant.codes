@@ -2,9 +2,11 @@
 // records photo dimensions from the media dir. Run from apps/api with TZ=UTC, since 1.x
 // permalinks use UTC dates:
 //   TZ=UTC node scripts/import-legacy.mjs /tmp/dump.json
-// Writes to POSTR_DATABASE (default .data/postr.db) and refuses to touch an existing database.
+// Writes to POSTR_DATABASE (default .data/postr.db) and refuses a database that already has
+// posts; the empty one a freshly started api creates is fine.
 import fs from 'node:fs'
 import path from 'node:path'
+import { DatabaseSync } from 'node:sqlite'
 import { createPostr, importLegacyPosts } from '@postr/core'
 
 const [dumpPath] = process.argv.slice(2)
@@ -19,8 +21,14 @@ if (process.env.TZ !== 'UTC') {
 
 const database = path.resolve(process.env.POSTR_DATABASE ?? '.data/postr.db')
 if (fs.existsSync(database)) {
-  console.error(`${database} already exists; move it aside to re-import.`)
-  process.exit(1)
+  const db = new DatabaseSync(database, { readOnly: true })
+  const hasPosts = db.prepare("select 1 from sqlite_master where name = 'posts'").get()
+  const { n } = hasPosts ? db.prepare('select count(*) n from posts').get() : { n: 0 }
+  db.close()
+  if (n > 0) {
+    console.error(`${database} already has ${n} posts; move it aside to re-import.`)
+    process.exit(1)
+  }
 }
 fs.mkdirSync(path.dirname(database), { recursive: true })
 
