@@ -1,0 +1,248 @@
+---
+// Full MF2-aware post renderer for single post pages
+// Ported from the legacy Next.js components/Post/index.tsx and supporting components
+//
+// Supports: note, article, photo, reply, repost, like, bookmark, video,
+//           audio, event, checkin, rsvp, quotation, collection
+//
+// Renders proper MF2 classes for IndieWeb semantics:
+//   h-entry, p-name, e-content, u-photo, u-url, dt-published, p-category,
+//   u-like-of, u-repost-of, u-in-reply-to, u-bookmark-of, u-featured,
+//   u-video, u-audio, dt-start, dt-end, p-location, p-rsvp, u-syndication
+
+import { site } from '../lib/site'
+import PostFooter from './PostFooter.astro'
+import PostContent from './PostContent.astro'
+import PhotosGallery from './PhotosGallery.astro'
+import { GrantCodesButton } from '@grantcodes/ui/components/button/index.js'
+import { Heart, Bookmark, Repeat2, Reply } from 'lucide-static'
+import ResponseTarget from './ResponseTarget.astro'
+import { hasResponseTarget } from '../lib/reference'
+import { getSiteUrl, normalizeInternalUrl } from '../lib/url'
+import { getResponseValue, getUrl } from '../lib/post-mentions'
+import { getChildren } from '../lib/post-children'
+import { getMediaUrl } from '../lib/post-media'
+import { onImageError, photoImage, type Photo } from '../lib/photo'
+
+export interface Props {
+  post: any
+  compact?: boolean
+}
+
+const { post, compact = false } = Astro.props
+
+const hasPost = !!(post && post.properties)
+
+// Guard: if no post, render nothing
+if (!hasPost) return
+
+const properties = post.properties
+const postType = post?.postType ?? null
+
+const name = post.name ?? null
+const content = properties.content?.[0] ?? null
+const summary = properties.summary?.[0] ?? null
+const url = normalizeInternalUrl(post.url)
+const featured = properties.featured?.[0] ?? null
+
+// Mention properties
+const siteUrl = getSiteUrl()
+const likeOf = getResponseValue(properties['like-of'], siteUrl)
+const repostOf = getResponseValue(properties['repost-of'], siteUrl)
+const inReplyTo = getResponseValue(properties['in-reply-to'], siteUrl)
+const bookmarkOf = properties['bookmark-of']?.[0] ?? null
+const quotationOf = getResponseValue(properties['quotation-of'], siteUrl)
+const rsvp = properties.rsvp?.[0] ?? null
+
+// Media
+const photos: Photo[] = post.photos ?? []
+const video = properties.video ?? []
+const audio = properties.audio ?? []
+
+// Event properties
+const start = properties.start?.[0] ?? null
+const end = properties.end?.[0] ?? null
+const location = properties.location?.[0] ?? null
+
+// Post children (gallery of referenced posts)
+const children = await getChildren(post)
+
+// The page this post responds to: embedded or previewed under its label instead of a bare link.
+const respondsTo = [likeOf, repostOf, bookmarkOf, inReplyTo].map(getUrl).find(Boolean)
+const responseEntry = respondsTo ? post.references?.[respondsTo] : undefined
+const rich = respondsTo ? hasResponseTarget(respondsTo, responseEntry) : false
+// Show the bare link for a mention unless it's the one previewed below its label.
+const linkFor = (value: unknown) => !(rich && getUrl(value) === respondsTo)
+const relation = { [getUrl(likeOf)]: 'u-like-of', [getUrl(repostOf)]: 'u-repost-of', [getUrl(bookmarkOf)]: 'u-bookmark-of', [getUrl(inReplyTo)]: 'u-in-reply-to' }[respondsTo ?? '']
+
+const authorName = site.author.name
+
+const onPhotoError = onImageError('figure')
+// Post photos fill the article column (46rem) or the screen.
+const photoSizes = '(min-width: 48rem) 46rem, 100vw'
+---
+
+<article
+  class={`post post--${postType ?? 'unknown'} h-entry`}
+>
+
+  {/* Featured image (e.g., article header image) */}
+  {featured && (
+    <header class="card__breakout post__header post__header--featured" style={`background-image: url(${featured})`}>
+      <data class="u-featured" value={featured} />
+      {name && <h1 class="post__title p-name">{name}</h1>}
+    </header>
+  )}
+
+  {/* Name/title (not featured header) */}
+  {!featured && name && (
+    <header class="post__header">
+      <h1 class="post__title p-name">{name}</h1>
+    </header>
+  )}
+
+  {/* ── Mention actions (like, repost, reply, bookmark, quotation) ── */}
+
+  {likeOf && (
+    <p class="post__action">
+      <grantcodes-icon set:html={Heart}></grantcodes-icon>
+      Liked
+      {linkFor(likeOf) && <a class="u-like-of" href={getUrl(likeOf)}>{getUrl(likeOf).replace(/^https?:\/\//, '')}</a>}
+    </p>
+  )}
+
+  {bookmarkOf && (
+    <p class="post__action">
+      <grantcodes-icon set:html={Bookmark}></grantcodes-icon>
+      Bookmarked
+      {linkFor(bookmarkOf) && <a class="u-bookmark-of" href={getUrl(bookmarkOf)}>{getUrl(bookmarkOf).replace(/^https?:\/\//, '')}</a>}
+    </p>
+  )}
+
+  {repostOf && (
+    <p class="post__action">
+      <grantcodes-icon set:html={Repeat2}></grantcodes-icon>
+      Reposted
+      {linkFor(repostOf) && <a class="u-repost-of" href={getUrl(repostOf)}>{getUrl(repostOf).replace(/^https?:\/\//, '')}</a>}
+    </p>
+  )}
+
+  {quotationOf && (
+    <p class="post__action">
+      Quoted
+      <a class="u-quotation-of" href={getUrl(quotationOf)}>{getUrl(quotationOf).replace(/^https?:\/\//, '')}</a>
+    </p>
+  )}
+
+  {inReplyTo && (
+    <p class="post__action">
+      <grantcodes-icon set:html={Reply}></grantcodes-icon>
+      {rsvp ? <>RSVPed <span class="p-rsvp">{rsvp}</span> to</> : 'Replied to'}
+      {linkFor(inReplyTo) && <a class="u-in-reply-to" href={getUrl(inReplyTo)}>{getUrl(inReplyTo).replace(/^https?:\/\//, '')}</a>}
+    </p>
+  )}
+
+  {rich && respondsTo && <ResponseTarget url={respondsTo} entry={responseEntry} relation={relation} />}
+
+  {/* ── Photos ── */}
+  {photos.length > 0 && (
+    <div class="card__breakout post__photos">
+      {photos.map((photo) => {
+        // Recorded dimensions and copies when postr has them, else the guessed 1800px copy.
+        const image = photoImage(photo, '1800', photoSizes)
+        return (
+          <figure>
+            <a href={photo.url} data-zoom data-width={photo.width} data-height={photo.height}>
+              <img
+                src={image.src}
+                srcset={image.srcset}
+                sizes={image.sizes}
+                data-fallback={image.fallback}
+                width={image.width}
+                height={image.height}
+                onerror={onPhotoError}
+                alt={photo.alt ?? ''}
+                loading="lazy"
+              />
+            </a>
+            <data class="u-photo" value={photo.url} />
+          </figure>
+        )
+      })}
+    </div>
+  )}
+
+  {/* ── Video ── */}
+  {video.length > 0 && video.map((v: any) => (
+    <div class="card__breakout">
+      <video class="u-video" src={getMediaUrl(v)} controls />
+    </div>
+  ))}
+
+  {/* ── Audio ── */}
+  {audio.length > 0 && audio.map((a: any) => (
+    <div class="card__breakout">
+      <audio class="u-audio" src={getMediaUrl(a)} controls></audio>
+    </div>
+  ))}
+
+  {/* ── Summary (shown for articles in compact or without content) ── */}
+  {summary && ((compact && postType === 'article') || !content) && (
+    <div class="card__breakout--padded">
+      <p class="p-summary">{typeof summary === 'string' ? summary : summary.value ?? ''}</p>
+    </div>
+  )}
+
+  {/* ── Content ── */}
+  {content && (
+    <PostContent content={content} />
+  )}
+
+  {/* Compact mode: article read more link */}
+  {compact && postType === 'article' && content && url && (
+    <div class="card__breakout--padded" style="text-align: center; padding: 1rem;">
+      <GrantCodesButton href={url} aria-hidden="true" {...{ variant: 'outline' } as object}>Read full post</GrantCodesButton>
+    </div>
+  )}
+
+  {/* ── Event properties (start/end) ── */}
+  {start && (
+    <div class="card__breakout--padded">
+      <h6 style="margin-bottom: 0;">Start</h6>
+      <time class="dt-start" datetime={start}>{new Date(start).toLocaleString()}</time>
+    </div>
+  )}
+  {end && (
+    <div class="card__breakout--padded">
+      <h6 style="margin-bottom: 0;">End</h6>
+      <time class="dt-end" datetime={end}>{new Date(end).toLocaleString()}</time>
+    </div>
+  )}
+
+  {/* ── Location ── */}
+  {location && location.properties?.name?.[0] && location.properties?.url?.[0] && (
+    <div class="card__breakout--padded p-location h-card">
+      At{' '}
+      <a class="u-url p-name p-org" href={location.properties.url[0]}>
+        {location.properties.name[0]}
+      </a>
+    </div>
+  )}
+
+  {/* ── Post children (gallery of referenced posts) ── */}
+  {children.length > 0 && (
+    <div class="post__children">
+      <PhotosGallery posts={children} type="collection" />
+    </div>
+  )}
+
+
+  {/* ── Footer ── */}
+  <PostFooter post={post} compact={compact} />
+
+  <!-- Hidden author h-card -->
+  <span class="p-author h-card screen-reader-text">
+    <span class="p-name">{authorName}</span>
+  </span>
+
+</article>

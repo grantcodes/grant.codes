@@ -1,0 +1,30 @@
+---
+// Category index — lists all categories
+// Ported from the legacy Next.js app/(default)/category/page.tsx
+
+import { site } from '../lib/site'
+import BaseLayout from '../layouts/BaseLayout.astro'
+import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
+import getCategories from '../lib/categories'
+
+const siteUrl = site.url
+const categories = await getCategories()
+---
+
+<BaseLayout title="Categories" canonicalUrl={`${siteUrl}/category`}>
+  <h2 class="page-title">Categories</h2>
+
+  <GrantCodesCard>
+    {categories.length === 0 ? (
+      <p>No categories found.</p>
+    ) : (
+      <ul class="list-plain" style="column-count: 3; column-gap: 2rem;">
+        {categories.map(({ name, slug }) => (
+          <li style="break-inside: avoid; margin-bottom: 0.3rem;">
+            <a href={`/category/${slug}`}>{name}</a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </GrantCodesCard>
+</BaseLayout>

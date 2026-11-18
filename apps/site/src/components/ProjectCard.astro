@@ -1,0 +1,51 @@
+---
+// A project from data/websites.js: logo, name and one-line description, linking to its page.
+import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
+
+export interface Props {
+  project: { slug: string; title: string; description: string; thumbnail: string }
+}
+
+const { project } = Astro.props
+---
+
+<GrantCodesCard class="project-card">
+  <a class="project-card__link" href={`/websites/${project.slug}`}>
+    <img class="project-card__logo" src={project.thumbnail} alt="" loading="lazy" />
+    <span class="project-card__text">
+      <strong class="project-card__title">{project.title}</strong>
+      <span class="project-card__description">{project.description}</span>
+    </span>
+  </a>
+</GrantCodesCard>
+
+<style>
+  .project-card__link {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    color: inherit;
+    text-decoration: none;
+  }
+  .project-card__logo {
+    flex: 0 0 4rem;
+    inline-size: 4rem;
+    block-size: 4rem;
+    object-fit: contain;
+  }
+  .project-card__text {
+    display: grid;
+    gap: 0.25rem;
+  }
+  .project-card__title {
+    font-size: 1.15rem;
+  }
+  .project-card__link:hover .project-card__title {
+    color: var(--day-accent);
+    text-decoration: underline wavy;
+  }
+  .project-card__description {
+    font-size: 0.9rem;
+    color: var(--g-color-content-subtle);
+  }
+</style>

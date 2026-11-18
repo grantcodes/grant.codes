@@ -1,0 +1,40 @@
+---
+// Monthly summary — /2024/3
+import { site } from '../../lib/site'
+import FullWidthLayout from '../../layouts/FullWidthLayout.astro'
+import ArchiveSummary from '../../components/ArchiveSummary.astro'
+import { getArchiveMonths, getArchivePosts, getMonthTrack, inMonth, monthNames, trackDistanceKm } from '../../lib/archive'
+
+export async function getStaticPaths() {
+  const months = await getArchiveMonths()
+  return months.map(([year, month], i) => ({
+    params: { typeOrYear: String(year), month: String(month) },
+    props: { previous: months[i - 1], next: months[i + 1] },
+  }))
+}
+
+const year = Number(Astro.params.typeOrYear)
+const month = Number(Astro.params.month)
+const { previous, next } = Astro.props as {
+  previous?: [number, number]
+  next?: [number, number]
+}
+
+const link = (target?: [number, number]) =>
+  target && { href: `/${target[0]}/${target[1]}`, label: `${monthNames[target[1] - 1].slice(0, 3)} ${target[0]}` }
+
+const posts = (await getArchivePosts()).filter((post) => inMonth(post, year, month))
+const track = getMonthTrack(year, month)
+const title = `${monthNames[month - 1]} ${year}`
+---
+
+<FullWidthLayout title={title} canonicalUrl={`${site.url}/${year}/${month}`}>
+  <ArchiveSummary
+    title={title}
+    posts={posts}
+    tracks={track.length ? [track] : []}
+    km={trackDistanceKm(getMonthTrack(year, month, Infinity))}
+    previous={link(previous)}
+    next={link(next)}
+  />
+</FullWidthLayout>

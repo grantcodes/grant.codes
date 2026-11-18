@@ -1,0 +1,29 @@
+---
+// A responsive, lazily loaded YouTube player (privacy-enhanced youtube-nocookie domain).
+export interface Props {
+  id: string
+  title?: string
+}
+
+const { id, title = 'YouTube video' } = Astro.props
+---
+
+<iframe
+  class="youtube-embed"
+  src={`https://www.youtube-nocookie.com/embed/${id}`}
+  title={title}
+  loading="lazy"
+  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  referrerpolicy="strict-origin-when-cross-origin"
+  allowfullscreen
+></iframe>
+
+<style>
+  .youtube-embed {
+    display: block;
+    inline-size: 100%;
+    aspect-ratio: 16 / 9;
+    border: 0;
+    border-radius: var(--g-border-radius-md);
+  }
+</style>

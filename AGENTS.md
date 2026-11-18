@@ -6,7 +6,7 @@ Instructions for AI agents and coding assistants working in this repository.
 
 ## Project Overview
 
-This is the frontend for **grant.codes**, a personal IndieWeb website. It is built with Next.js (App Router) and communicates with a separate backend service for content storage and retrieval.
+This is the **grant.codes** monorepo. It contains both the frontend and backend services for the grant.codes IndieWeb website, managed as a pnpm workspace.
 
 The site is **IndieWeb-first**: all content is stored as [Microformats2 (MF2)](https://microformats.org/wiki/microformats2) JSON, posted via [Micropub](https://micropub.spec.indieweb.org/), authenticated via [IndieAuth](https://indieauth.spec.indieweb.org/), and federated via [Webmention](https://webmention.net/).
 
@@ -14,14 +14,14 @@ The site is **IndieWeb-first**: all content is stored as [Microformats2 (MF2)](h
 
 ## Architecture
 
-Two separate services run the site:
+Two packages exist in this repo, both run as services:
 
 | Service | Location | Description |
 |---|---|---|
-| **Frontend** | This repo (root) | Next.js 16 App Router, port 3000 |
-| **Backend** | `backend/` | Express + Hono API server, port 4000 |
+| **Frontend** | `apps/site` | Astro 5 static site, port 3000 |
+| **Backend** | `apps/api` | Express + Hono API server, port 4000 |
 
-`backend/` is a **separate git repository** that lives alongside this one. It is listed in `.gitignore` and is not part of this repo's git history. Do not treat it as part of this package.
+The backend was imported into `apps/api` as a one-time snapshot from the previously standalone `backend.grant.codes` repository.
 
 **Data flow:**
 
@@ -35,85 +35,69 @@ Page component
   → components/Post  (render by post type)
 ```
 
-**ISR:** Pages use `revalidate: 60 * 60 * 12` (12h). On-demand revalidation is triggered via `POST /api/revalidate`.
+**Deployment:** one container, configured by the root `nixpacks.toml`. The image builds only the API. `pnpm start` builds the site against the API's SQLite database, which is mounted at runtime, then starts the API, which serves `apps/site/dist` as static files after its own routes. The API also implements the rules the Next site had in `next.config.js` (`apps/api/src/index.ts`):
 
-**Subdomain routing** is handled in `next.config.js` rewrites:
-
-| Subdomain | Resolves to |
+| Rule | Type |
 |---|---|
-| `where.is.grant.codes` | `/where` |
-| `who.is.grant.codes` | `/about` |
-| `pay.grant.codes` | `/pay` |
+| `where.is.grant.codes /` → `/where/` | Host-based rewrite |
+| `who.is.grant.codes /` → `/about/` | Host-based rewrite |
+| `pay.grant.codes /` → `/pay/` | Host-based rewrite |
+| `/.well-known/(.*)` → `https://fed.brid.gy/.well-known/$1` | Redirect (307) |
+| `Access-Control-Allow-Origin: *`, including `/fonts/` | CORS header (global `cors()`) |
+
+**API route status:**
+
+| Route | Decision |
+|---|---|
+| `POST /api/revalidate` | Retired. Astro static has no Next ISR equivalent. Use `POST /api/deploy-webhook` instead for publish-triggered rebuilds. |
+| `POST /api/deploy-webhook` | Active in `apps/api`. Triggers an external deploy webhook after publishing. Auth via `MICROPUB_TOKEN` (Bearer token). Returns 401 if token missing, 501 if `DEPLOY_WEBHOOK_URL` not set, 502 on fetch failure, 200 on success. |
+| `GET /api/last-location` | Active in `apps/api`. Returns live location from Dawarich proxy, or `{ location: false }` if unavailable. |
+| `POST /api/pay` | Retired for now. Payments are disabled and Astro pay pages are static. If payments return later, implement a new route in `apps/api`. |
 
 ---
 
 ## Tech Stack
 
-- **Framework:** Next.js 16 (App Router)
-- **UI:** React 19
+- **Framework:** Astro 5
+- **UI:** Astro components
 - **Language:** TypeScript + JavaScript (mixed; `allowJs: true`, `strict: false`, `strictNullChecks: true`)
 - **Styling:** SCSS + CSS Modules
 - **Node:** 22 (see `.nvmrc`)
 - **Module format:** ESM (`"type": "module"`)
 - **Date library:** `moment` (do not introduce dayjs or date-fns)
-- **Theming:** `@grantcodes/themer` — generates daily CSS variable themes injected in the root layout
+- **Theming:** `@grantcodes/ui/styles/themes/grantcodes.css` — daily CSS variable themes imported in the root layout
 
 ---
 
 ## Project Structure
 
 ```
-grant.codes/
-├── app/                        # Next.js App Router
-│   ├── layout.tsx              # Root HTML shell; injects theme, IndieWeb <link> tags, PWA metadata
-│   ├── (default)/              # Standard pages wrapped in <Container> (header + nav + footer)
-│   │   ├── page.tsx            # Home page
-│   │   ├── [typeOrYear]/       # Post-type archive (/notes) or year summary (/2023)
-│   │   │   └── [month]/[day]/  # Full date-based archive routing
-│   │   ├── category/
-│   │   ├── search/[search]/
-│   │   ├── feeds/
-│   │   ├── contact/
-│   │   ├── uses/
-│   │   ├── websites/
-│   │   └── pay/
-│   ├── (article)/new/          # New post composer (Micropub write UI)
-│   ├── (full-width)/           # Pages without Container wrapper
-│   │   ├── about/              # Profile / CV
-│   │   ├── where/              # Live location (fetches from Dawarich)
-│   │   └── photos/             # Photo gallery
-│   ├── api/
-│   │   ├── last-location/      # Proxies Dawarich location API
-│   │   ├── revalidate/         # On-demand ISR revalidation
-│   │   └── pay/                # Stripe payment intent
-│   ├── slides/                 # Reveal.js presentations
-│   └── not-found.tsx
-├── backend/                    # Separate git repo — Express + Hono API (port 4000)
-├── background-generator/       # Standalone Vite app for generating site backgrounds
-├── bin/                        # CLI scripts
-│   ├── generate-monthly-data.js  # Pulls posts / GPS / body data → data/monthly/
-│   └── dawarich-to-immich.js
-├── components/
-│   ├── Post/                   # Core post renderer — handles all MF2 post types
-│   ├── PostList/               # List, gallery, timeline, map views
-│   ├── Container/              # Site shell: Header, Footer, Nav, Pagination
-│   ├── About/                  # Profile, skills, presence sections
-│   ├── DataSummary/            # Year-in-review charts and visualisations
-│   └── ...                     # UI primitives: Card, Button, Icon, Toast, Tooltip
-├── css/
-│   ├── base/                   # Reset, fonts, typography, forms, layout
-│   ├── components/             # Per-component styles
-│   ├── pages/                  # Per-page styles (some CSS Modules)
-│   └── util/                   # Mixins and utilities
-├── data/
-│   └── monthly/                # Auto-generated JSON — DO NOT edit manually
-├── lib/
-│   ├── get/                    # Data-fetching helpers (posts, categories, years, metadata)
-│   ├── hooks/                  # Custom React hooks
-│   ├── normalize-mf2.js        # Cleans and deduplicates MF2 post data
-│   ├── auth.js                 # IndieAuth client instance
-│   └── micropub.js             # Micropub client instance
-└── public/                     # Static assets
+grant.codes/                         # pnpm workspace root
+├── apps/
+│   ├── api/                         # Express + Hono backend (port 4000)
+│   │   ├── src/                     #   TypeScript source
+│   │   ├── tests/                   #   Node test runner tests
+│   │   ├── static/                  #   Static assets served by the API
+│   │   ├── dist/                    #   Compiled JS output
+│   │   ├── .env.example             #   Backend-only env template
+│   │   ├── tsconfig.json            #   strict TS config
+│   │   └── package.json             #   `@grant.codes/api`
+│   ├── site/                        # Astro 5 frontend (port 3000) — primary
+│   │   ├── src/                     #   Astro components, pages, layouts
+│   │   ├── public/                  #   Static assets
+│   │   ├── data/                    #   Generated monthly JSON, static data
+│   │   ├── bin/                     #   CLI scripts (generate-monthly-data)
+│   │   ├── astro.config.ts         #   Astro config
+│   │   ├── tsconfig.json           #   TS config
+│   │   └── package.json            #   `@grant.codes/site`
+
+├── background-generator/            # Standalone Vite app for generating site backgrounds
+├── .github/workflows/
+│   └── montly-data.yml              # Monthly data generation workflow
+├── pnpm-workspace.yaml              # Workspace package config + native-module allowlist
+├── nixpacks.toml                    # Root deploy config (orchestrates entire monorepo build)
+├── AGENTS.md                        # This file
+└── package.json                     # Root workspace orchestration scripts
 ```
 
 ---
@@ -151,7 +135,7 @@ Always pass posts through this before rendering.
 
 ### Daily Theming
 
-`@grantcodes/themer` generates CSS custom properties based on the day of the week. The theme is injected inline in `app/layout.tsx` (server-side) and a `beforeInteractive` script prevents flash-of-wrong-theme on the client.
+CSS theming is provided by `@grantcodes/ui/styles/themes/grantcodes.css`, imported in the root layout (`src/layouts/Layout.astro`).
 
 ### Static Params
 
@@ -159,7 +143,7 @@ Year/type archive pages use `generateStaticParams()` to pre-render routes at bui
 
 ### Image Optimization
 
-Images from `backend.grant.codes` are optimized by Next.js automatically. The `images.remotePatterns` config in `next.config.js` is locked to `backend.grant.codes` only. Cached images expire after 7 days (`minimumCacheTTL: 604800`). Do not add external image proxy services.
+Images from `backend.grant.codes` are served directly as static references from Astro. Image caching (7-day minimum, `minimumCacheTTL: 604800`) is configured at the deployment/CDN layer. Do not add external image proxy services.
 
 ---
 
@@ -221,24 +205,43 @@ Images from `backend.grant.codes` are optimized by Next.js automatically. The `i
 Run from the repo root:
 
 ```bash
-npm run dev      # Start Next.js dev server (port 3000)
-npm run build    # Production build
-npm start        # Start production server
+npm run dev       # Start Astro + API dev servers
+npm run dev:api   # Start API server (port 4000)
+npm run dev:site  # Start Astro dev server (port 3000)
+npm run build     # Build both apps (site then api)
+npm run build:api # Build only the backend
+npm start         # Build the site, then serve it and the API (production)
+npm run start:api # Start production API server
+npm test          # Run API tests
 ```
 
-The backend is a separate service. To run the full stack locally, start the backend independently from `backend/`.
+The backend is a separate service. To run the full stack locally in separate terminals:
 
-Environment variables are read from `.env.local`. Key variables:
-- `NEXT_PUBLIC_API_URL` — URL of the backend API (e.g. `http://localhost:4000`)
+```bash
+# Terminal 1: API server
+npm run dev:api
+
+# Terminal 2: Frontend dev server (Astro)
+npm run dev
+```
+
+Environment variables:
+- **Root `.env`** — shared/public vars loaded by both apps (API URL, public env vars)
+- **`apps/api/.env.local`** — backend-specific secrets (not tracked; copy from `apps/api/.env.example`)
+- The API dev script loads `../../.env` (root) and `.env.local` (app-local) via `--env-file` flags.
+
+Key variables:
+- `NEXT_PUBLIC_API_URL` — URL of the backend API (defaults to `https://backend.grant.codes` in production, `http://localhost:4000` locally)
 
 ---
 
 ## Gotchas
 
 - **`data/monthly/`** is auto-generated by the GitHub Actions workflow (`.github/workflows/montly-data.yml`) on the 1st of each month. Do not edit these files manually.
-- **`backend/`** is a separate git repository and separate Node service. It is gitignored from this repo. Do not assume changes here are reflected there or vice versa.
+- **`apps/api`** was imported as a one-time snapshot from the previously standalone `backend.grant.codes` repo. No git history was preserved.
 - **`moment`** is the date library in use. Do not introduce `dayjs`, `date-fns`, or `luxon`.
-- **`strict: false`** in `tsconfig.json` is deliberate. The codebase predates strict mode adoption; turning it on will generate hundreds of errors.
-- **SVGs** are inlined via `svg-inline-loader` — import them as React components, not as image URLs.
-- **`background-generator/`** is a standalone Vite app with its own `package.json`. Run it independently; it is not part of the Next.js build.
+- **pnpm workspace** is the monorepo manager. The root does not have a `package-lock.json`; only `pnpm-lock.yaml` is tracked. Use `pnpm install` or `npm install` (which pnpm intercepts) — never `npm ci`.
+- **Native modules** (`canvas`, `sharp`) are allowed to build via `pnpm-workspace.yaml` `allowBuilds`. The root `nixpacks.toml` supplies required system packages (`cairo`, `pango`, `python312`, etc.). If a new native dep is added, it must be listed in both `pnpm-workspace.yaml` `allowBuilds` and the root `nixpacks.toml` `aptPkgs`/`nixPkgs`.
+- **`strict: false`** in `apps/site/tsconfig.json` is intentional — do not enable it. The backend (`apps/api/tsconfig.json`) uses `strict: true` — keep it that way.
+- **`background-generator/`** is a standalone Vite app with its own `package.json`. Run it independently; it is not part of the Astro or API build.
 - The `.well-known/` path is redirected to `fed.brid.gy` for ActivityPub federation — do not add local handlers under that path.

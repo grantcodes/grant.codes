@@ -1,0 +1,56 @@
+---
+// Leaflet map of one or more location tracks ([lat, lng] point lists).
+import type { Track } from '../lib/archive'
+
+export interface Props {
+  tracks: Track[]
+  label: string
+}
+
+const { tracks, label } = Astro.props
+const points = tracks.filter((track) => track.length > 0)
+---
+
+{points.length > 0 && (
+  <div class="track-map" role="img" aria-label={label} data-tracks={JSON.stringify(points)}></div>
+)}
+
+<script>
+  import 'leaflet/dist/leaflet.css'
+
+  async function drawMaps(maps: NodeListOf<HTMLElement>) {
+  // Resolve the day's accent (a light-dark() expression) to a colour Leaflet can use.
+  const probe = document.createElement('span')
+  probe.style.color = 'var(--day-accent)'
+  document.body.append(probe)
+  const accent = getComputedStyle(probe).color
+  probe.remove()
+    const L = await import('leaflet')
+    for (const element of maps) {
+      const tracks = JSON.parse(element.dataset.tracks ?? '[]') as Array<Array<[number, number]>>
+      const map = L.map(element, { scrollWheelZoom: false, attributionControl: true })
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      }).addTo(map)
+      const color = accent
+      const lines = tracks.map((track) =>
+        L.polyline(track, { color, weight: 4, opacity: 0.85, lineJoin: 'round' }).addTo(map)
+      )
+      map.fitBounds(L.featureGroup(lines).getBounds(), { padding: [20, 20], maxZoom: 14 })
+    }
+  }
+
+  const maps = document.querySelectorAll<HTMLElement>('.track-map')
+  if (maps.length) drawMaps(maps)
+</script>
+
+<style>
+  .track-map {
+    block-size: 24rem;
+    inline-size: 100%;
+    border-radius: var(--g-border-radius-md);
+    overflow: hidden;
+    isolation: isolate;
+  }
+</style>

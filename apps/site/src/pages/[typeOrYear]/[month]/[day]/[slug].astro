@@ -1,0 +1,60 @@
+---
+// Single post route — e.g. /2024/05/03/climatebase-week-2
+// Ported from the legacy Next.js app/(default)/[typeOrYear]/[month]/[day]/[slug]/page.tsx
+// Wave 8: MF2-aware single post rendering with proper post-type support
+// Wave 10: migrated from direct API fetch to canonical posts collection
+
+import { site } from '../../../../lib/site'
+import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
+import ArticleLayout from '@/layouts/ArticleLayout.astro'
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import Post from '@/components/Post.astro'
+import { getCollection } from 'astro:content'
+import { getMetadata } from '@/lib/metadata'
+
+export async function getStaticPaths() {
+  // Every post gets a route at its stored permalink path (/yyyy/mm/dd/slug).
+  // Static output has no request-time fallback, so skipping posts would 404.
+  const allEntries = await getCollection('posts')
+
+  return allEntries.flatMap((entry) => {
+    const post = entry.data
+    const [typeOrYear, month, day, ...slug] = post.path.split('/').filter(Boolean)
+    if (!day || slug.length === 0) return []
+    // Pass the entry to the page rather than scanning the collection per route.
+    return [{ params: { typeOrYear, month, day, slug: slug.join('/') }, props: { post } }]
+  })
+}
+
+const { typeOrYear, month, day, slug } = Astro.params
+const { post } = Astro.props
+
+const siteUrl = site.url
+
+// Generate metadata from post
+const meta = post ? await getMetadata({ params: { typeOrYear, month, day, slug }, post }) : await getMetadata({ params: { typeOrYear, month, day, slug } })
+const pageTitle = meta?.title ?? `${typeOrYear}/${month}/${day}/${slug}`
+const pageDescription = meta?.description ?? ''
+const canonicalUrl = `${siteUrl}/${typeOrYear}/${month}/${day}/${slug}`
+const PostLayout = post?.postType === 'article' ? ArticleLayout : BaseLayout
+---
+
+<PostLayout title={pageTitle} description={pageDescription} canonicalUrl={canonicalUrl}>
+  <!--- Single post content -->
+  {!post && (
+    <GrantCodesCard>
+      <h2>Post not found</h2>
+      <p class="text-muted">
+        This post could not be found. It may have been removed or the URL is incorrect.
+      </p>
+      <p><a href="/">← Back to home</a></p>
+    </GrantCodesCard>
+  )}
+
+  {post && (
+    <GrantCodesCard>
+      <Post post={post} />
+    </GrantCodesCard>
+  )}
+
+</PostLayout>

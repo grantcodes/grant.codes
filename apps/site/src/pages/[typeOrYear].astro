@@ -1,0 +1,131 @@
+---
+// Type archives (e.g. /likes, 25 per page) and year summaries (e.g. /2023).
+// 'notes', 'articles' and 'photos' have dedicated routes.
+
+import { site } from '../lib/site'
+import BaseLayout from '../layouts/BaseLayout.astro'
+import FullWidthLayout from '../layouts/FullWidthLayout.astro'
+import PostCard from '../components/PostCard.astro'
+import ArchiveSummary from '../components/ArchiveSummary.astro'
+import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
+import { GrantCodesPagination } from '@grantcodes/ui/components/pagination/index.js'
+import { getMetadata } from '../lib/metadata'
+import {
+  getArchiveMonths,
+  getArchivePosts,
+  getMonthTrack,
+  inMonth,
+  monthNames,
+  trackDistanceKm,
+} from '../lib/archive'
+
+// URL slug (plural) to post type.
+const TYPE_SLUG_MAP: Record<string, string> = {
+  likes: 'like',
+  replies: 'reply',
+  bookmarks: 'bookmark',
+  reposts: 'repost',
+  checkins: 'checkin',
+  events: 'event',
+  videos: 'video',
+  audio: 'audio',
+  collections: 'collection',
+  journals: 'journal',
+  listens: 'listen',
+  quotes: 'quotation',
+  reads: 'read',
+  rsvps: 'rsvp',
+  watches: 'watch',
+}
+
+export async function getStaticPaths() {
+  const types = [
+    'likes', 'replies', 'bookmarks', 'reposts', 'checkins',
+    'events', 'videos', 'audio', 'collections', 'journals',
+    'listens', 'quotes', 'reads', 'rsvps', 'watches',
+  ]
+  const years = [...new Set((await getArchiveMonths()).map(([year]) => year))]
+  return [
+    ...types.map((type) => ({ params: { typeOrYear: type } })),
+    ...years.map((year, i) => ({
+      params: { typeOrYear: String(year) },
+      props: { previousYear: years[i - 1], nextYear: years[i + 1] },
+    })),
+  ]
+}
+
+const { typeOrYear } = Astro.params
+const { previousYear, nextYear } = Astro.props as { previousYear?: number; nextYear?: number }
+const siteUrl = site.url
+const isYear = /^\d{4}$/.test(typeOrYear ?? '')
+const allPosts = await getArchivePosts()
+
+// ── Year summary ──
+const year = Number(typeOrYear)
+const yearMonths = isYear
+  ? (await getArchiveMonths()).filter(([y]) => y === year).map(([, month]) => month)
+  : []
+const yearPosts = isYear ? allPosts.filter((post) => inMonth(post, year)) : []
+const months = yearMonths.map((month) => ({
+  href: `/${year}/${month}`,
+  label: monthNames[month - 1].slice(0, 3),
+  count: yearPosts.filter((post) => inMonth(post, year, month)).length,
+}))
+const tracks = yearMonths.map((month) => getMonthTrack(year, month, 300)).filter((track) => track.length)
+const km = isYear
+  ? yearMonths.reduce((sum, month) => sum + trackDistanceKm(getMonthTrack(year, month, Infinity)), 0)
+  : 0
+
+// ── Type archive ──
+const meta = await getMetadata({ params: { typeOrYear } })
+const pageTitle = meta?.title ?? typeOrYear ?? ''
+const PER_PAGE = 25
+const typePosts = isYear
+  ? []
+  : allPosts.filter((post) => post.postType === (TYPE_SLUG_MAP[typeOrYear ?? ''] ?? typeOrYear))
+const totalPages = Math.max(Math.ceil(typePosts.length / PER_PAGE), 1)
+const pagePosts = typePosts.slice(0, PER_PAGE)
+---
+
+{isYear ? (
+  <FullWidthLayout title={`${year} in review`} canonicalUrl={`${siteUrl}/${year}`}>
+    <ArchiveSummary
+      title={String(year)}
+      posts={yearPosts}
+      tracks={tracks}
+      km={km}
+      months={months}
+      previous={previousYear ? { href: `/${previousYear}`, label: String(previousYear) } : undefined}
+      next={nextYear ? { href: `/${nextYear}`, label: String(nextYear) } : undefined}
+    />
+  </FullWidthLayout>
+) : (
+  <BaseLayout title={pageTitle} canonicalUrl={`${siteUrl}/${typeOrYear}`}>
+    <h2 class="page-title">{pageTitle}</h2>
+
+    {pagePosts.length === 0 && (
+      <GrantCodesCard>
+        <p>No posts found for {typeOrYear}.</p>
+      </GrantCodesCard>
+    )}
+
+    {pagePosts.length > 0 && (
+      <>
+        <div class="post-list">
+          {pagePosts.map((post) => (
+            <PostCard post={post} compact />
+          ))}
+        </div>
+
+        {totalPages > 1 && (
+          <GrantCodesPagination
+            previousHref=""
+            nextHref={`/${typeOrYear}/page/2`}
+            page={1}
+            pages={totalPages}
+          />
+        )}
+      </>
+    )}
+  </BaseLayout>
+)}

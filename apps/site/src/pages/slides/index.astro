@@ -1,0 +1,55 @@
+---
+// Slides index — archived/de-scoped
+//
+// Status: RETIRED — the Reveal.js presentations were not ported to Astro.
+// The legacy slide decks used heavy client-side JS (Reveal.js,
+// highlight, markdown, notes plugins) and are no longer served.
+//
+// This page lists past presentation titles for reference only.
+// None of these links resolve to active routes.
+
+import { site } from '../../lib/site'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
+
+const siteUrl = site.url
+---
+
+<BaseLayout title="Slides" canonicalUrl={`${siteUrl}/slides`}>
+  <h2 class="page-title">Presentations</h2>
+
+  <GrantCodesCard>
+    <p>
+      Slide presentations have been retired from the current site.
+      The titles below are listed for reference only.
+    </p>
+  </GrantCodesCard>
+
+  <ul class="list-plain" style="margin-top: 1.5rem;">
+    <li style="margin-bottom: 0.5rem;">
+      <span style="font-weight: 500;">Dundee MakerSpace</span>
+      <span class="text-muted"> — Enabling everyone to create anything</span>
+    </li>
+    <li style="margin-bottom: 0.5rem;">
+      <span style="font-weight: 500;">What is the IndieWeb?</span>
+    </li>
+    <li style="margin-bottom: 0.5rem;">
+      <span style="font-weight: 500;">Jam session: building the IndieWeb</span>
+    </li>
+    <li style="margin-bottom: 0.5rem;">
+      <span style="font-weight: 500;">Micropub: posting to your own site</span>
+    </li>
+    <li style="margin-bottom: 0.5rem;">
+      <span style="font-weight: 500;">Reducing grant.codes' environmental impact</span>
+    </li>
+    <li style="margin-bottom: 0.5rem;">
+      <span style="font-weight: 500;">Data portability on the IndieWeb</span>
+    </li>
+    <li style="margin-bottom: 0.5rem;">
+      <span style="font-weight: 500;">Running Away</span>
+    </li>
+    <li style="margin-bottom: 0.5rem;">
+      <span style="font-weight: 500;">Workin' 9 to 5</span>
+    </li>
+  </ul>
+</BaseLayout>

@@ -1,0 +1,99 @@
+---
+// Where am I? Live location from the api's Dawarich proxy (GET /api/last-location),
+// falling back to home (Barcelona) when it is unavailable.
+
+import { site } from '../../lib/site'
+import FullWidthLayout from '../../layouts/FullWidthLayout.astro'
+import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
+
+const home = { lat: 41.3874, lng: 2.1686, label: 'Barcelona, Spain' }
+---
+
+<FullWidthLayout title="Where am I?" canonicalUrl={`${site.url}/where`} noindex={true}>
+  <h1 class="page-title">Where am I?</h1>
+
+  <GrantCodesCard>
+    <p id="where-status">
+      {site.author.name} is based in <strong>{home.label}</strong>.
+    </p>
+  </GrantCodesCard>
+
+  <div
+    id="where-map"
+    class="where-map"
+    role="img"
+    aria-label="Map of my current location"
+    data-api-url={site.apiUrl}
+    data-home={JSON.stringify(home)}
+  ></div>
+</FullWidthLayout>
+
+<script>
+  import 'leaflet/dist/leaflet.css'
+  import L from 'leaflet'
+
+  interface Point {
+    latitude?: string | number
+    longitude?: string | number
+    timestamp?: number
+    city?: string
+    country?: string
+    geodata?: { properties?: { name?: string; city?: string; country?: string } }
+  }
+
+  const element = document.getElementById('where-map')
+  const status = document.getElementById('where-status')
+
+  if (element && status) {
+    const home = JSON.parse(element.dataset.home ?? '{}') as { lat: number; lng: number }
+    const map = L.map(element, { scrollWheelZoom: false }).setView([home.lat, home.lng], 11)
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(map)
+    const marker = L.circleMarker([home.lat, home.lng], {
+      radius: 10,
+      color: 'white',
+      weight: 3,
+      fillColor: getComputedStyle(element).getPropertyValue('color'),
+      fillOpacity: 1,
+    }).addTo(map)
+
+    fetch(`${element.dataset.apiUrl}/api/last-location`)
+      .then((res) => res.json())
+      .then(({ location }: { location: Point | false }) => {
+        if (!location) return
+        const lat = Number(location.latitude)
+        const lng = Number(location.longitude)
+        if (!Number.isFinite(lat) || !Number.isFinite(lng)) return
+
+        const geo = location.geodata?.properties
+        const place = [geo?.name, location.city ?? geo?.city, location.country ?? geo?.country]
+          .filter(Boolean)
+          .join(', ')
+        const when = location.timestamp
+          ? new Intl.RelativeTimeFormat('en-GB', { numeric: 'auto' }).format(
+              -Math.round((Date.now() / 1000 - location.timestamp) / 3600),
+              'hour'
+            )
+          : ''
+        status.textContent = `Last seen near ${place || `${lat.toFixed(3)}, ${lng.toFixed(3)}`}${when ? `, ${when}` : ''}.`
+        marker.setLatLng([lat, lng])
+        map.setView([lat, lng], 13)
+      })
+      .catch(() => {
+        // Keep the home fallback.
+      })
+  }
+</script>
+
+<style>
+  .where-map {
+    color: var(--day-accent);
+    block-size: min(70dvh, 36rem);
+    inline-size: 100%;
+    border-radius: var(--g-border-radius-md);
+    overflow: hidden;
+    isolation: isolate;
+  }
+</style>
