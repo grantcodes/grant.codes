@@ -10,6 +10,7 @@
  */
 
 import { rewriteContentHtml } from './url'
+import { categorySlug } from './category-slug'
 
 /**
  * Strip <script> tags (and their content) from an HTML string.
@@ -18,6 +19,31 @@ import { rewriteContentHtml } from './url'
  */
 export function stripScriptTags(html: string): string {
   return html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+}
+
+/**
+ * Links `#tag` in the text to its category page when `tag` is one of the post's categories.
+ * Skips text inside links, `code` and `pre`, and `#` that isn't at the start or after a space.
+ */
+function linkHashtags(html: string, categories: string[] = []): string {
+  const known = new Map(categories.map((name) => [name.toLowerCase(), name]))
+  if (!known.size) return html
+  let skip = 0
+  return html
+    .split(/(<[^>]+>)/)
+    .map((part) => {
+      if (part.startsWith('<')) {
+        if (/^<(a|code|pre)\b/i.test(part)) skip++
+        else if (/^<\/(a|code|pre)>/i.test(part)) skip = Math.max(0, skip - 1)
+        return part
+      }
+      if (skip) return part
+      return part.replace(/(^|[\s(])#(\w+)/g, (match, before, tag) => {
+        const name = known.get(tag.toLowerCase())
+        return name ? `${before}<a href="/category/${categorySlug(name)}" rel="tag">#${tag}</a>` : match
+      })
+    })
+    .join('')
 }
 
 /**
@@ -31,7 +57,7 @@ export function stripScriptTags(html: string): string {
  *
  * Always returns a sanitized HTML string safe for `set:html`.
  */
-export function renderContentHtml(content: any): string {
+export function renderContentHtml(content: any, categories: string[] = []): string {
   let html = ''
 
   if (content?.html) {
@@ -43,5 +69,5 @@ export function renderContentHtml(content: any): string {
   }
 
   // Rewrite internal grant.codes URLs to be relative
-  return rewriteContentHtml(html)
+  return linkHashtags(rewriteContentHtml(html), categories)
 }

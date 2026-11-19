@@ -5,6 +5,7 @@
 import { site } from '../lib/site'
 import { normalizeInternalUrl } from '../lib/url'
 import { formatRelativeDate } from '../lib/post-date-format'
+import { categorySlug } from '../lib/category-slug'
 
 export interface Props {
   post: any
@@ -106,7 +107,7 @@ const authorName = site.author.name
         if (typeof catName !== 'string') return null
         return (
           <span>
-            <a href={`/category/${encodeURIComponent(catName)}`} class="p-category">#{catName}</a>{' '}
+            <a href={`/category/${categorySlug(catName)}`} class="p-category">#{catName}</a>{' '}
           </span>
         )
       })}
