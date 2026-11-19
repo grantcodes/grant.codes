@@ -13,6 +13,7 @@ import { getMetadata } from '../lib/metadata'
 import {
   getArchiveMonths,
   getArchivePosts,
+  getListedPosts,
   getMonthTrack,
   inMonth,
   monthNames,
@@ -65,7 +66,7 @@ const year = Number(typeOrYear)
 const yearMonths = isYear
   ? (await getArchiveMonths()).filter(([y]) => y === year).map(([, month]) => month)
   : []
-const yearPosts = isYear ? allPosts.filter((post) => inMonth(post, year)) : []
+const yearPosts = isYear ? (await getListedPosts()).filter((post) => inMonth(post, year)) : []
 const months = yearMonths.map((month) => ({
   href: `/${year}/${month}`,
   label: monthNames[month - 1].slice(0, 3),

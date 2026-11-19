@@ -12,6 +12,11 @@ export async function getArchivePosts() {
     .sort((a, b) => postDate(b).getTime() - postDate(a).getTime())
 }
 
+/** Posts for the timeline, home page and date archives: unlisted posts only appear on their type's page. */
+export async function getListedPosts() {
+  return (await getArchivePosts()).filter((post) => post.visibility === 'public')
+}
+
 export const inMonth = (post: ArchivePost, year: number, month?: number) => {
   const date = postDate(post)
   return date.getFullYear() === year && (month === undefined || date.getMonth() + 1 === month)
@@ -27,7 +32,7 @@ export function countByType(posts: ArchivePost[]) {
 /** Years and months that have posts or a monthly data file, oldest first. */
 export async function getArchiveMonths() {
   const months = new Set(getMonthDataFiles())
-  for (const post of await getArchivePosts()) {
+  for (const post of await getListedPosts()) {
     const date = postDate(post)
     months.add(`${date.getFullYear()}/${date.getMonth() + 1}`)
   }
