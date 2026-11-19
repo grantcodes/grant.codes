@@ -16,6 +16,7 @@ import { formatRelativeDate } from '../lib/post-date-format'
 import { getMentionUrl, getResponseValue } from '../lib/post-mentions'
 import { getChildren } from '../lib/post-children'
 import { onImageError, photoImage, type Photo } from '../lib/photo'
+import { categorySlug } from '../lib/category-slug'
 
 export interface Props {
   post: any
@@ -148,7 +149,7 @@ const authorName = site.author.name
     )}
 
     <!-- Compact article cards show only their summary. -->
-    {previewContent && <PostContent content={previewContent} />}
+    {previewContent && <PostContent content={previewContent} categories={post.categories} />}
 
     <!-- For articles in compact: read more button -->
     {isCompactArticle && content && (
@@ -181,7 +182,7 @@ const authorName = site.author.name
           {category.map((cat: any) => {
             const catName = typeof cat === 'object' ? cat.value ?? cat : cat
             if (typeof catName !== 'string') return null
-            return <><a href={`/category/${encodeURIComponent(catName)}`} class="p-category">#{catName}</a>{' '}</>
+            return <><a href={`/category/${categorySlug(catName)}`} class="p-category">#{catName}</a>{' '}</>
           })}
         </>
       )}

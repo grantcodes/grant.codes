@@ -13,6 +13,7 @@
 import { site } from '../lib/site'
 import PostFooter from './PostFooter.astro'
 import PostContent from './PostContent.astro'
+import PostResponses from './PostResponses.astro'
 import PhotosGallery from './PhotosGallery.astro'
 import { GrantCodesButton } from '@grantcodes/ui/components/button/index.js'
 import { Heart, Bookmark, Repeat2, Reply } from 'lucide-static'
@@ -195,7 +196,7 @@ const photoSizes = '(min-width: 48rem) 46rem, 100vw'
 
   {/* ── Content ── */}
   {content && (
-    <PostContent content={content} />
+    <PostContent content={content} categories={post.categories} />
   )}
 
   {/* Compact mode: article read more link */}
@@ -239,6 +240,8 @@ const photoSizes = '(min-width: 48rem) 46rem, 100vw'
 
   {/* ── Footer ── */}
   <PostFooter post={post} compact={compact} />
+
+  {!compact && <PostResponses properties={properties} />}
 
   <!-- Hidden author h-card -->
   <span class="p-author h-card screen-reader-text">

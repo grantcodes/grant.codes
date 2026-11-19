@@ -14,11 +14,10 @@ import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
 import { GrantCodesPagination } from '@grantcodes/ui/components/pagination/index.js'
 import { getCollection } from 'astro:content'
 import getCategories from '../../../../lib/categories'
+import { categorySlug as slugOf } from '../../../../lib/category-slug'
 
 export async function getStaticPaths() {
   const allCategories = await getCategories()
-  // Pick the first 20 categories for build-time generation
-  const subset = allCategories.slice(0, 20)
   const paths: { params: { category: string; page: string } }[] = []
 
   // Load the collection once to compute page counts for each category
@@ -27,16 +26,11 @@ export async function getStaticPaths() {
 
   const PER_PAGE = 25
 
-  for (const cat of subset) {
-    const catName = cat.name
-    const count = allPosts.filter((post) => {
-      return post.categories.some(
-        (name) => name.toLowerCase() === catName.toLowerCase()
-      )
-    }).length
+  for (const cat of allCategories) {
+    const count = allPosts.filter((post) => post.categories.some((name) => slugOf(name) === cat.slug)).length
 
     const totalPages = Math.max(Math.ceil(count / PER_PAGE), 1)
-    for (let i = 2; i <= totalPages && i <= 3; i++) {
+    for (let i = 2; i <= totalPages; i++) {
       paths.push({ params: { category: cat.slug, page: String(i) } })
     }
   }
@@ -64,11 +58,7 @@ if (category) {
   const allEntries = await getCollection('posts')
   const allPosts = allEntries.map((entry) => entry.data)
 
-  const filtered = allPosts.filter((post) => {
-    return post.categories.some(
-      (name) => name.toLowerCase() === categoryName.toLowerCase()
-    )
-  })
+  const filtered = allPosts.filter((post) => post.categories.some((name) => slugOf(name) === category.slug))
 
   // Sort by canonical date descending
   filtered.sort((a, b) => {
@@ -86,7 +76,7 @@ if (category) {
 const prevPage = pageNum > 1 ? pageNum - 1 : null
 const nextPage = pageNum < totalPages ? pageNum + 1 : null
 const baseUrl = `/category/${categorySlug}`
-const prevHref = prevPage ? `${baseUrl}/page/${prevPage}` : ''
+const prevHref = prevPage === 1 ? baseUrl : prevPage ? `${baseUrl}/page/${prevPage}` : ''
 const nextHref = nextPage ? `${baseUrl}/page/${nextPage}` : ''
 ---
 

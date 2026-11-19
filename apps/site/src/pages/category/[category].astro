@@ -14,11 +14,11 @@ import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
 import { GrantCodesPagination } from '@grantcodes/ui/components/pagination/index.js'
 import { getCollection } from 'astro:content'
 import getCategories from '../../lib/categories'
+import { categorySlug as slugOf } from '../../lib/category-slug'
 
 export async function getStaticPaths() {
   const allCategories = await getCategories()
-  // Generate first 50 categories to keep build time manageable
-  return allCategories.slice(0, 50).map((cat) => ({
+  return allCategories.map((cat) => ({
     params: { category: cat.slug },
   }))
 }
@@ -41,12 +41,7 @@ if (category) {
   const allEntries = await getCollection('posts')
   const allPosts = allEntries.map((entry) => entry.data)
 
-  // Filter posts whose category array includes the matching category name
-  const filtered = allPosts.filter((post) => {
-    return post.categories.some(
-      (name) => name.toLowerCase() === categoryName.toLowerCase()
-    )
-  })
+  const filtered = allPosts.filter((post) => post.categories.some((name) => slugOf(name) === category.slug))
 
   // Sort by canonical date descending
   filtered.sort((a, b) => {
