@@ -5,11 +5,10 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 import PhotosGallery from '../components/PhotosGallery.astro'
 import PostCard from '../components/PostCard.astro'
 import ProjectList from '../components/ProjectList.astro'
-import { getArchivePosts } from '../lib/archive'
+import { getListedPosts } from '../lib/archive'
 import websites from '../data/websites.js'
 
-const posts = await getArchivePosts()
-const publicPosts = posts.filter((post) => post.visibility === 'public')
+const publicPosts = await getListedPosts()
 const projects = websites.slice(0, 4)
 const notes = publicPosts.filter((post) => post.postType === 'note').slice(0, 3)
 // Some old uploads are missing from the media store; extra photos fill the gaps their tiles leave.
