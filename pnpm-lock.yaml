@@ -17,23 +17,23 @@ importers:
         specifier: ^2.1.6
         version: 2.1.6(hono@4.13.17)
       '@postr/core':
-        specifier: 2.0.0-alpha.5
-        version: 2.0.0-alpha.5(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6))
+        specifier: 2.0.0-alpha.6
+        version: 2.0.0-alpha.6(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6))
       '@postr/plugin-feeds':
-        specifier: 2.0.0-alpha.5
-        version: 2.0.0-alpha.5(@postr/core@2.0.0-alpha.5(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6)))
+        specifier: 2.0.0-alpha.6
+        version: 2.0.0-alpha.6(@postr/core@2.0.0-alpha.6(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6)))
       '@postr/plugin-webmention-endpoint':
-        specifier: 2.0.0-alpha.5
-        version: 2.0.0-alpha.5(@postr/core@2.0.0-alpha.5(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6)))
+        specifier: 2.0.0-alpha.6
+        version: 2.0.0-alpha.6(@postr/core@2.0.0-alpha.6(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6)))
       '@postr/syndicator-instagram':
-        specifier: 3.0.0-alpha.5
-        version: 3.0.0-alpha.5(@postr/core@2.0.0-alpha.5(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6)))(@types/node@26.6.6)
+        specifier: 3.0.0-alpha.6
+        version: 3.0.0-alpha.6(@postr/core@2.0.0-alpha.6(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6)))(@types/node@26.6.6)
       '@postr/syndicator-superfeedr':
-        specifier: 3.0.0-alpha.5
-        version: 3.0.0-alpha.5(@postr/core@2.0.0-alpha.5(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6)))
+        specifier: 3.0.0-alpha.6
+        version: 3.0.0-alpha.6(@postr/core@2.0.0-alpha.6(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6)))
       '@postr/syndicator-telegram':
-        specifier: 2.0.0-alpha.5
-        version: 2.0.0-alpha.5(@postr/core@2.0.0-alpha.5(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6)))
+        specifier: 2.0.0-alpha.6
+        version: 2.0.0-alpha.6(@postr/core@2.0.0-alpha.6(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6)))
       canvas:
         specifier: ^3.2.3
         version: 3.2.3
@@ -69,11 +69,11 @@ importers:
         specifier: ^4.1.2
         version: 4.1.2(@types/react@19.2.13)(react@19.3.1)
       '@postr/astro':
-        specifier: 0.1.0-alpha.6
-        version: 0.1.0-alpha.6(@postr/core@2.0.0-alpha.5(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6)))(astro@7.4.8(@types/node@26.6.6)(esbuild@0.28.2)(tsx@4.23.15)(yaml@2.9.1))
+        specifier: 0.1.0-alpha.7
+        version: 0.1.0-alpha.7(@postr/core@2.0.0-alpha.6(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6)))(astro@7.4.8(@types/node@26.6.6)(esbuild@0.28.2)(tsx@4.23.15)(yaml@2.9.1))
       '@postr/core':
-        specifier: 2.0.0-alpha.5
-        version: 2.0.0-alpha.5(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6))
+        specifier: 2.0.0-alpha.6
+        version: 2.0.0-alpha.6(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6))
       astro:
         specifier: ^7.4.8
         version: 7.4.8(@types/node@26.6.6)(esbuild@0.28.2)(tsx@4.23.15)(yaml@2.9.1)
@@ -751,15 +751,15 @@ packages:
   '@parse5/tools@0.3.0':
     resolution: {integrity: sha512-zxRyTHkqb7WQMV8kTNBKWb1BeOFUKXBXTBWuxg9H9hfvQB3IwP6Iw2U75Ia5eyRxPNltmY7E8YAlz6zWwUnjKg==}
 
-  '@postr/astro@0.1.0-alpha.6':
-    resolution: {integrity: sha512-L0WcNk6GA4Mkx3jaPNzsTwmMLEEbv/FxSxaoQgNfCYHdybAc0iNJRLLThch/9/lWO25QcwsWaY5oLXJDTeum2g==}
+  '@postr/astro@0.1.0-alpha.7':
+    resolution: {integrity: sha512-NT2PmN26HEQDpWcJusrMDuW1dnZ4+29sNWWHHLKD3a28upmacfL1v22Z2XSDkLhabQALO1CuuG3iSXdpRlYzkQ==}
     engines: {node: '>=24'}
     peerDependencies:
-      '@postr/core': ^2.0.0-alpha.5
+      '@postr/core': ^2.0.0-alpha.6
       astro: ^6.0.0 || ^7.0.0
 
-  '@postr/core@2.0.0-alpha.5':
-    resolution: {integrity: sha512-1vnK3NWFLHqZ64lamvkOsi5rMCO/XUBUZ6k1YCG+dKNO/a1hBvtm0WyqZbc6eFEOv5kjyecUlv+j092M92khsQ==}
+  '@postr/core@2.0.0-alpha.6':
+    resolution: {integrity: sha512-lLb8fSNPfes/CVdKMNFyUcbIGj2hloJirglSsn3iWYHwZO6c4rFg4aqENJR1EST5zkUKQ3tRxnChAdNQ1iIq3A==}
     engines: {node: '>=24'}
     hasBin: true
     peerDependencies:
@@ -768,35 +768,35 @@ packages:
       sharp:
         optional: true
 
-  '@postr/plugin-feeds@2.0.0-alpha.5':
-    resolution: {integrity: sha512-/IkG3dQhs1Pim0wgwa+H5mDHCMxGoRUD/6BlmwbcsUod7+3FDmlmslhoPEXmdG3Yv8fCwMnOwl2IACyQf6Ip+g==}
+  '@postr/plugin-feeds@2.0.0-alpha.6':
+    resolution: {integrity: sha512-aRGCTKnGbZjG839ArqEAeVIly8RBt6j6ndK8tz6879gInJvrnaS3QkXsyHdrTLvYf8LZAZt971IN+e9FB8gTbA==}
     engines: {node: '>=24'}
     peerDependencies:
-      '@postr/core': ^2.0.0-alpha.5
+      '@postr/core': ^2.0.0-alpha.6
 
-  '@postr/plugin-webmention-endpoint@2.0.0-alpha.5':
-    resolution: {integrity: sha512-XqqlUDNcJu6U6Y9wDwMvoLyPdOFzOBJu5uZaBFtPe1BzZVUGB+RpeRX0jaGBy0nR0xA6IQlzrC4PTrOfogccRQ==}
+  '@postr/plugin-webmention-endpoint@2.0.0-alpha.6':
+    resolution: {integrity: sha512-4NxrrpB/n/hMGeLgOraingVywEGuJ3UqNEa9PscjfUTtTsrtZp0AbRVB/zS6Y33W4u+RqT56hd817eDazeiDVg==}
     engines: {node: '>=24'}
     peerDependencies:
-      '@postr/core': ^2.0.0-alpha.5
+      '@postr/core': ^2.0.0-alpha.6
 
-  '@postr/syndicator-instagram@3.0.0-alpha.5':
-    resolution: {integrity: sha512-bkC8aDNVxCiYNsrZaTZl/iAzQNsbXHltujsQ49vXl33/CBevuQLPQQgInGeWPZ0Is1E1SBirmC4Z0Yxe2zLF7Q==}
+  '@postr/syndicator-instagram@3.0.0-alpha.6':
+    resolution: {integrity: sha512-5z3t6XnvreWE0xihuYvYun5phSmsdShIKO5fSD6yOhgdIepEYk+8+qGRJci/E0QADLQQK8VK2BbAI1mNlflp5Q==}
     engines: {node: '>=24'}
     peerDependencies:
-      '@postr/core': ^2.0.0-alpha.5
+      '@postr/core': ^2.0.0-alpha.6
 
-  '@postr/syndicator-superfeedr@3.0.0-alpha.5':
-    resolution: {integrity: sha512-kkOXOw95CyVYxtIY1yqgqkWhtPJqQtlgbqgWU1hIXdXUgxEUxt5qADpx8FWUHmY/Xmolf8bzQLvtC1TDcLqgHA==}
+  '@postr/syndicator-superfeedr@3.0.0-alpha.6':
+    resolution: {integrity: sha512-dEapBKG6W+TsLZMtHB5dIcKIEcCyRKy59hoJVJi/otKSw0lNImp1CPctA6YXIBt2TqJBj18bc954/37NWLVA3Q==}
     engines: {node: '>=24'}
     peerDependencies:
-      '@postr/core': ^2.0.0-alpha.5
+      '@postr/core': ^2.0.0-alpha.6
 
-  '@postr/syndicator-telegram@2.0.0-alpha.5':
-    resolution: {integrity: sha512-nHN+y9YXDlHM1IT/4D2WA3SWFrzmABFP1KaFijkTmJ441hwKLFaDCTgot4dCUUWUKVktZfr7hGc18xl5FWIMBw==}
+  '@postr/syndicator-telegram@2.0.0-alpha.6':
+    resolution: {integrity: sha512-a0LGPV8JRDcqtwDO9S0Vy9LB8QEBDzrpRcA6e10F9R2wEfdpAS6UwHN/l6R9aDgqN//8o3m8C1ClghHZB4lruw==}
     engines: {node: '>=24'}
     peerDependencies:
-      '@postr/core': ^2.0.0-alpha.5
+      '@postr/core': ^2.0.0-alpha.6
 
   '@resvg/resvg-js-android-arm-eabi@2.6.2':
     resolution: {integrity: sha512-FrJibrAk6v29eabIPgcTUMPXiEz8ssrAk7TXxsiZzww9UTQ1Z5KAbFJs+Z0Ez+VZTYgnE5IQJqBcoSiMebtPHA==}
@@ -3598,12 +3598,12 @@ snapshots:
     dependencies:
       parse5: 7.3.0
 
-  '@postr/astro@0.1.0-alpha.6(@postr/core@2.0.0-alpha.5(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6)))(astro@7.4.8(@types/node@26.6.6)(esbuild@0.28.2)(tsx@4.23.15)(yaml@2.9.1))':
+  '@postr/astro@0.1.0-alpha.7(@postr/core@2.0.0-alpha.6(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6)))(astro@7.4.8(@types/node@26.6.6)(esbuild@0.28.2)(tsx@4.23.15)(yaml@2.9.1))':
     dependencies:
-      '@postr/core': 2.0.0-alpha.5(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6))
+      '@postr/core': 2.0.0-alpha.6(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6))
       astro: 7.4.8(@types/node@26.6.6)(esbuild@0.28.2)(tsx@4.23.15)(yaml@2.9.1)
 
-  '@postr/core@2.0.0-alpha.5(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6))':
+  '@postr/core@2.0.0-alpha.6(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6))':
     dependencies:
       '@mozilla/readability': 0.6.0
       '@sindresorhus/slugify': 4.0.1
@@ -3669,18 +3669,18 @@ snapshots:
       - typebox
       - valibot
 
-  '@postr/plugin-feeds@2.0.0-alpha.5(@postr/core@2.0.0-alpha.5(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6)))':
+  '@postr/plugin-feeds@2.0.0-alpha.6(@postr/core@2.0.0-alpha.6(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6)))':
     dependencies:
-      '@postr/core': 2.0.0-alpha.5(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6))
+      '@postr/core': 2.0.0-alpha.6(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6))
       feed: 6.0.0
 
-  '@postr/plugin-webmention-endpoint@2.0.0-alpha.5(@postr/core@2.0.0-alpha.5(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6)))':
+  '@postr/plugin-webmention-endpoint@2.0.0-alpha.6(@postr/core@2.0.0-alpha.6(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6)))':
     dependencies:
-      '@postr/core': 2.0.0-alpha.5(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6))
+      '@postr/core': 2.0.0-alpha.6(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6))
 
-  '@postr/syndicator-instagram@3.0.0-alpha.5(@postr/core@2.0.0-alpha.5(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6)))(@types/node@26.6.6)':
+  '@postr/syndicator-instagram@3.0.0-alpha.6(@postr/core@2.0.0-alpha.6(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6)))(@types/node@26.6.6)':
     dependencies:
-      '@postr/core': 2.0.0-alpha.5(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6))
+      '@postr/core': 2.0.0-alpha.6(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6))
       instagram-private-api: 1.46.1
       sharp: 0.35.5(@types/node@26.6.6)
     transitivePeerDependencies:
@@ -3688,13 +3688,13 @@ snapshots:
       - re2
       - supports-color
 
-  '@postr/syndicator-superfeedr@3.0.0-alpha.5(@postr/core@2.0.0-alpha.5(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6)))':
+  '@postr/syndicator-superfeedr@3.0.0-alpha.6(@postr/core@2.0.0-alpha.6(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6)))':
     dependencies:
-      '@postr/core': 2.0.0-alpha.5(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6))
+      '@postr/core': 2.0.0-alpha.6(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6))
 
-  '@postr/syndicator-telegram@2.0.0-alpha.5(@postr/core@2.0.0-alpha.5(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6)))':
+  '@postr/syndicator-telegram@2.0.0-alpha.6(@postr/core@2.0.0-alpha.6(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6)))':
     dependencies:
-      '@postr/core': 2.0.0-alpha.5(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6))
+      '@postr/core': 2.0.0-alpha.6(canvas@3.2.3)(sharp@0.35.5(@types/node@26.6.6))
 
   '@resvg/resvg-js-android-arm-eabi@2.6.2':
     optional: true
