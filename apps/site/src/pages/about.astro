@@ -6,6 +6,7 @@ export const prerender = true
 
 import { site } from '../lib/site'
 import FullWidthLayout from '../layouts/FullWidthLayout.astro'
+import ProfilePhoto from '../components/ProfilePhoto.astro'
 import { GrantCodesButton } from '@grantcodes/ui/components/button/index.js'
 import { BriefcaseBusiness, Camera, GitFork, Globe, Mail } from 'lucide-static'
 import websites from '../data/websites.js'
@@ -37,9 +38,7 @@ interface SkillSection {
 const skillsData = skillsDataRaw as SkillSection[]
 
 const siteUrl = site.url
-const authorName = site.author.name
 const authorEmail = site.author.email
-const authorPhoto = site.author.photo
 const authorGithub = site.author.github
 const authorInstagram = site.author.instagram
 
@@ -67,16 +66,7 @@ const upcomingWebsites = websites.slice(0, 6)
         <!-- Profile -->
         <div class="about-profile">
           <div class="about-profile__photo">
-            {authorPhoto && (
-              <img
-                class="u-photo"
-                src={authorPhoto}
-                alt={authorName}
-                width="400"
-                height="400"
-                loading="lazy"
-              />
-            )}
+            <ProfilePhoto />
           </div>
           <div class="about-profile__content">
             <h1 class="page-title">Hi! I'm Grant 👋</h1>
@@ -522,13 +512,6 @@ const upcomingWebsites = websites.slice(0, 6)
 
   .about-profile__photo {
     max-width: 20rem;
-  }
-
-  .about-profile__photo img {
-    display: block;
-    height: auto;
-    width: 100%;
-    border-radius: var(--border-radius);
   }
 
   .about-profile__description {
