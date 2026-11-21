@@ -1,0 +1,494 @@
+/* ── Site-wide CSS ──
+   Ported from the legacy Next.js CSS/SCSS source.
+   Applied on top of @grantcodes/ui/styles/base.css.
+ */
+
+/* ── Variables (ported from ../util/_variables.scss) ── */
+:root {
+    --border-radius: 0.4rem;
+    --content-width: 42rem;
+    --width-wide: 64rem;
+    --width-article: 46rem;
+
+    /* Daily palette (set on <html> from @grantcodes/themer); fall back to the brand purple. */
+    --day-main: var(--g-color-primary-500);
+    --day-compl: var(--g-color-secondary-500);
+    /* Readable accent: the day's colour, darkened in light mode and lightened in dark mode. */
+    --day-accent: var(--g-color-content-primary);
+    --day-accent: light-dark(
+        oklch(from var(--day-main) min(l, 0.45) max(c, 0.12) h),
+        oklch(from var(--day-main) max(l, 0.78) c h)
+    );
+    --g-color-content-primary: var(--day-accent);
+    --g-color-content-primary-hover: var(--day-accent);
+    --g-color-border-primary: var(--day-accent);
+    --g-button-color-background: var(--day-accent);
+    --g-focus-ring-color-default: var(--day-accent);
+
+    --about-heading-width: 12rem;
+    --about-gap: 2rem;
+
+    --font-sans:
+        'Greycliff', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+        Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+    --font-mono:
+        'DejaVu Sans Mono', Menlo, Consolas, 'Liberation Mono', Monaco,
+        'Lucida Console', monospace;
+
+    --surface-glass: color-mix(
+        in oklab,
+        var(--g-color-background-subtle) 78%,
+        transparent
+    );
+    /* Contour rings: one shade of the day's colour, from a faint wash to full strength at the centre. */
+    --topography-layer-0: color-mix(in oklab, var(--day-main) 10%, var(--g-color-background-default));
+    --topography-layer-1: color-mix(in oklab, var(--day-main) 25%, var(--g-color-background-default));
+    --topography-layer-2: color-mix(in oklab, var(--day-main) 42%, var(--g-color-background-default));
+    --topography-layer-3: color-mix(in oklab, var(--day-main) 60%, var(--g-color-background-default));
+    --topography-layer-4: color-mix(in oklab, var(--day-main) 80%, var(--g-color-background-default));
+    --topography-layer-5: var(--day-main);
+}
+
+html {
+    position: relative;
+    cursor:
+        url(/img/cursor.png) 16 16,
+        auto;
+    cursor:
+        -webkit-image-set(url(/img/cursor.png) 1x, url(/img/cursor-64.png) 2x)
+            16 16,
+        auto;
+}
+
+/* Long URLs (in post content, mentions, syndication) wrap instead of overflowing their card. */
+a {
+    overflow-wrap: anywhere;
+}
+
+::-webkit-scrollbar {
+    width: 0.5rem;
+}
+::-webkit-scrollbar-track {
+    background-color: var(--g-color-background-default);
+    border-radius: 0.25rem;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 0.25rem;
+    min-height: 2rem;
+    background-color: var(--g-color-border-default);
+}
+
+hr {
+    display: block;
+    border: none;
+    text-align: center;
+    line-height: 0;
+    overflow: visible;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+hr::after {
+    display: inline-block;
+    text-decoration: line-through wavy;
+    content: '\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0';
+}
+
+figure {
+    position: relative;
+    display: block;
+    margin: 0;
+    margin-bottom: 1rem;
+}
+figcaption {
+    padding: 1rem 1rem 0 1rem;
+    font-size: 1rem;
+    background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+figure img {
+    display: block;
+    width: 100%;
+}
+
+/* ── UI helpers (shared by migrated @grantcodes/ui pages) ── */
+.social-links {
+    display: flex;
+    gap: 0.5rem;
+}
+
+grantcodes-icon {
+    display: inline-flex;
+}
+
+.card-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.text-muted {
+    font-size: 0.8rem;
+    opacity: 0.6;
+}
+
+.list-plain {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.embed-wrap {
+    width: 100%;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* ── Shell: top bar, topography band, one content column ── */
+.shell {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-block-size: 100dvh;
+    isolation: isolate;
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--g-spacing-lg, 1.5rem);
+    inline-size: 100%;
+    max-inline-size: var(--content-width);
+    margin-inline: auto;
+    padding-inline: 1rem;
+    padding-block: 2rem 4rem;
+    flex: 1;
+}
+.main-content--wide {
+    max-inline-size: var(--width-wide);
+}
+.main-content--full {
+    max-inline-size: none;
+}
+.main-content--article {
+    max-inline-size: var(--width-article);
+}
+.main-content > grantcodes-card {
+    flex-grow: 0;
+}
+
+/* ── Header ── */
+.site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    inline-size: 100%;
+    max-inline-size: var(--width-wide);
+    margin-inline: auto;
+    padding: 1.25rem 1rem;
+    color: var(--g-color-content-default);
+}
+.site-header__name {
+    flex-shrink: 0;
+    white-space: nowrap;
+    font-size: 1.6rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    color: var(--g-color-content-default);
+    text-decoration: overline wavy var(--day-accent);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
+}
+/* The full-size name leaves no room for the menu button on the narrowest phones. */
+@media (max-width: 22rem) {
+    .site-header__name {
+        font-size: 1.2rem;
+    }
+}
+.site-header__nav {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+.site-header__links {
+    display: none;
+    gap: 1.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    white-space: nowrap;
+}
+/* Only once the name, all four links and the menu button fit on one line (rem here is 16px). */
+@media (min-width: 64rem) {
+    .site-header__links {
+        display: flex;
+    }
+}
+.site-header__links a,
+.site-menu__links a {
+    font-weight: 800;
+    color: var(--g-color-content-default);
+    text-decoration: none;
+}
+.site-header__links a:hover,
+.site-menu__links a:hover,
+.site-header__links a[aria-current='page'],
+.site-menu a[aria-current='page'] {
+    color: var(--day-accent);
+    text-decoration: underline wavy;
+    text-underline-offset: 0.25em;
+}
+.site-menu {
+    --popover-inline-size: min(22rem, calc(100vw - 2rem));
+    --popover-max-inline-size: calc(100vw - 2rem);
+}
+.site-menu__links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem 1rem;
+    margin: 1rem 0;
+    padding: 0;
+    list-style: none;
+}
+@media print {
+    .site-header__nav {
+        display: none;
+    }
+}
+
+/* ── Search (ported from _search.scss) ── */
+.search {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: stretch;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+    border-radius: var(--border-radius);
+    border: 2px solid var(--g-color-border-default);
+    font-size: 1rem;
+    overflow: hidden;
+    transition: border-color 0.2s;
+}
+@media (min-width: 70rem) {
+    .search {
+        font-size: 0.9rem;
+    }
+}
+.search:has(.search__input:focus-visible, .search__button:focus-visible) {
+    border-color: var(--g-color-content-default);
+}
+.search .search__input:not([type='checkbox']):not([type='radio']) {
+    flex: 1 1 auto;
+    margin: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    box-shadow: none;
+    border-color: transparent;
+    font-size: inherit;
+    min-width: 0;
+    background: color-mix(
+        in oklab,
+        var(--g-color-background-subtle) 78%,
+        transparent
+    );
+}
+.search__button {
+    align-items: center;
+    background: color-mix(
+        in oklab,
+        var(--g-color-background-subtle) 78%,
+        transparent
+    );
+    border: 0;
+    border-left: 1px solid var(--g-color-border-default);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    box-shadow: none;
+    color: inherit;
+    cursor: pointer;
+    display: inline-flex;
+    flex: 0 0 auto;
+    font-size: inherit;
+    justify-content: center;
+    margin: 0;
+    padding: 0 0.75em;
+}
+/* Page-level search (wider, standalone) */
+.search--page {
+    margin: 0;
+    font-size: 1.1rem;
+}
+.search--page .search__input {
+    padding: 0.7rem 0.8rem;
+}
+
+/* ── Footer ── */
+.main-footer {
+    grid-area: footer;
+}
+@media print {
+    .main-footer {
+        display: none;
+    }
+}
+
+/* ── Post list ── */
+.post-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* ── Pagination (ported from _pagination.scss) ── */
+.pagination {
+    clear: both;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+/* ── Topography band: the day's palette as contour rings behind the top of every page ── */
+@keyframes topography-ring-enter {
+    from {
+        transform: scale(0.6);
+        opacity: 0;
+    }
+}
+.shell__topography {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-end: 0;
+    z-index: -1;
+    inline-size: min(46rem, 100%);
+    overflow: hidden;
+    pointer-events: none;
+}
+.topography-bg {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+}
+@media (prefers-reduced-motion: no-preference) {
+    .topography-bg path {
+        animation: topography-ring-enter 1.2s both cubic-bezier(0.2, 0.7, 0.2, 1);
+        transform-origin: top right;
+    }
+    .topography-bg path:nth-child(2) { animation-delay: 0.08s; }
+    .topography-bg path:nth-child(3) { animation-delay: 0.16s; }
+    .topography-bg path:nth-child(4) { animation-delay: 0.24s; }
+    .topography-bg path:nth-child(5) { animation-delay: 0.32s; }
+    .topography-bg path:nth-child(6) { animation-delay: 0.4s; }
+}
+
+.post__read-more {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+}
+
+/* ── Posts (shared by Post, PostCard and PostFooter) ── */
+/* A breakout runs to the card's edges, past its body padding (--g-spacing-md). */
+.card__breakout {
+    display: block;
+    overflow: hidden;
+    clear: both;
+    margin: var(--g-spacing-md) calc(-1 * var(--g-spacing-md));
+    background-color: var(--g-color-background-subtle);
+}
+.card__breakout + .card__breakout {
+    margin-block-start: 0;
+}
+.card__breakout:first-child {
+    margin-block-start: calc(-1 * var(--g-spacing-md));
+}
+.card__breakout:last-child {
+    margin-block-end: calc(-1 * var(--g-spacing-md));
+}
+.card__breakout img,
+.card__breakout video {
+    display: block;
+    inline-size: 100%;
+}
+.card__breakout figure {
+    margin: 0;
+}
+.card__breakout--padded {
+    margin-block: var(--g-spacing-md);
+}
+
+.post__action {
+    margin: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+.post__action grantcodes-icon {
+    vertical-align: middle;
+    margin-inline-end: 0.3em;
+}
+.post__content > p:first-child {
+    margin-block-start: 0;
+}
+/* width/height attributes reserve the aspect ratio; the image still fits its box. */
+.post__card-photo img,
+.post__photos img {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+}
+
+/* One size for the whole footer line: date, author, categories, syndication, counts. */
+.post__footer {
+    padding-block-start: 0.75rem;
+    border-block-start: 1px solid var(--g-color-border-subtle);
+    color: var(--g-color-content-subtle);
+    font-size: var(--g-typography-font-size-2xs);
+    line-height: 1.5;
+}
+.post__footer * {
+    font-size: inherit;
+}
+/* Cards space their children with a gap; a single post's article doesn't. */
+.post > .post__footer {
+    margin-block-start: var(--g-spacing-md);
+}
+/* A Liked/Replied label sits close to the preview or link it labels. */
+.post__response {
+    display: grid;
+    gap: 0.5rem;
+    min-inline-size: 0;
+}
+.post__footer .h-card .p-name:hover {
+    text-decoration: underline wavy;
+}
+
+/* ── Post typography: one scale for titles and headings inside content ── */
+.post__title {
+    margin: 0;
+    font-size: clamp(1.75rem, 4.5vw, 2.75rem);
+    line-height: 1.1;
+    text-wrap: balance;
+}
+grantcodes-card .post__title {
+    font-size: clamp(1.4rem, 3.5vw, 2rem);
+}
+.post__content :is(h1, h2) {
+    font-size: 1.6rem;
+    line-height: 1.2;
+}
+.post__content :is(h3, h4, h5, h6) {
+    font-size: 1.25rem;
+}
+
+.page-title {
+    font: var(--g-typography-h2-font);
+}

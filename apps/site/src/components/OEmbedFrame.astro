@@ -1,0 +1,37 @@
+---
+// An allowlisted oEmbed player (see lib/oembed.ts), sized by the provider's width/height.
+import type { OEmbedFrame } from '../lib/oembed'
+
+export interface Props {
+  frame: OEmbedFrame
+}
+
+const { frame } = Astro.props
+// Video players keep their aspect ratio; fixed-height players (audio) keep their height.
+const style =
+  frame.width && frame.height
+    ? `aspect-ratio: ${frame.width} / ${frame.height}`
+    : frame.height
+      ? `block-size: ${frame.height}px`
+      : 'aspect-ratio: 16 / 9'
+---
+
+<iframe
+  class="oembed-frame"
+  src={frame.src}
+  title={frame.title ?? 'Embedded content'}
+  style={style}
+  loading="lazy"
+  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  referrerpolicy="strict-origin-when-cross-origin"
+  allowfullscreen
+></iframe>
+
+<style>
+  .oembed-frame {
+    display: block;
+    inline-size: 100%;
+    border: 0;
+    border-radius: var(--g-border-radius-md);
+  }
+</style>

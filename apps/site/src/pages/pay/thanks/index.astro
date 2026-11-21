@@ -1,0 +1,24 @@
+---
+// Pay thanks — static thank you page
+//
+// Status: IMPLEMENTED — static fallback
+// Cutover-blocker: NO — payment functionality is can-slip.
+//
+// Original Next.js behavior:
+// - Static thank-you page, robots: noindex
+// - Shows "I'm Rich!" message with Card component
+
+import { site } from '../../../lib/site'
+import BaseLayout from '../../../layouts/BaseLayout.astro'
+import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
+
+const siteUrl = site.url
+---
+
+<BaseLayout title="Thank You!" canonicalUrl={`${siteUrl}/pay/thanks`} noindex={true}>
+  <h2 class="page-title">Thank You!</h2>
+
+  <GrantCodesCard>
+    <p>Thank you very much for paying me. It is much appreciated.</p>
+  </GrantCodesCard>
+</BaseLayout>

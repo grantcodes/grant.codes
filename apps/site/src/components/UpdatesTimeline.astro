@@ -1,0 +1,36 @@
+---
+// One page of the updates timeline (notes, photos, articles and other home feed types).
+import { site } from '../lib/site'
+import BaseLayout from '../layouts/BaseLayout.astro'
+import PostCard from './PostCard.astro'
+import { GrantCodesPagination } from '@grantcodes/ui/components/pagination/index.js'
+import { getUpdates, UPDATES_PER_PAGE } from '../lib/updates'
+
+export interface Props {
+  page: number
+}
+
+const { page } = Astro.props
+const posts = await getUpdates()
+const totalPages = Math.max(Math.ceil(posts.length / UPDATES_PER_PAGE), 1)
+const pagePosts = posts.slice((page - 1) * UPDATES_PER_PAGE, page * UPDATES_PER_PAGE)
+const pageHref = (n: number) => (n === 1 ? '/updates' : `/updates/page/${n}`)
+const title = page === 1 ? 'Updates' : `Updates page ${page}`
+---
+
+<BaseLayout title={title} canonicalUrl={`${site.url}${pageHref(page)}`}>
+  <h1 class="page-title">{title}</h1>
+
+  <div class="post-list">
+    {pagePosts.map((post) => <PostCard post={post} compact />)}
+  </div>
+
+  {totalPages > 1 && (
+    <GrantCodesPagination
+      previousHref={page > 1 ? pageHref(page - 1) : ''}
+      nextHref={page < totalPages ? pageHref(page + 1) : ''}
+      page={page}
+      pages={totalPages}
+    />
+  )}
+</BaseLayout>

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://schema.railpack.com",
+  "steps": {
+    "build": {
+      "commands": ["pnpm run build:api"]
+    }
+  },
+  "deploy": {
+    "startCommand": "pnpm start"
+  }
+}

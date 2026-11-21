@@ -1,0 +1,89 @@
+---
+// Search page — minimal client-bridged search
+//
+// Status: MINIMAL IMPLEMENTATION — can-slip surface
+// Cutover-blocker: NO — search is explicitly can-slip. This page provides a
+// search form and client-side result rendering. Full SSR search requires
+// hybrid/server mode and is tracked as a post-cutover improvement.
+//
+// Original Next.js behavior:
+// - RSC at /search/[search] calls getPosts({ query: { search: params.search } })
+// - Renders PostList with results
+// - Pagination at /search/[search]/page/[page]
+//
+// Astro approach (static mode):
+// - Form submits GET to /search?q=query
+// - Static page loads, client JS reads ?q= param and fetches from backend API
+// - Renders results inline via DOM
+// - No-JS fallback: shows search form with message
+//
+// Upgrade path: switch to hybrid output (output: 'hybrid') to enable true
+// server-side search routes at /search/[search] with getPosts.
+
+import { site } from '../../lib/site'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
+import { Search } from 'lucide-static'
+
+const siteUrl = site.url
+const authorName = site.author.name
+const apiUrl = site.apiUrl
+
+// Preserve current query in the search input after page load
+const searchQuery = Astro.url.searchParams.get('q') || ''
+---
+
+<BaseLayout title="Search" canonicalUrl={`${siteUrl}/search`}>
+  <h2 class="page-title">Search</h2>
+
+  <GrantCodesCard>
+    <form class="search search--page" method="GET" action="/search">
+      <label for="search-page-input" class="screen-reader-text">Search posts</label>
+      <input
+        id="search-page-input"
+        class="search__input"
+        type="search"
+        name="q"
+        placeholder={`Search ${authorName}'s posts...`}
+        value={searchQuery}
+        autofocus
+      />
+      <button class="search__button" type="submit">
+        <span class="screen-reader-text">Search</span>
+        <grantcodes-icon style="font-size: 18px" set:html={Search}></grantcodes-icon>
+      </button>
+    </form>
+  </GrantCodesCard>
+
+  <!-- Search results container -- populated by client JS -->
+  <div
+    id="search-results"
+    class="post-list"
+    aria-live="polite"
+    data-api-url={apiUrl}
+    data-site-url={siteUrl}
+  >
+    {
+      !searchQuery ? (
+        <GrantCodesCard>
+          <p>Enter a search term above to find posts across the site.</p>
+        </GrantCodesCard>
+      ) : null
+    }
+    <noscript>
+      <div style="text-align: center; padding: 2rem; background: var(--g-color-background-default); border: 1px solid var(--g-color-border-default); border-radius: 0.4rem;">
+        <p>JavaScript is required to perform a search.</p>
+        <p style="font-size: 0.8rem; opacity: 0.7;">
+          Enable JavaScript or use your browser's find-in-page feature.
+        </p>
+      </div>
+    </noscript>
+  </div>
+</BaseLayout>
+
+<script>
+  // Results are rendered client-side, so their custom elements must be defined here too.
+  import '@grantcodes/ui/components/card/index.js'
+  import { performSearch } from '../../lib/search-client'
+  performSearch()
+</script>

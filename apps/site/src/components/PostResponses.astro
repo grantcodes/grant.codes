@@ -1,0 +1,155 @@
+---
+// Responses other sites sent this post: likes, reposts and bookmarks as faces, comments and
+// mentions as a list. 1.x stored mentions under `webmention`; postr 2 uses `mention`.
+import { GrantCodesAvatar } from '@grantcodes/ui/components/avatar/index.js'
+import getAuthor from '../lib/author'
+import { formatRelativeDate } from '../lib/post-date-format'
+
+export interface Props {
+  properties: Record<string, any[] | undefined>
+}
+
+const { properties } = Astro.props
+
+const faces = [
+  { key: 'like', title: 'Likes', verb: 'Liked by' },
+  { key: 'repost', title: 'Reposts', verb: 'Reposted by' },
+  { key: 'bookmark', title: 'Bookmarks', verb: 'Bookmarked by' },
+]
+
+const entries = (key: string) => (properties[key] ?? []).filter((item) => item?.properties)
+const first = (value: any) => (typeof value === 'object' ? value?.value : value) ?? null
+const responseUrl = (item: any) => first(item.properties.url?.[0]) ?? getAuthor(item.properties.author?.[0]).url
+const authorOf = (item: any) => {
+  const author = getAuthor(item.properties.author?.[0])
+  return { ...author, photo: first(author.photo) }
+}
+// Third-party HTML is never rendered: comments show their plain text.
+const text = (item: any) => {
+  const content = item.properties.content?.[0]
+  return (typeof content === 'object' ? content?.value : content) ?? item.properties.name?.[0] ?? ''
+}
+
+const comments = entries('comment')
+const mentions = [...entries('mention'), ...entries('webmention')]
+const hasAny = faces.some(({ key }) => entries(key).length) || comments.length || mentions.length
+---
+
+{hasAny && (
+  <section class="responses" aria-label="Responses">
+    {faces.map(({ key, title, verb }) => entries(key).length > 0 && (
+      <div class="responses__group">
+        <h2 class="responses__title">{title} <span class="responses__count">{entries(key).length}</span></h2>
+        <ul class="responses__faces">
+          {entries(key).map((item) => {
+            const author = authorOf(item)
+            return (
+              <li class={`p-${key} h-cite`}>
+                <a class="u-url" href={responseUrl(item)} title={`${verb} ${author.name ?? 'someone'}`}>
+                  <GrantCodesAvatar src={author.photo ?? undefined} name={author.name ?? ''} alt={`${verb} ${author.name ?? 'someone'}`} size="small" />
+                </a>
+              </li>
+            )
+          })}
+        </ul>
+      </div>
+    ))}
+
+    {comments.length > 0 && (
+      <div class="responses__group">
+        <h2 class="responses__title">Comments <span class="responses__count">{comments.length}</span></h2>
+        <ol class="responses__list">
+          {comments.map((item) => {
+            const author = authorOf(item)
+            const published = item.properties.published?.[0]
+            return (
+              <li class="p-comment h-cite responses__comment">
+                <a class="p-author h-card responses__author" href={author.url ?? undefined}>
+                  <GrantCodesAvatar src={author.photo ?? undefined} name={author.name ?? ''} alt="" size="small" />
+                  <span class="p-name">{author.name ?? 'Someone'}</span>
+                </a>
+                <p class="p-content">{text(item)}</p>
+                {responseUrl(item) && (
+                  <a class="u-url responses__date" href={responseUrl(item)}>
+                    {published ? <time class="dt-published" datetime={published}>{formatRelativeDate(published)}</time> : 'View'}
+                  </a>
+                )}
+              </li>
+            )
+          })}
+        </ol>
+      </div>
+    )}
+
+    {mentions.length > 0 && (
+      <div class="responses__group">
+        <h2 class="responses__title">Mentions <span class="responses__count">{mentions.length}</span></h2>
+        <ul class="responses__list">
+          {mentions.map((item) => {
+            const author = authorOf(item)
+            return (
+              <li class="p-mention h-cite">
+                <a class="u-url" href={responseUrl(item)}>{item.properties.name?.[0] || author.name || responseUrl(item)}</a>
+              </li>
+            )
+          })}
+        </ul>
+      </div>
+    )}
+  </section>
+)}
+
+<style>
+  .responses {
+    display: grid;
+    gap: 1.5rem;
+    margin-block-start: 1.5rem;
+    padding-block-start: 1.5rem;
+    border-block-start: 1px solid var(--g-color-border-default, currentColor);
+  }
+  .responses__title {
+    margin: 0 0 0.5rem;
+    font-size: var(--g-typography-font-size-sm, 1rem);
+  }
+  .responses__count {
+    color: var(--g-color-content-subtle);
+    font-weight: normal;
+  }
+  .responses__faces a {
+    text-decoration: none;
+  }
+  .responses__faces {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .responses__list {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .responses__comment {
+    display: grid;
+    gap: 0.25rem;
+  }
+  .responses__author {
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
+    font-weight: 700;
+    color: inherit;
+    text-decoration: none;
+  }
+  .responses__comment .p-content {
+    margin: 0;
+  }
+  .responses__date {
+    font-size: var(--g-typography-font-size-2xs, 0.8rem);
+    color: var(--g-color-content-subtle);
+  }
+</style>

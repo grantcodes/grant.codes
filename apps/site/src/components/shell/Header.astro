@@ -1,0 +1,70 @@
+---
+// Top bar: site name, primary links, and a menu popover with every archive and search.
+import { site } from '../../lib/site'
+import { GrantCodesButton } from '@grantcodes/ui/components/button/index.js'
+import { GrantCodesPopover } from '@grantcodes/ui/components/popover/index.js'
+import { Menu, Search } from 'lucide-static'
+
+const primaryLinks = [
+  { text: 'Projects', to: '/websites' },
+  { text: 'Photos', to: '/photos' },
+  { text: 'Updates', to: '/updates' },
+  { text: 'About', to: '/about' },
+]
+
+const menuLinks = [
+  { text: 'Home', to: '/' },
+  { text: 'About', to: '/about' },
+  { text: 'Contact', to: '/contact' },
+  { text: 'Where am I?', to: '/where' },
+  { text: 'Projects', to: '/websites' },
+  { text: 'Updates', to: '/updates' },
+  { text: 'Articles', to: '/articles' },
+  { text: 'Notes', to: '/notes' },
+  { text: 'Photos', to: '/photos' },
+  { text: 'Galleries', to: '/collections' },
+  { text: 'Likes', to: '/likes' },
+  { text: 'Replies', to: '/replies' },
+  { text: 'Watches', to: '/watches' },
+  { text: 'Check-ins', to: '/checkins' },
+]
+
+const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/'
+const current = (to: string) => (currentPath === to ? 'page' : undefined)
+---
+
+<header class="site-header">
+  <a href="/" class="site-header__name" aria-current={current('/')}>{site.name}</a>
+
+  <nav class="site-header__nav" aria-label="Primary">
+    <ul class="site-header__links" role="list">
+      {primaryLinks.map((link) => (
+        <li><a href={link.to} aria-current={current(link.to)}>{link.text}</a></li>
+      ))}
+    </ul>
+
+    <GrantCodesPopover client:load placement="bottom-end" class="site-menu">
+      {/* Spread works around grantcodes/ui#231 (global `variant` typing). */}
+      <GrantCodesButton slot="trigger" color="inherit" {...{ variant: 'outline' } as object}>
+        <grantcodes-icon slot="start" aria-hidden="true" set:html={Menu}></grantcodes-icon>
+        Menu
+      </GrantCodesButton>
+
+      <form class="search" method="GET" action="/search" role="search">
+        <label for="menu-search" class="screen-reader-text">Search posts</label>
+        <input id="menu-search" class="search__input" type="search" name="q" placeholder="Search posts" />
+        <button class="search__button" type="submit">
+          <span class="screen-reader-text">Search</span>
+          <grantcodes-icon aria-hidden="true" set:html={Search}></grantcodes-icon>
+        </button>
+      </form>
+
+      <ul class="site-menu__links" role="list">
+        {menuLinks.map((link) => (
+          <li><a href={link.to} aria-current={current(link.to)}>{link.text}</a></li>
+        ))}
+      </ul>
+    </GrantCodesPopover>
+  </nav>
+</header>
+

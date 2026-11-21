@@ -1,0 +1,214 @@
+---
+// Photo gallery; every photo links to its post, which opens in a modal (PostModal).
+// - type "feed": square grid; hidden h-entries keep the feed parseable.
+// - type "collection": a scrolling filmstrip of a collection's photos at their own aspect ratio.
+
+import { site } from '../lib/site'
+import { normalizeInternalUrl } from '../lib/url'
+import { onImageError, photoImage, thumbnailImage, type Photo } from '../lib/photo'
+import { GrantCodesGallery } from '@grantcodes/ui/components/gallery/index.js'
+
+export interface Props {
+  posts: any[]
+  type?: 'feed' | 'collection'
+}
+
+const { posts = [], type = 'feed' } = Astro.props
+
+// Filmstrip photos are at most 14rem tall, so they display about 14rem × their aspect ratio wide.
+const stripSizes = (photo: Photo) =>
+  photo.width && photo.height ? `${((14 * photo.width) / photo.height).toFixed(1)}rem` : undefined
+const photos = posts.flatMap((post) =>
+  (post.photos ?? []).map((photo: Photo) => ({
+    permalink: normalizeInternalUrl(post.url),
+    alt: photo.alt || post.name || '',
+    image: type === 'feed' ? thumbnailImage(photo) : photoImage(photo, '700', stripSizes(photo)),
+  }))
+)
+const onError = onImageError('a')
+---
+
+{photos.length > 0 && (
+  // Spread works around grantcodes/ui#231 (global `variant` typing).
+  <GrantCodesGallery
+    class={`photos-gallery photos-gallery--${type}`}
+    {...(type === 'collection' ? { variant: 'filmstrip' } : {}) as object}
+  >
+    {photos.map((photo) =>
+      type === 'feed' ? (
+        <a href={photo.permalink} class="photos-gallery__item" data-post-modal>
+          <img
+            src={photo.image.src}
+            data-fallback={photo.image.fallback}
+            width={photo.image.width}
+            height={photo.image.height}
+            onerror={onError}
+            alt={photo.alt}
+            loading="lazy"
+          />
+        </a>
+      ) : (
+        <a
+          href={photo.permalink}
+          class="photos-gallery__item h-cite"
+          data-post-modal
+        >
+          <img
+            src={photo.image.src}
+            srcset={photo.image.srcset}
+            sizes={photo.image.sizes}
+            data-fallback={photo.image.fallback}
+            width={photo.image.width}
+            height={photo.image.height}
+            onerror={onError}
+            alt={photo.alt}
+            class="u-photo"
+            loading="lazy"
+          />
+          <data class="u-url" value={photo.permalink} />
+        </a>
+      )
+    )}
+  </GrantCodesGallery>
+)}
+
+<script>
+  // Drag filmstrips with the mouse (touch and trackpads already scroll them natively).
+  for (const gallery of document.querySelectorAll<HTMLElement>('.photos-gallery--collection')) {
+    const strip = () => gallery.shadowRoot?.querySelector<HTMLElement>('.gallery__slot')
+    let start: { x: number; scroll: number } | undefined
+    let dragged = false
+
+    gallery.addEventListener('pointerdown', (event) => {
+      const el = strip()
+      if (event.pointerType !== 'mouse' || event.button !== 0 || !el) return
+      start = { x: event.clientX, scroll: el.scrollLeft }
+      dragged = false
+    })
+    gallery.addEventListener('pointermove', (event) => {
+      const el = strip()
+      if (!start || !el) return
+      const dx = event.clientX - start.x
+      if (!dragged && Math.abs(dx) < 5) return
+      if (!dragged) {
+        dragged = true
+        gallery.setPointerCapture(event.pointerId)
+        gallery.classList.add('is-dragging')
+        // Snapping and smooth scrolling fight a dragged scroll position.
+        el.style.scrollSnapType = 'none'
+        el.style.scrollBehavior = 'auto'
+      }
+      el.scrollLeft = start.scroll - dx
+    })
+    const end = () => {
+      const el = strip()
+      start = undefined
+      gallery.classList.remove('is-dragging')
+      if (el) {
+        el.style.scrollSnapType = ''
+        el.style.scrollBehavior = ''
+      }
+    }
+    gallery.addEventListener('pointerup', end)
+    gallery.addEventListener('pointercancel', end)
+    // A drag isn't a click: don't open the photo it ended on.
+    gallery.addEventListener(
+      'click',
+      (event) => {
+        if (!dragged) return
+        event.preventDefault()
+        event.stopPropagation()
+        dragged = false
+      },
+      true
+    )
+    gallery.addEventListener('dragstart', (event) => event.preventDefault())
+  }
+</script>
+
+{type === 'feed' && posts.length > 0 && (
+  <div class="screen-reader-text">
+    {posts.map((post) => (
+      <article class="h-entry">
+        <a class="u-url" href={normalizeInternalUrl(post.url)}>{post.url}</a>
+        <time class="dt-published" datetime={post.published.toISOString()}>{post.published.toISOString()}</time>
+        {post.photos.map((photo: { url: string }) => <data class="u-photo" value={photo.url} />)}
+        {post.content && <div class="e-content" set:html={post.content.html} />}
+        <span class="p-author h-card"><span class="p-name">{site.author.name}</span></span>
+      </article>
+    ))}
+  </div>
+)}
+
+<style is:global>
+  .photos-gallery {
+    display: block;
+    --gallery-columns: 5;
+    --gallery-gap: 0.25rem;
+  }
+  @media (max-width: 30rem) {
+    .photos-gallery {
+      --gallery-columns: 3;
+    }
+  }
+  /* /photos: one big edge-to-edge wall; more columns as the screen widens. */
+  @media (min-width: 64rem) {
+    .photos-page .photos-gallery {
+      --gallery-columns: 7;
+    }
+  }
+  @media (min-width: 100rem) {
+    .photos-page .photos-gallery {
+      --gallery-columns: 10;
+    }
+  }
+  .photos-gallery__item {
+    display: block;
+    min-inline-size: 0;
+    overflow: hidden;
+    border-radius: 0.25rem;
+  }
+  .photos-gallery__item[hidden] {
+    display: none;
+  }
+  .photos-gallery__item img {
+    display: block;
+    inline-size: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  .photos-gallery__item:hover img,
+  .photos-gallery__item:focus-visible img {
+    transform: scale(1.05);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .photos-gallery__item img {
+      transition: none;
+    }
+  }
+
+  /* Filmstrip: fixed height, each photo at its own width. */
+  .photos-gallery--collection {
+    --filmstrip-height: clamp(9rem, 45vw, 14rem);
+  }
+  /* Run edge to edge inside a card, past its body padding. */
+  grantcodes-card .photos-gallery--collection {
+    margin-inline: calc(-1 * var(--g-spacing-md));
+  }
+  @media (pointer: fine) {
+    .photos-gallery--collection,
+    .photos-gallery--collection .photos-gallery__item {
+      cursor: grab;
+    }
+    .photos-gallery--collection.is-dragging,
+    .photos-gallery--collection.is-dragging .photos-gallery__item {
+      cursor: grabbing;
+    }
+  }
+  .photos-gallery--collection .photos-gallery__item img {
+    inline-size: auto;
+    block-size: 100%;
+    aspect-ratio: auto;
+  }
+</style>

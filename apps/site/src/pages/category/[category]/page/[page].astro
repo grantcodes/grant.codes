@@ -1,0 +1,115 @@
+---
+// Category pagination — /category/:category/page/:page
+// Ported from the legacy Next.js app/(default)/category/[category]/page/[page]/page.tsx
+//
+// Uses the Postr content collection with route-layer filtering
+// instead of direct API fetching. Computes total pages from the
+// in-memory collection so that every page is pre-rendered at build time.
+
+import { site } from '../../../../lib/site'
+import { postDate } from '../../../../lib/post-date'
+import BaseLayout from '../../../../layouts/BaseLayout.astro'
+import PostCard from '../../../../components/PostCard.astro'
+import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
+import { GrantCodesPagination } from '@grantcodes/ui/components/pagination/index.js'
+import { getCollection } from 'astro:content'
+import getCategories from '../../../../lib/categories'
+import { categorySlug as slugOf } from '../../../../lib/category-slug'
+
+export async function getStaticPaths() {
+  const allCategories = await getCategories()
+  const paths: { params: { category: string; page: string } }[] = []
+
+  // Load the collection once to compute page counts for each category
+  const allEntries = await getCollection('posts')
+  const allPosts = allEntries.map((entry) => entry.data)
+
+  const PER_PAGE = 25
+
+  for (const cat of allCategories) {
+    const count = allPosts.filter((post) => post.categories.some((name) => slugOf(name) === cat.slug)).length
+
+    const totalPages = Math.max(Math.ceil(count / PER_PAGE), 1)
+    for (let i = 2; i <= totalPages; i++) {
+      paths.push({ params: { category: cat.slug, page: String(i) } })
+    }
+  }
+
+  return paths
+}
+
+const siteUrl = site.url
+const { category: categorySlug, page } = Astro.params
+const pageNum = parseInt(page ?? '1')
+
+// Look up the category
+const allCategories = await getCategories()
+const category = allCategories.find((cat) => cat.slug === categorySlug)
+const categoryName = category?.name ?? categorySlug ?? ''
+const pageTitle = category
+  ? `Category: ${category.name} page ${pageNum}`
+  : `Category: ${categorySlug} page ${pageNum}`
+
+// Fetch and filter from the canonical collection
+let posts: any[] = []
+let totalPages = 1
+
+if (category) {
+  const allEntries = await getCollection('posts')
+  const allPosts = allEntries.map((entry) => entry.data)
+
+  const filtered = allPosts.filter((post) => post.categories.some((name) => slugOf(name) === category.slug))
+
+  // Sort by canonical date descending
+  filtered.sort((a, b) => {
+    return postDate(b).getTime() - postDate(a).getTime()
+  })
+
+  // In-memory pagination
+  const PER_PAGE = 25
+  totalPages = Math.max(Math.ceil(filtered.length / PER_PAGE), 1)
+  const startIndex = (pageNum - 1) * PER_PAGE
+  posts = filtered.slice(startIndex, startIndex + PER_PAGE)
+}
+
+// Calculate prev/next
+const prevPage = pageNum > 1 ? pageNum - 1 : null
+const nextPage = pageNum < totalPages ? pageNum + 1 : null
+const baseUrl = `/category/${categorySlug}`
+const prevHref = prevPage === 1 ? baseUrl : prevPage ? `${baseUrl}/page/${prevPage}` : ''
+const nextHref = nextPage ? `${baseUrl}/page/${nextPage}` : ''
+---
+
+<BaseLayout title={pageTitle} canonicalUrl={`${siteUrl}${baseUrl}/page/${page}`}>
+  <h2 class="page-title">{pageTitle}</h2>
+
+  {!category && (
+    <GrantCodesCard>
+      <p>Category not found: {categorySlug}.</p>
+      <p><a href="/category">← All Categories</a></p>
+    </GrantCodesCard>
+  )}
+
+  {category && posts.length === 0 && (
+    <GrantCodesCard>
+      <p>No posts found for "{categoryName}" on page {pageNum}.</p>
+    </GrantCodesCard>
+  )}
+
+  {category && posts.length > 0 && (
+    <>
+      <div class="post-list">
+        {posts.map((post) => (
+          <PostCard post={post} compact />
+        ))}
+      </div>
+
+      <GrantCodesPagination
+        previousHref={prevHref}
+        nextHref={nextHref}
+        page={pageNum}
+        pages={totalPages}
+      />
+    </>
+  )}
+</BaseLayout>

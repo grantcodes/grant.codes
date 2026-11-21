@@ -1,0 +1,44 @@
+---
+// New Post — Micropub composer landing page
+//
+// Status: STEADY-STATE PLACEHOLDER — Micropub composer is part of the
+// postrchild browser extension and does not need an Astro-side rebuild.
+// This page is the valid target route for the extension's compose flow.
+//
+// Original Next.js behavior:
+// - Static page with Post component rendering a new-post template
+// - Used with the postrchild browser extension for Micropub drafting
+// - ArticleLayout, robots: noindex
+//
+// Astro approach (static mode):
+// - Static page providing the landing route the extension expects
+// - The composer itself lives in the postrchild extension, not in the site
+
+import { site } from '../../lib/site'
+import ArticleLayout from '../../layouts/ArticleLayout.astro'
+import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
+
+const siteUrl = site.url
+---
+
+<ArticleLayout title="New Post" canonicalUrl={`${siteUrl}/new`} noindex={true}>
+  <h2 class="page-title">New Post</h2>
+
+  <GrantCodesCard>
+    <p>
+      This page is used with the postrchild browser extension to compose and publish
+      new posts via the <a href="https://micropub.spec.indieweb.org/">Micropub</a> API.
+    </p>
+
+    <p>The Micropub composer lives in the postrchild browser extension.
+    This page provides the stable route that the extension targets for its
+    compose-and-publish workflow.</p>
+
+    <hr />
+
+    <p class="text-muted" style="margin-bottom: 0;">
+      The postrchild extension uses this page to provide a template for drafting
+      new articles directly on grant.codes.
+    </p>
+  </GrantCodesCard>
+</ArticleLayout>

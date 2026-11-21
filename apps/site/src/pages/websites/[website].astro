@@ -1,0 +1,81 @@
+---
+// Website detail page
+// Ported from the legacy Next.js app/(default)/websites/[website]/page.tsx
+// Wave 11: migrated to SSR GrantCodesCard with nav links in footer slot
+
+import { site } from '../../lib/site'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
+import { ArrowLeft, ExternalLink } from 'lucide-static'
+import websites from '../../data/websites.js'
+
+const siteUrl = site.url
+
+export async function getStaticPaths() {
+  return websites.map((website) => ({
+    params: { website: website.slug },
+  }))
+}
+
+const { website: slug } = Astro.params
+const website = websites.find((w) => w.slug === slug)
+
+if (!website) {
+  return Astro.redirect('/websites', 302)
+}
+
+const { title, screenshot, url, content = '' } = website
+---
+
+<BaseLayout title={title} canonicalUrl={`${siteUrl}/websites/${slug}`}>
+  <GrantCodesCard>
+    <header >
+      {screenshot && (
+        <img
+          src={screenshot}
+          alt={`${title} Screenshot`}
+          loading="lazy"
+        />
+      )}
+      <h1 class="p-name post__title">{title}</h1>
+    </header>
+
+    <main class="website-content" set:html={content} />
+
+    <div class="website-nav-row">
+      <a href="/websites" class="website-nav-link">
+        <grantcodes-icon set:html={ArrowLeft}></grantcodes-icon>
+        All Projects
+      </a>
+      {url && (
+        <a href={url} target="_blank" rel="noopener noreferrer" class="website-nav-link">
+          View Project
+          <grantcodes-icon set:html={ExternalLink}></grantcodes-icon>
+        </a>
+      )}
+    </div>
+  </GrantCodesCard>
+</BaseLayout>
+
+<style>
+  .website-nav-row {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--g-spacing-sm);
+  }
+
+  .website-nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--g-spacing-sm, 0.25rem);
+      text-decoration: none;
+      font: inherit;
+      color: inherit;
+  }
+
+  .website-nav-link:hover {
+      text-decoration: underline;
+  }
+</style>

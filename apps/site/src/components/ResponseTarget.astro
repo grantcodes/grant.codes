@@ -1,0 +1,36 @@
+---
+// What a like/repost/bookmark/reply points at: an allowlisted oEmbed player, else a YouTube
+// player built from the URL, else a link preview.
+// Renders nothing when neither is available (callers then show the bare link).
+import type { Mf2Item } from '@postr/core'
+import OEmbedFrame from './OEmbedFrame.astro'
+import YouTubeEmbed from './YouTubeEmbed.astro'
+import ReferencePreview from './ReferencePreview.astro'
+import { getEmbedFrame, getReference, getYouTubeId } from '../lib/reference'
+
+export interface Props {
+  url: string
+  entry?: Mf2Item
+  /** Microformat class for the link, e.g. `u-like-of`. */
+  relation?: string
+}
+
+const { url, entry, relation } = Astro.props
+const frame = getEmbedFrame(url, entry)
+const youtubeId = getYouTubeId(url)
+const reference = getReference(url, entry)
+---
+
+{frame ? (
+  <>
+    <OEmbedFrame frame={frame} />
+    <data class={relation} value={url} />
+  </>
+) : youtubeId ? (
+  <>
+    <YouTubeEmbed id={youtubeId} title={reference?.name} />
+    <data class={relation} value={url} />
+  </>
+) : reference ? (
+  <ReferencePreview reference={reference} relation={relation} />
+) : null}

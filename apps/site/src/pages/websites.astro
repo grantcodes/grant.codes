@@ -1,0 +1,11 @@
+---
+import { site } from '../lib/site'
+import BaseLayout from '../layouts/BaseLayout.astro'
+import ProjectList from '../components/ProjectList.astro'
+import websites from '../data/websites.js'
+---
+
+<BaseLayout title="Projects" canonicalUrl={`${site.url}/websites`}>
+  <h1 class="page-title">Projects</h1>
+  <ProjectList projects={websites} />
+</BaseLayout>

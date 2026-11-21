@@ -1,0 +1,50 @@
+---
+// Full-size image viewer for any `a[data-zoom]` link (its href is the full image), in a
+// fullscreen grantcodes-dialog, the design system's media-viewer mode.
+import { GrantCodesDialog } from '@grantcodes/ui/components/dialog/index.js'
+---
+
+{/* Client-only: server-rendered, grantcodes-dialog 4.1.2 hydrates without its header and dismiss button. */}
+<GrantCodesDialog client:only="@grantcodes/astro" fullscreen class="lightbox" aria-label="Image viewer">
+  <img class="lightbox__image" alt="" />
+</GrantCodesDialog>
+
+<script>
+  type Dialog = HTMLElement & { open: boolean }
+  // The dialog is client-only, so it may not exist yet when this runs; look it up on use.
+  const lightbox = () => document.querySelector<Dialog>('grantcodes-dialog.lightbox')
+  const image = () => lightbox()?.querySelector<HTMLImageElement>('.lightbox__image')
+
+  document.addEventListener('click', async (event) => {
+    if (!(event.target instanceof Element)) return
+    const link = event.target.closest<HTMLAnchorElement>('a[data-zoom]')
+    const dialog = lightbox()
+    const img = image()
+    if (!link || !dialog || !img || event.metaKey || event.ctrlKey || event.shiftKey) return
+    event.preventDefault()
+    // The dialog fills the screen, so it doesn't change size as the image loads.
+    img.src = link.href
+    img.alt = link.querySelector('img')?.alt ?? ''
+    await customElements.whenDefined('grantcodes-dialog')
+    dialog.open = true
+  })
+
+  // Clear after the exit transition so the image doesn't vanish mid-fade.
+  document.addEventListener('toggle', (event) => {
+    const dialog = lightbox()
+    if (event.target !== dialog || !(event instanceof CustomEvent) || event.detail.open) return
+    setTimeout(() => dialog?.open || image()?.removeAttribute('src'), 300)
+  })
+</script>
+
+<style is:global>
+  .lightbox__image {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: contain;
+  }
+  a[data-zoom] {
+    cursor: zoom-in;
+  }
+</style>

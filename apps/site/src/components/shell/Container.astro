@@ -1,0 +1,22 @@
+---
+// Site shell: top bar, topography band, one content column, footer.
+// `size`: 'normal' reading column, 'wide' for maps/summaries, 'article' for long reads, 'full' edge to edge.
+import Header from './Header.astro'
+import Footer from './Footer.astro'
+import Topography from './Topography.astro'
+
+export interface Props {
+  size?: 'normal' | 'wide' | 'article' | 'full'
+}
+
+const { size = 'normal' } = Astro.props
+---
+
+<div class="shell">
+  <div class="shell__topography" aria-hidden="true"><Topography /></div>
+  <Header />
+  <main class={`main-content main-content--${size}`}>
+    <slot />
+  </main>
+  <Footer />
+</div>
