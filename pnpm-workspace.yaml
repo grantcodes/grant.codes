@@ -9,12 +9,12 @@ allowBuilds:
   unrs-resolver: true
 blockExoticSubdeps: false
 minimumReleaseAgeExclude:
-  - '@postr/astro@0.1.0-alpha.8'
-  - '@postr/core@2.0.0-alpha.7'
-  - '@postr/plugin-feeds@2.0.0-alpha.7'
-  - '@postr/plugin-webmention-endpoint@2.0.0-alpha.7'
-  - '@postr/syndicator-instagram@3.0.0-alpha.7'
-  - '@postr/syndicator-superfeedr@3.0.0-alpha.7'
-  - '@postr/syndicator-telegram@2.0.0-alpha.7'
+  - '@postr/astro@0.1.0-alpha.9'
+  - '@postr/core@2.0.0-alpha.8'
+  - '@postr/plugin-feeds@2.0.0-alpha.8'
+  - '@postr/plugin-webmention-endpoint@2.0.0-alpha.8'
+  - '@postr/syndicator-instagram@3.0.0-alpha.8'
+  - '@postr/syndicator-superfeedr@3.0.0-alpha.8'
+  - '@postr/syndicator-telegram@2.0.0-alpha.8'
   - '@grantcodes/ui@4.1.4'
   - '@grantcodes/astro@1.3.4'

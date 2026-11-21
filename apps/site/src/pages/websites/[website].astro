@@ -3,6 +3,8 @@
 // Ported from the legacy Next.js app/(default)/websites/[website]/page.tsx
 // Wave 11: migrated to SSR GrantCodesCard with nav links in footer slot
 
+export const prerender = true
+
 import { site } from '../../lib/site'
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'

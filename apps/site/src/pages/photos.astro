@@ -13,24 +13,15 @@
 // - Pagination: <Pagination noNext={posts.length < 50} />
 
 import { site } from '../lib/site'
-import { postDate } from '../lib/post-date'
+import { getArchivePosts } from '../lib/archive'
 import FullWidthLayout from '../layouts/FullWidthLayout.astro'
 import PhotosGallery from '../components/PhotosGallery.astro'
 import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
 import { GrantCodesPagination } from '@grantcodes/ui/components/pagination/index.js'
-import { getCollection } from 'astro:content'
 
 const siteUrl = site.url
 
-// Fetch all entries from the canonical posts collection and filter for photos.
-// Sorting by canonical date (newest first) ensures deterministic output.
-const allEntries = await getCollection('posts')
-const allPhotos = allEntries
-  .map((entry) => entry.data)
-  .filter((post) => post?.postType === 'photo')
-  .sort((a, b) => {
-    return postDate(b).getTime() - postDate(a).getTime()
-  })
+const allPhotos = (await getArchivePosts()).filter((post) => post.postType === 'photo')
 
 // In-memory pagination — first page, 120 per page
 const PER_PAGE = 120

@@ -9,25 +9,15 @@
 // Ported from the legacy Next.js app/(default)/[typeOrYear]/page.tsx (articles case)
 
 import { site } from '../lib/site'
-import { postDate } from '../lib/post-date'
+import { getArchivePosts } from '../lib/archive'
 import BaseLayout from '../layouts/BaseLayout.astro'
 import PostCard from '../components/PostCard.astro'
 import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
 import { GrantCodesPagination } from '@grantcodes/ui/components/pagination/index.js'
-import { getCollection } from 'astro:content'
 
 const siteUrl = site.url
 
-// Fetch all entries from the canonical posts collection and filter for articles.
-// The collection is built at build time by the postrLoader.
-// Sorting by canonical date (newest first) ensures deterministic output.
-const allEntries = await getCollection('posts')
-const articles = allEntries
-  .map((entry) => entry.data)
-  .filter((post) => post?.postType === 'article')
-  .sort((a, b) => {
-    return postDate(b).getTime() - postDate(a).getTime()
-  })
+const articles = (await getArchivePosts()).filter((post) => post.postType === 'article')
 
 // In-memory pagination — first page, 25 per page
 const PER_PAGE = 25

@@ -3,6 +3,8 @@
 // Ported from the legacy Next.js app/(default)/uses/page.tsx
 // Wave 6: migrated legacy .card blocks to SSR GrantCodesCard
 
+export const prerender = true
+
 import { site } from '../lib/site'
 import BaseLayout from '../layouts/BaseLayout.astro'
 import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
