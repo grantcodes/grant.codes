@@ -17,6 +17,8 @@
 // - POST /api/pay retired; implement in apps/api if payments return later
 // - /pay/thanks preserved as static page
 
+export const prerender = true
+
 import { site } from '../../lib/site'
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'

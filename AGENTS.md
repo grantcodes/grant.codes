@@ -18,7 +18,7 @@ Two packages exist in this repo, both run as services:
 
 | Service | Location | Description |
 |---|---|---|
-| **Frontend** | `apps/site` | Astro 5 static site, port 3000 |
+| **Frontend** | `apps/site` | Astro on-demand site (dev server port 3000; rendered by the API in production) |
 | **Backend** | `apps/api` | Express + Hono API server, port 4000 |
 
 The backend was imported into `apps/api` as a one-time snapshot from the previously standalone `backend.grant.codes` repository.
@@ -35,7 +35,7 @@ Page component
   → components/Post  (render by post type)
 ```
 
-**Deployment:** one container, built by Railpack from the root `railpack.json`. The image builds only the API. `pnpm start` builds the site against the API's SQLite database, which is mounted at runtime, then starts the API, which serves `apps/site/dist` as static files after its own routes. The API also implements the rules the Next site had in `next.config.js` (`apps/api/src/index.ts`):
+**Deployment:** one container, built by Railpack from the root `railpack.json`. The image builds only the API. `pnpm start` builds the site (`@astrojs/node` middleware mode), so its `NEXT_PUBLIC_*` values come from the runtime environment, then starts the API. After its own routes and the site's static files (`apps/site/dist/client`), the API hands every other request to the site's handler, which renders it from the postr SQLite database through the `postrLiveLoader` collection in `apps/site/src/live.config.ts`. New posts appear without a rebuild: `lib/archive.ts` caches the post list until the database file changes. The API also implements the rules the Next site had in `next.config.js` (`apps/api/src/index.ts`):
 
 | Rule | Type |
 |---|---|
@@ -49,8 +49,7 @@ Page component
 
 | Route | Decision |
 |---|---|
-| `POST /api/revalidate` | Retired. Astro static has no Next ISR equivalent. Use `POST /api/deploy-webhook` instead for publish-triggered rebuilds. |
-| `POST /api/deploy-webhook` | Active in `apps/api`. Triggers an external deploy webhook after publishing. Auth via `MICROPUB_TOKEN` (Bearer token). Returns 401 if token missing, 501 if `DEPLOY_WEBHOOK_URL` not set, 502 on fetch failure, 200 on success. |
+| `POST /api/revalidate`, `POST /api/deploy-webhook` | Retired. Pages render per request, so publishing needs no revalidation or rebuild. |
 | `GET /api/last-location` | Active in `apps/api`. Returns live location from Dawarich proxy, or `{ location: false }` if unavailable. |
 | `POST /api/pay` | Retired for now. Payments are disabled and Astro pay pages are static. If payments return later, implement a new route in `apps/api`. |
 
@@ -137,9 +136,9 @@ Always pass posts through this before rendering.
 
 CSS theming is provided by `@grantcodes/ui/styles/themes/grantcodes.css`, imported in the root layout (`src/layouts/Layout.astro`).
 
-### Static Params
+### Rendering
 
-Year/type archive pages use `generateStaticParams()` to pre-render routes at build time. `lib/get/years.ts` and `lib/get/post-types.ts` provide the param values.
+Pages that read posts render on demand and validate their own params, returning a 404 for an unknown type, year, category or page number. Pages that don't read posts (`about`, `contact`, `uses`, `websites`, `pay`, `slides`, `new`, `where`) opt into prerendering. Keep the subdomain rewrite targets (`/where/`, `/about/`, `/pay/`) prerendered, because the API serves them as static files.
 
 ### Image Optimization
 

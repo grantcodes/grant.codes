@@ -16,7 +16,6 @@ export interface EnvConfig {
 	INSTAGRAM_PASSWORD?: string | undefined;
 	INSTAGRAM_PROXY?: string | undefined;
 	HUB?: string | undefined;
-	DEPLOY_WEBHOOK_URL?: string | undefined;
 }
 
 function validateEnv(): EnvConfig {

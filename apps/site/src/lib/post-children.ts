@@ -1,17 +1,17 @@
-import { getEntry } from 'astro:content'
+import { getLiveEntry } from 'astro:content'
 import { site } from './site'
 
 const sitePrefix = `${site.url}/`
 
-/** Entries of a collection post's children, which postr stores as absolute URLs. */
+/** Posts in a collection post, which postr stores as absolute URLs in `children`. */
 export async function getChildren(post: { children?: unknown }) {
   if (!Array.isArray(post.children)) return []
-  const entries = await Promise.all(
+  const results = await Promise.all(
     post.children.map((url) =>
       typeof url === 'string' && url.startsWith(sitePrefix)
-        ? getEntry('posts', url.slice(sitePrefix.length))
+        ? getLiveEntry('posts', { id: url.slice(sitePrefix.length) })
         : undefined
     )
   )
-  return entries.flatMap((entry) => (entry ? [entry.data] : []))
+  return results.flatMap((result) => (result?.entry ? [result.entry.data] : []))
 }

@@ -1,15 +1,32 @@
-import { getCollection } from 'astro:content'
+import { getLiveCollection } from 'astro:content'
 import { postDate } from './post-date'
-import getMonthData from './month-data'
-import getMonthDataFiles from './month-data-files'
+import { databaseVersion } from './database'
+import { getMonthData, monthDataKeys } from './month-data'
 
-export type ArchivePost = Awaited<ReturnType<typeof getArchivePosts>>[number]
+export type ArchivePost = Awaited<ReturnType<typeof loadArchivePosts>>[number]
 
-/** Every post, newest first by the date 1.x archived it under. */
-export async function getArchivePosts() {
-  return (await getCollection('posts'))
+async function loadArchivePosts() {
+  const { entries, error } = await getLiveCollection('posts')
+  if (error || !entries) throw error
+  return entries
     .map((entry) => entry.data)
     .sort((a, b) => postDate(b).getTime() - postDate(a).getTime())
+}
+
+// Loading every post takes most of a second, so reuse the list until the database changes.
+let cached: { version: string; posts: ReturnType<typeof loadArchivePosts> } | undefined
+
+/** Every post, newest first by the date 1.x archived it under. */
+export function getArchivePosts() {
+  const version = databaseVersion()
+  if (cached?.version !== version) {
+    const posts = loadArchivePosts()
+    cached = { version, posts }
+    posts.catch(() => {
+      if (cached?.posts === posts) cached = undefined
+    })
+  }
+  return cached.posts
 }
 
 /** Posts for the timeline, home page and date archives: unlisted posts only appear on their type's page. */
@@ -31,7 +48,7 @@ export function countByType(posts: ArchivePost[]) {
 
 /** Years and months that have posts or a monthly data file, oldest first. */
 export async function getArchiveMonths() {
-  const months = new Set(getMonthDataFiles())
+  const months = new Set(monthDataKeys)
   for (const post of await getListedPosts()) {
     const date = postDate(post)
     months.add(`${date.getFullYear()}/${date.getMonth() + 1}`)
@@ -44,9 +61,9 @@ export async function getArchiveMonths() {
 export type Track = Array<[lat: number, lng: number]>
 
 /** The month's location track as [lat, lng] points, thinned to at most `maxPoints`. */
-export function getMonthTrack(year: number, month: number, maxPoints = 1500): Track {
+export async function getMonthTrack(year: number, month: number, maxPoints = 1500): Promise<Track> {
   const coordinates: Array<[number, number]> =
-    getMonthData(year, month)?.geojson?.geometry?.coordinates ?? []
+    (await getMonthData(year, month))?.geojson?.geometry?.coordinates ?? []
   const step = Math.max(1, Math.ceil(coordinates.length / maxPoints))
   return coordinates
     .filter((_, i) => i % step === 0 || i === coordinates.length - 1)

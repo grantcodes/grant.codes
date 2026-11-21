@@ -2,10 +2,9 @@
 import UpdatesTimeline from '../../../components/UpdatesTimeline.astro'
 import { getUpdates, UPDATES_PER_PAGE } from '../../../lib/updates'
 
-export async function getStaticPaths() {
-  const pages = Math.ceil((await getUpdates()).length / UPDATES_PER_PAGE)
-  return Array.from({ length: Math.max(pages - 1, 0) }, (_, i) => ({ params: { page: String(i + 2) } }))
-}
+const page = Number(Astro.params.page)
+const pages = Math.ceil((await getUpdates()).length / UPDATES_PER_PAGE)
+if (!Number.isInteger(page) || page < 2 || page > pages) return new Response(null, { status: 404 })
 ---
 
-<UpdatesTimeline page={Number(Astro.params.page)} />
+<UpdatesTimeline page={page} />

@@ -1,52 +1,26 @@
 ---
 // Photos gallery pagination — /photos/page/2, /photos/page/3, etc.
 // Ported from the legacy Next.js app/(full-width)/photos/page/[page]/page.tsx
-//
-// Uses the Postr content collection with route-layer filtering.
-// Computes total pages from the in-memory collection so that
-// every page is pre-rendered at build time.
 
 import { site } from '../../../lib/site'
-import { postDate } from '../../../lib/post-date'
+import { getArchivePosts } from '../../../lib/archive'
 import FullWidthLayout from '../../../layouts/FullWidthLayout.astro'
 import PhotosGallery from '../../../components/PhotosGallery.astro'
 import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
 import { GrantCodesPagination } from '@grantcodes/ui/components/pagination/index.js'
-import { getCollection } from 'astro:content'
-
-export async function getStaticPaths() {
-  const allEntries = await getCollection('posts')
-  const photoCount = allEntries.filter(
-    (e) => e.data?.postType === 'photo'
-  ).length
-
-  const PER_PAGE = 120
-  const totalPages = Math.max(Math.ceil(photoCount / PER_PAGE), 1)
-
-  // Pre-generate all pages (page 1 is /photos, start from page 2)
-  return Array.from({ length: totalPages - 1 }, (_, i) => ({
-    params: { page: String(i + 2) },
-  }))
-}
 
 const { page } = Astro.params
 
 const siteUrl = site.url
-const pageNum = parseInt(page ?? '2')
+const pageNum = Number(page)
 
-// Fetch and filter photos from the canonical collection.
-// Sorting by canonical date (newest first) ensures deterministic output.
-const allEntries = await getCollection('posts')
-const allPhotos = allEntries
-  .map((entry) => entry.data)
-  .filter((post) => post?.postType === 'photo')
-  .sort((a, b) => {
-    return postDate(b).getTime() - postDate(a).getTime()
-  })
+const allPhotos = (await getArchivePosts()).filter((post) => post.postType === 'photo')
 
-// In-memory pagination
 const PER_PAGE = 120
 const totalPages = Math.max(Math.ceil(allPhotos.length / PER_PAGE), 1)
+if (!Number.isInteger(pageNum) || pageNum < 2 || pageNum > totalPages) {
+  return new Response(null, { status: 404 })
+}
 const startIndex = (pageNum - 1) * PER_PAGE
 const posts = allPhotos.slice(startIndex, startIndex + PER_PAGE)
 

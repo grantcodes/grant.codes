@@ -1,51 +1,26 @@
 ---
 // Notes archive pagination — /notes/page/2, /notes/page/3, etc.
-//
-// Uses the Postr content collection with route-layer filtering.
-// Computes total pages from the in-memory collection so that
-// every page is pre-rendered at build time.
 
 import { site } from '../../../lib/site'
-import { postDate } from '../../../lib/post-date'
+import { getArchivePosts } from '../../../lib/archive'
 import BaseLayout from '../../../layouts/BaseLayout.astro'
 import PostCard from '../../../components/PostCard.astro'
 import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
 import { GrantCodesPagination } from '@grantcodes/ui/components/pagination/index.js'
-import { getCollection } from 'astro:content'
-
-export async function getStaticPaths() {
-  const allEntries = await getCollection('posts')
-  const noteCount = allEntries.filter(
-    (e) => e.data?.postType === 'note'
-  ).length
-
-  const PER_PAGE = 25
-  const totalPages = Math.max(Math.ceil(noteCount / PER_PAGE), 1)
-
-  return Array.from({ length: totalPages - 1 }, (_, i) => ({
-    params: { page: String(i + 2) }, // page 2, 3, 4…
-  }))
-}
 
 const { page } = Astro.params
-const pageNum = parseInt(page ?? '2')
+const pageNum = Number(page)
 
 const siteUrl =
   site.url
 
-// Fetch and filter notes from the canonical collection.
-// Sorting by canonical date (newest first) ensures deterministic output.
-const allEntries = await getCollection('posts')
-const notes = allEntries
-  .map((entry) => entry.data)
-  .filter((post) => post?.postType === 'note')
-  .sort((a, b) => {
-    return postDate(b).getTime() - postDate(a).getTime()
-  })
+const notes = (await getArchivePosts()).filter((post) => post.postType === 'note')
 
-// In-memory pagination
 const PER_PAGE = 25
 const totalPages = Math.max(Math.ceil(notes.length / PER_PAGE), 1)
+if (!Number.isInteger(pageNum) || pageNum < 2 || pageNum > totalPages) {
+  return new Response(null, { status: 404 })
+}
 const startIndex = (pageNum - 1) * PER_PAGE
 const pageNotes = notes.slice(startIndex, startIndex + PER_PAGE)
 

@@ -39,51 +39,40 @@ const TYPE_SLUG_MAP: Record<string, string> = {
   watches: 'watch',
 }
 
-export async function getStaticPaths() {
-  const types = [
-    'likes', 'replies', 'bookmarks', 'reposts', 'checkins',
-    'events', 'videos', 'audio', 'collections', 'journals',
-    'listens', 'quotes', 'reads', 'rsvps', 'watches',
-  ]
-  const years = [...new Set((await getArchiveMonths()).map(([year]) => year))]
-  return [
-    ...types.map((type) => ({ params: { typeOrYear: type } })),
-    ...years.map((year, i) => ({
-      params: { typeOrYear: String(year) },
-      props: { previousYear: years[i - 1], nextYear: years[i + 1] },
-    })),
-  ]
-}
-
-const { typeOrYear } = Astro.params
-const { previousYear, nextYear } = Astro.props as { previousYear?: number; nextYear?: number }
+const { typeOrYear = '' } = Astro.params
 const siteUrl = site.url
-const isYear = /^\d{4}$/.test(typeOrYear ?? '')
-const allPosts = await getArchivePosts()
+const isYear = /^\d{4}$/.test(typeOrYear)
 
 // ── Year summary ──
 const year = Number(typeOrYear)
-const yearMonths = isYear
-  ? (await getArchiveMonths()).filter(([y]) => y === year).map(([, month]) => month)
-  : []
+const archiveMonths = isYear ? await getArchiveMonths() : []
+const years = [...new Set(archiveMonths.map(([y]) => y))]
+const yearIndex = years.indexOf(year)
+if (isYear ? yearIndex === -1 : !Object.hasOwn(TYPE_SLUG_MAP, typeOrYear)) {
+  return new Response(null, { status: 404 })
+}
+const previousYear = years[yearIndex - 1]
+const nextYear = years[yearIndex + 1]
+const yearMonths = archiveMonths.filter(([y]) => y === year).map(([, month]) => month)
 const yearPosts = isYear ? (await getListedPosts()).filter((post) => inMonth(post, year)) : []
 const months = yearMonths.map((month) => ({
   href: `/${year}/${month}`,
   label: monthNames[month - 1].slice(0, 3),
   count: yearPosts.filter((post) => inMonth(post, year, month)).length,
 }))
-const tracks = yearMonths.map((month) => getMonthTrack(year, month, 300)).filter((track) => track.length)
-const km = isYear
-  ? yearMonths.reduce((sum, month) => sum + trackDistanceKm(getMonthTrack(year, month, Infinity)), 0)
-  : 0
+const tracks = (await Promise.all(yearMonths.map((month) => getMonthTrack(year, month, 300)))).filter(
+  (track) => track.length
+)
+const fullTracks = await Promise.all(yearMonths.map((month) => getMonthTrack(year, month, Infinity)))
+const km = fullTracks.reduce((sum, track) => sum + trackDistanceKm(track), 0)
 
 // ── Type archive ──
 const meta = await getMetadata({ params: { typeOrYear } })
-const pageTitle = meta?.title ?? typeOrYear ?? ''
+const pageTitle = meta?.title ?? typeOrYear
 const PER_PAGE = 25
 const typePosts = isYear
   ? []
-  : allPosts.filter((post) => post.postType === (TYPE_SLUG_MAP[typeOrYear ?? ''] ?? typeOrYear))
+  : (await getArchivePosts()).filter((post) => post.postType === TYPE_SLUG_MAP[typeOrYear])
 const totalPages = Math.max(Math.ceil(typePosts.length / PER_PAGE), 1)
 const pagePosts = typePosts.slice(0, PER_PAGE)
 ---
