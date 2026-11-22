@@ -7,6 +7,7 @@ export const prerender = true
 import { site } from '../lib/site'
 import FullWidthLayout from '../layouts/FullWidthLayout.astro'
 import ProfilePhoto from '../components/ProfilePhoto.astro'
+import ProjectList from '../components/ProjectList.astro'
 import { GrantCodesButton } from '@grantcodes/ui/components/button/index.js'
 import { BriefcaseBusiness, Camera, GitFork, Globe, Mail } from 'lucide-static'
 import websites from '../data/websites.js'
@@ -404,20 +405,7 @@ const upcomingWebsites = websites.slice(0, 6)
         <div class="about-section__content">
           <div class="about-subsection">
             <div class="about-subsection__content">
-              <div class="websites-grid">
-                {upcomingWebsites.map((website) => (
-                  <a href={`/websites/${website.slug}`} class="website-tile" title={website.title}>
-                    <span class="screen-reader-text">{website.title}</span>
-                    <img
-                      class="website-tile__image"
-                      src={website.thumbnail}
-                      loading="lazy"
-                      aria-hidden="true"
-                      alt=""
-                    />
-                  </a>
-                ))}
-              </div>
+              <ProjectList projects={upcomingWebsites} />
               {websites.length > 6 && (
                 <GrantCodesButton href="/websites" style="margin-top: 1rem;">View All</GrantCodesButton>
               )}
@@ -766,42 +754,5 @@ const upcomingWebsites = websites.slice(0, 6)
   /* Print card */
   .about-print-card {
     /* Print-friendly cards get a subtle border/shadow in print */
-  }
-
-  /* Websites grid reused from websites page */
-  .websites-grid {
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: repeat(2, minmax(1rem, 1fr));
-    list-style: none;
-  }
-
-  .website-tile {
-    display: block;
-    position: relative;
-    padding: 1rem;
-    background-color: rgba(255, 255, 255, 0.9);
-    border-radius: var(--border-radius);
-    box-shadow: 0 0.5rem 3rem rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(1rem);
-    width: 100%;
-    max-width: 16rem;
-    transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s, filter 0.2s;
-    text-decoration: none;
-  }
-
-  .website-tile:hover,
-  .website-tile:focus {
-    transform: translateY(-0.3em) scale(1.03);
-    background-color: rgba(255, 255, 255, 1);
-    box-shadow: 0 0.5rem 3rem rgba(0, 0, 0, 0.2);
-  }
-
-  .website-tile__image {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    object-position: center;
   }
 </style>

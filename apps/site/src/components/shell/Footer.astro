@@ -28,7 +28,7 @@ const thisSite = [
   <GrantCodesFooter columns={3}>
     <GrantCodesFooterColumn>
       <p class="site-footer__name">{site.name}</p>
-      <p>{author.name} makes fun, accessible, sustainable websites. A Scot living in Barcelona.</p>
+      <p>{author.name} makes fun, accessible, sustainable websites.</p>
       <div class="social-links">
         <a href={`mailto:${author.email}`} rel="me" aria-label="Email">
           <grantcodes-icon style="font-size: 24px" set:html={Mail}></grantcodes-icon>
@@ -58,8 +58,7 @@ const thisSite = [
 
     <div slot="bottom" class="h-card">
       <p>
-        © <span class="p-name">{author.name}</span>, 2012–{new Date().getFullYear()}. Published with
-        <a href="https://github.com/grantcodes/postr">postr</a>.
+        © <span class="p-name">{author.name}</span>, 2012–{new Date().getFullYear()}.
       </p>
       <a href={site.url} class="u-url screen-reader-text" rel="me">{site.name}</a>
       <data class="p-email" value={`mailto:${author.email}`} />
