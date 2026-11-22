@@ -1,109 +1,127 @@
-import { fileURLToPath } from 'node:url'
-import { dirname, join } from 'node:path'
-import { mkdirSync, writeFileSync } from 'node:fs'
-import dotenv from 'dotenv'
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
 import getPoints from './lib/get-monthly-points.js'
 import getPosts from './lib/get-monthly-posts.js'
 import getWeight from './lib/get-monthly-weight.js'
 
-dotenv.config({ path: '.env' })
-dotenv.config({ path: '.env.production' })
+// Local runs read secrets from the repo root env file; CI passes them as env vars.
+const envFile = new URL('../../../.env', import.meta.url)
+if (existsSync(envFile)) process.loadEnvFile(envFile)
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
+// Matches the jitter threshold the site uses when measuring track distance.
+const MIN_POINT_DISTANCE_M = 50
 
-const getData = async ({ year, month } = {}) => {
-  console.log(`[Getting data for ${year}/${month}]`)
+const distanceM = ([lng1, lat1], [lng2, lat2]) => {
+  const rad = Math.PI / 180
+  const a =
+    Math.sin(((lat2 - lat1) * rad) / 2) ** 2 +
+    Math.cos(lat1 * rad) *
+      Math.cos(lat2 * rad) *
+      Math.sin(((lng2 - lng1) * rad) / 2) ** 2
+  return 12742000 * Math.asin(Math.sqrt(a))
+}
 
-  const data = {
-    postTypes: {},
+/** GeoJSON [lng, lat] coordinates, dropping points within MIN_POINT_DISTANCE_M of the last one kept. */
+const toCoordinates = (points) => {
+  const coordinates = []
+  for (const { latitude, longitude } of points) {
+    const point = [Number.parseFloat(longitude), Number.parseFloat(latitude)]
+    if (!point.every(Number.isFinite)) continue
+    const last = coordinates.at(-1)
+    if (!last || distanceM(last, point) >= MIN_POINT_DISTANCE_M) {
+      coordinates.push(point)
+    }
   }
+  return coordinates
+}
 
-  // Get post data
+const getData = async ({ year, month }) => {
+  const from = new Date(Date.UTC(year, month - 1, 1))
+  const to = new Date(Date.UTC(year, month, 1))
+  const data = { postTypes: {} }
+
   const posts = await getPosts({ year, month })
   for (const post of posts) {
-    const { postType } = post.cms
+    const postType = post.cms?.postType
     if (postType) {
-      if (!data.postTypes[postType]) {
-        data.postTypes[postType] = 0
-      }
-      data.postTypes[postType]++
+      data.postTypes[postType] = (data.postTypes[postType] ?? 0) + 1
     }
   }
 
-  // Get dawarich data
-  const points = await getPoints({ year, month })
-  if (points?.length) {
-    const geojson = {
+  const points = await getPoints({ from, to })
+  const coordinates = toCoordinates(points ?? [])
+  if (coordinates.length) {
+    data.geojson = {
       type: 'Feature',
       properties: {},
-      geometry: {
-        type: 'LineString',
-        coordinates: [],
-      },
+      geometry: { type: 'LineString', coordinates },
     }
-
-    for (const { latitude, longitude } of points) {
-      try {
-        const lat = parseFloat(latitude)
-        const lon = parseFloat(longitude)
-        geojson.geometry.coordinates.push([lat, lon])
-      } catch (err) {
-        console.error(err)
-        continue
-      }
-    }
-    data.geojson = geojson
   }
 
-  // Get body data
-  const body = await getWeight({ year, month })
+  const body = await getWeight({ from, to })
   if (body) {
     data.body = body
   }
 
-  // TODO: Github data
-  // TODO: Spotify data
-  // TODO: Maybe Trakt tv data
+  console.log(
+    `[${year}/${month}] ${posts.length} posts, ${points?.length ?? 0} points (${coordinates.length} kept), ${Object.keys(body ?? {}).length} body sensors`
+  )
 
-  return data
+  const hasData = posts.length || coordinates.length || body
+  return hasData ? data : null
 }
 
-const init = async () => {
-  const currentDate = new Date()
-  const saveData = process.argv.includes('--save')
-  let year = process.argv.find((arg) => arg.startsWith('--year='))
-  let month = process.argv.find((arg) => arg.startsWith('--month='))
-  if (year) {
-    year = parseInt(year.replace('--year=', ''))
-  } else {
-    year =
-      month === 1 ? currentDate.getFullYear() - 1 : currentDate.getFullYear()
+const parseMonth = (value) => {
+  const match = /^(\d{4})-(\d{1,2})$/.exec(value)
+  const year = Number(match?.[1])
+  const month = Number(match?.[2])
+  if (!match || month < 1 || month > 12) {
+    throw new Error(`Invalid month "${value}", expected YYYY-MM`)
   }
-  if (month) {
-    month = parseInt(month.replace('--month=', ''))
-  } else {
-    month = currentDate.getMonth() === 0 ? 12 : currentDate.getMonth()
-  }
+  return { year, month }
+}
 
-  if (!month) {
+/** Expands `YYYY-MM` and `YYYY-MM..YYYY-MM` arguments; defaults to the previous month. */
+const getMonths = (args) => {
+  if (!args.length) {
+    const now = new Date()
+    const previous = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 1, 1))
+    return [{ year: previous.getUTCFullYear(), month: previous.getUTCMonth() + 1 }]
   }
 
-  const data = await getData({ year, month })
-
-  if (data) {
-    if (saveData) {
-      console.log('[Saving data to disk]')
-      const json = JSON.stringify(data, null, 2)
-      const dir = join(__dirname, '..', 'data', 'monthly', year.toString())
-      mkdirSync(dir, { recursive: true })
-      writeFileSync(`${dir}/${month}.json`, json)
-    } else {
-      console.log('[Got data]')
-      console.log(data)
+  const months = []
+  for (const arg of args) {
+    const [start, end = start] = arg.split('..').map(parseMonth)
+    for (
+      let { year, month } = start;
+      year * 12 + month <= end.year * 12 + end.month;
+      month === 12 ? ((year += 1), (month = 1)) : (month += 1)
+    ) {
+      months.push({ year, month })
     }
-  } else {
-    console.warn('[No data found]')
+  }
+  return months
+}
+
+const save = process.argv.includes('--save')
+const months = getMonths(process.argv.slice(2).filter((arg) => !arg.startsWith('--')))
+let failed = false
+
+for (const { year, month } of months) {
+  try {
+    const data = await getData({ year, month })
+    if (!data) {
+      console.warn(`[${year}/${month}] No data found, nothing to save`)
+    } else if (save) {
+      const dir = new URL(`../data/monthly/${year}/`, import.meta.url)
+      mkdirSync(dir, { recursive: true })
+      writeFileSync(new URL(`${month}.json`, dir), JSON.stringify(data, null, 2) + '\n')
+    } else {
+      console.log(JSON.stringify(data).slice(0, 500))
+    }
+  } catch (err) {
+    failed = true
+    console.error(`[${year}/${month}] Failed:`, err)
   }
 }
 
-init()
+if (failed) process.exitCode = 1

@@ -1,18 +1,26 @@
-name: Montly Data Update
+name: Monthly Data Update
 
 on:
   workflow_dispatch:
+    inputs:
+      months:
+        description: >-
+          Months to generate, e.g. "2024-05..2024-12 2025-03"
+          (default: previous month)
+        required: false
+        default: ''
   schedule:
     - cron: 0 12 1 * *
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
-jobs:
-  # This workflow contains a single job called "build"
-  run:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+permissions:
+  contents: write
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+concurrency:
+  group: monthly-data
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -20,17 +28,9 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version-file: .nvmrc
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 11.15.0
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Generate data for the previous month
+      - name: Generate monthly data
         env:
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
           MICROPUB_TOKEN: ${{ secrets.MICROPUB_TOKEN }}
@@ -38,17 +38,22 @@ jobs:
           DAWARICH_API_KEY: ${{ secrets.DAWARICH_API_KEY }}
           HOME_ASSISTANT_KEY: ${{ secrets.HOME_ASSISTANT_KEY }}
           HOME_ASSISTANT_URL: ${{ secrets.HOME_ASSISTANT_URL }}
+          MONTHS: ${{ inputs.months }}
         working-directory: apps/site
-        run: node bin/generate-monthly-data --save
+        # MONTHS is unquoted so each month or range is its own argument.
+        run: node bin/generate-monthly-data.js --save $MONTHS
 
-      - name: Commit new file
+      # Commit the months that succeeded; the job still reports any failure.
+      - name: Commit and push
+        if: ${{ !cancelled() }}
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config user.email "action@github.com"
+          git config user.name "GitHub Action"
           git add apps/site/data/monthly
-          git commit -m "Add new montly data file" -a
-
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          if git diff --cached --quiet; then
+            echo "No monthly data changes"
+            exit 0
+          fi
+          git commit -m "chore(site): update monthly data"
+          git pull --rebase
+          git push

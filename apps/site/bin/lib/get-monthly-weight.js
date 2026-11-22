@@ -15,76 +15,62 @@ const sensors = [
 ]
 
 function isNumeric(str) {
-  // if (typeof str != 'string') return false
   return !isNaN(str) && !isNaN(parseFloat(str))
 }
 
-const getWeight = async ({ year, month }) => {
-  try {
-    if (!process.env.HOME_ASSISTANT_KEY) {
-      throw new Error('Missing home assistant key')
-    }
+/**
+ * Get body sensor history from Home Assistant between the given dates
+ * @param {object} options The start and end dates
+ * @returns {object|null} Readings by sensor, or null when there are none or Home Assistant is not configured
+ */
+const getWeight = async ({ from, to }) => {
+  if (!process.env.HOME_ASSISTANT_URL || !process.env.HOME_ASSISTANT_KEY) {
+    console.warn('[Skipping body data: HOME_ASSISTANT_URL or HOME_ASSISTANT_KEY not set]')
+    return null
+  }
 
-    const from = new Date(`${year}-${month}-01`)
-    const to = new Date(new Date(from).setMonth(from.getMonth() + 1))
-    const apiUrl = `${
-      process.env.HOME_ASSISTANT_URL
-    }/api/history/period/${from.toISOString()}?end_time=${to.toISOString()}&filter_entity_id=${Object.values(
-      sensors
-    ).join(',')}`
+  const apiUrl = `${
+    process.env.HOME_ASSISTANT_URL
+  }/api/history/period/${from.toISOString()}?end_time=${to.toISOString()}&filter_entity_id=${sensors.join(',')}`
 
-    const response = await fetch(apiUrl, {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.HOME_ASSISTANT_KEY}`,
-      },
-      method: 'GET',
-    })
-    const data = await response.json()
-    const body = {}
+  const response = await fetch(apiUrl, {
+    headers: {
+      Accept: 'application/json',
+      Authorization: `Bearer ${process.env.HOME_ASSISTANT_KEY}`,
+    },
+    signal: AbortSignal.timeout(60_000),
+  })
+  if (!response.ok) {
+    throw new Error(`Home Assistant responded ${response.status}`)
+  }
+  const data = await response.json()
+  const body = {}
 
-    for (const sensorEntries of data) {
-      for (const entry of sensorEntries) {
-        const time = new Date(entry.last_updated)
-        const key = entry.entity_id.replace('sensor.grant_', '')
-        if (
-          entry.state &&
-          entry.state !== 'unknown' &&
-          entry.state !== 'unavailable'
-        ) {
-          const value = isNumeric(entry.state)
-            ? parseFloat(entry.state)
-            : entry.state
+  for (const sensorEntries of data) {
+    for (const entry of sensorEntries) {
+      const time = new Date(entry.last_updated)
+      const key = entry.entity_id.replace('sensor.grant_', '')
+      if (
+        entry.state &&
+        entry.state !== 'unknown' &&
+        entry.state !== 'unavailable'
+      ) {
+        const value = isNumeric(entry.state)
+          ? parseFloat(entry.state)
+          : entry.state
 
-          if (value) {
-            if (!body[key]) {
-              body[key] = []
-            }
-
-            body[key].push({ time, value })
+        if (value) {
+          if (!body[key]) {
+            body[key] = []
           }
+
+          body[key].push({ time, value })
         }
       }
     }
-
-    // Delete unused body keys
-    for (const key in body) {
-      if (body[key].length === 0) {
-        delete body[key]
-      }
-    }
-
-    // If there is no data return null
-    if (Object.keys(body).length === 0) {
-      return null
-    }
-
-    return body
-  } catch (err) {
-    console.log('[Error getting weight]', err)
-    return null
   }
+
+  return Object.keys(body).length ? body : null
 }
 
 export default getWeight
