@@ -40,14 +40,3 @@ export function getPhotoAlt(value: any): string {
   if (typeof value === 'object' && value?.alt) return value.alt
   return ''
 }
-
-/**
- * Normalise a media (video/audio) URL from an MF2 value.
- *
- * Same semantics as `getPhotoUrl` — handles string or object-with-value.
- */
-export function getMediaUrl(value: any): string {
-  if (typeof value === 'object' && value?.value) return value.value
-  if (typeof value === 'string') return value
-  return ''
-}

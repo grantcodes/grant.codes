@@ -3,7 +3,7 @@
 import { site } from '../lib/site'
 import BaseLayout from '../layouts/BaseLayout.astro'
 import PhotosGallery from '../components/PhotosGallery.astro'
-import PostCard from '../components/PostCard.astro'
+import Post from '../components/Post.astro'
 import ProfilePhoto from '../components/ProfilePhoto.astro'
 import ProjectList from '../components/ProjectList.astro'
 import { getListedPosts } from '../lib/archive'
@@ -56,7 +56,7 @@ const photos = publicPosts.filter((post) => post.postType === 'photo').slice(0, 
     <section class="home-section">
       <h2>Notes</h2>
       <div class="post-list">
-        {notes.map((post) => <PostCard post={post} compact />)}
+        {notes.map((post) => <Post post={post} compact />)}
       </div>
       <a href="/updates">All updates</a>
     </section>

@@ -9,7 +9,7 @@
 import { site } from '../../lib/site'
 import { getArchivePosts } from '../../lib/archive'
 import BaseLayout from '../../layouts/BaseLayout.astro'
-import PostCard from '../../components/PostCard.astro'
+import Post from '../../components/Post.astro'
 import { GrantCodesPagination } from '@grantcodes/ui/components/pagination/index.js'
 import getCategories from '../../lib/categories'
 import { categorySlug as slugOf } from '../../lib/category-slug'
@@ -46,7 +46,7 @@ const nextHref = totalPages > 1 ? `/category/${categorySlug}/page/2` : ''
 
   <div class="post-list">
     {posts.map((post) => (
-      <PostCard post={post} compact />
+      <Post post={post} compact />
     ))}
   </div>
 

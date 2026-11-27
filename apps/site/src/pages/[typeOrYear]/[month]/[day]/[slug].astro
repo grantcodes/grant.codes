@@ -7,7 +7,6 @@ import { site } from '../../../../lib/site'
 import ArticleLayout from '@/layouts/ArticleLayout.astro'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import Post from '@/components/Post.astro'
-import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
 import { getLiveEntry } from 'astro:content'
 import { LiveEntryNotFoundError } from 'astro/content/runtime'
 import { getMetadata } from '@/lib/metadata'
@@ -29,7 +28,5 @@ const PostLayout = post.postType === 'article' ? ArticleLayout : BaseLayout
 ---
 
 <PostLayout title={pageTitle} description={pageDescription} canonicalUrl={canonicalUrl}>
-  <GrantCodesCard>
-    <Post post={post} />
-  </GrantCodesCard>
+  <Post post={post} />
 </PostLayout>

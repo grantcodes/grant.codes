@@ -4,7 +4,7 @@ import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
 import ArchiveStats from './ArchiveStats.astro'
 import TrackMap from './TrackMap.astro'
 import PhotosGallery from './PhotosGallery.astro'
-import PostCard from './PostCard.astro'
+import Post from './Post.astro'
 import { countByType, type ArchivePost, type Track } from '../lib/archive'
 
 export interface Props {
@@ -70,7 +70,7 @@ const busiest = Math.max(1, ...months.map((month) => month.count))
   <section class="archive-summary__section">
     <h2>Writing</h2>
     <div class="post-list">
-      {writing.map((post) => <PostCard post={post} compact />)}
+      {writing.map((post) => <Post post={post} compact />)}
     </div>
   </section>
 )}
