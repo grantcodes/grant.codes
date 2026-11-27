@@ -11,7 +11,7 @@
 import { site } from '../lib/site'
 import { getArchivePosts } from '../lib/archive'
 import BaseLayout from '../layouts/BaseLayout.astro'
-import PostCard from '../components/PostCard.astro'
+import Post from '../components/Post.astro'
 import { GrantCodesCard } from '@grantcodes/ui/components/card/index.js'
 import { GrantCodesPagination } from '@grantcodes/ui/components/pagination/index.js'
 
@@ -41,7 +41,7 @@ const nextHref = totalPages > 1 ? '/notes/page/2' : ''
     <>
       <div class="post-list">
         {pageNotes.map((post) => (
-          <PostCard post={post} compact />
+          <Post post={post} compact />
         ))}
       </div>
 

@@ -58,14 +58,15 @@ import { GrantCodesDialog } from '@grantcodes/ui/components/dialog/index.js'
         const res = await fetch(url, { signal: controller.signal })
         if (!res.ok) throw new Error(String(res.status))
         const doc = (Document as any).parseHTMLUnsafe(await res.text()) as Document
-        const post = doc.querySelector('main article.post')
+        const post = doc.querySelector('main article.h-entry')
         if (!post) throw new Error('no post')
         adoptStyles(doc)
         // The post's name becomes the dialog header; unnamed posts show their date instead.
-        // (A featured-image header stays in the body: it carries the image.)
-        const name = post.querySelector('.post__header:not(.post__header--featured)')
+        // `:scope > grantcodes-card >` skips citations' and comments' names and dates.
+        const name = post.querySelector(':scope > grantcodes-card > grantcodes-post-title')
+        const date = post.querySelector(':scope > grantcodes-card > grantcodes-post-footer .dt-published')
         title.textContent =
-          name?.textContent?.trim() || post.querySelector('.dt-published')?.textContent?.trim() || 'Post'
+          name?.querySelector('.p-name')?.textContent?.trim() || date?.textContent?.trim() || 'Post'
         name?.remove()
         const images = [...post.querySelectorAll('img')]
         for (const img of images) img.loading = 'eager'

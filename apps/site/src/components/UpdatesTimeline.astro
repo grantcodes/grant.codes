@@ -2,7 +2,7 @@
 // One page of the updates timeline (notes, photos, articles and other home feed types).
 import { site } from '../lib/site'
 import BaseLayout from '../layouts/BaseLayout.astro'
-import PostCard from './PostCard.astro'
+import Post from './Post.astro'
 import { GrantCodesPagination } from '@grantcodes/ui/components/pagination/index.js'
 import { getUpdates, UPDATES_PER_PAGE } from '../lib/updates'
 
@@ -22,7 +22,7 @@ const title = page === 1 ? 'Updates' : `Updates page ${page}`
   <h1 class="page-title">{title}</h1>
 
   <div class="post-list">
-    {pagePosts.map((post) => <PostCard post={post} compact />)}
+    {pagePosts.map((post) => <Post post={post} compact />)}
   </div>
 
   {totalPages > 1 && (
