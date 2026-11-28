@@ -16,5 +16,5 @@ minimumReleaseAgeExclude:
   - '@postr/syndicator-instagram@3.0.0-alpha.8'
   - '@postr/syndicator-superfeedr@3.0.0-alpha.8'
   - '@postr/syndicator-telegram@2.0.0-alpha.8'
-  - '@grantcodes/ui@4.2.2'
-  - '@grantcodes/astro@1.4.2'
+  - '@grantcodes/ui@4.3.0'
+  - '@grantcodes/astro@1.5.0'

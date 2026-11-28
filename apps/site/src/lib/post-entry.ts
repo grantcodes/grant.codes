@@ -36,6 +36,8 @@ export const postOptions = (post: PostData, options: PostOptions = {}): PostOpti
   sanitize: (html) => renderContentHtml({ html }, post.categories),
   formatDate: (iso) => formatRelativeDate(iso, new Date(), 'en-GB'),
   categoryHref: (name) => `/category/${categorySlug(name)}`,
-  author: { name: site.author.name },
+  author: { name: site.author.name, url: site.url, photo: site.author.photo },
+  // Every post here is mine: keep the h-card for parsers, don't print "by Grant Richmond".
+  hideAuthor: true,
   ...options,
 })
