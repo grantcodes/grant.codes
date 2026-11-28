@@ -68,6 +68,8 @@ import { GrantCodesDialog } from '@grantcodes/ui/components/dialog/index.js'
         title.textContent =
           name?.querySelector('.p-name')?.textContent?.trim() || date?.textContent?.trim() || 'Post'
         name?.remove()
+        // The dialog is already the frame: drop the post card's own.
+        post.querySelector(':scope > grantcodes-card')?.setAttribute('flat', '')
         const images = [...post.querySelectorAll('img')]
         for (const img of images) img.loading = 'eager'
         body.replaceChildren(document.adoptNode(post))
