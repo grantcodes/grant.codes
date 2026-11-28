@@ -11,9 +11,9 @@
   },
   "dependencies": {
     "@astrojs/node": "^11.1.14",
-    "@grantcodes/astro": "^1.4.2",
+    "@grantcodes/astro": "^1.5.0",
     "@grantcodes/themer": "^2.0.0",
-    "@grantcodes/ui": "^4.2.2",
+    "@grantcodes/ui": "^4.3.0",
     "@postr/astro": "0.1.0-alpha.9",
     "@postr/core": "2.0.0-alpha.8",
     "astro": "^7.4.8",
